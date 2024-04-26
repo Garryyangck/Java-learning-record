@@ -427,7 +427,7 @@
 	> 1. ==直观区别：==哑协议传输进度不可⻅；==智能协议传输可⻅==。
 	> 2. ==传输速度：== ==智能协议==⽐哑协议==传输速度快==。
 
-**操作**：
+==操作==：
 
 1. ```bash
 	git clone --bare # 没有工作区的代码，只有.git目录中的文件
@@ -528,6 +528,209 @@
 ---
 
 
+
+## 33.把本地仓库同步到 githuhb
+
+1. ```bash
+	git push -u github
+	```
+
+2. ```bash
+	git push -u --set-upstream github # 远程仓库没有当前push的分支，自动为远程仓库创建该分支
+	```
+
+3. ==如果远程仓库有本地没有的文件，则不会接受本次push==。
+
+	> ![image-20240426163049768](Git.assets/image-20240426163049768.png)
+	>
+	> 从提示中可以得知，==需要把远程仓库fetch下来和本地仓库merge，这样最新的commit会有两个parent – main 和 github/main==，==最新commit必须以远程仓库为parent才能完成push==。
+
+4. ```bash
+	git pull github main # 把远端的main fetch下来并和本地的main merge
+	```
+
+5. ```bash
+	git fetch github main # 把远端的main拉取下来
+	```
+
+	> ```bash
+	> remote: Enumerating objects: 5, done.
+	> remote: Counting objects: 100% (5/5), done.
+	> remote: Compressing objects: 100% (5/5), done.
+	> remote: Total 5 (delta 0), reused 0 (delta 0), pack-reused 0
+	> Unpacking objects: 100% (5/5), 1.81 KiB | 264.00 KiB/s, done.
+	> From https://github.com/Garryyangck/Test-git-pull-and-merge
+	>  * branch            main       -> FETCH_HEAD
+	>  * [new branch]      main       -> github/main
+	> ```
+	>
+	> ![image-20240426163729839](Git.assets/image-20240426163729839.png)
+	>
+	> ---
+	>
+	> 可以看到==多了一个远端的分支==。
+	>
+	> ![image-20240426163753148](Git.assets/image-20240426163753148.png)
+	>
+	> ---
+	>
+	> 可以看到==fetch之后出现了一个远端分支==，但注意==它们不是相连的，而是独立的树==。
+	>
+	> ![image-20240426164410589](Git.assets/image-20240426164410589.png)
+
+6. ```bash
+	git merge github/main # 将当前HEAD所在的main分支和fetch下来的github/main进行merge
+	```
+
+	> 报错：==不能将两个不在同一树上的分支进行merge==
+	>
+	> ![image-20240426164947725](Git.assets/image-20240426164947725.png)
+	>
+	> ---
+	>
+	> ```bash
+	> git merge --allow-unrelated-histories  github/main # 允许merge不在同一树上的分支
+	> ```
+	>
+	> ![image-20240426165114460](Git.assets/image-20240426165114460.png)
+	>
+	> ---
+	>
+	> ==本地的main和远端的main完成merge==，==新commit有README.md, LICENSE, .gitignore==。
+	>
+	> ![image-20240426165237140](Git.assets/image-20240426165237140.png)
+
+7. 重新进行push，成功。
+
+	> ```bash
+	> git push --set-upstream github main
+	> ```
+	>
+	> ![image-20240426170432496](Git.assets/image-20240426170432496.png)
+
+8. 同时也把git-learning那个网页push上去了
+
+	> ![image-20240426172618725](Git.assets/image-20240426172618725.png)
+
+---
+
+
+
+## 34.不同人修改不同文件
+
+1. ```bash
+	git fetch github # 把远端他人的修改fetch下来
+	git merge <他人修改的分支> # 把他人修改的分支和自己的分支合并，由于是不同文件，因此很顺利
+	# 成功达成fast-forwards之后，很顺利就能push
+	```
+
+---
+
+
+
+## 35.不同人修改相同文件的不同区域
+
+1. ==他人在我提交之前进行提交，导致我提交的时候远端发现我的提交`none fast-forward`==。
+
+	> ![image-20240426194407868](Git.assets/image-20240426194407868.png)
+
+2. ==fetch之后可以看到他人提交的处于树的另一分支，这也解释我们为何不是`fast-forward`==。
+
+	> ![image-20240426194722234](Git.assets/image-20240426194722234.png)
+
+3. 使用merge进行合并，合并成功。
+
+	> ```bash
+	> git merge github/main
+	> ```
+	>
+	> ![image-20240426195000861](Git.assets/image-20240426195000861.png)
+	>
+	> ---
+	>
+	> ![image-20240426195818008](Git.assets/image-20240426195818008.png)
+
+---
+
+
+
+## 36.不同人修改相同文件的相同区域
+
+1. ==第二个人提交时发生了合并冲突==。
+
+	> ![image-20240426201312596](Git.assets/image-20240426201312596.png)
+
+2. ```bash
+	vim index.html # 手动解决冲突
+	```
+
+3. 完成之后：
+
+	> ![image-20240426201918508](Git.assets/image-20240426201918508.png)
+	>
+	> 直接commit，示意完成冲突修复：
+	>
+	> ```bash
+	> git commit -am'xxx'
+	> ```
+	>
+	> ---
+	>
+	> ![image-20240426202035231](Git.assets/image-20240426202035231.png)
+
+---
+
+
+
+## 37.一个人变更文件名另一人文件内容
+
+1. 变更文件名的先提交，后面变更内容的人直接
+
+	```bash
+	git pull
+	```
+
+	==git就直接帮我们同时变更文件名和内容了，不会冲突==。
+
+---
+
+
+
+## 38.多人修改同一文件的文件名
+
+1. ==git直接创建两个内容相同，文件名不同的文件，让我们自行决定保留==。
+
+	> <img src="Git.assets/image-20240426202948822.png" alt="image-20240426202948822" style="zoom:50%;" />
+
+---
+
+
+
+## 39.禁止对集成分支 push -f
+
+1. ==比如你`reset --hard`到一个老版本，再`push -f`，就把远端这之间所有变更干没了==。
+
+----
+
+
+
+## 40.禁止对集成分支 rebase
+
+1. 一定不能改变集成分支的历史，否则可能导致rebase生成一个新分叉，然后其它人的HEAD和你rebase出来并push到远端的新分叉不在一个子树上，无法push。
+
+	> <img src="Git.assets/image-20240426204519023.png" alt="image-20240426204519023" style="zoom: 67%;" />
+
+---
+
+
+
+## 43.Github怎么搜项目
+
+1. https://docs.github.com/en/search-github/searching-on-github/searching-for-repositories【官方】
+2. `in:readme`，`stars:>100`，`filename:xxx`，`'xxx'+'yyy'`。
+3. `'BIT' + '北理工' + '资料' in:readme stars:>10`
+
+---
 
 
 

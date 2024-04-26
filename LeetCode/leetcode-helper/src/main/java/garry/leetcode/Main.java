@@ -16,25 +16,24 @@ public class Main {
     @SuppressWarnings("ImplicitArrayToString")
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.singleNumber(new int[]{0, 1, 0, 1, 0, 1, 99});
+        System.out.println(solution.leastInterval(new char[]{'A', 'A', 'A', 'B', 'B', 'B'}, 2));
     }
 }
 
 @SuppressWarnings({"all"})
 class Solution {
-    public int singleNumber(int[] nums) {
-        int[] wei = new int[32];
-        int ans = 0;
-        for (int i = 31; i >= 0; i--) {
-            for (int j = 0; j < nums.length; j++) {
-                if (((nums[j] >>> i) & 1) == 1)
-                    wei[i]++;
-            }
-            if (wei[i] % 3 != 0) {
-                ans <<= 1;
-                ans |= 1;
-            }
+    public int leastInterval(char[] tasks, int n) {
+        int[] nums = new int[26];
+        for (int i = 0; i < tasks.length; i++) {
+            nums[(int) (tasks[i] - 'A')]++;
         }
-        return ans;
+        Arrays.sort(nums);
+        int ans = (nums[nums.length - 1] - 1) * (n + 1) + 1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] == 0)
+                return ans;
+            ans = Math.max(ans, (nums[i] - 1) * (n + 1) + 1 + (25 - i));
+        }
+        return Math.max(ans, tasks.length);
     }
 }

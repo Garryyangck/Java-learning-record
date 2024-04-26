@@ -5680,5 +5680,64 @@ Java进阶完成：
 		    }
 		}
 		```
+
+
+
+# ***2024.4.26打卡	Day 86***
+
+1. Git
+	- 完成至第45个视频。
+
+2. Redis
+
+	- 1篇。缓存雪崩、击穿、穿透的成因和解决方法。
+
+3. leetcode刷题：3题
+
+	- [55. 跳跃游戏](https://leetcode.cn/problems/jump-game/)
 	
-	- 
+		不断维护能跳到的最大距离，for循环的上限为此最大距离
+	
+	- [45. 跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/)
+	
+		没做出来
+	
+		```java
+		public int jump(int[] nums) {
+		    int length = nums.length;
+		    int end = 0;
+		    int maxPosition = 0;
+		    int step = 0;
+		    for (int i = 0; i < length - 1; i++) {
+		        maxPosition = Math.max(maxPosition, i + nums[i]);
+		        if (i == end) { // 表示到达s一步能到达的最远点，此时再跳一步最多跳到maxLen
+		            end = maxPosition;
+		            step++;
+		        }
+		    }
+		    return step;
+		}
+		```
+	
+	- [621. 任务调度器](https://leetcode.cn/problems/task-scheduler/)
+	
+		统计每个字符出现的次数，排序，如果有一个数量=maxNum就k++，最后+k
+	
+		```java
+		public int leastInterval(char[] tasks, int n) {
+		    int[] nums = new int[26];
+		    for (int i = 0; i < tasks.length; i++) {
+		        nums[(int) (tasks[i] - 'A')]++;
+		    }
+		    Arrays.sort(nums);
+		    int ans = (nums[nums.length - 1] - 1) * (n + 1) + 1;
+		    for (int i = nums.length - 1; i >= 0; i--) {
+		        if (nums[i] == 0)
+		            return ans;
+		        ans = Math.max(ans, (nums[i] - 1) * (n + 1) + 1 + (25 - i));
+		    }
+		    return Math.max(ans, tasks.length);
+		}
+		```
+	
+	
