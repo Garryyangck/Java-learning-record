@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--下载的mysql-connector-java-5.1.6.jar的绝对路径-->
+    <classPathEntry location="D:\apache-maven-3.6.1\mvn_resp\org\mybatis\generator\mysql-connector-java-5.1.6.jar"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <!--不再追加xml的插件，注意位置必须在commentGenerator之前-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+
+        <!--消除所有注释，位置有要求，需要放在数据库连接前面-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/mall?characterEncoding=UTF-8&amp;useSSL=false&amp;serverTimezone=UTC"
+                        userId="root"
+                        password="1234">
+        </jdbcConnection>
+
+        <!--关闭将所有数值强转为BigDecimals，即程序根据数据大小调整转换的格式-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--表属性映射的Java对象，包名garry.mall.pojo，目录名为src/main/java-->
+        <javaModelGenerator targetPackage="garry.mall.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--xml文件，包名garry.mall.dao，目录名src/main/resources-->
+        <sqlMapGenerator targetPackage="garry.mall.dao" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--Mapper类，包名garry.mall.pojo，目录名为src/main/java-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="garry.mall.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--table表映射，名字不要前面的mall，把与example有关的全部去掉-->
+        <table tableName="mall_category" domainObjectName="Category" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+
+        <table tableName="mall_order" domainObjectName="Order" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+
+        <table tableName="mall_order_item" domainObjectName="OrderItem" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+
+        <table tableName="mall_pay_info" domainObjectName="PayInfo" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+
+        <table tableName="mall_product" domainObjectName="Product" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false">
+            <!--不单独拿出xxxWithPLOBS的方法-->
+            <columnOverride column="detail" jdbcType="VARCHAR"/>
+            <columnOverride column="sub_images" jdbcType="VARCHAR"/>
+        </table>
+
+        <table tableName="mall_shipping" domainObjectName="Shipping" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+
+        <table tableName="mall_user" domainObjectName="User" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+    </context>
+</generatorConfiguration>

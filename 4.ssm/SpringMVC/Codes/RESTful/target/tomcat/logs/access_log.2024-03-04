@@ -1,0 +1,3 @@
+0:0:0:0:0:0:0:1 - - [04/Mar/2024:11:44:56 +0800] "GET /RESTful HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [04/Mar/2024:11:44:56 +0800] "GET /RESTful/ HTTP/1.1" 404 967 http-bio-8080-exec-3 25
+0:0:0:0:0:0:0:1 - - [04/Mar/2024:11:45:20 +0800] "GET /RESTful/restful/request HTTP/1.1" 200 32 http-bio-8080-exec-4 19

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="userDao" class="garry.spring.aop.dao.UserDao"/>
+    <bean id="employeeDao" class="garry.spring.aop.dao.EmployeeDao"/>
+    <bean id="userService" class="garry.spring.aop.service.UserService">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+    <bean id="employeeService" class="garry.spring.aop.service.EmployeeService">
+        <property name="employeeDao" ref="employeeDao"/>
+    </bean>
+
+    <!--AOP配置-->
+    <bean id="methodAspect" class="garry.spring.aop.aspect.MethodAspect"/>
+    <aop:config>
+        <!--pointcut切点，表示切面类的作用范围-->
+        <!--此处表示public类型，任意返回类型，garry包下所有类所有方法任意参数的方法-->
+        <aop:pointcut id="pointcut" expression="execution(public * garry..*Service.*(..))"/>
+        <!--定义切面类-->
+        <aop:aspect ref="methodAspect">
+            <!--before通知，在目标方法运行前执行methodAspect.printExecutionTime-->
+            <aop:before method="printExecutionTime" pointcut-ref="pointcut"/>
+            <!--after通知，在目标方法运行后调用-->
+            <aop:after method="doAfter" pointcut-ref="pointcut"/>
+            <!--after-returning通知，在目标方法运行后调用，且将返回结果注入到returning="ret"中-->
+            <aop:after-returning method="doAfterReturn" pointcut-ref="pointcut" returning="ret"/>
+            <!--after-throwing通知，异常后调用，且将异常结果注入到throwing="th"中-->
+            <aop:after-throwing method="doAfterException" pointcut-ref="pointcut" throwing="th"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

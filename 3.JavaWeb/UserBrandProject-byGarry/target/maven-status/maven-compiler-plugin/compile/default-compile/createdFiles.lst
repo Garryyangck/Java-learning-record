@@ -1,0 +1,16 @@
+com\itheima\pojo\User.class
+com\itheima\web\userservlet\RegisterServlet.class
+com\itheima\service\UserService.class
+com\itheima\util\SqlSessionFactoryUtils.class
+com\itheima\mapper\BrandMapper.class
+com\itheima\web\userservlet\CheckCodeServlet.class
+com\itheima\web\userservlet\LoginServlet.class
+com\itheima\util\CheckCodeUtil.class
+com\itheima\service\BrandService.class
+com\itheima\web\brandservlet\SelectByIdServlet.class
+com\itheima\web\brandservlet\UpdateServlet.class
+com\itheima\web\brandservlet\SelectAllServlet.class
+com\itheima\web\brandservlet\AddServlet.class
+com\itheima\web\brandservlet\DeleteServlet.class
+com\itheima\mapper\UserMapper.class
+com\itheima\pojo\Brand.class

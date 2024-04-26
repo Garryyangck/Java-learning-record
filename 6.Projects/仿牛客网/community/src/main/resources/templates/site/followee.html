@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!--访问该页面时，在此处生成CSRF令牌-->
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+	<link rel="stylesheet" th:href="@{/css/global.css}"/>
+	<title>牛客网-关注</title>
+</head>
+<body>
+	<div class="nk-container">
+		<!-- 头部 -->
+		<header class="bg-dark sticky-top" th:replace="index::header"></header>
+
+		<!-- 内容 -->
+		<div class="main">
+			<div class="container">
+				<div class="position-relative">
+					<!-- 选项 -->
+					<ul class="nav nav-tabs mb-3">
+						<li class="nav-item">
+							<a class="nav-link position-relative active" th:href="@{/user/followee(userId = ${user.id})}">
+								<i class="text-info" th:utext="${user.username}"></i> 关注的人
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link position-relative" th:href="@{/user/follower(userId = ${user.id})}">
+								关注 <i class="text-info" th:utext="${user.username}"></i> 的人
+							</a>
+						</li>
+					</ul>
+					<a th:href="@{/user/profile(userId = ${user.id})}" class="text-muted position-absolute rt-0">返回个人主页&gt;</a>
+				</div>
+				
+				<!-- 关注列表 -->
+				<ul class="list-unstyled" th:each="followee:${followees}">
+					<li class="media pb-3 pt-3 mb-3 border-bottom position-relative">
+						<a th:href="@{/user/profile(userId = ${followee.user.id})}">
+							<img th:src="${followee.user.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像" >
+						</a>
+						<div class="media-body">
+							<h6 class="mt-0 mb-3">
+								<span class="text-success" th:utext="${followee.user.username}"></span>
+								<!--关注时间-->
+								<span class="float-right text-muted font-size-12">关注于
+									<i th:utext="${#dates.format(followee.followDateTime, 'yyyy-MM-dd HH:mm:ss')}"></i>
+								</span>
+							</h6>
+							<div>
+								<button type="button" th:onclick="|follow(this, ${followee.user.id})|"
+										th:if="${loginUser != null && loginUser.id != followee.user.id}"
+										th:class="|btn ${followee.followStatus == 1 ? 'btn-secondary' : 'btn-info'} btn-sm float-right mr-5 follow-btn|"
+										th:utext="${followee.followStatus == 1 ? '已关注' : '关注TA'}">
+								</button>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<!-- 分页 -->
+				<nav class="mt-5" th:if="${pageInfo.pages > 0}"><!--页数>0才会显示-->
+					<ul class="pagination justify-content-center">
+						<!--跳转首页-->
+						<li class="page-item">
+							<a class="page-link"
+							   th:href="@{${pagePath}(userId = ${user.id}, pageNum = 1)}">首页</a>
+						</li>
+
+						<!--必须不是第一页，才有上一页-->
+						<li th:class="|page-item ${pageInfo.pageNum == 1 ? 'disabled' : ''}|">
+							<a class="page-link"
+							   th:href="@{${pagePath}(userId = ${user.id}, pageNum = ${pageInfo.prePage})}">上一页</a>
+						</li>
+
+						<!--当前页高亮，创建数组遍历，判断页数范围-->
+						<li th:class="|page-item ${i == pageInfo.pageNum ? 'active' : ''}|"
+							th:each="i:${#numbers.sequence(pageInfo.pageNum - navigatePageWidth, pageInfo.pageNum + navigatePageWidth)}"
+							th:if="${i >= 1 && i <= pageInfo.pages}">
+							<a class="page-link"
+							   th:href="@{${pagePath}(userId = ${user.id}, pageNum = ${i})}" th:text="${i}"></a>
+						</li>
+
+						<!--必须不是最后一页，才有下一页-->
+						<li th:class="|page-item ${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}|">
+							<a class="page-link"
+							   th:href="@{${pagePath}(userId = ${user.id}, pageNum = ${pageInfo.nextPage})}">下一页</a>
+						</li>
+
+						<!--跳转至末页-->
+						<li class="page-item">
+							<a class="page-link"
+							   th:href="@{${pagePath}(userId = ${user.id}, pageNum = ${pageInfo.pages})}">末页</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<!-- 尾部 -->
+		<footer class="bg-dark" th:replace="index::footer"></footer>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+	<script th:src="@{/js/global.js}"></script>
+	<script th:src="@{/js/profile.js}"></script>
+</body>
+</html>

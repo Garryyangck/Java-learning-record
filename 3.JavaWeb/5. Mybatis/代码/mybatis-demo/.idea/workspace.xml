@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="378238a9-cdd9-403b-8c1d-143a8f9530e4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../8. HTTP&amp;Tomcat+Servlet/代码/web-demo/web-demo.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/out/production/LeetcodeHelper/com/garry/leetcode/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/out/production/LeetcodeHelper/com/garry/leetcode/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/out/production/LeetcodeHelper/com/garry/leetcode/Solution.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/out/production/LeetcodeHelper/com/garry/leetcode/Solution.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/src/com/garry/leetcode/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../LeetCode/LeetcodeHelper/src/com/garry/leetcode/Main.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="D:\IDEA 20.2\IntelliJ IDEA 2020.2.3\plugins\maven\lib\maven3" />
+        <option name="userSettingsFile" value="D:\software\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1seRZuYrGdUyVU78Wgz13ymtI60" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\workspace\mybatis-demo\src\test\java\com\itheima\test" />
+      <recent name="D:\workspace\mybatis-demo\src\main\resources\com\itheima\mapper" />
+      <recent name="D:\workspace\mybatis-demo\src\main\java\com\itheima\mapper" />
+      <recent name="D:\workspace\mybatis-demo\src\main\java\com\itheima\pojo" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.itheima.mapper" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\workspace\mybatis-demo\src\main\java\com\itheima\mapper" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.MyBatisTest.testDeleteByIds">
+    <configuration name="MyBatisTest.testAdd" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="mybatis-demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.itheima.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.itheima.test" />
+      <option name="MAIN_CLASS_NAME" value="com.itheima.test.MyBatisTest" />
+      <option name="METHOD_NAME" value="testAdd" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyBatisTest.testAdd2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="mybatis-demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.itheima.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.itheima.test" />
+      <option name="MAIN_CLASS_NAME" value="com.itheima.test.MyBatisTest" />
+      <option name="METHOD_NAME" value="testAdd2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyBatisTest.testDeleteById" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="mybatis-demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.itheima.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.itheima.test" />
+      <option name="MAIN_CLASS_NAME" value="com.itheima.test.MyBatisTest" />
+      <option name="METHOD_NAME" value="testDeleteById" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyBatisTest.testDeleteByIds" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="mybatis-demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.itheima.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.itheima.test" />
+      <option name="MAIN_CLASS_NAME" value="com.itheima.test.MyBatisTest" />
+      <option name="METHOD_NAME" value="testDeleteByIds" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyBatisTest.testUpdate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="mybatis-demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.itheima.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.itheima.test" />
+      <option name="MAIN_CLASS_NAME" value="com.itheima.test.MyBatisTest" />
+      <option name="METHOD_NAME" value="testUpdate" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.MyBatisTest.testAdd" />
+      <item itemvalue="JUnit.MyBatisTest.testAdd2" />
+      <item itemvalue="JUnit.MyBatisTest.testDeleteById" />
+      <item itemvalue="JUnit.MyBatisTest.testUpdate" />
+      <item itemvalue="JUnit.MyBatisTest.testDeleteByIds" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.MyBatisTest.testDeleteByIds" />
+        <item itemvalue="JUnit.MyBatisTest.testAdd2" />
+        <item itemvalue="JUnit.MyBatisTest.testUpdate" />
+        <item itemvalue="JUnit.MyBatisTest.testDeleteById" />
+        <item itemvalue="JUnit.MyBatisTest.testAdd" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="378238a9-cdd9-403b-8c1d-143a8f9530e4" name="Default Changelist" comment="" />
+      <created>1621231128833</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1621231128833</updated>
+      <workItem from="1621231129903" duration="14147000" />
+      <workItem from="1621256966276" duration="1587000" />
+      <workItem from="1621258575945" duration="23000" />
+      <workItem from="1621258616526" duration="59000" />
+      <workItem from="1621258690196" duration="204000" />
+      <workItem from="1621258909261" duration="11457000" />
+      <workItem from="1621318353318" duration="2405000" />
+      <workItem from="1621321501463" duration="58247000" />
+      <workItem from="1708832738234" duration="687000" />
+      <workItem from="1708833507673" duration="1382000" />
+      <workItem from="1708834912188" duration="13000" />
+      <workItem from="1708834953032" duration="6000" />
+      <workItem from="1708841215497" duration="3331000" />
+      <workItem from="1708846675955" duration="6631000" />
+      <workItem from="1708868227510" duration="34000" />
+      <workItem from="1708871975136" duration="336000" />
+      <workItem from="1708872406844" duration="410000" />
+      <workItem from="1708910139284" duration="544000" />
+      <workItem from="1708932863968" duration="28000" />
+      <workItem from="1708933229781" duration="118000" />
+      <workItem from="1709088255142" duration="454000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="321" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1708844941512">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state x="321" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1707.1019@0.0.1707.1019" timestamp="1708844941512" />
+    <state x="581" y="205" key="FileChooserDialogImpl" timestamp="1708933337070">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state x="581" y="205" key="FileChooserDialogImpl/0.0.1707.1019@0.0.1707.1019" timestamp="1708933337070" />
+    <state width="1653" height="494" key="GridCell.Tab.0.bottom" timestamp="1708910686595">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state width="1653" height="494" key="GridCell.Tab.0.bottom/0.0.1707.1019@0.0.1707.1019" timestamp="1708910686595" />
+    <state width="1653" height="494" key="GridCell.Tab.0.center" timestamp="1708910686595">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state width="1653" height="494" key="GridCell.Tab.0.center/0.0.1707.1019@0.0.1707.1019" timestamp="1708910686595" />
+    <state width="1653" height="494" key="GridCell.Tab.0.left" timestamp="1708910686595">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state width="1653" height="494" key="GridCell.Tab.0.left/0.0.1707.1019@0.0.1707.1019" timestamp="1708910686595" />
+    <state width="1653" height="494" key="GridCell.Tab.0.right" timestamp="1708910686595">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state width="1653" height="494" key="GridCell.Tab.0.right/0.0.1707.1019@0.0.1707.1019" timestamp="1708910686595" />
+    <state width="301" height="593" key="HiddenNamespacesPopup" timestamp="1708844865932">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state width="301" height="593" key="HiddenNamespacesPopup/0.0.1707.1019@0.0.1707.1019" timestamp="1708844865932" />
+    <state x="223" y="67" key="SettingsEditor" timestamp="1708910257023">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state x="223" y="67" key="SettingsEditor/0.0.1707.1019@0.0.1707.1019" timestamp="1708910257023" />
+    <state x="58" y="118" key="new project wizard" timestamp="1708933345417">
+      <screen x="0" y="0" width="1707" height="1019" />
+    </state>
+    <state x="58" y="118" key="new project wizard/0.0.1707.1019@0.0.1707.1019" timestamp="1708933345417" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../software/apache-maven-3.6.1/mvn_resp/org/mybatis/mybatis/3.5.5/mybatis-3.5.5-sources.jar!/org/apache/ibatis/reflection/ParamNameResolver.java</url>
+          <line>122</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../software/apache-maven-3.6.1/mvn_resp/org/mybatis/mybatis/3.5.5/mybatis-3.5.5-sources.jar!/org/apache/ibatis/reflection/ParamNameResolver.java</url>
+          <line>155</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.sun.proxy.$Proxy7" memberName="h" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>

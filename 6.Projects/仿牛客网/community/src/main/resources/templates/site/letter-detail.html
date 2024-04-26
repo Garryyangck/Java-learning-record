@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--访问该页面时，在此处生成CSRF令牌-->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="stylesheet" th:href="@{/css/letter.css}"/>
+    <title>牛客网-私信详情</title>
+</head>
+<body>
+<div class="nk-container">
+    <!-- 头部 -->
+    <header class="bg-dark sticky-top" th:replace="index::header"></header>
+
+    <!-- 内容 -->
+    <div class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <!--私信对象名称-->
+                    <h6><b class="square"></b> 来自 <i class="text-success" th:utext="${friend.username}"></i> 的私信
+                    </h6>
+                </div>
+                <div class="col-4 text-right">
+                    <!--返回-->
+                    <a class="btn btn-secondary btn-sm" th:href="@{/message/letter/list(pageNum = ${fromPageNum})}">返回</a>
+                    <!--回私信-->
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sendModal">
+                        给TA私信
+                    </button>
+                </div>
+            </div>
+            <!-- 弹出框 -->
+            <div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">发私信</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">发给：</label>
+                                    <input type="text" class="form-control" id="recipient-name" th:value="${friend.username}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">内容：</label>
+                                    <textarea class="form-control" id="message-text" rows="10"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="sendBtn">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 提示框 -->
+            <div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="hintModalLabel">提示</h5>
+                        </div>
+                        <div class="modal-body" id="hintBody">
+                            发送完毕!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 私信列表 -->
+            <ul class="list-unstyled mt-4" th:each="map:${messages}">
+                <li class="media pb-3 pt-3 mb-2">
+                    <!--用户详情-->
+                    <a th:href="@{/user/profile(userId = ${map.user.id})}">
+                        <img th:src="${map.user.headerUrl}" class="mr-4 rounded-circle user-header"
+                             alt="用户头像">
+                    </a>
+                    <div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="mr-auto" th:utext="${map.user.username} + ${map.preStatus == 0 ? '(未读)' : ''}"></strong>
+                            <small th:utext="${#dates.format(map.message.createTime, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                            <!--删除私信-->
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"
+                                    th:onclick="|delete_msg(${map.message.id})|">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="toast-body" th:utext="${map.message.content}"></div>
+                    </div>
+                </li>
+            </ul>
+            <!-- 分页 -->
+            <nav class="mt-5" th:if="${pageInfo.pages > 0}"><!--页数>0才会显示-->
+                <ul class="pagination justify-content-center">
+                    <!--跳转首页-->
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(friendId = ${friend.id}, conversationId = ${conversationId}, pageNum = 1)}">首页</a>
+                    </li>
+
+                    <!--必须不是第一页，才有上一页-->
+                    <li th:class="|page-item ${pageInfo.pageNum == 1 ? 'disabled' : ''}|">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(friendId = ${friend.id}, conversationId = ${conversationId}, pageNum = ${pageInfo.prePage})}">上一页</a>
+                    </li>
+
+                    <!--当前页高亮，创建数组遍历，判断页数范围-->
+                    <li th:class="|page-item ${i == pageInfo.pageNum ? 'active' : ''}|"
+                        th:each="i:${#numbers.sequence(pageInfo.pageNum - navigatePageWidth, pageInfo.pageNum + navigatePageWidth)}"
+                        th:if="${i >= 1 && i <= pageInfo.pages}">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(friendId = ${friend.id}, conversationId = ${conversationId}, pageNum = ${i})}"
+                           th:text="${i}"></a>
+                    </li>
+
+                    <!--必须不是最后一页，才有下一页-->
+                    <li th:class="|page-item ${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}|">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(friendId = ${friend.id}, conversationId = ${conversationId}, pageNum = ${pageInfo.nextPage})}">下一页</a>
+                    </li>
+
+                    <!--跳转至末页-->
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(friendId = ${friend.id}, conversationId = ${conversationId}, pageNum = ${pageInfo.pages})}">末页</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <footer class="bg-dark" th:replace="index::footer"></footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/global.js}"></script>
+<script th:src="@{/js/letter.js}"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="computer" class="garry.spring.ioc.pojo.Computer">
+        <constructor-arg name="brand" value="联想"/>
+        <constructor-arg name="type" value="台式机"/>
+        <constructor-arg name="order" value="6668888"/>
+        <constructor-arg name="price" value="6000"/>
+    </bean>
+
+    <bean id="company" class="garry.spring.ioc.pojo.Company">
+        <property name="rooms">
+            <set>
+                <value>301-项目经理办公室</value>
+                <value>302-开发部门</value>
+                <value>303-测试部门</value>
+            </set>
+        </property>
+        <property name="computers">
+            <map>
+                <entry key="项目经理" value-ref="computer"/>
+                <entry key="开发部">
+                    <bean class="garry.spring.ioc.pojo.Computer">
+                        <constructor-arg name="brand" value="联想"/>
+                        <constructor-arg name="type" value="台式机"/>
+                        <constructor-arg name="order" value="8888"/>
+                        <constructor-arg name="price" value="3000"/>
+                    </bean>
+                </entry>
+                <entry key="测试部">
+                    <bean class="garry.spring.ioc.pojo.Computer">
+                        <constructor-arg name="brand" value="联想"/>
+                        <constructor-arg name="type" value="台式机"/>
+                        <constructor-arg name="order" value="666"/>
+                        <constructor-arg name="price" value="3000"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+        <property name="info">
+            <props>
+                <prop key="phone">010-12345678</prop>
+                <prop key="address">北京市房山区xxx大学</prop>
+                <prop key="website">www.xxxedu.cn</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

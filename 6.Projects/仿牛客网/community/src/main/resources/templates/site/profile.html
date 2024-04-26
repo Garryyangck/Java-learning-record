@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--访问该页面时，在此处生成CSRF令牌-->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <title>牛客网-个人主页</title>
+</head>
+<body>
+<div class="nk-container">
+    <!-- 头部 -->
+    <header class="bg-dark sticky-top" th:replace="index::header"></header>
+
+    <!-- 内容 -->
+    <div class="main">
+        <div class="container">
+            <!-- 选项 -->
+            <div class="position-relative">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/user/profile(userId = ${user.id})}">个人信息</a>
+                    </li>
+                    <!--我的帖子-->
+                    <li class="nav-item" th:if="${loginUser != null && loginUser.id == user.id}">
+                        <a class="nav-link" th:href="@{/user/post}">我的帖子</a>
+                    </li>
+                    <!--我的回复-->
+                    <li class="nav-item" th:if="${loginUser != null && loginUser.id == user.id}">
+                        <a class="nav-link" th:href="@{/user/reply}">我的回复</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- 个人信息 -->
+            <div class="media mt-5">
+                <img th:src="${user.headerUrl}" class="align-self-start mr-4 rounded-circle"
+                     alt="用户头像" style="width:50px;">
+                <div class="media-body">
+                    <h5 class="mt-0 text-warning">
+                        <span th:utext="${user.username}"></span>
+                        <!--关注TA-->
+                        <button type="button" th:onclick="|follow(this, ${user.id})|"
+                                th:if="${loginUser != null && loginUser.id != user.id}"
+                                th:class="|btn ${followStatus == 1 ? 'btn-secondary' : 'btn-info'} btn-sm float-right mr-5 follow-btn|"
+                                th:utext="${followStatus == 1 ? '已关注' : '关注TA'}">
+                        </button>
+                    </h5>
+                    <div class="text-muted mt-3">
+                        <span>
+							注册于 <i class="text-muted"
+                                   th:utext="${#dates.format(user.createTime, 'yyyy-MM-dd HH:mm:ss')}"></i>
+						</span>
+                    </div>
+                    <div class="text-muted mt-3 mb-5">
+                        <!--关注列表-->
+                        <span>
+                            关注了 <a class="text-primary"
+                                   th:href="@{/user/followee(userId = ${user.id})}"
+                                   th:utext="${followeeCount}"></a> 人
+                        </span>
+                        <!--粉丝列表-->
+                        <span class="ml-4">
+                            关注者 <a class="text-primary" id="follower"
+                                   th:href="@{/user/follower(userId = ${user.id})}"
+                                   th:utext="${followerCount}"></a> 人
+                        </span>
+                        <!--收到的赞-->
+                        <span class="ml-4">
+                            获得了 <i class="text-danger" th:utext="${likeCount}"></i> 个赞
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <footer class="bg-dark" th:replace="index::footer"></footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/global.js}"></script>
+<script th:src="@{/js/profile.js}"></script>
+</body>
+</html>

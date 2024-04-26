@@ -1,0 +1,44 @@
+server:
+  # 应用服务 WEB 访问端口
+  port: 8081
+  # 设置session过期时间
+  servlet:
+    session:
+      timeout: 1800
+
+spring:
+  # Mybatis 数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mysql://localhost:3306/mall?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    data-username:
+  # json中的null属性不会显示
+  jackson:
+    default-property-inclusion: non_null
+  # redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  # 配置rabbitMQ
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+mybatis:
+  # 自动将下划线命名法转换为驼峰命名法
+  configuration:
+    map-underscore-to-camel-case: true
+    # 控制台输出sql语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 解决*Mapper.xml文件找不到的问题，classpath本质是编译后的target/classes目录
+#  mapper-locations: classpath:mapper/*.xml
+
+logging:
+  pattern:
+    # 修改日志的格式
+    console: "[%thread] %-5level %logger{36} - %msg%n"
+

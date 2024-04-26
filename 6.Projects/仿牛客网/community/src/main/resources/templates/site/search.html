@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <title>牛客网-搜索结果</title>
+</head>
+<body>
+<div class="nk-container">
+    <!-- 头部 -->
+    <header class="bg-dark sticky-top" th:replace="index::header"></header>
+
+    <!-- 内容 -->
+    <div class="main">
+        <div class="container">
+            <h6><b class="square"></b><em th:utext="${searchWord}"></em> 相关帖子</h6>
+            <!-- 帖子列表 -->
+            <ul class="list-unstyled mt-4" th:each="map:${discussPosts}">
+                <li class="media pb-3 pt-3 mb-3 border-bottom">
+                    <a th:href="@{/user/profile(userId = ${map.user.id})}">
+                        <img th:src="${map.user.headerUrl}" class="mr-4 rounded-circle" alt="用户头像"
+                             style="width:50px;height:50px;">
+                    </a>
+                    <div class="media-body">
+                        <h6 class="mt-0 mb-3">
+                            <a th:href="@{/post/detail(postId = ${map.post.id})}" th:utext="${map.post.title}"></a>
+                            <span class="badge badge-secondary bg-primary" th:if="${map.post.type == 1}">置顶</span>
+                            <span class="badge badge-secondary bg-danger" th:if="${map.post.status == 1}">精华</span>
+                        </h6>
+                        <div class="mb-3" th:utext="${map.post.content}"></div>
+                        <div class="text-muted font-size-12">
+                            <u class="mr-3" th:utext="${map.user.username}"></u>
+                            发布于 <b th:utext="${#dates.format(map.post.createTime, 'yyyy-MM-dd HH:mm:ss')}"></b>
+                            <ul class="d-inline float-right">
+                                <li class="d-inline ml-2">赞 <i th:utext="${map.likeCount}"></i></li>
+                                <li class="d-inline ml-2">|</li>
+                                <li class="d-inline ml-2">回复 <i th:utext="${map.post.commentCount}"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- 分页 -->
+            <nav class="mt-5" th:if="${pageInfo.pages > 0}"><!--页数>0才会显示-->
+                <ul class="pagination justify-content-center">
+                    <!--跳转首页-->
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(searchWord = ${searchWord}, pageNum = 1)}">首页</a>
+                    </li>
+
+                    <!--必须不是第一页，才有上一页-->
+                    <li th:class="|page-item ${pageInfo.pageNum == 1 ? 'disabled' : ''}|">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(searchWord = ${searchWord}, pageNum = ${pageInfo.prePage})}">上一页</a>
+                    </li>
+
+                    <!--当前页高亮，创建数组遍历，判断页数范围-->
+                    <li th:class="|page-item ${i == pageInfo.pageNum ? 'active' : ''}|"
+                        th:each="i:${#numbers.sequence(pageInfo.pageNum - navigatePageWidth, pageInfo.pageNum + navigatePageWidth)}"
+                        th:if="${i >= 1 && i <= pageInfo.pages}">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(searchWord = ${searchWord}, pageNum = ${i})}" th:text="${i}"></a>
+                    </li>
+
+                    <!--必须不是最后一页，才有下一页-->
+                    <li th:class="|page-item ${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}|">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(searchWord = ${searchWord}, pageNum = ${pageInfo.nextPage})}">下一页</a>
+                    </li>
+
+                    <!--跳转至末页-->
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(searchWord = ${searchWord}, pageNum = ${pageInfo.pages})}">末页</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <footer class="bg-dark" th:replace="index::footer"></footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/global.js}"></script>
+</body>
+</html>

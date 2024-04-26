@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="stylesheet" th:href="@{/css/letter.css}"/>
+    <title>牛客网-通知详情</title>
+</head>
+<body>
+<div class="nk-container">
+    <!-- 头部 -->
+    <header class="bg-dark sticky-top" th:replace="index::header"></header>
+
+    <!-- 内容 -->
+    <div class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <h6><b class="square"></b> 系统通知</h6>
+                </div>
+                <div class="col-4 text-right">
+                    <a th:href="@{/message/notice/list}" class="btn btn-secondary btn-sm">返回</a>
+                </div>
+            </div>
+
+            <!-- 通知列表 -->
+            <ul class="list-unstyled mt-4">
+                <li class="media pb-3 pt-3 mb-2" th:each="map:${messages}">
+                    <img src="http://static.nowcoder.com/images/head/notify.png" class="mr-4 rounded-circle user-header"
+                         alt="系统图标">
+                    <div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="mr-auto"
+                                    th:utext="${map.user.username} + ${map.preStatus == 0 ? '(未读)' : ''}"></strong>
+                            <small th:utext="${#dates.format(map.message.createTime, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                            <!--删除系统通知-->
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"
+                                    th:onclick="|delete_msg(${map.message.id})|">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="toast-body">
+								<span th:if="${noticeTopic == 'comment'}">用户
+									<a class="text-primary" th:href="@{/user/profile(userId = ${map.user.id})}">
+										<i th:utext="${map.user.username}"></i>
+									</a> 评论了你的
+									<b th:utext="${map.entityType == 1 ? '帖子' : '评论'}"></b>,
+									<a class="text-primary" th:href="@{/post/detail(postId = ${map.postId})}">点击查看</a> !
+								</span>
+                            <span th:if="${noticeTopic == 'like'}">用户
+									<a class="text-primary" th:href="@{/user/profile(userId = ${map.user.id})}">
+										<i th:utext="${map.user.username}"></i>
+									</a> 点赞了你的
+									<b th:utext="${map.entityType == 1 ? '帖子' : '评论'}"></b>,
+									<a class="text-primary" th:href="@{/post/detail(postId = ${map.postId})}">点击查看</a> !
+								</span>
+                            <span th:if="${noticeTopic == 'follow'}">用户
+									<a class="text-primary" th:href="@{/user/profile(userId = ${map.user.id})}">
+										<i th:utext="${map.user.username}"></i>
+									</a> 关注了你
+								</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- 分页 -->
+            <nav class="mt-5" th:if="${pageInfo.pages > 0}"><!--页数>0才会显示-->
+                <ul class="pagination justify-content-center">
+                    <!--跳转首页-->
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(noticeTopic = ${noticeTopic}, pageNum = 1)}">首页</a>
+                    </li>
+
+                    <!--必须不是第一页，才有上一页-->
+                    <li th:class="|page-item ${pageInfo.pageNum == 1 ? 'disabled' : ''}|">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(noticeTopic = ${noticeTopic}, pageNum = ${pageInfo.prePage})}">上一页</a>
+                    </li>
+
+                    <!--当前页高亮，创建数组遍历，判断页数范围-->
+                    <li th:class="|page-item ${i == pageInfo.pageNum ? 'active' : ''}|"
+                        th:each="i:${#numbers.sequence(pageInfo.pageNum - navigatePageWidth, pageInfo.pageNum + navigatePageWidth)}"
+                        th:if="${i >= 1 && i <= pageInfo.pages}">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(noticeTopic = ${noticeTopic}, pageNum = ${i})}" th:text="${i}"></a>
+                    </li>
+
+                    <!--必须不是最后一页，才有下一页-->
+                    <li th:class="|page-item ${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}|">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(noticeTopic = ${noticeTopic}, pageNum = ${pageInfo.nextPage})}">下一页</a>
+                    </li>
+
+                    <!--跳转至末页-->
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="@{${pagePath}(noticeTopic = ${noticeTopic}, pageNum = ${pageInfo.pages})}">末页</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <footer class="bg-dark" th:replace="index::footer"></footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/global.js}"></script>
+<script th:src="@{/js/letter.js}"></script>
+</body>
+</html>

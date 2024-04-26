@@ -1,0 +1,38 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+spring:
+  # Mybatis 数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mysql://localhost:3306/mall?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+  rabbitmq:
+    addresses: 127.0.0.1
+    # 端口不要配置成15672了，那是GUI的端口
+    port: 5672
+    password: guest
+    username: guest
+
+mybatis:
+  configuration:
+    # 自动将下划线命名法转换为驼峰命名法，引入mybatis-generator后就不需要了，它使用resultMap做了映射
+    map-underscore-to-camel-case: true
+  # 解决*Mapper.xml文件找不到的问题，classpath本质是编译后的target/classes目录
+#  mapper-locations: classpath:mapper/*.xml
+
+# 修改日志的格式
+logging:
+  pattern:
+    console: "[%thread] %-5level %logger{36} - %msg%n"
+
+# wx支付的相关配置
+wx:
+  appId: wx3e6b9f1c5a7ff034
+  mchId: 1614433647
+  mchKey: Aa111111111122222222223333333333
+  notifyUrl: http://garry-mall.natapp1.cc/pay/notify
+  returnUrl: http://garry-mall.natapp1.cc/index.html
+

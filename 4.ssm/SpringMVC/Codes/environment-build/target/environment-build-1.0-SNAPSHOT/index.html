@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>默认页面</title>
+</head>
+<body>
+
+<form action="./um/pm" method="post">
+    username:<input type="text" name="username"><br>
+    password:<input type="password" name="password"><br>
+    createTime:<input type="text" name="createTime"><br>
+    <input type="submit" value="提交"><br>
+</form>
+
+<button type="button" id="skip">跳转</button>
+
+<script>
+    document.getElementById("skip").onclick = function () {
+        location.href = "./form.html"
+    }
+</script>
+
+</body>
+</html>

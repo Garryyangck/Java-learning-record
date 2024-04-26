@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <title>牛客网-个人主页</title>
+</head>
+<body>
+<div class="nk-container">
+    <!-- 头部 -->
+    <header class="bg-dark sticky-top" th:replace="index::header"></header>
+
+    <!-- 内容 -->
+    <div class="main">
+        <div class="container">
+            <!-- 选项 -->
+            <div class="position-relative">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/profile(userId = ${user.id})}">个人信息</a>
+                    </li>
+                    <!--我的帖子-->
+                    <li class="nav-item" th:if="${loginUser != null && loginUser.id == user.id}">
+                        <a class="nav-link active" th:href="@{/user/post}">我的帖子</a>
+                    </li>
+                    <!--我的回复-->
+                    <li class="nav-item" th:if="${loginUser != null && loginUser.id == user.id}">
+                        <a class="nav-link" th:href="@{/user/reply}">我的回复</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- 我的帖子 -->
+            <div class="mt-4">
+                <h6><b class="square"></b> 发布的帖子(<i th:utext="${postCount}"></i>)</h6>
+                <ul class="list-unstyled mt-4 pl-3 pr-3" th:each="map:${discussPosts}">
+                    <li class="border-bottom pb-3 mt-4">
+                        <div class="font-size-16 text-info">
+                            <a th:href="@{/post/detail(postId = ${map.post.id})}" class="text-info"
+                               th:utext="${map.post.title}"></a>
+                            <span class="badge badge-secondary bg-primary" th:if="${map.post.type == 1}">置顶</span>
+                            <span class="badge badge-secondary bg-danger" th:if="${map.post.status == 1}">精华</span>
+                        </div>
+                        <div class="mt-1 font-size-14" th:utext="${map.post.content}"></div>
+                        <div class="text-right font-size-12 text-muted">
+                            赞 <i class="mr-3" th:utext="${map.likeCount}"></i>
+                            发布于 <b th:utext="${#dates.format(map.post.createTime, 'yyyy-MM-dd HH:mm:ss')}"></b>
+                        </div>
+                    </li>
+                </ul>
+                <!-- 分页 -->
+                <nav class="mt-5" th:if="${pageInfo.pages > 0}"><!--页数>0才会显示-->
+                    <ul class="pagination justify-content-center">
+                        <!--跳转首页-->
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{${pagePath}(pageNum = 1)}">首页</a>
+                        </li>
+
+                        <!--必须不是第一页，才有上一页-->
+                        <li th:class="|page-item ${pageInfo.pageNum == 1 ? 'disabled' : ''}|">
+                            <a class="page-link"
+                               th:href="@{${pagePath}(pageNum = ${pageInfo.prePage})}">上一页</a>
+                        </li>
+
+                        <!--当前页高亮，创建数组遍历，判断页数范围-->
+                        <li th:class="|page-item ${i == pageInfo.pageNum ? 'active' : ''}|"
+                            th:each="i:${#numbers.sequence(pageInfo.pageNum - navigatePageWidth, pageInfo.pageNum + navigatePageWidth)}"
+                            th:if="${i >= 1 && i <= pageInfo.pages}">
+                            <a class="page-link"
+                               th:href="@{${pagePath}(pageNum = ${i})}" th:text="${i}"></a>
+                        </li>
+
+                        <!--必须不是最后一页，才有下一页-->
+                        <li th:class="|page-item ${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}|">
+                            <a class="page-link"
+                               th:href="@{${pagePath}(pageNum = ${pageInfo.nextPage})}">下一页</a>
+                        </li>
+
+                        <!--跳转至末页-->
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{${pagePath}(pageNum = ${pageInfo.pages})}">末页</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <footer class="bg-dark" th:replace="index::footer"></footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/global.js}"></script>
+</body>
+</html>

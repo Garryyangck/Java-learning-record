@@ -1,0 +1,160 @@
+server:
+  # 应用服务 WEB 访问端口
+  port: 8080
+  servlet:
+    # 上下文地址，默认为 /，就是在访问所有页面之前要加上:/community
+    context-path: /community
+
+spring:
+  # Mybatis 数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mysql://localhost:3306/community?characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    type: com.zaxxer.hikari.HikariDataSource
+    # 线程池配置
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 30000
+  # json中的null属性不会显示
+  jackson:
+    default-property-inclusion: non_null
+  # thymeleaf配置
+  thymeleaf:
+    # 关闭缓存
+    cache: false
+  # spring-mail配置
+  mail:
+    host: smtp.sina.com
+    port: 465
+    username: 17380672612@sina.cn
+    password: d7ef9d8a493293e4
+    protocol: smtps
+    properties:
+      mail:
+        smtl:
+          auth: true
+        smtp:
+          ssl:
+            enable: true
+  # redis配置
+  redis:
+    # redis一共11个库，使用第0个库
+    database: 0
+    host: localhost
+    port: 6379
+  # kafka配置
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: community-consumer-group
+      enable-auto-commit: true
+      auto-commit-interval: 3000
+  # elasticsearch配置
+  data:
+    elasticsearch:
+      cluster-name: garry-community
+      # elasticsearch tcp服务的端口
+      cluster-nodes: localhost:9300
+  task:
+    # Spring自带的普通线程池的配置
+    execution:
+      pool:
+        # 默认5个线程
+        core-size: 5
+        # 如果不够用，最多扩容到15
+        max-size: 15
+        # 15个线程也不够用，就把任务放到一个队列里，起到缓冲的作用
+        queue-capacity: 100
+    # Spring自带的普通线程池的配置
+    scheduling:
+      pool:
+        size: 5
+  # quartz配置
+  quartz:
+    # 存储方式
+    job-store-type: jdbc
+    # 调度器的名字
+    scheduler-name: communityScheduler
+    # 核心配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            # scheduler的id自动生成
+            instanceId: AUTO
+          # job存储到数据库的配置
+          jobStore:
+            # 使用该类存储到数据库
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            # 使用的jdbc的驱动
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            # 是否采用集群的方式
+            isClustered: true
+          # 线程池的配置
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 5
+
+mybatis:
+  configuration:
+    # 自动将下划线命名法转换为驼峰命名法
+    map-underscore-to-camel-case: true
+    # 控制台输出sql语句
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 使用主键自增机制
+    use-generated-keys: true
+  # 解决*Mapper.xml文件找不到的问题，classpath本质是编译后的target/classes目录
+  mapper-locations: classpath:mapper/*.xml
+  # 起别名，得告诉mybatis需要的对象在哪个包
+  type-aliases-package: garry.community.pojo
+
+logging:
+  pattern:
+    # 修改日志的格式
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %magenta(%-5level) %green([%-50.50class]) >>> %cyan(%msg) %n"
+  level:
+    # 设置日志最低级别
+    garry.community: debug
+
+community:
+  path:
+    domain: http://localhost:8080
+    upload: D:/杨宸楷/学习/java-learning/6.Projects/仿牛客网/upload
+
+# 七牛云配置
+qiniu:
+  key:
+    access: hkTkZQZQLA_g8gdrxh8UkRaIQoHCPH4cIknN4_OC
+    secret: u_objeDDFbY4B2gRREnL0UaQC85o5PsJP4i_i9K7
+  bucket:
+    header:
+      name: garry-community-header
+      url: http://sb5sep8d3.hb-bkt.clouddn.com
+
+# Caffeine配置
+caffeine:
+  # 用Caffeine在本地缓存热门帖子(热门帖子的更新不是很频繁(5minutes)，因此可以考虑缓存)
+  posts:
+    max-size: 15
+    expire-seconds: 180
+
+# spring-boot Actuator的配置
+management:
+  endpoints:
+    web:
+      exposure:
+        # 打开所有的监控点
+        include: "*"
+      # 自定义监控路径 monitor
+      # 默认值：http://localhost:8016/actuator/*
+      # 配置后：http://localhost:8016/monitor/*
+#      base-path: /monitor
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      # 通过指定接口关闭 SpringBoot
+      enabled: false

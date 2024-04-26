@@ -1,0 +1,6 @@
+com\itheima\MyBatisDemo.class
+com\itheima\MyBatisDemo2.class
+com\itheima\pojo\User.class
+com\itheima\mapper\BrandMapper.class
+com\itheima\mapper\UserMapper.class
+com\itheima\pojo\Brand.class

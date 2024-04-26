@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="garry.community.dao.DiscussPostMapper">
+    <resultMap id="BaseResultMap" type="garry.community.pojo.DiscussPost">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="comment_count" jdbcType="INTEGER" property="commentCount"/>
+        <result column="score" jdbcType="DOUBLE" property="score"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, title, content, type, status, create_time, comment_count, score
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from discuss_post
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from discuss_post
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="garry.community.pojo.DiscussPost">
+        insert into discuss_post (id, user_id, title,
+                                  content, type, status,
+                                  create_time, comment_count, score)
+        values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+                #{content,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{commentCount,jdbcType=INTEGER}, #{score,jdbcType=DOUBLE})
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="garry.community.pojo.DiscussPost">
+        insert into discuss_post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="commentCount != null">
+                comment_count,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commentCount != null">
+                #{commentCount,jdbcType=INTEGER},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="garry.community.pojo.DiscussPost">
+        update discuss_post
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commentCount != null">
+                comment_count = #{commentCount,jdbcType=INTEGER},
+            </if>
+            <if test="score != null">
+                score = #{score,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="garry.community.pojo.DiscussPost">
+        update discuss_post
+        set user_id       = #{userId,jdbcType=VARCHAR},
+            title         = #{title,jdbcType=VARCHAR},
+            content       = #{content,jdbcType=VARCHAR},
+            type          = #{type,jdbcType=INTEGER},
+            status        = #{status,jdbcType=INTEGER},
+            create_time   = #{createTime,jdbcType=TIMESTAMP},
+            comment_count = #{commentCount,jdbcType=INTEGER},
+            score         = #{score,jdbcType=DOUBLE}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectDiscussPosts" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from discuss_post
+        where status != 2
+        <if test="userId != 0">
+            and user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        order by
+        <if test="onTop == true">
+            type desc ,
+        </if>
+        create_time desc
+    </select>
+
+    <select id="selectDiscussPostRows" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(id)
+        from discuss_post
+        where status != 2
+        <if test="userId != 0">
+            and user_id = #{userId,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectAllPosts" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from discuss_post
+        where status != 2
+    </select>
+
+    <select id="selectHotDiscussPosts" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from discuss_post
+        where status != 2
+        <if test="userId != 0">
+            and user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        order by
+        <if test="onTop == true">
+            type desc ,
+        </if>
+        score desc
+    </select>
+
+    <delete id="deleteByUserId" parameterType="java.lang.Integer">
+        delete
+        from discuss_post
+        where user_id = #{userId,jdbcType=INTEGER}
+    </delete>
+</mapper>

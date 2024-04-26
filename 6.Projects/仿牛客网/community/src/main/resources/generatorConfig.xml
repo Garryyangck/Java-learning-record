@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--下载的mysql-connector-java-5.1.6.jar的绝对路径-->
+    <classPathEntry location="D:\apache-maven-3.6.1\mvn_resp\org\mybatis\generator\mysql-connector-java-5.1.6.jar"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <!--不再追加xml的插件，注意位置必须在commentGenerator之前-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+
+        <!--消除所有注释，位置有要求，需要放在数据库连接前面-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/community?characterEncoding=UTF-8&amp;useSSL=false&amp;serverTimezone=UTC"
+                        userId="root"
+                        password="1234">
+        </jdbcConnection>
+
+        <!--关闭将所有数值强转为BigDecimals，即程序根据数据大小调整转换的格式-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--表属性映射的Java对象，包名garry.community.pojo，目录名为src/main/java-->
+        <javaModelGenerator targetPackage="garry.community.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--xml文件，包名mapper，目录名src/main/resources-->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--Mapper类，包名garry.community.pojo，目录名为src/main/java-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="garry.community.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="user" domainObjectName="User" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+
+        <table tableName="discuss_post" domainObjectName="DiscussPost" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false">
+            <columnOverride column="content" jdbcType="VARCHAR"/>
+        </table>
+
+        <table tableName="login_ticket" domainObjectName="LoginTicket" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false"/>
+
+        <table tableName="comment" domainObjectName="Comment" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false">
+            <columnOverride column="content" jdbcType="VARCHAR"/>
+        </table>
+
+        <table tableName="message" domainObjectName="Message" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false">
+            <columnOverride column="content" jdbcType="VARCHAR"/>
+        </table>
+
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+    <link rel="stylesheet" th:href="@{/css/letter.css}"/>
+    <title>牛客网-通知</title>
+</head>
+<body>
+<div class="nk-container">
+    <!-- 头部 -->
+    <header class="bg-dark sticky-top" th:replace="index::header"></header>
+
+    <!-- 内容 -->
+    <div class="main">
+        <div class="container">
+            <div class="position-relative">
+                <!-- 选项 -->
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" th:href="@{/message/letter/list}">朋友私信
+                            <!--私信消息数量-->
+                            <span class="badge badge-danger"
+                                  th:utext="${unreadLettersCount}"
+                                  th:if="${unreadLettersCount > 0}">
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative active" th:href="@{/message/notice/list}">系统通知
+                            <!--通知消息数量-->
+                            <span class="badge badge-danger"
+                                  th:utext="${unreadNoticeCount}"
+                                  th:if="${unreadNoticeCount > 0}">
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 通知列表 -->
+            <ul class="list-unstyled">
+                <!--评论-->
+                <li class="media pb-3 pt-3 mb-3 border-bottom position-relative">
+                    <!--未读评论消息数-->
+                    <span class="badge badge-danger"
+                          th:utext="${unreadCommentCount}"
+                          th:if="${unreadCommentCount > 0}">
+                    </span>
+                    <a th:href="@{/message/notice/detail(noticeTopic = 'comment')}">
+                        <img src="http://static.nowcoder.com/images/head/reply.png" class="mr-4 user-header" alt="通知图标">
+                    </a>
+                    <div class="media-body">
+                        <h6 class="mt-0 mb-3">
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'comment')}">
+                                <span>评论</span>
+                            </a>
+                            <!--最新评论时间-->
+                            <span class="float-right text-muted font-size-12"
+                                  th:if="${firstComment != null}"
+                                  th:utext="${#dates.format(firstComment.createTime, 'yyyy-MM-dd HH:mm:ss')}">
+                            </span>
+                        </h6>
+                        <div>
+                            <!--最新评论 详情链接-->
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'comment')}"
+                               th:if="${firstComment != null}">用户
+                                <i th:utext="${commentUser.username}"></i> 评论了你的
+                                <b th:utext="${commentEntityType == 1 ? '帖子' : '评论'}"></b> ...
+                            </a>
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'comment')}">
+                                <ul class="d-inline font-size-12 float-right">
+                                    <!--系统评论消息总数-->
+                                    <li class="d-inline ml-2">
+                                    <span class="text-primary">共
+                                        <i th:utext="${commentCount}"></i> 条通知
+                                    </span>
+                                    </li>
+                                </ul>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <!--点赞-->
+                <li class="media pb-3 pt-3 mb-3 border-bottom position-relative">
+                    <!--未读点赞消息数-->
+                    <span class="badge badge-danger"
+                          th:utext="${unreadLikeCount}"
+                          th:if="${unreadLikeCount > 0}">
+                    </span>
+                    <a th:href="@{/message/notice/detail(noticeTopic = 'like')}">
+                        <img src="http://static.nowcoder.com/images/head/like.png" class="mr-4 user-header" alt="通知图标">
+                    </a>
+                    <div class="media-body">
+                        <h6 class="mt-0 mb-3">
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'like')}">
+                                <span>点赞</span>
+                            </a>
+                            <!--最新点赞时间-->
+                            <span class="float-right text-muted font-size-12"
+                                  th:if="${firstLike != null}"
+                                  th:utext="${#dates.format(firstLike.createTime, 'yyyy-MM-dd HH:mm:ss')}">>
+                            </span>
+                        </h6>
+                        <div>
+                            <!--最新点赞的用户 详情链接-->
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'like')}"
+                               th:if="${firstLike != null}">用户
+                                <i th:utext="${likeUser.username}"></i> 点赞了你的
+                                <b th:utext="${likeEntityType == 1 ? '帖子' : '评论'}"></b> ...
+                            </a>
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'like')}">
+                                <ul class="d-inline font-size-12 float-right">
+                                    <!--系统点赞通知总数-->
+                                    <li class="d-inline ml-2">
+                                    <span class="text-primary">共
+                                        <i th:utext="${likeCount}"></i> 条通知
+                                    </span>
+                                    </li>
+                                </ul>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <!--关注-->
+                <li class="media pb-3 pt-3 mb-3 border-bottom position-relative">
+                    <!--未读关注消息数-->
+                    <span class="badge badge-danger"
+                          th:utext="${unreadFollowCount}"
+                          th:if="${unreadFollowCount > 0}">
+                    </span>
+                    <a th:href="@{/message/notice/detail(noticeTopic = 'follow')}">
+                        <img src="http://static.nowcoder.com/images/head/follow.png" class="mr-4 user-header" alt="通知图标">
+                    </a>
+                    <div class="media-body">
+                        <h6 class="mt-0 mb-3">
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'follow')}">
+                                <span>关注</span>
+                            </a>
+                            <!--最新关注时间-->
+                            <span class="float-right text-muted font-size-12"
+                                  th:if="${firstFollow != null}"
+                                  th:utext="${#dates.format(firstFollow.createTime, 'yyyy-MM-dd HH:mm:ss')}">
+                            </span>
+                        </h6>
+                        <div>
+                            <!--最新关注的用户 详情链接-->
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'follow')}"
+                               th:if="${firstFollow != null}">用户
+                                <i th:utext="${followUser.username}"></i> 关注了你 ...
+                            </a>
+                            <a th:href="@{/message/notice/detail(noticeTopic = 'follow')}">
+                                <ul class="d-inline font-size-12 float-right">
+                                    <!--系统关注消息总数-->
+                                    <li class="d-inline ml-2">
+                                    <span class="text-primary">共
+                                        <i th:utext="${followCount}"></i> 条通知
+                                    </span>
+                                    </li>
+                                </ul>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <footer class="bg-dark" th:replace="index::footer"></footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/global.js}"></script>
+</body>
+</html>

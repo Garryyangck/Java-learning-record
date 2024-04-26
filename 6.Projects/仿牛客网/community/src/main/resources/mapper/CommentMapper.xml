@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="garry.community.dao.CommentMapper">
+    <resultMap id="BaseResultMap" type="garry.community.pojo.Comment">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="entity_type" jdbcType="INTEGER" property="entityType"/>
+        <result column="entity_id" jdbcType="INTEGER" property="entityId"/>
+        <result column="target_id" jdbcType="INTEGER" property="targetId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, entity_type, entity_id, target_id, content, status, create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from comment
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from comment
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="garry.community.pojo.Comment">
+        insert into comment (id, user_id, entity_type,
+                             entity_id, target_id, content,
+                             status, create_time)
+        values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{entityType,jdbcType=INTEGER},
+                #{entityId,jdbcType=INTEGER}, #{targetId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
+                #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="garry.community.pojo.Comment">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="entityType != null">
+                entity_type,
+            </if>
+            <if test="entityId != null">
+                entity_id,
+            </if>
+            <if test="targetId != null">
+                target_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="entityType != null">
+                #{entityType,jdbcType=INTEGER},
+            </if>
+            <if test="entityId != null">
+                #{entityId,jdbcType=INTEGER},
+            </if>
+            <if test="targetId != null">
+                #{targetId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="garry.community.pojo.Comment">
+        update comment
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="entityType != null">
+                entity_type = #{entityType,jdbcType=INTEGER},
+            </if>
+            <if test="entityId != null">
+                entity_id = #{entityId,jdbcType=INTEGER},
+            </if>
+            <if test="targetId != null">
+                target_id = #{targetId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="garry.community.pojo.Comment">
+        update comment
+        set user_id     = #{userId,jdbcType=INTEGER},
+            entity_type = #{entityType,jdbcType=INTEGER},
+            entity_id   = #{entityId,jdbcType=INTEGER},
+            target_id   = #{targetId,jdbcType=INTEGER},
+            content     = #{content,jdbcType=VARCHAR},
+            status      = #{status,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectComments" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from comment
+        where status != 1
+        and entity_type = #{entityType,jdbcType=INTEGER}
+        and entity_id = #{entityId,jdbcType=INTEGER}
+        order by create_time
+    </select>
+
+    <select id="selectCommentRows" resultType="java.lang.Integer">
+        select count(id)
+        from comment
+        where status != 1
+          and entity_type = #{entityType,jdbcType=INTEGER}
+          and entity_id = #{entityId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectCommentCountByUserId" resultType="java.lang.Integer">
+        select count(id)
+        from comment
+        where status != 1
+        <if test="userId != null and userId != 0">
+            and user_id = #{userId}
+        </if>
+    </select>
+
+    <select id="selectCommentByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from comment
+        where status != 1
+        <if test="userId != null and userId != 0">
+            and user_id = #{userId}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectCommentByEntityId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from comment
+        where status != 1
+        <if test="entityId != null and entityId != 0">
+            and entity_id = #{entityId}
+        </if>
+    </select>
+</mapper>

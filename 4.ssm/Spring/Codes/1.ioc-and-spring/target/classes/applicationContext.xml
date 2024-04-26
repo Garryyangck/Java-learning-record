@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--通过构造器创建实例对象-->
+    <bean id="sweetApple" class="garry.pojo.Apple">
+        <constructor-arg name="title" value="红富士"/>
+        <constructor-arg name="location" value="欧洲"/>
+        <constructor-arg name="color" value="红色"/>
+    </bean>
+
+    <!--通过静态工厂创建实例对象-->
+    <bean id="softApple" class="garry.factory.AppleStaticFactory"
+          factory-method="createSoftApple"/>
+
+    <!--通过工厂实例创建实例对象-->
+    <bean id="factoryInstance" class="garry.factory.AppleFactoryInstance"/>
+    <bean id="sourApple" factory-bean="factoryInstance"
+          factory-method="createSourApple"/>
+
+
+    <bean name="lily,Lily" class="garry.pojo.Child">
+        <property name="name" value="莉莉"/>
+        <property name="apple" ref="sweetApple"/>
+    </bean>
+    <bean id="andy" class="garry.pojo.Child">
+        <property name="name" value="安迪"/>
+        <property name="apple" ref="sourApple"/>
+    </bean>
+    <bean id="luna" class="garry.pojo.Child">
+        <property name="name" value="露娜"/>
+        <property name="apple" ref="softApple"/>
+    </bean>
+</beans>

@@ -1,0 +1,17 @@
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:19:14:52 +0800] "GET /jsp-byGarry HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:19:14:52 +0800] "GET /jsp-byGarry/ HTTP/1.1" 404 975 http-bio-8080-exec-3 7
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:19:15:00 +0800] "GET /jsp-byGarry/hello.jsp HTTP/1.1" 200 109 http-bio-8080-exec-4 303
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:29:17 +0800] "GET /jsp-byGarry HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:29:17 +0800] "GET /jsp-byGarry/ HTTP/1.1" 404 975 http-bio-8080-exec-3 9
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:30:03 +0800] "GET /jsp-byGarry HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:30:03 +0800] "GET /jsp-byGarry/ HTTP/1.1" 404 975 http-bio-8080-exec-3 10
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:30:11 +0800] "GET /jsp-byGarry/hello.jsp HTTP/1.1" 200 105 http-bio-8080-exec-4 278
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:56:47 +0800] "GET /jsp-byGarry HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:56:47 +0800] "GET /jsp-byGarry/ HTTP/1.1" 404 975 http-bio-8080-exec-3 10
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:56:53 +0800] "GET /jsp-byGarry/brand.jsp HTTP/1.1" 200 1346 http-bio-8080-exec-4 332
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:59:22 +0800] "GET /jsp-byGarry HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:59:22 +0800] "GET /jsp-byGarry/ HTTP/1.1" 404 975 http-bio-8080-exec-3 7
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:20:59:26 +0800] "GET /jsp-byGarry/brand.jsp HTTP/1.1" 200 1311 http-bio-8080-exec-4 300
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:21:02:59 +0800] "GET /jsp-byGarry HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:21:02:59 +0800] "GET /jsp-byGarry/ HTTP/1.1" 404 975 http-bio-8080-exec-3 16
+0:0:0:0:0:0:0:1 - - [27/Feb/2024:21:03:05 +0800] "GET /jsp-byGarry/brand.jsp HTTP/1.1" 200 1566 http-bio-8080-exec-4 295

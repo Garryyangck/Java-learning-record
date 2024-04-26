@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="garry.community.dao.MessageMapper">
+    <resultMap id="BaseResultMap" type="garry.community.pojo.Message">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="from_id" jdbcType="INTEGER" property="fromId"/>
+        <result column="to_id" jdbcType="INTEGER" property="toId"/>
+        <result column="conversation_id" jdbcType="VARCHAR" property="conversationId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, from_id, to_id, conversation_id, content, status, create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from message
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from message
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="garry.community.pojo.Message">
+        insert into message (id, from_id, to_id,
+                             conversation_id, content, status,
+                             create_time)
+        values (#{id,jdbcType=INTEGER}, #{fromId,jdbcType=INTEGER}, #{toId,jdbcType=INTEGER},
+                #{conversationId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="garry.community.pojo.Message">
+        insert into message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="fromId != null">
+                from_id,
+            </if>
+            <if test="toId != null">
+                to_id,
+            </if>
+            <if test="conversationId != null">
+                conversation_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="fromId != null">
+                #{fromId,jdbcType=INTEGER},
+            </if>
+            <if test="toId != null">
+                #{toId,jdbcType=INTEGER},
+            </if>
+            <if test="conversationId != null">
+                #{conversationId,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="garry.community.pojo.Message">
+        update message
+        <set>
+            <if test="fromId != null">
+                from_id = #{fromId,jdbcType=INTEGER},
+            </if>
+            <if test="toId != null">
+                to_id = #{toId,jdbcType=INTEGER},
+            </if>
+            <if test="conversationId != null">
+                conversation_id = #{conversationId,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="garry.community.pojo.Message">
+        update message
+        set from_id         = #{fromId,jdbcType=INTEGER},
+            to_id           = #{toId,jdbcType=INTEGER},
+            conversation_id = #{conversationId,jdbcType=VARCHAR},
+            content         = #{content,jdbcType=VARCHAR},
+            status          = #{status,jdbcType=INTEGER},
+            create_time     = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectConversations" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from message
+        where id in (
+        select max(id)
+        from message
+        where status != 2
+        and from_id != 1
+        and (from_id = #{userId} or to_id = #{userId})
+        group by conversation_id
+        )
+        order by create_time desc
+    </select>
+
+    <select id="selectConversationRows" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where id in (
+            select max(id)
+            from message
+            where status != 2
+              and from_id != 1
+              and (from_id = #{userId} or to_id = #{userId})
+            group by conversation_id
+        )
+    </select>
+
+    <select id="selectLetters" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from message
+        where status != 2
+        and conversation_id = #{conversationId}
+        order by create_time desc
+    </select>
+
+    <select id="selectLetterRows" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where status != 2
+          and conversation_id = #{conversationId}
+    </select>
+
+    <select id="selectUnreadLettersCount" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where status = 0
+        and from_id != 1
+        and to_id = #{userId}
+        <if test="conversationId != null">
+            and conversation_id = #{conversationId}
+        </if>
+    </select>
+
+    <select id="selectLettersCount" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where status != 2
+        and from_id != 1
+        and (from_id = #{userId} or to_id = #{userId})
+        <if test="conversationId != null">
+            and conversation_id = #{conversationId}
+        </if>
+    </select>
+
+    <select id="selectUnreadNoticeCount" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where status = 0
+        and from_id = 1
+        <if test="userId != null">
+            and to_id = #{userId}
+        </if>
+    </select>
+
+    <select id="selectUnreadSpecificNoticeCount" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where status = 0
+        and from_id = 1
+        <if test="conversationId != null">
+            and conversation_id = #{conversationId}
+        </if>
+        <if test="userId != null">
+            and to_id = #{userId}
+        </if>
+    </select>
+
+    <select id="selectRecentMessageOfSpecificNotice" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from message
+        where id in (
+        select max(id)
+        from message
+        where status != 2
+        and from_id = 1
+        <if test="conversationId != null">
+            and conversation_id = #{conversationId}
+        </if>
+        <if test="userId != null">
+            and to_id = #{userId}
+        </if>
+        )
+    </select>
+
+    <select id="selectSpecificNoticeCount" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where status != 2
+        and from_id = 1
+        <if test="conversationId != null">
+            and conversation_id = #{conversationId}
+        </if>
+        <if test="userId != null">
+            and to_id = #{userId}
+        </if>
+    </select>
+
+    <select id="selectSpecificNotice" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from message
+        where status != 2
+        and from_id = 1
+        <if test="conversationId != null">
+            and conversation_id = #{conversationId}
+        </if>
+        <if test="userId != null">
+            and to_id = #{userId}
+        </if>
+        order by status, create_time desc
+    </select>
+</mapper>

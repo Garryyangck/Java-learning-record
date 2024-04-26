@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="sweetApple" class="garry.ioc.pojo.Apple">
+        <property name="title" value="红富士"/>
+        <property name="location" value="欧洲"/>
+        <property name="color" value="红色"/>
+    </bean>
+
+    <bean id="sourApple" class="garry.ioc.pojo.Apple">
+        <property name="title" value="青苹果"/>
+        <property name="location" value="中亚"/>
+        <property name="color" value="绿色"/>
+    </bean>
+</beans>

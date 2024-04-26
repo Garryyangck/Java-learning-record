@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="4.tinyioc" />
+        <module name="2.book-shop" />
+        <module name="3.company-property-list" />
+        <module name="ioc-and-spring" />
+        <module name="5.annotation" />
+        <module name="1.ioc-and-spring" />
+        <module name="6.java-config" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
