@@ -5740,4 +5740,57 @@ Java进阶完成：
 		}
 		```
 	
+
+
+
+# ***2024.4.27打卡	Day 87***
+
+1. Git
+	- 视频课专栏已完成。
+
+2. Redis
+
+	- 2篇。使用LFU清理不再使用的缓存数据，使用pika解决Redis单实例扩大数据量。
+
+3. leetcode刷题：2题
+
+	- [435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/)
 	
+		和安排活动一样，剔除最少就等同于留下最多区间，按结束位置从大到小排序，维护结束位置end。
+	
+	- [135. 分发糖果](https://leetcode.cn/problems/candy/)
+	
+		先不考虑头尾（注意只有一个元素的情况），从左到右遍历，再从右到左遍历，最后考虑头尾
+	
+		```java
+		if (ratings.length == 1) // 注意只有一个元素的情况
+		    return 1;
+		int[] candy = new int[ratings.length];
+		for (int i = 1; i <= ratings.length - 2; i++) { // 从左到右遍历
+		    if (ratings[i] > ratings[i + 1]) {
+		        candy[i] = Math.max(candy[i], candy[i + 1] + 1);
+		    }
+		    if (ratings[i] > ratings[i - 1]) {
+		        candy[i] = Math.max(candy[i], candy[i - 1] + 1);
+		    }
+		}
+		for (int i = ratings.length - 2; i >= 1; i--) { // 再从右到左遍历
+		    if (ratings[i] > ratings[i + 1]) {
+		        candy[i] = Math.max(candy[i], candy[i + 1] + 1);
+		    }
+		    if (ratings[i] > ratings[i - 1]) {
+		        candy[i] = Math.max(candy[i], candy[i - 1] + 1);
+		    }
+		}
+		if (ratings[0] > ratings[1]) // 最后考虑头尾
+		    candy[0] = candy[1] + 1;
+		if (ratings[ratings.length - 1] > ratings[ratings.length - 2])
+		    candy[ratings.length - 1] = candy[ratings.length - 2] + 1;
+		int ans = candy.length;
+		for (int i = 0; i < candy.length; i++) {
+		    ans += candy[i];
+		}
+		return ans;
+		```
+	
+		

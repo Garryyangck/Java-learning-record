@@ -16,24 +16,46 @@ public class Main {
     @SuppressWarnings("ImplicitArrayToString")
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.leastInterval(new char[]{'A', 'A', 'A', 'B', 'B', 'B'}, 2));
+        solution.candy(new int[]{3, 2, 1, 1, 4, 3, 3});
     }
 }
 
 @SuppressWarnings({"all"})
 class Solution {
-    public int leastInterval(char[] tasks, int n) {
-        int[] nums = new int[26];
-        for (int i = 0; i < tasks.length; i++) {
-            nums[(int) (tasks[i] - 'A')]++;
+    public int candy(int[] ratings) {
+        int[] candy = new int[ratings.length];
+        for(int i = 0; i < ratings.length - 1; i++) {
+            if(i == 0) {
+                if(ratings[i] > ratings[i + 1]) {
+                    candy[i] = Math.max(candy[i], candy[i + 1] + 1);
+                }
+                continue;
+            }
+            if(ratings[i] > ratings[i + 1]) {
+                candy[i] = Math.max(candy[i], candy[i + 1] + 1);
+            }
+            if(ratings[i] > ratings[i - 1]) {
+                candy[i] = Math.max(candy[i], candy[i - 1] + 1);
+            }
         }
-        Arrays.sort(nums);
-        int ans = (nums[nums.length - 1] - 1) * (n + 1) + 1;
-        for (int i = nums.length - 1; i >= 0; i--) {
-            if (nums[i] == 0)
-                return ans;
-            ans = Math.max(ans, (nums[i] - 1) * (n + 1) + 1 + (25 - i));
+        for(int i = ratings.length - 1; i > 0; i--) {
+            if(i == ratings.length - 1) {
+                if(ratings[i] > ratings[i - 1]) {
+                    candy[i] = Math.max(candy[i], candy[i - 1] + 1);
+                }
+                continue;
+            }
+            if(ratings[i] > ratings[i + 1]) {
+                candy[i] = Math.max(candy[i], candy[i + 1] + 1);
+            }
+            if(ratings[i] > ratings[i - 1]) {
+                candy[i] = Math.max(candy[i], candy[i - 1] + 1);
+            }
         }
-        return Math.max(ans, tasks.length);
+        int ans = candy.length;
+        for(int i = 0; i < candy.length; i++) {
+            ans += candy[i];
+        }
+        return ans;
     }
 }
