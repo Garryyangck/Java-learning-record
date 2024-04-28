@@ -16,46 +16,34 @@ public class Main {
     @SuppressWarnings("ImplicitArrayToString")
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.candy(new int[]{3, 2, 1, 1, 4, 3, 3});
+        System.out.println(solution.combine(4, 2));
     }
 }
 
 @SuppressWarnings({"all"})
 class Solution {
-    public int candy(int[] ratings) {
-        int[] candy = new int[ratings.length];
-        for(int i = 0; i < ratings.length - 1; i++) {
-            if(i == 0) {
-                if(ratings[i] > ratings[i + 1]) {
-                    candy[i] = Math.max(candy[i], candy[i + 1] + 1);
-                }
-                continue;
-            }
-            if(ratings[i] > ratings[i + 1]) {
-                candy[i] = Math.max(candy[i], candy[i + 1] + 1);
-            }
-            if(ratings[i] > ratings[i - 1]) {
-                candy[i] = Math.max(candy[i], candy[i - 1] + 1);
-            }
-        }
-        for(int i = ratings.length - 1; i > 0; i--) {
-            if(i == ratings.length - 1) {
-                if(ratings[i] > ratings[i - 1]) {
-                    candy[i] = Math.max(candy[i], candy[i - 1] + 1);
-                }
-                continue;
-            }
-            if(ratings[i] > ratings[i + 1]) {
-                candy[i] = Math.max(candy[i], candy[i + 1] + 1);
-            }
-            if(ratings[i] > ratings[i - 1]) {
-                candy[i] = Math.max(candy[i], candy[i - 1] + 1);
-            }
-        }
-        int ans = candy.length;
-        for(int i = 0; i < candy.length; i++) {
-            ans += candy[i];
-        }
+    private List<List<Integer>> ans = new ArrayList<>();
+    private List<Integer> now = new ArrayList<>();
+    private int n;
+    private int k;
+
+    public List<List<Integer>> combine(int n, int k) {
+        this.n = n;
+        this.k = k;
+        backTrace(1);
         return ans;
+    }
+
+    private void backTrace(int index) {
+        if (now.size() >= k) {
+            ans.add(new ArrayList(now));
+            return;
+        }
+
+        for (int i = index; i <= n; i++) {
+            now.add(i);
+            backTrace(index + 1);
+            now.remove(now.size() - 1);
+        }
     }
 }
