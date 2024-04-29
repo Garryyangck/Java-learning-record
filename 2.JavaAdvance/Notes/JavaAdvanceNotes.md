@@ -20,7 +20,7 @@ public static int cnt = 0;
 2. jdk8以前的版本存在*方法区中静态域*
 3. jdk8以后的版本，***在类加载时会在堆区创建一个 Class实例***，***专门存放 static类变量***
 
-![微信截图_20240206180019](advance-learning.assert/微信截图_20240206180019.png)
+![微信截图_20240206180019](advance-learning.assets/微信截图_20240206180019.png)
 
 ---
 
@@ -62,7 +62,7 @@ public static void show() {}
 
 5. ***java执行的程序 参数 1 参数 2 参数 3***
 
-	<img src="advance-learning.assert/微信截图_20240206215612.png" alt="微信截图_20240206215612" style="zoom: 67%;" />
+	<img src="advance-learning.assets/微信截图_20240206215612.png" alt="微信截图_20240206215612" style="zoom: 67%;" />
 
 6. *main方法是静态方法，**只能调用本类的静态成员***
 
@@ -70,9 +70,9 @@ public static void show() {}
 
 ***在 IDEA中给 main方法传参：***
 
-> <img src="advance-learning.assert/微信截图_20240206220311.png" alt="微信截图_20240206220311" style="zoom:30%;" />
+> <img src="advance-learning.assets/微信截图_20240206220311.png" alt="微信截图_20240206220311" style="zoom:30%;" />
 >
-> <img src="advance-learning.assert/微信截图_20240206220341.png" alt="微信截图_20240206220341" style="zoom: 40%;" />
+> <img src="advance-learning.assets/微信截图_20240206220341.png" alt="微信截图_20240206220341" style="zoom: 40%;" />
 
 
 
@@ -274,7 +274,7 @@ class Movie {
 
 	> - ***饿汉式*** 存在浪费资源的可能。如果***一个对象实例都没有使用***，那么饿汉式***创建的对象就浪费了***
 	>
-	> - ***懒汉式 ***是***使用时才创建***，就不存在这个问题。
+	> - ***懒汉式*** 是***使用时才创建***，就不存在这个问题。
 
 ### final
 
@@ -502,7 +502,7 @@ interface MyInterface {
 
 3. 同样有继承中“爷爷类”的概念
 
-	![微信截图_20240207183219](advance-learning.assert/微信截图_20240207183219.png)
+	![微信截图_20240207183219](advance-learning.assets/微信截图_20240207183219.png)
 
 
 
@@ -692,13 +692,13 @@ enum Season2 {
 5. 无参构造器，创建常量对象，则可以省略 ()
 6. 当我们使用 enum 关键字开发一个枚举类时,默认***会继承 Enum类***，因而***不能再继承其他类***，***可以接口***
 
-![微信截图_20240208133257](advance-learning.assert/微信截图_20240208133257.png)
+![微信截图_20240208133257](advance-learning.assets/微信截图_20240208133257.png)
 
 ---
 
 ### Enum类中的方法
 
-![微信截图_20240208134159](advance-learning.assert/微信截图_20240208134159.png)
+![微信截图_20240208134159](advance-learning.assets/微信截图_20240208134159.png)
 
 1. ***name()方法：***输出***枚举对象的名字***
 
@@ -840,7 +840,7 @@ public @interface Override {
 
 ### 异常体系图
 
-![微信截图_20240208164335](advance-learning.assert/微信截图_20240208164335.png)
+![微信截图_20240208164335](advance-learning.assets/微信截图_20240208164335.png)
 
 1. ***所有异常的父类：***`Throwable类`，`Throwable类`实现了`Serializable接口`
 2. `Error类`和`Exception类`直接继承`Throwable类`
@@ -891,7 +891,7 @@ public @interface Override {
 
 	如果程序员没有显式处理异常，默认`throws Exception`
 
-	<img src="advance-learning.assert/微信截图_20240208171805.png" alt="微信截图_20240208171805" style="zoom:67%;" />
+	<img src="advance-learning.assets/微信截图_20240208171805.png" alt="微信截图_20240208171805" style="zoom:67%;" />
 
 ---
 
@@ -1032,7 +1032,7 @@ public @interface Override {
 
 ### throws 和 throw 的区别
 
-![微信截图_20240208222342](advance-learning.assert/微信截图_20240208222342.png)
+![微信截图_20240208222342](advance-learning.assets/微信截图_20240208222342.png)
 
 ```java
 //throws：一种异常处理方式，方法声明处，后跟异常类型
@@ -1052,15 +1052,15 @@ public static void function {
 
 ## 14.八大常用类
 
-![微信截图_20240209115754](advance-learning.assert/微信截图_20240209115754.png)
+![微信截图_20240209115754](advance-learning.assets/微信截图_20240209115754.png)
 
 ***Character和 Boolean没有继承 Number：***
 
-<img src="advance-learning.assert/微信截图_20240209120009.png" alt="微信截图_20240209120009" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240209120009.png" alt="微信截图_20240209120009" style="zoom:67%;" />
 
 ***其它六个类均继承自 Number：***
 
-![微信截图_20240209120221](advance-learning.assert/微信截图_20240209120221.png)
+![微信截图_20240209120221](advance-learning.assets/微信截图_20240209120221.png)
 
 
 
@@ -1212,7 +1212,7 @@ private static class IntegerCache {
             cache[k] = new Integer(j++);
 
         // range [-128, 127] must be interned (JLS7 5.1.7)
-        assert IntegerCache.high >= 127;
+        assets IntegerCache.high >= 127;
     }
 
     private IntegerCache() {}
@@ -1274,7 +1274,7 @@ System.out.println(i3 == i4);//T
 
 ## 16.String 详解
 
-![微信截图_20240209161416](advance-learning.assert/微信截图_20240209161416.png)
+![微信截图_20240209161416](advance-learning.assets/微信截图_20240209161416.png)
 
 > 串行化：可以在网络传输
 
@@ -1325,7 +1325,7 @@ System.out.println(i3 == i4);//T
 	String str2 = new String("hsp");
 	```
 
-![微信截图_20240209165734](advance-learning.assert/微信截图_20240209165734.png)
+![微信截图_20240209165734](advance-learning.assets/微信截图_20240209165734.png)
 
 ---
 
@@ -1764,7 +1764,7 @@ System.out.println(bigDecimal.divide(bigDecimal2, BigDecimal.ROUND_CEILING));
 
 	***Date =通过 SimpleDateFormat.format(Date)=> String***
 
-	> ![微信截图_20240211141038](advance-learning.assert/微信截图_20240211141038.png)
+	> ![微信截图_20240211141038](advance-learning.assets/微信截图_20240211141038.png)
 	>
 	> ```java
 	> //1. 创建 SimpleDateFormat对象，可以指定相应的格式
@@ -1903,13 +1903,13 @@ System.out.println(bigDecimal.divide(bigDecimal2, BigDecimal.ROUND_CEILING));
 
 ***Collectoin接口下的框架：***（单列集合）
 
-![微信截图_20240212194417](advance-learning.assert/微信截图_20240212194417.png)
+![微信截图_20240212194417](advance-learning.assets/微信截图_20240212194417.png)
 
 > 实现`Iterable`接口，可以使用迭代器遍历
 
 ***Map接口下的框架：***（双列集合）
 
-<img src="advance-learning.assert/微信截图_20240211174217.png" alt="微信截图_20240211174217" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240211174217.png" alt="微信截图_20240211174217" style="zoom:67%;" />
 
 ---
 
@@ -1985,7 +1985,7 @@ for(Object obj : arr) {
 2. List 中可以***通过索引取出元素***，即***通过 `list.get(int index) `***
 3. ***不能使用 ` [ ] `取出元素！***
 
-<img src="advance-learning.assert/微信截图_20240214153811.png" alt="微信截图_20240214153811" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214153811.png" alt="微信截图_20240214153811" style="zoom:67%;" />
 
 ---
 
@@ -2038,7 +2038,7 @@ for(Object obj : arr) {
 2. ArrayList ***底层使用数组储存数据***
 3. ***线程不安全***，源码中没有 `synchronized` 修饰，执行效率高，多线程不建议使用 ArrayList
 
-![微信截图_20240214154142](advance-learning.assert/微信截图_20240214154142.png)
+![微信截图_20240214154142](advance-learning.assets/微信截图_20240214154142.png)
 
 ---
 
@@ -2087,7 +2087,7 @@ for(Object obj : arr) {
 		>
 		> 	如果当前为默认（即第一次扩容），则最小需求容量为10与minCapacity中较大值
 		>
-		> 	![微信截图_20240212171847](advance-learning.assert/微信截图_20240212171847.png)
+		> 	![微信截图_20240212171847](advance-learning.assets/微信截图_20240212171847.png)
 		>
 		> 3. ensureExplicitCapacity方法：
 		>
@@ -2133,13 +2133,13 @@ for(Object obj : arr) {
 	}
 	```
 
-![微信截图_20240214154227](advance-learning.assert/微信截图_20240214154227.png)
+![微信截图_20240214154227](advance-learning.assets/微信截图_20240214154227.png)
 
 ---
 
 ### Vector vs ArrayList
 
-![微信截图_20240212175821](advance-learning.assert/微信截图_20240212175821.png)
+![微信截图_20240212175821](advance-learning.assets/微信截图_20240212175821.png)
 
 ---
 
@@ -2149,13 +2149,13 @@ for(Object obj : arr) {
 
 2. 示意图：
 
-	> <img src="advance-learning.assert/微信截图_20240212182512.png" alt="微信截图_20240212182512" style="zoom:67%;" />
+	> <img src="advance-learning.assets/微信截图_20240212182512.png" alt="微信截图_20240212182512" style="zoom:67%;" />
 
 3. 可以***原地删除和添加***
 
 4. ***线程不安全***，源码中没有 `synchronized` 修饰
 
-<img src="advance-learning.assert/微信截图_20240214154424.png" alt="微信截图_20240214154424" style="zoom: 60%;" />
+<img src="advance-learning.assets/微信截图_20240214154424.png" alt="微信截图_20240214154424" style="zoom: 60%;" />
 
 ---
 
@@ -2184,7 +2184,7 @@ for(Object obj : arr) {
 
 2. `remove`
 
-	<img src="advance-learning.assert/微信截图_20240212193529.png" alt="微信截图_20240212193529" style="zoom:67%;" />
+	<img src="advance-learning.assets/微信截图_20240212193529.png" alt="微信截图_20240212193529" style="zoom:67%;" />
 
 3. `set`，修改
 
@@ -2194,7 +2194,7 @@ for(Object obj : arr) {
 
 ### LinkedList vs ArrayList
 
-![微信截图_20240212193818](advance-learning.assert/微信截图_20240212193818.png)
+![微信截图_20240212193818](advance-learning.assets/微信截图_20240212193818.png)
 
 > 一般来说，***在程序中，80%-90%都是查询***，因此***大部分情况下会选择 ArrayList***
 
@@ -2210,7 +2210,7 @@ for(Object obj : arr) {
 2. ***不允许重复元素，最多一个 null***
 3. ***取出的顺序与添加的顺序不同***，但是是**固定的**
 
-<img src="advance-learning.assert/微信截图_20240214154811.png" alt="微信截图_20240214154811" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214154811.png" alt="微信截图_20240214154811" style="zoom:67%;" />
 
 ---
 
@@ -2236,7 +2236,7 @@ for(Object obj : arr) {
 
 3. ***不保证存放数据的顺序和取出顺序一致***
 
-<img src="advance-learning.assert/微信截图_20240214154902.png" alt="微信截图_20240214154902" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214154902.png" alt="微信截图_20240214154902" style="zoom:67%;" />
 
 ***超经典面试题：***
 
@@ -2472,7 +2472,7 @@ System.out.println("set=" + set);
 3. LinkedHashSet 根据元素的 hashCode 值来决定元素的存储位置，同时使用链表维护元素的次序，***这使得元素看起来是以插入顺序保存的***
 4. LinkedHashSet 不允许添重复元素
 
-<img src="advance-learning.assert/微信截图_20240214155051.png" alt="微信截图_20240214155051" style="zoom:60%;" />
+<img src="advance-learning.assets/微信截图_20240214155051.png" alt="微信截图_20240214155051" style="zoom:60%;" />
 
 ---
 
@@ -2528,7 +2528,7 @@ System.out.println("set=" + set);
 	
 6. HashMap没有实现同步，因此***是线程不安全的***，没有被`synchronized`修饰
 
-<img src="advance-learning.assert/微信截图_20240214155213.png" alt="微信截图_20240214155213" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214155213.png" alt="微信截图_20240214155213" style="zoom:67%;" />
 
 ---
 
@@ -2657,7 +2657,7 @@ System.out.println("set=" + set);
 
 ### HashMap
 
-<img src="advance-learning.assert/微信截图_20240214155331.png" alt="微信截图_20240214155331" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214155331.png" alt="微信截图_20240214155331" style="zoom:67%;" />
 
 ---
 
@@ -2682,7 +2682,7 @@ System.out.println("set=" + set);
 2. ***`Hashtable` 线程安全，而 `HashMap` 线程不安全***
 3. 用法基本和 `HashMap` 一致
 
-<img src="advance-learning.assert/微信截图_20240214155434.png" alt="微信截图_20240214155434" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214155434.png" alt="微信截图_20240214155434" style="zoom:67%;" />
 
 ---
 
@@ -2709,7 +2709,7 @@ System.out.println("set=" + set);
 
 ### Hashtable vs HashMap
 
-![微信截图_20240214152408](advance-learning.assert/微信截图_20240214152408.png)
+![微信截图_20240214152408](advance-learning.assets/微信截图_20240214152408.png)
 
 ---
 
@@ -2722,7 +2722,7 @@ System.out.println("set=" + set);
 3. Properties 还***可以用于 从 xxx.properties 文件中，加载数据到 Properties类对象并进行读取和修改***
 4. 说明: 工作后 ***xxx.properties 文件通常作为配置文件***
 
-<img src="advance-learning.assert/微信截图_20240214160626.png" alt="微信截图_20240214160626" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214160626.png" alt="微信截图_20240214160626" style="zoom:67%;" />
 
 ---
 
@@ -2730,7 +2730,7 @@ System.out.println("set=" + set);
 
 ## 25.集合选型规则
 
-![微信截图_20240214161447](advance-learning.assert/微信截图_20240214161447.png)
+![微信截图_20240214161447](advance-learning.assets/微信截图_20240214161447.png)
 
 ---
 
@@ -2758,7 +2758,7 @@ System.out.println("set=" + set);
 
 4. ***线程不安全***
 
-<img src="advance-learning.assert/微信截图_20240214163229.png" alt="微信截图_20240214163229" style="zoom: 50%;" />
+<img src="advance-learning.assets/微信截图_20240214163229.png" alt="微信截图_20240214163229" style="zoom: 50%;" />
 
 ---
 
@@ -2821,7 +2821,7 @@ treeSet.add(new Person());
 
 2. ***线程不安全***
 
-<img src="advance-learning.assert/微信截图_20240214165622.png" alt="微信截图_20240214165622" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240214165622.png" alt="微信截图_20240214165622" style="zoom:67%;" />
 
 ---
 
@@ -3140,7 +3140,7 @@ public <T,R...> void func(T t, R r...) {}
 	> }
 	> ```
 	>
-	> ![微信截图_20240215165430](advance-learning.assert/微信截图_20240215165430.png)
+	> ![微信截图_20240215165430](advance-learning.assets/微信截图_20240215165430.png)
 
 ---
 
@@ -3199,7 +3199,7 @@ public <T,R...> void func(T t, R r...) {}
 
 	> 主线程结束，子线程继续跑，进程没有结束
 	>
-	> <img src="advance-learning.assert/微信截图_20240215231946.png" alt="微信截图_20240215231946" style="zoom:67%;" />
+	> <img src="advance-learning.assets/微信截图_20240215231946.png" alt="微信截图_20240215231946" style="zoom:67%;" />
 
 5. ***为什么调的时 start 方法而不是 run 方法？***
 
@@ -3227,7 +3227,7 @@ public <T,R...> void func(T t, R r...) {}
 
 8. ***JVM 调用的 start0 方法，才是真正实现多线程的方法***
 
-  > ![微信截图_20240216124350](advance-learning.assert/微信截图_20240216124350.png)
+  > ![微信截图_20240216124350](advance-learning.assets/微信截图_20240216124350.png)
 
 ---
 
@@ -3388,7 +3388,7 @@ myDaemonThread.start();
 	>
 	> 在一个终止的线程上调用 start() 方法，会抛出 java.lang.IllegalThreadStateException 异常
 
-![微信截图_20240216173402](advance-learning.assert/微信截图_20240216173402.png)
+![微信截图_20240216173402](advance-learning.assets/微信截图_20240216173402.png)
 
 ---
 
@@ -3441,11 +3441,11 @@ myDaemonThread.start();
 	> 	```java
 	> 	class SellTicket implements Runnable {
 	> 	    private int ticketNum = 100;
-	> 	    												
+	> 	    														
 	> 	    Object obj = new Object();
-	> 	    												
+	> 	    														
 	> 	    public /*synchronized*/ void sell() 
-	> 													
+	> 															
 	> 	        synchronized (/*this*/ object) {//锁加在该对象的obj对象上
 	> 	            ...
 	> 	        }
@@ -3560,13 +3560,13 @@ class DeadLockDemo extends Thread {
 
 # Chapter19 IO流
 
-![微信截图_20240217140006](advance-learning.assert/微信截图_20240217140006.png)
+![微信截图_20240217140006](advance-learning.assets/微信截图_20240217140006.png)
 
 ## 33.文件基本操作
 
 ### File类
 
-<img src="advance-learning.assert/微信截图_20240216205435.png" alt="微信截图_20240216205435" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240216205435.png" alt="微信截图_20240216205435" style="zoom:67%;" />
 
 ---
 
@@ -3666,7 +3666,7 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 > 2. 按***数据流的流向*** 不同分为：输入流，输出流
 > 3. 按***流的角色*** 的不同分为：节点流，处理流/包装流
 
-<img src="advance-learning.assert/微信截图_20240216214637.png" alt="微信截图_20240216214637" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240216214637.png" alt="微信截图_20240216214637" style="zoom:67%;" />
 
 > 1. Java的IO流共涉及40多个类，实际上非常规则，***都是从如上 4个抽象基类派生的***
 > 2. 由这四个类派生出来的子类名称都是***以其父类名作为子类名后缀***
@@ -3686,7 +3686,7 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 
 4. `close()` 方法：关闭文件字节输入流，***释放资源***
 
-<img src="advance-learning.assert/微信截图_20240216222912.png" alt="微信截图_20240216222912" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240216222912.png" alt="微信截图_20240216222912" style="zoom:50%;" />
 
 ---
 
@@ -3715,7 +3715,7 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 
 4. `close()` 方法：关闭文件字节输出流，***释放资源***
 
-<img src="advance-learning.assert/微信截图_20240216223008.png" alt="微信截图_20240216223008" style="zoom: 50%;" />
+<img src="advance-learning.assets/微信截图_20240216223008.png" alt="微信截图_20240216223008" style="zoom: 50%;" />
 
 ---
 
@@ -3734,7 +3734,7 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 	> 1. `new String(char[]):`将char[]转换成String
 	> 2. `new String(char],off,len):`将char[]的指定部分转换成String
 
-<img src="advance-learning.assert/微信截图_20240217124626.png" alt="微信截图_20240217124626" style="zoom: 50%;" />
+<img src="advance-learning.assets/微信截图_20240217124626.png" alt="微信截图_20240217124626" style="zoom: 50%;" />
 
 ---
 
@@ -3760,7 +3760,7 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 
 > ***因为 close和 flush方法底层会调用 writeBytes方法，而 writeBytes方法才将输出流写入文件***
 
-![微信截图_20240217125947](advance-learning.assert/微信截图_20240217125947.png)
+![微信截图_20240217125947](advance-learning.assets/微信截图_20240217125947.png)
 
 ---
 
@@ -3770,7 +3770,7 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 
 ***BufferedReader是包装流，可以封装其它继承 Reader的流对象，提高效率***
 
-> <img src="advance-learning.assert/微信截图_20240217132019.png" alt="微信截图_20240217132019" style="zoom: 50%;" />
+> <img src="advance-learning.assets/微信截图_20240217132019.png" alt="微信截图_20240217132019" style="zoom: 50%;" />
 >
 > ***同理 BuffedWriter***
 
@@ -3784,7 +3784,7 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 1. 构造器 `BufferedReader(Reader)`
 2. readLine，读取一整行，返回String，读完返回null
 
-<img src="advance-learning.assert/微信截图_20240217135413.png" alt="微信截图_20240217135413" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217135413.png" alt="微信截图_20240217135413" style="zoom:50%;" />
 
 ---
 
@@ -3797,19 +3797,19 @@ System.out.println("是不是一个目录=" + file.isDirectory());//F
 >
 > ***不要去用它操作二进制文件 (视频，声音，doc，pdf等)，会损坏文件***
 
-![微信截图_20240217135513](advance-learning.assert/微信截图_20240217135513.png)
+![微信截图_20240217135513](advance-learning.assets/微信截图_20240217135513.png)
 
 ---
 
 ### BufferedInputStream
 
-<img src="advance-learning.assert/微信截图_20240217140608.png" alt="微信截图_20240217140608" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217140608.png" alt="微信截图_20240217140608" style="zoom:50%;" />
 
 ---
 
 ### BufferedOutputStream
 
-<img src="advance-learning.assert/微信截图_20240217140718.png" alt="微信截图_20240217140718" style="zoom: 50%;" />
+<img src="advance-learning.assets/微信截图_20240217140718.png" alt="微信截图_20240217140718" style="zoom: 50%;" />
 
 ---
 
@@ -3854,7 +3854,7 @@ oos.close();
 System.out.println("数据保存完毕(序列化形式)");
 ```
 
-<img src="advance-learning.assert/微信截图_20240217141645.png" alt="微信截图_20240217141645" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217141645.png" alt="微信截图_20240217141645" style="zoom:50%;" />
 
 ---
 
@@ -3879,7 +3879,7 @@ System.out.println(ois.readDouble());
 System.out.println(ois.readUTF());
 ```
 
-<img src="advance-learning.assert/微信截图_20240217141828.png" alt="微信截图_20240217141828" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217141828.png" alt="微信截图_20240217141828" style="zoom:50%;" />
 
 ---
 
@@ -3946,7 +3946,7 @@ System.out.println("读取内容=" + s);
 br.close();
 ```
 
-<img src="advance-learning.assert/微信截图_20240217164711.png" alt="微信截图_20240217164711" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217164711.png" alt="微信截图_20240217164711" style="zoom:50%;" />
 
 ----
 
@@ -3962,7 +3962,7 @@ osw.close();
 System.out.println("按照 " + charSet + " 保存文件成功~");
 ```
 
-<img src="advance-learning.assert/微信截图_20240217165509.png" alt="微信截图_20240217165509" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217165509.png" alt="微信截图_20240217165509" style="zoom:50%;" />
 
 ---
 
@@ -3987,13 +3987,13 @@ System.out.println("按照 " + charSet + " 保存文件成功~");
 
 3. `System.setOut(String)` 方法，***重新设置输出的位置，默认是控制台***
 
-<img src="advance-learning.assert/微信截图_20240217165852.png" alt="微信截图_20240217165852" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217165852.png" alt="微信截图_20240217165852" style="zoom:50%;" />
 
 ---
 
 ### PrintWriter
 
-<img src="advance-learning.assert/微信截图_20240217170218.png" alt="微信截图_20240217170218" style="zoom:50%;" />
+<img src="advance-learning.assets/微信截图_20240217170218.png" alt="微信截图_20240217170218" style="zoom:50%;" />
 
 ---
 
@@ -4069,7 +4069,7 @@ System.out.println("保存配置文件成功~");
 	>
 	> 5. ***IPv4的地址分类***
 	>
-	> <img src="advance-learning.assert/微信截图_20240217212114.png" alt="微信截图_20240217212114" style="zoom:67%;" />
+	> <img src="advance-learning.assets/微信截图_20240217212114.png" alt="微信截图_20240217212114" style="zoom:67%;" />
 
 4. ***域名：*** ***将 ip地址映射成域名***
 
@@ -4095,7 +4095,7 @@ System.out.println("保存配置文件成功~");
 
 	> ***最常用的协议：TCP/IP协议，由网络层的 IP协议和传输层的 TCP协议组成***
 	>
-	> <img src="advance-learning.assert/微信截图_20240217215533.png" alt="微信截图_20240217215533" style="zoom:67%;" />
+	> <img src="advance-learning.assets/微信截图_20240217215533.png" alt="微信截图_20240217215533" style="zoom:67%;" />
 
 7. **TCP 和 UDP 协议：**
 
@@ -4160,7 +4160,7 @@ System.out.println("保存配置文件成功~");
 
 4. 一般***主动发起通信的应用程序属客户端***，**等待通信请求的为服务端**
 
-![微信截图_20240218133511](advance-learning.assert/微信截图_20240218133511.png)
+![微信截图_20240218133511](advance-learning.assets/微信截图_20240218133511.png)
 
 ---
 
@@ -4217,7 +4217,7 @@ public class TCPuploadCilent {
         //连接服务器
         Socket socket = new Socket(InetAddress.getLocalHost(), 8888);
         //获取文件，将其转为byte数组
-        String srcPath = "D:\\杨宸楷\\学习\\java-learning\\JavaAdvance\\Notes\\advance-learning.assert\\微信截图_20240218133511.png";
+        String srcPath = "D:\\杨宸楷\\学习\\java-learning\\JavaAdvance\\Notes\\advance-learning.assets\\微信截图_20240218133511.png";
         FileInputStream fileInputStream = new FileInputStream(srcPath);
         byte[] buf = StreamUtils.streamToByteArray(fileInputStream);//将InputStream转为byte[]
         //传给服务器
@@ -4249,7 +4249,7 @@ public class TCPuploadCilent {
 >
 > 如果有一个***外部程序(客户端 )***连接到该端口，就会显示一条连接信息
 >
-> ![微信截图_20240218202418](advance-learning.assert/微信截图_20240218202418.png)
+> ![微信截图_20240218202418](advance-learning.assets/微信截图_20240218202418.png)
 
 ---
 
@@ -4418,7 +4418,7 @@ public class TCPdownloadClient {
 
 ***项目概念图：***
 
-> ![微信截图_20240219150519](advance-learning.assert/微信截图_20240219150519.png)
+> ![微信截图_20240219150519](advance-learning.assets/微信截图_20240219150519.png)
 
 > 创建线程的意义：一个客户可能会同时进行多个服务，创建多个socket，因此创建线程可以方便管理socket
 >
@@ -4462,11 +4462,11 @@ ServerConnectClientThread
 
 > 允许并行启动Client的方法：
 >
-> <img src="advance-learning.assert/微信截图_20240220002011.png" alt="微信截图_20240220002011" style="zoom:50%;" />
+> <img src="advance-learning.assets/微信截图_20240220002011.png" alt="微信截图_20240220002011" style="zoom:50%;" />
 >
 > ---
 >
-> <img src="advance-learning.assert/微信截图_20240220001628.png" alt="微信截图_20240220001628" style="zoom:50%;" />
+> <img src="advance-learning.assets/微信截图_20240220001628.png" alt="微信截图_20240220001628" style="zoom:50%;" />
 
 ---
 
@@ -4631,7 +4631,7 @@ public static void sendOfflineMessage(String receiver) {
 2. 这个对象包含了类的完整结构信息，***通过这个对象得到类的结构***
 3. 这个Class对象就像一面镜子，透过这个镜子看到类的结构，所以，形象的称之为：反射
 
-![微信截图_20240222124148](advance-learning.assert/微信截图_20240222124148.png)
+![微信截图_20240222124148](advance-learning.assets/微信截图_20240222124148.png)
 
 ---
 
@@ -4676,13 +4676,13 @@ public static void sendOfflineMessage(String receiver) {
 
 	有的地方称为类的元数据(包括 方法代码变量名，方法名，访问权限等等)
 
-<img src="advance-learning.assert/微信截图_20240222132356.png" alt="微信截图_20240222132356" style="zoom: 50%;" />
+<img src="advance-learning.assets/微信截图_20240222132356.png" alt="微信截图_20240222132356" style="zoom: 50%;" />
 
 ---
 
 ### Class类常用方法
 
-![微信截图_20240222154457](advance-learning.assert/微信截图_20240222154457.png)
+![微信截图_20240222154457](advance-learning.assets/微信截图_20240222154457.png)
 
 ```java
 String classAllPath = "com.hspedu.Car";
@@ -4781,7 +4781,7 @@ for (Field f : fields) {
 
 ### 类加载的阶段
 
-<img src="advance-learning.assert/微信截图_20240222171136.png" alt="微信截图_20240222171136" style="zoom:67%;" />
+<img src="advance-learning.assets/微信截图_20240222171136.png" alt="微信截图_20240222171136" style="zoom:67%;" />
 
 1. ***加载阶段***
 

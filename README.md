@@ -5799,8 +5799,8 @@ Java进阶完成：
 # ***2024.4.28打卡	Day 88***
 
 1. Java线程池视频课
+	  - 快速全部过了一遍。
 
-  - 快速全部过了一遍。
 
 2. Redis视频课
 
@@ -5811,54 +5811,90 @@ Java进阶完成：
 	- Java基础完成4个问题。
 
 4. Redis
-  - 1篇。使用原子操作，如单命令操作INCR/DECR或Lua脚本实现原子操作，相比加锁，原子操作对资源的限制更少，一般具有更高的并发性能。
+	  - 1篇。使用原子操作，如单命令操作INCR/DECR或Lua脚本实现原子操作，相比加锁，原子操作对资源的限制更少，一般具有更高的并发性能。
 
 5. leetcode刷题：4题
 
-  - [77. 组合](https://leetcode.cn/problems/combinations/)
+      - [77. 组合](https://leetcode.cn/problems/combinations/)
 
-  	简单回溯，注意是`backTrace(i + 1);`而不是`backTrace(index + 1);`！
+        简单回溯，注意是`backTrace(i + 1);`而不是`backTrace(index + 1);`！
 
-  - [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
+      - [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
 
-  	简单回溯，注意只能使用数字1~9。
+        简单回溯，注意只能使用数字1~9。
 
-  - [40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
+      - [40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
 
-  	先排序，后面如果不是某次的第一个，且上一个和当前的值一致，则说明当前的继续遍历肯定会重复，直接continue。注意必须剪枝，否则超时。
+        先排序，后面如果不是某次的第一个，且上一个和当前的值一致，则说明当前的继续遍历肯定会重复，直接continue。注意必须剪枝，否则超时。
 
-  	```java
-  	public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-  	    Arrays.sort(candidates); // 去重
-  	    this.candidates = candidates;
-  	    this.target = target;
-  	    backTrace(0);
-  	    return ans;
-  	}
+        ```java
+        public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+            Arrays.sort(candidates); // 去重
+            this.candidates = candidates;
+            this.target = target;
+            backTrace(0);
+            return ans;
+        }
+
+        private void backTrace(int index) {
+            if (sum == target) {
+                ans.add(new ArrayList(now));
+                return;
+            }
+
+            if(sum > target) // 剪枝
+                return;
+
+            for (int i = index; i < candidates.length; i++) {
+                if(i > index && candidates[i] == candidates[i - 1]) // 去重
+                    continue;
+                now.add(candidates[i]);
+                sum += candidates[i];
+                backTrace(i + 1);
+                now.remove(now.size() - 1);
+                sum -= candidates[i];
+            }
+        }
+        ```
+
+      - [39. 组合总和](https://leetcode.cn/problems/combination-sum/)
+
+        把上面那道的backTrace(i+1)改成backTrace(i)即可。
+
   	
-  	private void backTrace(int index) {
-  	    if (sum == target) {
-  	        ans.add(new ArrayList(now));
-  	        return;
-  	    }
-  	
-  	    if(sum > target) // 剪枝
-  	        return;
-  	
-  	    for (int i = index; i < candidates.length; i++) {
-  	        if(i > index && candidates[i] == candidates[i - 1]) // 去重
-  	            continue;
-  	        now.add(candidates[i]);
-  	        sum += candidates[i];
-  	        backTrace(i + 1);
-  	        now.remove(now.size() - 1);
-  	        sum -= candidates[i];
-  	    }
-  	}
-  	```
 
-  - [39. 组合总和](https://leetcode.cn/problems/combination-sum/)
+# ***2024.4.29打卡	Day 89***
 
-  	把上面那道的backTrace(i+1)改成backTrace(i)即可。
+1. 八股文一轮复习开始！
+	- Java基础完成10个问题，Java基础部分完成。
 
-  	
+
+2. Redis
+	- 1篇。通过单Redis实例实现分布式锁进行并发空值，并能使用多Redis实例增加可靠性。
+
+3. leetcode刷题：2题
+
+	- [78. 子集](https://leetcode.cn/problems/subsets/)
+	
+		就是遍历所有组合，递归终止条件是now.size() >= nums.length
+	
+		```java
+		public void dfs(int start) {
+		    if (now.size() > nums.length)
+		        return;
+		
+		    ans.add(new ArrayList<>(now));
+		
+		    for (int i = start; i < nums.length; i++) {
+		        now.add(nums[i]);
+		        dfs(i + 1);
+		        now.remove(now.size() - 1);
+		    }
+		}
+		```
+	
+	- [90. 子集 II](https://leetcode.cn/problems/subsets-ii/)
+	
+		在上一题的基础上先排序，然后`if(i > start && nums[i] == nums[i - 1])`去重。
+	
+		

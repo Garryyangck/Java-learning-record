@@ -41,7 +41,7 @@ class Solution {
         }
 
         for (int i = index; i <= n; i++) {
-            now.add(i);
+                now.add(i);
             backTrace(index + 1);
             now.remove(now.size() - 1);
         }

@@ -52,7 +52,7 @@ JVM负责==解释和执行==字节码*.class文件*
 2. *.class字节码文件*通过java.exe运行
 3. 所谓运行，就是将*.class字节码文件*装载到*对应的JVM中执行*
 
-![微信截图_20240201214339](basic-learning.assert/微信截图_20240201214339.png)
+![微信截图_20240201214339](basic-learning.assets/微信截图_20240201214339.png)
 
 ### Java转义字符
 
@@ -102,7 +102,7 @@ javadoc 工具软件识别以下标签：
 
 ### Java代码规范
 
-![微信截图_20240201221602](basic-learning.assert/微信截图_20240201221602.png)
+![微信截图_20240201221602](basic-learning.assets/微信截图_20240201221602.png)
 
 还有一点就是*一个.java中只有一个public类，且文件名与public类名一致*
 
@@ -120,7 +120,7 @@ javadoc 工具软件识别以下标签：
 
 - 左右两边有一边是字符串时，+ 号做字符串拼接运算
 
-![微信截图_20240202114505](basic-learning.assert/微信截图_20240202114505.png)
+![微信截图_20240202114505](basic-learning.assets/微信截图_20240202114505.png)
 
 
 
@@ -212,7 +212,7 @@ public class FloatDetail{
 
 APl (Application Programming Interface，==应用程序编程接口== ) 是 Java 提供的基本编程接口
 
-![微信截图_20240202125406](basic-learning.assert/微信截图_20240202125406.png)
+![微信截图_20240202125406](basic-learning.assets/微信截图_20240202125406.png)
 
 ### 字符类型 char
 
@@ -235,20 +235,20 @@ public class CharDetail{
 
 ### 字符编码
 
-![微信截图_20240202135348](basic-learning.assert/微信截图_20240202135348.png)
+![微信截图_20240202135348](basic-learning.assets/微信截图_20240202135348.png)
 
 1. ASCII码表
 	- 一个字节最多表示256个字符，而==ASCII码只用了128个字符==
 	- 缺点：不能表示所有字符
 
-![微信截图_20240202135747](basic-learning.assert/微信截图_20240202135747.png)
+![微信截图_20240202135747](basic-learning.assets/微信截图_20240202135747.png)
 
 2. Unicode编码
 	- ==所有字符都使用2个字节==
 	- 最多表示$2^8 \times 2^8 = 65536$个字符
 	- ==Unicode码兼容ASCII码==，如'a'均为97
 
-![微信截图_20240202135829](basic-learning.assert/微信截图_20240202135829.png)
+![微信截图_20240202135829](basic-learning.assets/微信截图_20240202135829.png)
 
 3. UTF-8编码
 
@@ -257,7 +257,7 @@ public class CharDetail{
 	- ==可以采用1~6个字节表示一个符号==
 	- 字母一个字节，==汉字三个字节==
 
-![微信截图_20240202135910](basic-learning.assert/微信截图_20240202135910.png)
+![微信截图_20240202135910](basic-learning.assets/微信截图_20240202135910.png)
 
 ### 布尔类型 boolean
 
@@ -271,7 +271,7 @@ public class CharDetail{
 
 ==精度小的可以自动转换为精度大的==
 
-![微信截图_20240202160855](basic-learning.assert/微信截图_20240202160855.png)
+![微信截图_20240202160855](basic-learning.assets/微信截图_20240202160855.png)
 
 1. 多种数据混合运算时，*自动转成容量最大的数据类型*，再进行计算
 2. 大精度不能自动转换为小精度的
@@ -487,7 +487,7 @@ public class LogicOperator{
 
 ### 运算符优先级
 
-<img src="basic-learning.assert/微信截图_20240202211915.png" alt="微信截图_20240202211915"  />
+<img src="basic-learning.assets/微信截图_20240202211915.png" alt="微信截图_20240202211915"  />
 
 ```
 1. () {} . -> 等
@@ -543,9 +543,9 @@ public class LogicOperator{
 
 ==关键字==：被 Java 语言赋予了特殊含义，用做*专门用途的字符串*（*均为小写*）
 
-![微信截图_20240202213749](basic-learning.assert/微信截图_20240202213749.png)
+![微信截图_20240202213749](basic-learning.assets/微信截图_20240202213749.png)
 
-![微信截图_20240202213813](basic-learning.assert/微信截图_20240202213813.png)
+![微信截图_20240202213813](basic-learning.assets/微信截图_20240202213813.png)
 
 ==保留字==：现有 Java 版本**尚未使用**，但**以后版本可能会作为关键字使用**。
 
@@ -644,7 +644,7 @@ public class BinaryTest{
 
 #### 原码、反码、补码
 
-![微信截图_20240203124152](basic-learning.assert/微信截图_20240203124152.png)
+![微信截图_20240203124152](basic-learning.assets/微信截图_20240203124152.png)
 
 1. int型4字节，最高位0为正，1为负
 
@@ -952,7 +952,7 @@ System.out.println("-2>>>1 = " + temp);//2147483647
 
 ## 23.类与对象快速入门
 
-![微信截图_20240203193830](basic-learning.assert/微信截图_20240203193830.png)
+![微信截图_20240203193830](basic-learning.assets/微信截图_20240203193830.png)
 
 ### 属性 | 成员变量 | 字段
 
@@ -984,7 +984,7 @@ Person p1 = new Person();
 3. ==对象名指向堆区中申请内存的首地址==
 4. 如果类的属性有==引用类型==，则*在堆区中为一个指向方法区中实例化对象的指针*
 
-![微信截图_20240203210416](basic-learning.assert/微信截图_20240203210416.png)
+![微信截图_20240203210416](basic-learning.assets/微信截图_20240203210416.png)
 
 ### Java内存的结构分析
 
@@ -1005,7 +1005,7 @@ Person p1 = new Person();
 
 ### 方法的调用机制原理
 
-![微信截图_20240203212622](basic-learning.assert/微信截图_20240203212622.png)
+![微信截图_20240203212622](basic-learning.assets/微信截图_20240203212622.png)
 
 ```java
 访问修饰符 返回数据类型 方法名（形参列表..） {//方法体
@@ -1069,7 +1069,7 @@ public void func(ELemTye Elem...) {//function...
 
 ### 递归的内存分配
 
-![微信截图_20240204120247](basic-learning.assert/微信截图_20240204120247.png)
+![微信截图_20240204120247](basic-learning.assets/微信截图_20240204120247.png)
 
 1. main栈中创建对象，在==堆区中开辟空间==
 2. main栈中调用方法，在==栈区开辟一块方法栈区==
@@ -1234,29 +1234,29 @@ Person p = new Person(20, "小倩");//问该对象的创建流程
 
 1. ==方法区中加载 Person类信息== (Person.class)，*只会加载一次*
 
-	<img src="basic-learning.assert/微信截图_20240204142642.png" alt="微信截图_20240204142642" style="zoom:50%;" align = left />
+	<img src="basic-learning.assets/微信截图_20240204142642.png" alt="微信截图_20240204142642" style="zoom:50%;" align = left />
 
 2. 在==堆中分配空间==  (地址)
 
-	<img src="basic-learning.assert/微信截图_20240204143001.png" alt="微信截图_20240204143001" style="zoom:50%;" align = left />
+	<img src="basic-learning.assets/微信截图_20240204143001.png" alt="微信截图_20240204143001" style="zoom:50%;" align = left />
 
 3. 完成对象初始化
 
 	1. ==默认初始化== age=0 name=null
 
-		<img src="basic-learning.assert/微信截图_20240204143118.png" alt="微信截图_20240204143118" style="zoom:50%;" align = left />
+		<img src="basic-learning.assets/微信截图_20240204143118.png" alt="微信截图_20240204143118" style="zoom:50%;" align = left />
 
 	2. ==显式初始化== age=90,name=null
 
-		<img src="basic-learning.assert/微信截图_20240204143221.png" alt="微信截图_20240204143221" style="zoom:50%;" align = left />
+		<img src="basic-learning.assets/微信截图_20240204143221.png" alt="微信截图_20240204143221" style="zoom:50%;" align = left />
 
 	3. ==构造器的初始化== age =20,name=小倩
 
-		<img src="basic-learning.assert/微信截图_20240204143306.png" alt="微信截图_20240204143306" style="zoom:50%;" align = left />
+		<img src="basic-learning.assets/微信截图_20240204143306.png" alt="微信截图_20240204143306" style="zoom:50%;" align = left />
 
 4. 在对象在堆中的地址,返回给 p (p 是对象名,也可以理解成是对象的引用)
 
-	<img src="basic-learning.assert/微信截图_20240204143443.png" alt="微信截图_20240204143443" style="zoom:50%;" align = left />
+	<img src="basic-learning.assets/微信截图_20240204143443.png" alt="微信截图_20240204143443" style="zoom:50%;" align = left />
 
 
 
@@ -1264,7 +1264,7 @@ Person p = new Person(20, "小倩");//问该对象的创建流程
 
 ==哪个对象调用，this就代表哪个对象==
 
-![微信截图_20240204161748](basic-learning.assert/微信截图_20240204161748.png)
+![微信截图_20240204161748](basic-learning.assets/微信截图_20240204161748.png)
 
 1. this 关键字可以用来访问本类的属性、方法、构造器
 
@@ -1415,7 +1415,7 @@ com.sina.crm.utils //工具类
 3. 默认级别：没有修饰符号，向同一个包的类公开，==注意不向不同包的子类公开==
 4. 私有级别：用 private 修饰，只有类本身可以访问，不对外公开
 
-![微信截图_20240205132343](basic-learning.assert/微信截图_20240205132343.png)
+![微信截图_20240205132343](basic-learning.assets/微信截图_20240205132343.png)
 
 
 
@@ -1462,7 +1462,7 @@ class Son extends Parent {
 
 3. java ==所有类都是 Object 类的子类==, Object 是所有类的基类
 
-	![微信截图_20240205165002](basic-learning.assert/微信截图_20240205165002.png)
+	![微信截图_20240205165002](basic-learning.assets/微信截图_20240205165002.png)
 
 4. 父类构造器的调用不限于直接父类！将一直往上追溯直到 Object 类(顶级父类)（==自上而下顺序调用==）
 
@@ -1513,7 +1513,7 @@ class Son extends Father { //子类
 
 3. 将==堆区中对象的地址返回给栈区中的对象名==
 
-![微信截图_20240205170801](basic-learning.assert/微信截图_20240205170801.png)
+![微信截图_20240205170801](basic-learning.assets/微信截图_20240205170801.png)
 
 
 
@@ -1535,7 +1535,7 @@ class Son extends Father { //子类
 
 ==super vs this==
 
-![微信截图_20240205175837](basic-learning.assert/微信截图_20240205175837.png)
+![微信截图_20240205175837](basic-learning.assets/微信截图_20240205175837.png)
 
 
 
@@ -1567,13 +1567,13 @@ class Son extends Father { //子类
 
 ==重载  vs 重写：==
 
-![微信截图_20240205214634](basic-learning.assert/微信截图_20240205214634.png)
+![微信截图_20240205214634](basic-learning.assets/微信截图_20240205214634.png)
 
 
 
 ## 37.多态详解
 
-![微信截图_20240206151002](basic-learning.assert/微信截图_20240206151002.png)
+![微信截图_20240206151002](basic-learning.assets/微信截图_20240206151002.png)
 
 ==对象多态：==
 
@@ -1858,7 +1858,7 @@ class Car {
 
 1. `F7`(跳入)，比如调用一个类的方法，使用跳入==进入对应类的方法处==
 
-	![微信截图_20240212165616](basic-learning.assert/微信截图_20240212165616.png)
+	![微信截图_20240212165616](basic-learning.assets/微信截图_20240212165616.png)
 
 2. `F8`(跳过)，不会进入方法的位置，==直接执行到下一行==
 
