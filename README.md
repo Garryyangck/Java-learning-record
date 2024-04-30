@@ -5897,4 +5897,79 @@ Java进阶完成：
 	
 		在上一题的基础上先排序，然后`if(i > start && nums[i] == nums[i - 1])`去重。
 	
+
+
+
+# ***2024.4.30打卡	Day 90***
+
+1. 八股文一轮复习
+	- Java集合部分完成。
+
+
+2. Redis
+	- 1篇。Redis 事务具有一致性和隔离性（EXEC之前使用WATCH机制），不具备持久性，原子性在事务中的命令执行出错时不具有。
+
+3. leetcode刷题：3题
+
+	- [46. 全排列](https://leetcode.cn/problems/permutations/)
+	
+		增加 visit，避免重复访问同一个元素。
+	
+	- [47. 全排列 II](https://leetcode.cn/problems/permutations-ii/)
+	
+		没做出来。
+	
+		去重时必须满足`visit[i - 1] == false`，否则前面的已入now，遍历到这里时只是第一次，不会重复，而如果前一个没有入now，就要放进当前的数了，那么肯定后续放入前一个的时候会造成重复。
+	
+		```java
+		for (int i = 0; i < nums.length; i++) {
+		    if (!visit[i]) {
+		        // 去重时必须满足`visit[i - 1] == false`
+		        if (i > 0 && nums[i] == nums[i - 1] && visit[i - 1] == false) {
+		            continue;
+		        }
+		        visit[i] = true;
+		        now.add(nums[i]);
+		        backTrace(start + 1);
+		        visit[i] = false;
+		        now.remove(now.size() - 1);
+		    }
+		}
+		```
+	
+	- [51. N 皇后](https://leetcode.cn/problems/n-queens/)
+	
+		创建一个map，记录每个节点被皇后覆盖的次数，只有为零时才能进一步遍历。还要注意一下ans的add过程不要搞混了。
+	
+		```java
+		public void backTrace(int row) {
+		    if (row >= n) {
+		        List<String> method = new ArrayList<>();
+		        for (int i = 0; i < n; i++) {
+		            StringBuffer buffer = new StringBuffer();
+		            int col = now.get(i);
+		            for(int j = 0; j < n; j++) {
+		                if(j == col)
+		                    buffer.append("Q");
+		                else
+		                    buffer.append(".");
+		            }
+		            method.add(new String(buffer));
+		        }
+		        ans.add(method);
+		        return;
+		    }
+		
+		    for (int col = 0; col < n; col++) {
+		        if (map[row][col] == 0) {
+		            putQueen(row, col);
+		            now.add(col);
+		            backTrace(row + 1);
+		            removeQueen(row, col);
+		            now.remove(now.size() - 1);
+		        }
+		    }
+		}
+		```
+	
 		

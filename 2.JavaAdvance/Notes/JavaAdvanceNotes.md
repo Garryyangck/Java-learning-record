@@ -2315,7 +2315,7 @@ System.out.println("set=" + set);
 	> 
 	>     //需要加入的索引的位置不为空
 	>     else {
-	>         //一个开发技巧提示： 在需要局部变量(辅助变量)时候，在创建
+	>         //一个开发技巧提示： 在需要局部变量(辅助变量)时候，再创建
 	>         Node<K,V> e; K k;
 	> 
 	>         //如果当前索引位置对应的链表的第一个元素和准备添加的key的hash值一样
@@ -2346,7 +2346,7 @@ System.out.println("set=" + set);
 	>             for (int binCount = 0; ; ++binCount) {
 	>                 if ((e = p.next) == null) {
 	>                     p.next = newNode(hash, key, value, null);
-	>                     if (binCount >= TREEIFY_THRESHOLD(8) - 1) // -1 for 1st
+	>                     if (binCount >= TREEIFY_THRESHOLD/*8*/ - 1) // -1 for 1st
 	>                         treeifyBin(tab, hash);
 	>                     break;
 	>                 }
@@ -2388,7 +2388,7 @@ System.out.println("set=" + set);
 	> 	for (int binCount = 0; ; ++binCount) {
 	> 	    if ((e = p.next) == null) {//在最后加入
 	> 	        p.next = newNode(hash, key, value, null);
-	> 	        if (binCount >= TREEIFY_THRESHOLD(8) - 1) // -1 for 1st
+	> 	        if (binCount >= TREEIFY_THRESHOLD/*8*/ - 1) // -1 for 1st
 	> 	            treeifyBin(tab, hash);//创建红黑树
 	> 	        break;
 	> 	    }
@@ -2406,7 +2406,7 @@ System.out.println("set=" + set);
 	> 	```java
 	> 	if ((e = p.next) == null) {
 	> 	    p.next = newNode(hash, key, value, null);
-	> 	    if (binCount >= TREEIFY_THRESHOLD(8) - 1) // -1 for 1st
+	> 	    if (binCount >= TREEIFY_THRESHOLD/*8*/ - 1) // -1 for 1st
 	> 	        treeifyBin(tab, hash);//链表长度达到8，创建红黑树
 	> 	    break;
 	> 	}
@@ -3441,11 +3441,11 @@ myDaemonThread.start();
 	> 	```java
 	> 	class SellTicket implements Runnable {
 	> 	    private int ticketNum = 100;
-	> 	    														
+	> 	    															
 	> 	    Object obj = new Object();
-	> 	    														
+	> 	    															
 	> 	    public /*synchronized*/ void sell() 
-	> 															
+	> 																
 	> 	        synchronized (/*this*/ object) {//锁加在该对象的obj对象上
 	> 	            ...
 	> 	        }
