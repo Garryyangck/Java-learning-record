@@ -5972,4 +5972,158 @@ Java进阶完成：
 		}
 		```
 	
+
+
+
+# ***2024.5.1打卡	Day 91***
+
+1. 八股文一轮复习
+	- JVM 垃圾回收部分完成。
+
+
+2. Redis
+
+	- 1篇。主从同步时的坑，异步复制的延后，过期键设置相对过期时间导致读取从库过期键，不合理设置搞崩服务器。
+
+3. leetcode刷题：6题
+
+	- [70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
+		简单dp
+
+	- [746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
+
+		注意楼顶是index=cost.length。
+
+	- [198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
+
+		注意要分3种情况，一种是今天不抢`dp[i-1]`，一种是基于2天前的抢今天的`dp[i-2]+nums[i]`，还有就是基于3天前的抢今天的`dp[i-3]+nums[i]`，没有四天前的了，因为4天前的肯定可以多抢一次2天前的。
+
+		```java
+		for (int i = 2; i < nums.length; i++) {
+		    dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+		    if (i > 2)
+		        dp[i] = Math.max(dp[i], dp[i - 3] + nums[i]);
+		}
+		```
+
+	- [62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+
+		简单dp
+
+	- [64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
+
+		简单dp
+
+	- [63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/)
+
+		障碍物到达方式为0即可。
+
+
+
+# ***2024.5.2打卡	Day 92***
+
+1. 八股文一轮复习
+	- JVM 部分完成。
+2. java 并发专栏
+	  - 5篇。包括 java 内存模型，互斥锁，死锁。
+3. Redis 专栏
+	  - 1篇。Redis 缓存、并发控制和事务的课后习题。
+4. leetcode刷题：5题
+
+	- 0-1背包问题
+
+		```java
+		dp[i][v]，表示第0~i个物品中，当背包大小为v时可以获得的最大价值
+		
+		    对于第i个物品，有两种选择：
+		    1.不拿取该物品，则价值和0~(i-1)一样，dp[i][v] = dp[i - 1][v]
+		    2.拿取该物品，则价值增加v[i]，dp[i][v] = dp[i - 1][v - w[i]] + v[i]
+		
+		    dp[i][v] = Math.max(dp[i - 1][v], dp[i - 1][v - w[i]] + v[i])
+		
+		    for(int i = 0; i < N; i++) { // 遍历物品
+		        for(int j = 0; j < V; j++) { // 遍历背包大小
+		            if(j >= w[i]) { // 当前背包大小大于第i个物品的大小
+		                dp[i][v] = Math.max(dp[i - 1][j], dp[i - 1][j - w[i]] + v[i]);
+		            } else { // 否则装不下
+		                dp[i][v] = dp[i - 1][v];
+		            }
+		        }
+		    }
+		```
+
+	- 完全背包问题：每件物品可以无限拿（隐含可那的上限是 `V / w[i]`）
+
+		```java
+		dp[i][v]，表示第0~i个物品中，当背包大小为v时可以获得的最大价值
+		
+		    对于第i个物品，有两种选择：
+		    1.不拿取该物品，则价值和0~(i-1)一样，dp[i][v] = dp[i - 1][v]
+		    2.拿取该物品，遍历拿取的数量，for(int k = 0; k * w[i] <= j; k++)
+		    dp[i][v] = dp[i - 1][j - k * w[i]] + k * v[i]
+		
+		dp[i][v] = Math.max(dp[i - 1][v], dp[i][v] = dp[i - 1][j - k * w[i]] + k * v[i])
+		
+		    for(int i = 0; i < N; i++) { // 遍历物品
+		        for(int j = 0; j < V; j++) { // 遍历背包大小
+		            for(int k = 0; k * w[i] <= j; k++) {
+		                dp[i][v] = Math.max(dp[i - 1][j], 
+		                                    dp[i - 1][j - k * w[i]] + k * v[i])
+		            }
+		        }
+		    }
+		```
+
+	- 多重背包问题：第i件物品有s[i]件
+
+		```java
+		for(int i = 0; i < N; i++) { // 遍历物品
+		    for(int j = 0; j < V; j++) { // 遍历背包大小
+		        for(int k = 0; k <= s[i] && k * w[i] <= j; k++) {
+		            dp[i][v] = Math.max(dp[i - 1][j], 
+		                                dp[i - 1][j - k * w[i]] + k * v[i])
+		        }
+		    }
+		}
+		```
+
+	- [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
+
+		`dp[begin][end] = (s.charAt(begin) == s.charAt(end) && dp[begin + 1][end - 1])`
+
+	- [718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
+
+		没做出来。
+
+		```java
+		class Solution {
+		    public int findLength(int[] nums1, int[] nums2) {
+		        int n1 = nums1.length;
+		        int n2 = nums2.length;
+		
+		        // 以i,j结尾的数组的最长子数组
+		        int[][] dp = new int[n1 + 1][n2 + 1];
+		        int max = 0;
+		
+		        for (int i = 1; i <= n1; i++) {
+		            for (int j = 1; j <= n2; j++) {
+		                if (nums1[i - 1] == nums2[j - 1]) {
+		                    /*
+		                    	1 2 3 4 5
+		                    	1 2 6 4 7
+		                    	在遍历到4时，因为前面的3 != 6，因此dp[i - 1][j - 1]=0
+		                    	故最终结果dp[i][j] = dp[i - 1][j - 1] + 1 = 1，没有问题
+		                    */
+		                    dp[i][j] = dp[i - 1][j - 1] + 1;
+		                    max = Math.max(max, dp[i][j]);
+		                }
+		            }
+		        }
+		
+		        return max;
+		    }
+		}
+		```
+
 		
