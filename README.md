@@ -6127,3 +6127,103 @@ Java进阶完成：
 		```
 
 		
+
+# ***2024.5.3打卡	Day 93***
+
+1. java 并发专栏
+
+	- 1篇。用synchronized，wait(), notifyAll()实现“等待-通知”机制优化循环等待。
+
+2. Redis 专栏
+
+	- 1篇。Redis 在秒杀场景下的应用。
+
+3. leetcode刷题：3题
+
+	- [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+		注意第i个数必须时递增子序列的结尾
+
+		```java
+		class Solution {
+		    public int lengthOfLIS(int[] nums) {
+		        // 以第i个数结尾的递增子序列的长度
+		        // 注意第i个数必须时递增子序列的结尾
+		        int[] dp = new int[nums.length];
+		        int ans = 1;
+		        for (int i = 0; i < nums.length; i++) {
+		            int len = 1;
+		            for (int j = i - 1; j >= 0; j--) { // 向前遍历
+		                if (nums[j] < nums[i]) {
+		                    len = Math.max(len, dp[j] + 1);
+		                }
+		            }
+		            dp[i] = len;
+		            ans = Math.max(ans, len);
+		        }
+		        return ans;
+		    }
+		}
+		```
+
+	- [72. 编辑距离](https://leetcode.cn/problems/edit-distance/)
+
+		如果`word1.charAt(i - 1) != word2.charAt(j - 1)`，那么有三种策略。
+
+		替换一个，`dp[i-1][j-1]+1`
+
+		增加一个，增加的肯定是`words2.get(j)`这个元素，因此次数为当前以i结尾的words1到以j-1结尾的words2的步骤数+1，即`dp[i][j-1]+1`
+
+		减少一个，减少之后当前为以i-1结尾的words1，次数为`dp[i-1][j]+1`
+
+	- [10. 正则表达式匹配](https://leetcode.cn/problems/regular-expression-matching/)
+
+		专门把星号拿出来讨论就可以，星号可以匹配0个，因此有`dp[0][i]=dp[0][i-2]`
+
+		然后遍历时有星号，星号前一个不能匹配就`dp[i][j]=dp[i][j-2]`
+
+		可以匹配就有匹配0个，1个，多个三种情况，其中匹配多个相当于`s.get(i)`被抵消掉了，当前的星号可以继续向前匹配`s.get(i-1)`，如果还能成功匹配`s.get(i-1)`，就会递归似的继续向前匹配。
+
+		```java
+		int len1 = s.length();
+		int len2 = p.length();
+		// 以j结尾的p，是否能匹配以i结尾的s
+		boolean[][] dp = new boolean[len1 + 1][len2 + 1];
+		dp[0][0] = true;// 长度都是0，因此肯定可以匹配
+		// x*可以是0个x，因此dp[0][j]=d[0][j-2]
+		for (int j = 2; j < len2; j++) {
+		    // 以j结尾，则最后一个字符在j-1
+		    if (p.charAt(j - 1) == '*') {
+		        dp[0][j] = dp[0][j - 2];
+		    }
+		}
+		
+		// 遍历
+		for (int i = 1; i <= len1; i++) {
+		    for (int j = 1; j <= len2; j++) {
+		        // 不是*
+		        if (p.charAt(j - 1) != '*') {
+		            // 匹配成功
+		            if (p.charAt(j - 1) == '.' || p.charAt(j - 1) == s.charAt(i - 1)) {
+		                dp[i][j] = dp[i - 1][j - 1];
+		            } else {// 匹配失败
+		                dp[i][j] = false;
+		            }
+		        } else {// 是*p.charAt(j-2)可以有0或n个
+		            // 当前这个无法匹配，只能匹配0个
+		            if (p.charAt(j - 2) != s.charAt(i - 1) && p.charAt(j - 2) != '.') {
+		                dp[i][j] = dp[i][j - 2];
+		            // p.charAt(j - 2) 可以匹配 s.charAt(i - 1)
+		            } else {
+		                dp[i][j] = dp[i][j - 2]/* 匹配0个 */
+		                    || dp[i - 1][j - 2]/* 匹配一个 */
+		                    || dp[i - 1][j];/* 匹配多个，相当于抵消s[i]，即继续匹配s.get(i-1) */
+		            }
+		        }
+		    }
+		}
+		
+		return dp[len1][len2];
+		```
+
+		
