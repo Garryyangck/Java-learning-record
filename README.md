@@ -6226,4 +6226,39 @@ Java进阶完成：
 		return dp[len1][len2];
 		```
 
-		
+
+
+
+# ***2024.5.4打卡	Day 94***
+
+1. java 并发专栏
+
+	- 5篇。已完成前11篇基础篇。
+
+2. 并发线程池视频
+
+	- 完成4个。
+
+3. leetcode刷题：5题
+
+	- [122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+		今天有股票，则昨天有或者昨天没有今天买的
+
+		今天没股票，则昨天无或者昨天有今天刚卖
+
+	- [714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
+
+		买入的时候多交一个fee
+
+	- [121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+		分三种情况，没买过，现在持有，和已完成交易
+
+	- [123. 买卖股票的最佳时机 III](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/)
+
+		和上面那道类似，只不过分五种情况了
+
+	- [188. 买卖股票的最佳时机 IV](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/)
+
+		注意要初始化第0天的`dp[0][1+2*k]为-prices[i]`
