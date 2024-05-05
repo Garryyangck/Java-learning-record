@@ -1,5 +1,7 @@
 package garry.leetcode;
 
+import java.util.Arrays;
+
 /**
  * @author Garry
  * ---------2024/3/22 11:40
@@ -8,37 +10,34 @@ package garry.leetcode;
 public class Main {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.maxProfit(2, new int[]{2, 4, 1});
+        solution.coinChange(new int[]{2, 5, 1}, 11);
     }
 }
 
 class Solution {
-    public int maxProfit(int k, int[] prices) {
-        if (prices.length == 1)
-            return 0;
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        for(int i = 0; i <= amount; i++)
+            dp[i] = Integer.MAX_VALUE;
 
-        int[][] dp = new int[prices.length][2 * k + 1];
-        // 初始化dp[0][j]
-        for (int i = 1; i < 2 * k + 1; i += 2) {
-            dp[0][i] = 0;
-        }
-        dp[0][1] = -prices[0];
+        dp[0] = 0;
+        Arrays.sort(coins);
 
-        for (int i = 1; i < prices.length; i++) {
-            dp[i][0] = dp[i - 1][0];
-            for (int j = 1; j < 2 * k + 1; j++) {
-                if (j % 2 == 0) { // 没有股票
-                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1] + prices[i]);
-                } else { // 有股票
-                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1] - prices[i]);
-                }
+        for(int i = 0; i < coins.length; i++) {
+            for(int num = 1; num * coins[i] <= amount; num++) {
+                dp[num * coins[i]] = num;
             }
         }
 
-        int ans = 0;
-        for (int i = 0; i < 2 * k + 1; i++) {
-            ans = Math.max(ans, dp[prices.length - 1][i]);
+        for(int i = 0; i <= amount; i++) {
+            for(int j = 0; j < coins.length; j++) {
+                if(i - coins[j] < 0)
+                    break;
+                if(dp[i - coins[j]] == Integer.MAX_VALUE)
+                    continue;
+                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+            }
         }
-        return ans;
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
     }
 }

@@ -6262,3 +6262,41 @@ Java进阶完成：
 	- [188. 买卖股票的最佳时机 IV](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/)
 
 		注意要初始化第0天的`dp[0][1+2*k]为-prices[i]`
+
+
+
+# ***2024.5.5打卡	Day 95***
+
+最近感觉有点没动力了。。。自己被很多没有意义的事消耗了精力，我必须把它们赶出自己的生活。
+
+1. java 并发视频课
+
+	- 全部完成
+
+2. java 并发文章
+
+	- 5篇。
+
+3. leetcode刷题：2题
+
+	- [309. 买卖股票的最佳时机含冷冻期](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+
+		```java
+		for (int i = 1; i < prices.length; i++) {
+		    dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+		    if (i == 1) {
+		        dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+		        continue;
+		    }
+		    // dp[i][1]是否能从dp[i-1][0]状态买入呢？ 
+		    // 从dp[i-2][0]状态买入是否会丢失dp[i-1][0]的信息？答案是不能，不会。
+		    // dp[i-1][0]这个状态可能是当天卖出，i-1天前卖出且处于非冷冻期，i-1天前卖出且处于冷冻期三种可能。
+		    // i-1当天卖出，或者处于冷冻期，第i天都不能买入
+		    // 若i-1为非冷冻期， 那么i-2天也为非冷冻期。且这两天的状态一模一样。即dp[i-1][0] = dp[i-2][0]
+		    dp[i][1] = Math.max(dp[i - 1][1], dp[i - 2][0] - prices[i]);
+		}
+		```
+
+	- [322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+		记得先把零钱及其整数倍进行初始化，先排序coins，这样大面值在后面，遇到公因数最终会取小值。
