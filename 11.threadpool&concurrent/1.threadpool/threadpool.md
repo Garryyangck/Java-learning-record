@@ -39,9 +39,9 @@
 
 ### 3.线程存活时间和工作队列
 
-1. 线程数多于corePoolSize，那么如果**多余的线程空闲时间超过keepAliveTime，它们就会被终止**。
+1. 线程数多于corePoolSize，那么如果==多余的线程空闲时间超过keepAliveTime，它们就会被终止==。
 
-2. **工作队列**：
+2. ==工作队列==：
 
 	> ![image-20240428141652789](threadpool.assets/image-20240428141652789.png)
 
@@ -79,11 +79,11 @@
 
 ### 5.常见线程池的用法演示
 
-1. **SingleThreadPool**：线程数为1的线程池。
+1. ==SingleThreadPool==：线程数为1的线程池。
 
-2. **CacheThreadPool**：线程数上限无限大，且任务队列为直接交接队列，也存在OOM风险。
+2. ==CacheThreadPool==：线程数上限无限大，且任务队列为直接交接队列，也存在OOM风险。
 
-3. **ScheduledThreadPool**：
+3. ==ScheduledThreadPool==：
 
 	```java
 	public static void main(String[] args) {
@@ -108,15 +108,15 @@
 
 ### 7.正确关闭线程池
 
-1. **shutdown**：**拒绝之后的执行请求**，但是当前**没有执行完的线程和任务队列中剩余的任务依旧继续执行**。
+1. ==shutdown==：==拒绝之后的执行请求==，但是当前==没有执行完的线程和任务队列中剩余的任务依旧继续执行==。
 
-2. **isShutdown**：判断当前**线程是否已经shutdown**。
+2. ==isShutdown==：判断当前==线程是否已经shutdown==。
 
-3. **isTerminated**：判断当前线程已经shutdown且**所有任务是否已经完成**。
+3. ==isTerminated==：判断当前线程已经shutdown且==所有任务是否已经完成==。
 
-4. **awaitTermination**：检测线程池在**指定时间内是否terminated**。
+4. ==awaitTermination==：检测线程池在==指定时间内是否terminated==。
 
-5. **shutdownNow**：**正在被线程执行的任务被interrupted，返回队列中的任务**。
+5. ==shutdownNow==：==正在被线程执行的任务被interrupted，返回队列中的任务==。
 
 	```java
 	public class Shutdown {
@@ -203,7 +203,7 @@
 
 ### 8.暂停和恢复线程池
 
-**自定义**线程池，使用**钩子方法**pause和resume**实现线程池的暂停和恢复**。
+==自定义==线程池，使用==钩子方法==pause和resume==实现线程池的暂停和恢复==。
 
 ```java
 public class PauseableThreadPool extends ThreadPoolExecutor {
@@ -234,7 +234,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
     }
 
-    /**
+    /==
      * 在任务执行前判断当前线程是否处于暂停状态
      */
     @Override
@@ -253,7 +253,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
 
     }
 
-    /**
+    /==
      * 让当前线程暂停
      */
     public void pause() {
@@ -310,7 +310,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
 
 1. > <img src="threadpool.assets/image-20240428160740247.png" alt="image-20240428160740247" style="zoom:67%;" />
 
-2. **线程池里的线程只被start一次**，之后它会一直**检测任务队列有没有新的任务**，**调用任务的run方法**。
+2. ==线程池里的线程只被start一次==，之后它会一直==检测任务队列有没有新的任务==，==调用任务的run方法==。
 
 ---
 
@@ -320,4 +320,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
 
 1. > ![image-20240428161453673](threadpool.assets/image-20240428161453673.png)
 
-2. 
+---
+
+
+

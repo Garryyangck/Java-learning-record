@@ -6300,3 +6300,33 @@ Java进阶完成：
 	- [322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
 
 		记得先把零钱及其整数倍进行初始化，先排序coins，这样大面值在后面，遇到公因数最终会取小值。
+
+
+
+# ***2024.5.6打卡	Day 96***
+
+1. java 并发
+
+	- 剩余的文章完成
+	
+2. 设计模式：
+
+  - 完成Spring中的设计模式，单例模式，代理模式，工厂模式
+
+2. leetcode刷题：4题
+
+	- [160. 相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/)
+	
+		left为null则遍历另一链表，right也同理，最后两链表必然相遇（可能在null处相遇）
+	
+	- [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+	
+		递归
+	
+	- [234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
+	
+		O(1) 空间的方法：先找偏左中点，分割，把右半反转，然后比较两个链表。
+	
+	- [2. 两数相加](https://leetcode.cn/problems/add-two-numbers/)
+	
+		先把最低位加出来，标记是否进位，然后递归得到后面的加法结果，然后循环进位后面的结果，最后把进位后的后面结果和当前new出来的新节点拼接。

@@ -882,18 +882,194 @@
 2. ==然后在类里面直接右键 -> External Tools -> show byte code==
 
 	> <img src="Concurrent.assets/image-20240505165153633.png" alt="image-20240505165153633" style="zoom:50%;" />
+	
+3. ==synchronized 的字节码==：
+
+  > - ==java 源代码==：
+  >
+  > 	```java
+  > 	public class Test {
+  > 	    public static final Object lockObject = new Object();//随便创建一个对象
+  > 	
+  > 	    public static void main(String[] args) {
+  > 	        for (int i = 0; i < 10; i++) {
+  > 	            new Thread(new Runnable() {
+  > 	                @Override
+  > 	                public void run() {
+  > 	                    f();
+  > 	                }
+  > 	            }).start();
+  > 	        }
+  > 	    }
+  > 	
+  > 	    public static void f() {
+  > 	        synchronized (lockObject) {
+  > 	            System.out.println("hello synchronized");
+  > 	            try {
+  > 	                Thread.sleep(1000);
+  > 	            } catch (InterruptedException e) {
+  > 	                e.printStackTrace();
+  > 	            }
+  > 	        }
+  > 	    }
+  > 	}
+  > 	```
+  >
+  > - ==字节码==：
+  >
+  > 	```
+  > 	Compiled from "Test.java"
+  > 	public class Test {
+  > 	  public static final java.lang.Object lockObject;
+  > 	
+  > 	  public Test();
+  > 	    Code:
+  > 	       0: aload_0
+  > 	       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+  > 	       4: return
+  > 	
+  > 	  public static void main(java.lang.String[]);
+  > 	    Code:
+  > 	       0: iconst_0
+  > 	       1: istore_1
+  > 	       2: iload_1
+  > 	       3: bipush        10
+  > 	       5: if_icmpge     31
+  > 	       8: new           #2                  // class java/lang/Thread
+  > 	      11: dup
+  > 	      12: new           #3                  // class Test$1
+  > 	      15: dup
+  > 	      16: invokespecial #4                  // Method Test$1."<init>":()V
+  > 	      19: invokespecial #5                  // Method java/lang/Thread."<init>":(Ljava/lang/Runnable;)V
+  > 	      22: invokevirtual #6                  // Method java/lang/Thread.start:()V
+  > 	      25: iinc          1, 1
+  > 	      28: goto          2
+  > 	      31: return
+  > 	
+  > 	  public static void f();
+  > 	    Code:
+  > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
+  > 	       3: dup
+  > 	       4: astore_0
+  > 	       5: monitorenter
+  > 	       6: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;
+  > 	       9: ldc           #9                  // String hello synchronized
+  > 	      11: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+  > 	      14: ldc2_w        #11                 // long 1000l
+  > 	      17: invokestatic  #13                 // Method java/lang/Thread.sleep:(J)V
+  > 	      20: goto          28
+  > 	      23: astore_1
+  > 	      24: aload_1
+  > 	      25: invokevirtual #15                 // Method java/lang/InterruptedException.printStackTrace:()V
+  > 	      28: aload_0
+  > 	      29: monitorexit
+  > 	      30: goto          38
+  > 	      33: astore_2
+  > 	      34: aload_0
+  > 	      35: monitorexit
+  > 	      36: aload_2
+  > 	      37: athrow
+  > 	      38: return
+  > 	    Exception table:
+  > 	       from    to  target type
+  > 	          14    20    23   Class java/lang/InterruptedException
+  > 	           6    30    33   any
+  > 	          33    36    33   any
+  > 	
+  > 	  static {};
+  > 	    Code:
+  > 	       0: new           #16                 // class java/lang/Object
+  > 	       3: dup
+  > 	       4: invokespecial #1                  // Method java/lang/Object."<init>":()V
+  > 	       7: putstatic     #7                  // Field lockObject:Ljava/lang/Object;
+  > 	      10: return
+  > 	}
+  > 	
+  > 	Process finished with exit code 0
+  > 	
+  > 	```
+  >
+  > - ==主要看 f() 的字节码==：
+  >
+  > 	```java
+  > 	public static void f();
+  > 	    Code:
+  > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
+  > 	       3: dup
+  > 	       4: astore_0
+  > 	       5: monitorenter
+  > 	       6: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;
+  > 	       9: ldc           #9                  // String hello synchronized
+  > 	      11: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+  > 	      14: ldc2_w        #11                 // long 1000l
+  > 	      17: invokestatic  #13                 // Method java/lang/Thread.sleep:(J)V
+  > 	      20: goto          28
+  > 	      23: astore_1
+  > 	      24: aload_1
+  > 	      25: invokevirtual #15                 // Method java/lang/InterruptedException.printStackTrace:()V
+  > 	      28: aload_0
+  > 	      29: monitorexit
+  > 	      30: goto          38
+  > 	      33: astore_2
+  > 	      34: aload_0
+  > 	      35: monitorexit
+  > 	      36: aload_2
+  > 	      37: athrow
+  > 	      38: return
+  > 	    Exception table:
+  > 	       from    to  target type
+  > 	          14    20    23   Class java/lang/InterruptedException
+  > 	           6    30    33   any
+  > 	          33    36    33   any
+  > 	```
+  >
+  > - ==AI 给出的解释==：
+  >
+  > 	```java
+  > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
+  > 	3: dup - 复制栈顶的lockObject引用。
+  > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
+  > 	    
+  > 	// 管程开始同步
+  > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
+  > 	    
+  > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
+  > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
+  > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
+  > 	14: ldc2_w        #11 - 将长整型1000l（1000毫秒）加载到栈顶。
+  > 	17: invokestatic  #13 - 调用Thread.sleep方法，使当前线程暂停1000毫秒。
+  > 	20: goto          28 - 如果没有异常发生，跳转到第28行。
+  > 	23: astore_1 - 如果Thread.sleep抛出InterruptedException异常，将其存储在局部变量槽1中。
+  > 	24: aload_1 - 加载InterruptedException到栈顶。
+  > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
+  > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
+  > 	    
+  > 	// 结束管程同步
+  > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
+  > 	    
+  > 	    
+  > 	30: goto          38 - 跳转到第38行，结束方法。
+  > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
+  > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
+  > 	    
+  > 	// 退出管程
+  > 	35: monitorexit - 退出lockObject的监视器。
+  > 	    
+  > 	    
+  > 	36: aload_2 - 加载局部变量槽2中的异常到栈顶。
+  > 	37: athrow - 重新抛出存储在局部变量槽2中的异常。
+  > 	38: return - 方法正常结束，返回。
+  > 	Exception table: - 异常表，列出了可能抛出的异常及其处理方式：
+  > 	from 14 to 20 target 23 type java/lang/InterruptedException - 如果在Thread.sleep期间发生InterruptedException，则跳转到第23行处理。
+  > 	from 6 to 30 target 33 type any - 如果在进入监视器到退出监视器之间的任何位置发生任何类型的异常，则跳转到第33行处理。
+  > 	from 33 to 36 target 33 type any - 如果在退出监视器时发生任何类型的异常，则跳转到第33行处理。
+  > 	```
 
 ---
 
 
 
-### 2.CAS 是什么？Java8是如何优化 CAS 的？
-
-1. 
-
-
-
-### 3.一句话撸完重量级锁、自旋锁、轻量级锁、偏向锁、悲观、乐观锁等各种锁
+### 2.一句话撸完重量级锁、自旋锁、轻量级锁、偏向锁、悲观、乐观锁等各种锁
 
 1. ==重量级锁==
 
@@ -939,7 +1115,7 @@
 
 
 
-### 4.CAS 是什么？Java8是如何优化 CAS 的？
+### 3.CAS 是什么？Java8 是如何优化 CAS 的？
 
 1. ```java
 	public class CASTest {
@@ -983,7 +1159,7 @@
 
 
 
-### 5.一文搞懂volatile关键字
+### 4.一文搞懂 volatile 关键字
 
 1. ==volatile保证变量可见性的原理==
 
@@ -1009,6 +1185,652 @@
 	> - 同时满足：
 	> 	1. 运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值。
 	> 	2. 变量不需要与其他状态变量共同参与不变约束。
+
+---
+
+
+
+### 5.一文读懂 synchronized
+
+1. synchronized 并非一开始就该对象加上重量级锁，也是==从偏向锁，轻量级锁，再到重量级锁的过程==。
+
+2. 这个过程也告诉我们，==假如我们一开始就知道某个同步代码块的竞争很激烈、很慢的话，那么我们一开始就应该使用重量级锁了，从而省掉一些锁转换的开销==。
+
+3. ==锁对象==
+
+	> - java==对象在内存中的存储结构==主要有一下三个部分：
+	>
+	> 	1. 对象头
+	> 	2. 实例数据
+	> 	3. 填充数据
+	>
+	> - ==对象头==里的数据主要是一些运行时的数据，其简单的结构如下：
+	>
+	> 	| 长度     | 内容                   | 说明                            |
+	> 	| -------- | ---------------------- | ------------------------------- |
+	> 	| 32/64bit | Mark Work              | hashCode,GC分代年龄，==锁信息== |
+	> 	| 32/64bit | Class Metadata Address | 指向对象类型数据的指针          |
+	> 	| 32/64bit | Array Length           | 数组的长度(当对象为数组时)      |
+	>
+	> - 当我们创建一个对象LockObject时，该对象的部分==Mark Word关键数据==如下：
+	>
+	> 	![image-20240506112948579](Concurrent.assets/image-20240506112948579.png)
+	> 	
+	> - 从图中可以看出，==偏向锁==的标志位是“01”，==状态是“0”，表示该对象还没有被加上偏向锁==（“1”是表示被加上偏向锁）。该==对象被创建出来的那一刻，就有了偏向锁的标志位，这也说明了所有对象都是可偏向的==，但所有对象的状态都为“0”，也同时说明==所有被创建的对象的偏向锁并没有生效==。
+	>
+
+---
+
+
+
+### 6.图解 | 你管这破玩意叫线程池？
+
+1. 我们可以给==非核心线程==设定一个超时时间 ==keepAliveTime==，当这么长时间没能从队列里获取任务时，就不再等了，销毁线程。
+
+	> ![图片](Concurrent.assets/640.gif)
+
+2. 线程池的样例：
+
+	```java
+	public FlashExecutor(
+	    int corePoolSize,
+	    int maximumPoolSize,
+	    long keepAliveTime,
+	    TimeUnit unit,
+	    BlockingQueue<Runnable> workQueue,
+	    ThreadFactory threadFactory,
+	    RejectedExecutionHandler handler) 
+	{
+	    ... // 省略一些参数校验
+	        this.corePoolSize = corePoolSize;
+	    this.maximumPoolSize = maximumPoolSize;
+	    this.workQueue = workQueue;
+	    this.keepAliveTime = unit.toNanos(keepAliveTime);
+	    this.threadFactory = threadFactory;
+	    this.handler = handler;
+	}
+	
+	int corePoolSize：// 核心线程数
+	int maximumPoolSize：// 最大线程数
+	long keepAliveTime：// 非核心线程的空闲时间
+	TimeUnit unit：// 空闲时间的单位
+	BlockingQueue<Runnable> workQueue：// 任务队列（线程安全的阻塞队列）
+	ThreadFactory threadFactory：// 线程工厂
+	RejectedExecutionHandler handler：// 拒绝策略
+	```
+
+3. ==线程池执行流程==：
+
+	> ![图片](Concurrent.assets/640-17149675855482.webp)
+
+4. ==两个常见问题==：
+
+	> 1. ==线程池中的线程是越多越好吗==？
+	> 2. ==为什么线程池可以加快速度==？
+
+---
+
+
+
+### 7.Java并发包中最重要的几个同步类
+
+1. ==ReenTrantLock==
+
+	> - ==ReentrantLock 是可重入锁的意思==。
+	>
+	> - ==可重入锁==：就是从一个线程获取锁之后，到这个线程==释放该锁之前==，该线程可以==再次进入获取该锁==，这像==递归调用，同一个线程多次进入同一个锁==。
+	>
+	> - 在 ReenTrantLock 中，通过==调用 lock() 方法来获取锁==，==调用 unlock() 方法来释放锁==的机制进行代码块的同步。
+	>
+	> - ReentrantLock 的实现==依赖于同步器框架 AbstranctQueuedSynchronizer==。
+	>
+	> - AbstrancQueuedSynchronizer，这个类也简称为 AQS。==AQS 使用一个整型的 volatile 变量(名为 state)来维护同步状态==，而==这个变量的操作是靠 CAS 机制来保证他的原子性==。
+	>
+	> - ==默认==情况下，ReenTrantLock 使用的是==非公平锁==，我们也可以通过构造器指定是否要公平锁。
+	>
+	> 	```java
+	> 	/==
+	> 	  * Creates an instance of {@code ReentrantLock} with the
+	> 	  * given fairness policy.
+	> 	  *
+	> 	  * @param fair {@code true} if this lock should use a fair ordering policy
+	> 	  */
+	> 	public ReentrantLock(boolean fair) {
+	> 	    sync = fair ? new FairSync() : new NonfairSync();
+	> 	}
+	> 	```
+	>
+	> - ==公平锁==：做个比喻就是在银行门口等待的人，==先来的==，等下可以==先获取==到锁来办理事情。即在锁的获取上，是按照时间的顺序公平获取的。==非公平锁==：和公平锁相反，==慢来的也有可能先获取到锁==。
+
+2. ==CountDownLatch==
+
+	> - 这是一个==计数同步类==，他可以==让当前线程处于等待状态，直到计数为0时才能继续往下执行==。
+	>
+	> - ==常用方法==：
+	>
+	> 	```java
+	> 	// 构造器，必须制定计数次数
+	> 	public CountDownLatch(int count) {
+	> 	    if (count < 0) throw new IllegalArgumentException("count < 0");
+	> 	    this.sync = new Sync(count);
+	> 	}
+	> 	
+	> 	// 进入等待状态，直到计数数为 0 时，才可以继续往下执行，如果该线程被打断的话，则会抛出 InterruptedException 异常
+	> 	public void await() throws InterruptedException {
+	> 	    sync.acquireSharedInterruptibly(1);
+	> 	}
+	> 	
+	> 	// 计数减一
+	> 	public void countDown() {
+	> 	    sync.releaseShared(1);
+	> 	}
+	> 	```
+	>
+	> - ==经典示例，主线程必须等两个子线程均执行完才能继续，否则会被 count.wait 阻塞==。
+	>
+	> 	```java
+	> 	public class CountDownLatchTest {
+	> 	    static CountDownLatch count = new CountDownLatch(2); // 计数为 2
+	> 	    static int sum1 = 0; // 1 到 100 相加
+	> 	    static int sum2 = 0; // 101 到 200 相加
+	> 	
+	> 	    public static void main (String[] args) {
+	> 	        // 线程 1
+	> 	        new Thread(new Runnable() {
+	> 	            @Override
+	> 	            public void run() {
+	> 	                // 执行 1 到 10 相加
+	> 	                for (int i = 1; i <= 100; i++) {
+	> 	                    sum1 += i;
+	> 	                }
+	> 	                count.countDown();
+	> 	            }
+	> 	        }).start();
+	> 	        // 线程2
+	> 	        new Thread(new Runnable() {
+	> 	            @Override
+	> 	            public void run() {
+	> 	                // 执行 101 到 200 相加
+	> 	                for (int i = 101; i <= 200; i++) {
+	> 	                    // 假设每次执行相加都会花一些时间
+	> 	                    sum1 += i;
+	> 	                }
+	> 	                count.countDown();
+	> 	            }
+	> 	        }).start();
+	> 	        // 等到两个线程都执行完，在把他们相加
+	> 	        try {
+	> 	            count.wait();
+	> 	            System.out.println("最终的结果：" + (sum1 + sum2));
+	> 	        } catch (Exception e) {
+	> 	            e.printStackTrace();
+	> 	        }
+	> 	    }
+	> 	}
+	> 	```
+	>
+	> - 该类==内部维护着一个 Sync 类==，该==内部类继承了同步阻塞队列（AQS==），实现核心方法。
+	>
+	> 	```java
+	> 	 private static final class Sync extends AbstractQueuedSynchronizer
+	> 	```
+	>
+	> - 真正执行减 1 的是 Sync.doReleaseShared() 方法，该方法的内部实现逻辑主要是依靠 CAS 机制来实现计数减一。
+
+3. ==CyclicBarrier 同步类==
+
+	> - Barrier 是阻拦的意思，他和 CountDownLatch 有点类似，当指定的线程数都执行到某个位置的时候，他才会继续往下执行。主要特点是==可以让几个线程相互等待，就像被一道围栏给阻塞了一样，等到人齐了，在一同往下执行==。
+	>
+	> - ==操作演示==：
+	>
+	> 	```java
+	> 	public class CyclicBarrierTest {
+	> 	    // 表示 await 的线程达到3个时，这3个线程才会继续向下执行
+	> 	    static CyclicBarrier barrier = new CyclicBarrier(3);
+	> 	    
+	> 	    static int sum1 = 0; // 1 到 100 相加
+	> 	    static int sum2 = 0; // 101 到 200 相加
+	> 	    public static void main (String[] args) {
+	> 	        // 线程 1
+	> 	        new Thread(new Runnable() {
+	> 	            @Override
+	> 	            public void run() {
+	> 	                // 执行 1 到 10 相加
+	> 	                for (int i = 1; i <= 100; i++) {
+	> 	                    sum1 += i;
+	> 	                }
+	> 	                // 进入等待
+	> 	                try {
+	> 	                    barrier.await();
+	> 	                } catch (Exception e) {
+	> 	                    e.printStackTrace();
+	> 	                }
+	> 	            }
+	> 	        }).start();
+	> 	        // 线程2
+	> 	        new Thread(new Runnable() {
+	> 	            @Override
+	> 	            public void run() {
+	> 	                // 执行 101 到 200 相加
+	> 	                for (int i = 101; i <= 200; i++) {
+	> 	                    // 假设每次执行相加都会花一些时间
+	> 	                    sum1 += i;
+	> 	                }
+	> 	                // 进入等待
+	> 	                try {
+	> 	                    barrier.await();
+	> 	                } catch (Exception e) {
+	> 	                    e.printStackTrace();
+	> 	                }
+	> 	            }
+	> 	        }).start();
+	> 	        // 等到两个线程都执行完，在把他们相加
+	> 	        try {
+	> 	            barrier.await();
+	> 	            System.out.println("最终的结果：" + (sum1 + sum2));
+	> 	        } catch (Exception e) {
+	> 	            e.printStackTrace();
+	> 	        }
+	> 	    }
+	> 	}
+	> 	```
+	>
+	> - CyclicBarrier 是如何实现线程安全的呢？==CyclicBarrier 主要是依赖于 ReenTrantLock 来实现线程同步安全的==。
+	>
+	> - ==CountDownLatch vs CyclicBarrier==
+	>
+	> 	- 相比与 CountDownLatch，==CyclicBarrier 实例可以重复利用，我们可以通过重置方法 reset() 实现重复利用==。
+	> 	- CycliBarrier 是==多个线程互相等待==，而 CountDownLatch 是==一个线程等待其他线程执行完毕==。
+	> 	- 还有在同步锁上也有些不同，==一个是依赖于 ReentrantLock==，==一个是依赖于 CAS==（虽然 ReentrantLock的底层也是依赖于 CAS 机制）。
+	
+4. ==Semaphore==
+
+  > - semaphore 是信号量的意思，通过这个类，可以==控制某个资源最多可以被几个线程所持有==。
+  >
+  > - ==常用方法==：
+  >
+  > 	```java
+  > 	// 如果还有许可，则继续执行，否则将进入WAITING状态，直到有许可
+  > 	public void acquire() throws InterruptedException {
+  > 	    sync.acquireSharedInterruptibly(1);
+  > 	}
+  > 	
+  > 	// 释放持有的许可
+  > 	public void release() {
+  > 	    sync.releaseShared(1);
+  > 	}
+  > 	```
+  >
+  > - 演示：一个银行4个窗口，10个人前来办理业务。
+  >
+  > 	```java
+  > 	public class SemaphoreTest {
+  > 	
+  > 	    // 假设有4个许可证，每次都需要一个许可证
+  > 	    static Semaphore semaphore = new Semaphore(4);
+  > 	
+  > 	    static class EatingThread implements Runnable{
+  > 	        @Override
+  > 	        public void run() {
+  > 	            // 尝试是否能够拿到可用的许可证
+  > 	            try {
+  > 	                semaphore.acquire(); // 尝试获取许可，没有则WAITING，直到有许可
+  > 	                System.out.println(Thread.currentThread() + "拿到许可证了，窗口办理事情中");
+  > 	                Thread.sleep(10000);
+  > 	            } catch (Exception e) {
+  > 	                e.printStackTrace();
+  > 	            }finally {
+  > 	                // 释放持有的许可证
+  > 	                semaphore.release();
+  > 	            }
+  > 	
+  > 	        }
+  > 	    }
+  > 	
+  > 	    // 开始测试
+  > 	    public static void main(String[] args) {
+  > 	        // 10个人来银行办理，不过总共只有3个窗口，每次只能有三个人同时在办理
+  > 	        for (int i = 0; i < 10; i++) {
+  > 	            Thread t = new Thread(new EatingThread());
+  > 	            t.start();
+  > 	        }
+  > 	    }
+  > 	}
+  > 	```
+  >
+  > - 这个类的主要特点是，可以==对资源的同时访问人数进行控制==。
+
+---
+
+
+
+### 8.AQS 原理（暂时没看）
+
+
+
+## 线程池视频课
+
+### 1.初始线程池
+
+1. for循环中直接new1000个线程，这样开销太大（==每一个java线程直接对应操作系统的一个线程==），我们希望有==固定数量的线程，来执行这1000个线程==，这样就==避免了反复创建并销毁线程所带来的开销问题==。
+2. 使用==线程池的好处==：
+	1. 响应速度加快，因为节省了反复创建和销毁线程带来的事件开销。
+	2. 合理分配CPU和内存。
+	3. 统一管理线程。
+
+---
+
+
+
+### 2.线程增减的好处
+
+1. ==线程池的参数==：
+
+	> ![image-20240428121337864](Concurrent.assets/image-20240428121337864.png)
+
+2. ==线程添加的规则==：
+
+	> 1. 如果==线程数小于corePoolsize==，即使==其他已创建的线程处于空闲状态，也会创建一个新线程==来运行新任务。
+	> 2. 如果线程数==等于(或大于)corePoolSize但少干maximumPoolSize==，任务==放入队列==(workQueue)。
+	> 3. 如果==队列已满==，并且线程数==小于maxPoolSize==，则==创建一个新线程==来运行任务。
+	> 4. 如果队列已满，并且==线程数大于或等于maxPoolSize==，则==拒绝==该任务。
+	>
+	> ![image-20240428122147848](Concurrent.assets/image-20240428122147848.png)
+
+3. ==例子==：
+
+	> ![image-20240428122306352](Concurrent.assets/image-20240428122306352.png)
+
+4. 通过设置==corePoolSize和maximumPoolSize 相同，就可以创建固定大小的线程池==。
+
+	> 社区项目里就是设置的两个值相同，意思是线程数不会超过这个值，队列满了没有扩展的空间。
+
+---
+
+
+
+### 3.线程存活时间和工作队列
+
+1. 线程数多于corePoolSize，那么如果==多余的线程空闲时间超过keepAliveTime，它们就会被终止==。
+
+2. ==工作队列==：
+
+	> ![image-20240428141652789](Concurrent.assets/image-20240428141652789.png)
+
+---
+
+
+
+### 4.自动创建线程池的风险
+
+1. ```java
+	public class FixedThreadPoolOOM {
+	    public static void main(String[] args) {
+	        ExecutorService threadPool = Executors.newFixedThreadPool(1);
+	        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+	            threadPool.execute(new Task()); // 一直往无界队列里塞任务，最后填满分配的内存空间，导致OOM
+	        }
+	    }
+	
+	    static class Task implements Runnable {
+	        @Override
+	        public void run() { // 一直sleep，无法及时完成任务
+	            try {
+	                Thread.sleep(Long.MAX_VALUE);
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	}
+	```
+
+---
+
+
+
+### 5.常见线程池的用法演示
+
+1. ==SingleThreadPool==：线程数为1的线程池。
+
+2. ==CacheThreadPool==：线程数上限无限大，且任务队列为直接交接队列，也存在OOM风险。
+
+3. ==ScheduledThreadPool==：
+
+	```java
+	public static void main(String[] args) {
+	    ScheduledExecutorService pool = Executors.newScheduledThreadPool(5);
+	    pool.schedule(new Task(), 1/*延迟*/, TimeUnit.SECONDS);
+	    pool.scheduleAtFixedRate(new Task(), 1/*延迟*/, 3/*频率*/, TimeUnit.SECONDS);
+	    pool.shutdown();
+	}
+	```
+
+---
+
+
+
+### 6.几种线程池的对比
+
+1. > ![image-20240428145251962](Concurrent.assets/image-20240428145251962.png)
+
+---
+
+
+
+### 7.正确关闭线程池
+
+1. ==shutdown==：==拒绝之后的执行请求==，但是当前==没有执行完的线程和任务队列中剩余的任务依旧继续执行==。
+
+2. ==isShutdown==：判断当前==线程是否已经shutdown==。
+
+3. ==isTerminated==：判断当前线程已经shutdown且==所有任务是否已经完成==。
+
+4. ==awaitTermination==：检测线程池在==指定时间内是否terminated==。
+
+5. ==shutdownNow==：==正在被线程执行的任务被interrupted，返回队列中的任务==。
+
+	```java
+	public class Shutdown {
+	    public static void main(String[] args) throws InterruptedException {
+	        ExecutorService threadPool = Executors.newFixedThreadPool(10);
+	        for (int i = 0; i < 1000; i++) {
+	            threadPool.execute(new Shutdown.Task());
+	        }
+	        Thread.sleep(2000);
+	        // 返回队列中的任务
+	        List<Runnable> unExecutedTaskList = threadPool.shutdownNow();
+	        for (Runnable runnable : unExecutedTaskList) {
+	            System.out.println(runnable);
+	        }
+	    }
+	
+	    static class Task implements Runnable {
+	
+	        @Override
+	        public void run() {
+	            try {
+	                Thread.sleep(500);
+	                System.out.println(Thread.currentThread());
+	            } catch (InterruptedException e) {
+	                System.out.println(Thread.currentThread() + " is interrupted!");
+	            }
+	        }
+	    }
+	}
+	
+	Thread[pool-1-thread-2,5,main]
+	Thread[pool-1-thread-10,5,main]
+	Thread[pool-1-thread-8,5,main]
+	Thread[pool-1-thread-1,5,main]
+	Thread[pool-1-thread-4,5,main]
+	Thread[pool-1-thread-5,5,main]
+	Thread[pool-1-thread-9,5,main]
+	Thread[pool-1-thread-3,5,main]
+	Thread[pool-1-thread-6,5,main]
+	Thread[pool-1-thread-7,5,main]
+	Thread[pool-1-thread-9,5,main]
+	Thread[pool-1-thread-2,5,main]
+	Thread[pool-1-thread-8,5,main]
+	Thread[pool-1-thread-10,5,main]
+	Thread[pool-1-thread-7,5,main]
+	Thread[pool-1-thread-5,5,main]
+	Thread[pool-1-thread-3,5,main]
+	Thread[pool-1-thread-6,5,main]
+	Thread[pool-1-thread-1,5,main]
+	Thread[pool-1-thread-4,5,main]
+	Thread[pool-1-thread-7,5,main]
+	Thread[pool-1-thread-1,5,main]
+	Thread[pool-1-thread-10,5,main]
+	Thread[pool-1-thread-2,5,main]
+	Thread[pool-1-thread-5,5,main]
+	Thread[pool-1-thread-6,5,main]
+	Thread[pool-1-thread-9,5,main]
+	Thread[pool-1-thread-8,5,main]
+	Thread[pool-1-thread-3,5,main]
+	Thread[pool-1-thread-4,5,main]
+	Thread[pool-1-thread-7,5,main] is interrupted! // 正在被线程执行的任务被interrupted
+	Thread[pool-1-thread-9,5,main] is interrupted!
+	Thread[pool-1-thread-8,5,main] is interrupted!
+	Thread[pool-1-thread-2,5,main] is interrupted!
+	Thread[pool-1-thread-5,5,main] is interrupted!
+	Thread[pool-1-thread-6,5,main] is interrupted!
+	Thread[pool-1-thread-10,5,main] is interrupted!
+	Thread[pool-1-thread-4,5,main] is interrupted!
+	Thread[pool-1-thread-1,5,main] is interrupted!
+	Thread[pool-1-thread-3,5,main] is interrupted!
+	garry.threadpool.Shutdown$Task@29453f44
+	garry.threadpool.Shutdown$Task@5cad8086
+	garry.threadpool.Shutdown$Task@6e0be858
+	garry.threadpool.Shutdown$Task@61bbe9ba
+	garry.threadpool.Shutdown$Task@610455d6
+	garry.threadpool.Shutdown$Task@511d50c0
+	garry.threadpool.Shutdown$Task@60e53b93
+	...
+	```
+
+---
+
+
+
+### 8.暂停和恢复线程池
+
+==自定义==线程池，使用==钩子方法==pause和resume==实现线程池的暂停和恢复==。
+
+```java
+public class PauseableThreadPool extends ThreadPoolExecutor {
+
+    private boolean isPaused;
+
+    private final ReentrantLock lock = new ReentrantLock();
+
+    // 和当前的锁绑定
+    private final Condition unpaused = lock.newCondition();
+
+    /*
+        子类的构造函数必须要调用父类的构造函数才能完成父类的构造
+     */
+    public PauseableThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
+    }
+
+    public PauseableThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
+    }
+
+    public PauseableThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, RejectedExecutionHandler handler) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, handler);
+    }
+
+    public PauseableThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
+    }
+
+    /==
+     * 在任务执行前判断当前线程是否处于暂停状态
+     */
+    @Override
+    protected void beforeExecute(Thread t, Runnable r) {
+        super.beforeExecute(t, r);
+        lock.lock();
+        try {
+            while (isPaused) {
+                unpaused.await(); // 让当前的线程暂停，直到被重新激活
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+
+    }
+
+    /==
+     * 让当前线程暂停
+     */
+    public void pause() {
+        lock.lock();
+        try {
+            isPaused = true;
+        } catch (Exception e) {
+            lock.unlock();
+        }
+    }
+
+    public void resume() {
+        lock.lock();
+        try {
+            isPaused = false;
+            unpaused.signal();
+            unpaused.signalAll(); // 唤醒该Condition上全部的线程
+        } catch (Exception e) {
+            lock.unlock();
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        PauseableThreadPool threadPool = new PauseableThreadPool(10, 10, 0L, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("我被执行");
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        for (int i = 0; i < 10000; i++) {
+            threadPool.execute(runnable);
+        }
+        Thread.sleep(1500);
+        threadPool.pause();
+        System.out.println("线程池被暂停...");
+        Thread.sleep(1500);
+        threadPool.resume();
+        System.out.println("线程池被恢复...");
+    }
+}
+```
+
+---
+
+
+
+### 9.线程池实现复用的原因
+
+1. > <img src="Concurrent.assets/image-20240428160740247.png" alt="image-20240428160740247" style="zoom:67%;" />
+
+2. ==线程池里的线程只被start一次==，之后它会一直==检测任务队列有没有新的任务==，==调用任务的run方法==。
+
+---
+
+
+
+### 10.线程池状态
+
+1. > ![image-20240428161453673](Concurrent.assets/image-20240428161453673.png)
 
 ---
 
