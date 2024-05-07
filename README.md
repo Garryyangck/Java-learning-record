@@ -6310,8 +6310,8 @@ Java进阶完成：
 	- 剩余的文章完成
 	
 2. 设计模式：
+	  - 完成Spring中的设计模式，单例模式，代理模式，工厂模式
 
-  - 完成Spring中的设计模式，单例模式，代理模式，工厂模式
 
 2. leetcode刷题：4题
 
@@ -6330,3 +6330,29 @@ Java进阶完成：
 	- [2. 两数相加](https://leetcode.cn/problems/add-two-numbers/)
 	
 		先把最低位加出来，标记是否进位，然后递归得到后面的加法结果，然后循环进位后面的结果，最后把进位后的后面结果和当前new出来的新节点拼接。
+
+
+
+# ***2024.5.7打卡	Day 97***
+
+1. 八股文一轮复习：
+
+	设计模式+框架部分已完成
+
+2. leetcode刷题：4题
+
+	- [19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
+
+		快慢节点法，fast 快 n 个节点，它们都从 pre 开始遍历，最后 `slow.next = slow.next.next`。
+
+	- [23. 合并 K 个升序链表](https://leetcode.cn/problems/merge-k-sorted-lists/)
+
+		归并排序，最后 merge 一下左右的有序链表
+
+	- [82. 删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/)
+
+		使用递归求解时要分多种情况讨论，比如 postList == null(1,2,2 or 1,1,1)，head.val == postList.val(1,1,2) ，head.val == head.next.val(即head也要消除(1,1,1,2))，(1,2)，直接head.next = postList，return head。
+
+	- [92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/)
+
+		把反转 left ~ right 递归化简为反转前 n 个。`head.next = reverseBetween(head.next, left - 1, right - 1);` and when left == 1 is true : `return reverseN(head, right - left + 1);`。

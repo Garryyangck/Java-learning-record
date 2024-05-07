@@ -1409,7 +1409,7 @@
 
 ## 设计模式
 
-### 1.Spring 设计模式总结
+### 1.Spring 设计模式总结🌟🌟🌟🌟
 
 1. ==控制反转(IoC)和依赖注入(DI)==
 
@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 		
+	> 			
 	> 	    private String message;
-	> 		
+	> 			
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 		
+	> 			
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 		
+	> 			
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 		
+	> 			
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 		
+	> 			
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 		
+	> 			
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 		
+	> 			
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -1554,7 +1554,7 @@
 
 
 
-### 2.什么是单例模式？
+### 2.什么是单例模式？🌟🌟🌟🌟🌟
 
 1. 如果单例初始值是null，还未构建，则构建单例对象并返回。这个写法属于单例模式当中的==懒汉模式。==
 
@@ -1656,7 +1656,7 @@
 
 
 
-### 3.什么是代理模式？
+### 3.什么是代理模式？🌟🌟🌟🌟
 
 1. ==静态代理==：==写死代理的类，缺点是泛用性差==，比如我想给很多类添加同一个功能，那我总不能给每一个类都编写一个代理类吧。
 
@@ -1720,13 +1720,393 @@
 
 
 
-### 4.什么是工厂模式？
+### 4.什么是工厂模式？🌟🌟
 
 1. 工厂模式在创建型模式当中比较常用，它并不是一个独立的设计模式，而是==三种功能接近的设计模式的统称==。分别为==简单工厂模式，工厂方法模式，抽象工厂模式==。
 2. 通过工厂类创建对象并且==根据传入参数决定具体子类对象==的做法，就是==简单工厂模式==。
 3. ==每一个口罩子类都对应一个工厂子类，利用多态特性动态创建对象的模式==，就是==工厂方法模式==。
 
 ---
+
+
+
+### 5.什么是观察者模式？🌟🌟
+
+1. > <img src="bgwROUND1.assets/image-20240507105810215.png" alt="image-20240507105810215" style="zoom:67%;" />
+
+2. 在上面的UML图中，主要有两组实体对象，一组是观察者，一组是被观察者。==所有的观察者，都实现了Observer接口==；==所有的被观察者，都继承自Subject抽象类==。
+
+3. ==Subject类的成员OberverList，存储着已注册的观察者==，当==事件发生时，会通知列表中的所有观察者==。需要注意的是，OberverList所依赖的是的Observer接口，这样就避免了观察者与被观察者的紧耦合。
+
+4. ==示例，创建 Observer 和 Subject==：
+
+	```java
+	//观察者
+	public interface Observer {
+	    public void update();
+	}
+	
+	//被观察者
+	abstract public class Subject {
+	
+	    private List<Observer> observerList = new ArrayList<Observer>();
+	
+	    public void attachObserver(Observer observer) {
+	        observerList.add(observer);
+	    }
+	
+	    public void detachObserver(Observer observer){
+	        observerList.remove(observer);
+	    }
+	
+	    public void notifyObservers(){
+	        for (Observer observer: observerList){
+	            observer.update();
+	        }
+	    }
+	}
+	```
+
+5. 观察者们实现 Observer 接口，自行实现 update 逻辑
+
+	```java
+	//怪物
+	public class Monster implements Observer {
+	
+	    @Override
+	    public void update() {
+	        if(inRange()){
+	            System.out.println("怪物 对主角攻击！");
+	        }
+	    }
+	
+	    private boolean inRange(){
+	        //判断主角是否在自己的影响范围内，这里忽略细节，直接返回true
+	        return true;
+	    }
+	}
+	
+	//陷阱
+	public class Trap implements Observer {
+	
+	    @Override
+	    public void update() {
+	        if(inRange()){
+	            System.out.println("陷阱 困住主角！");
+	        }
+	    }
+	
+	    private boolean inRange(){
+	        //判断主角是否在自己的影响范围内，这里忽略细节，直接返回true
+	        return true;
+	    }
+	}
+	
+	//宝物
+	public class Treasure implements Observer {
+	
+	    @Override
+	    public void update() {
+	        if(inRange()){
+	            System.out.println("宝物 为主角加血！");
+	        }
+	    }
+	
+	    private boolean inRange(){
+	        //判断主角是否在自己的影响范围内，这里忽略细节，直接返回true
+	        return true;
+	    }
+	}
+	```
+
+	游戏的主角继承 Subject 类
+
+	```java
+	public class Hero extends Subject{
+	    void move(){
+	        System.out.println("主角向前移动");
+	        notifyObservers(); // 通知所有 Oberser，自己行动了
+	    }
+	}
+	```
+
+---
+
+
+
+## Java Web
+
+### 1.什么是单点登录？🌟🌟🌟
+
+1. 单点登录就是==在多个系统中，用户只需一次登录，各个系统即可感知该用户已经登录==。
+
+	> 比如阿里系的==淘宝和天猫==，很明显地我们可以知道这是两个系统，但是你在使用的时候，登录了天猫，淘宝也会自动登录。
+
+2. 回顾我们当初的==单系统登录==：
+
+	> - 用户登录时，验证用户的账户和密码。
+	> - 生成一个 LoginToken 保存在数据库中，将 LoginToken 写到 Cookie 中。
+	> - 将用户数据保存在 Session / ThreadLocal 中。
+	> - 请求时都会带上 Cookie，检查有没有登录，如果已经登录则放行；没有登录则根据 LoginToken 查询对应 User，然后写入 Session / ThreadLocal 实现自动登录。
+
+3. ==多系统登录的问题==：
+
+	> - ==Session不共享问题==
+	> - ==Cookie跨域的问题==
+	> - ==CAS原理==
+
+4. ==Session不共享问题==
+
+	> - 单系统登录功能主要是用Session保存用户信息来实现的，但是：==多系统即可能有多个Tomcat==，而==Session依赖的是当前系统的Tomcat==，所以==系统A的Session和系统B的Session==是==不共享==的。
+	>
+	> - ![image-20240507115020651](bgwROUND1.assets/image-20240507115020651.png)
+	>
+	> - 我们可以将登录功能==单独抽取==出来，做成一个==子系统==。
+	>
+	> 	![image-20240507121344108](bgwROUND1.assets/image-20240507121344108.png)
+	>
+	> 	- ==SSO系统生成一个token，并将用户信息存到Redis中==，并设置过期时间。
+	> 	- ==其他系统请求SSO系统==进行登录，==得到SSO返回的token，写到Cookie==中。
+	> 	- 每次请求时，Cookie都会带上，==拦截器得到token，判断是否已经登录==。
+	>
+	> 	到这里，其实我们会发现其实就两个变化：
+	>
+	> 	- ==将登陆功能抽取为一个系统（SSO），其他系统请求SSO进行登录==。
+	> 	- ==本来将用户信息存到Session，现在将用户信息存到Redis==。
+
+5. ==Cookie跨域的问题==
+
+	> - ==Cookie是不能跨域的==。比如说，我们请求`<https://www.google.com/>`时，浏览器会自动把`google.com`的Cookie带过去给`google`的服务器，而不会把`<https://www.baidu.com/>`的Cookie带过去给`google`的服务器。
+	> - ==由于域名不同==，用户向系统A登录后，==系统A返回给浏览器的Cookie，用户再请求系统B的时候不会将系统A的Cookie带过去==。
+	> - ==解决方案==：
+	> 	1. 服务端将Cookie写到客户端后，==客户端对Cookie进行解析，将Token解析出来==，==此后请求都把这个Token带上就行了==。
+	> 	2. ==多个域名共享Cookie==，在写到客户端的时候==设置Cookie的domain==。
+	> 	3. 将Token保存在SessionStroage中（==不依赖Cookie==就没有跨域的问题了）
+
+6. ==CAS原理==
+
+	> - ![image-20220303162331489](bgwROUND1.assets/image-20220303162331489.png)
+	> - 系统A`www.java3y.com`发现用户并没有登录，于是==重定向到sso认证中心，并将自己的地址作为参数==：==`www.sso.com?service=www.java3y.com`==。
+	> - sso认证中心发现用户未登录，将用户引导至登录页面，用户进行输入用户名和密码进行登录，==用户与认证中心==建立==全局会话（生成一份Token，写到Cookie中，保存在浏览器上）==。
+	> - 随后，认证中心==重定向回系统A==，并把Token携带过去给系统A，重定向的地址如下：==`www.java3y.com?token=xxxxxxx`==。
+	> - ![image-20220303162426274](bgwROUND1.assets/image-20220303162426274.png)
+	> - 此时，用户想要访问系统B`www.java4y.com`受限的资源(比如说订单功能，订单功能需要登录后才能访问)，系统B`www.java4y.com`发现用户并没有登录，于是==重定向到sso认证中心，并将自己的地址作为参数==。认证中心==根据带过来的Cookie==发现==已经与用户建立了全局会话==了，认证中心==重定向回系统B==，并把==Token携带过去给系统B==。
+	> - ![image-20220303162448039](bgwROUND1.assets/image-20220303162448039.png)
+	> - 看到这里，其实SSO认证中心就类似一个==中转站==。
+
+---
+
+
+
+### 2.面试题：给我说一下你项目中的单点登录是如何实现的？🌟🌟🌟
+
+1. ==http无状态协议==
+
+	> - ==http是无状态协议==，浏览器的每一次请求，服务器会独立处理，==不与之前或之后的请求产生关联==。
+	> - <img src="bgwROUND1.assets/797930-20161129155231912-1627010726.png" alt="3c91a3bf-25d8-4b1f-8e4a-68535c51aaa8" style="zoom:125%;" />
+	> - ==既然http协议无状态，那就让服务器和浏览器共同维护一个状态吧==！这就是==会话机制==。
+
+2. ==会话机制==
+
+	> - 浏览器第一次请求服务器，==服务器创建一个会话，并将会话的id作为响应的一部分发送给浏览器==，浏览器存储会话id，==并在后续第二次和第三次请求中带上会话id，服务器取得请求中的会话id就知道是不是同一个用户了==。
+	> - <img src="bgwROUND1.assets/797930-20161129155233115-1744636093.png" alt="8a9fb230-d506-4b19-b821-4001c68c4588" style="zoom:125%;" />
+	> - tomcat会话机制当然也实现了cookie，访问tomcat服务器时，浏览器中可以看到一个名为“==JSESSIONID”的cookie，这就是tomcat会话机制维护的会话id==。
+	> - <img src="bgwROUND1.assets/797930-20161129155234443-99011212.png" alt="518293d9-64b2-459c-9d45-9f353c757d1f" style="zoom:125%;" />
+
+3. ==登录状态==
+
+	> - <img src="bgwROUND1.assets/797930-20161129155235693-1708276896.png" alt="70e396fa-1bf2-42f8-a504-ce20306e31fa" style="zoom:125%;" />
+	> - ==以上讨论，都是在单系统的范畴中==。
+
+4. ==多系统的复杂性==
+
+	> - ==web系统早已从久远的单系统发展成为如今由多系统组成的应用群==，面对如此众多的系统，用户==难道要一个一个登录、然后一个一个注销==吗？就像下图描述的这样：
+	>
+	> 	![6dfbb0b1-46c0-4945-a3bf-5f060fa80710](bgwROUND1.assets/797930-20161129155236615-855014039.png)
+	>
+	> - 虽然单系统的登录解决方案很完美，但对于多系统应用群已经不再适用了，为什么呢？
+	>
+	> 	- ==Cookie 不能跨域==。
+	>
+	> 	<img src="bgwROUND1.assets/797930-20161129155238881-1171826792.png" alt="4d58ccfa-0114-486d-bec2-c28f2f9eb513" style="zoom:150%;" />
+	>
+	> - ==共享 Cookie== 解决 Cookie 跨域问题：
+	>
+	> 	- 既然这样，为什么不将web应用群中所有子系统的域名统一在一个顶级域名下，例如“*.baidu.com”，然后==将它们的cookie域设置为“baidu.com”==，这种做法理论上是可以的，甚至早期很多多系统登录就采用这种==同域名共享cookie==的方式。
+	> 	- 然而，可行并不代表好，共享cookie的方式存在==众多局限==。
+	> 		1. 首先，==应用群域名得统一==；
+	> 		2. 其次，应用群各系统使用的技术（==至少是web服务器）要相同==，==不然cookie的key值（tomcat为JSESSIONID）不同，无法维持会话==；
+	> 		3. 共享cookie的方式是==无法实现跨语言技术平台登录==的，比如java、php、.net系统之间；第三，cookie本身不安全。
+
+5. ==单点登录==
+
+	> - 单点登录全称Single Sign On（以下简称SSO），是指==在多系统应用群中登录一个系统，便可在其他所有系统中得到授权而无需再次登录==。
+	> - <img src="bgwROUND1.assets/797930-20161203152650974-276822362.png" alt="img" style="zoom:125%;" />
+	> - ==对上图的解释==：
+	> 	1. 用户访问系统1的受保护资源，系统1发现用户未登录，==重定向至sso认证中心，并将自己的地址作为参数==。
+	> 	2. sso认证中心发现用户未登录，将用户引导至登录页面。
+	> 	3. 用户输入用户名密码提交登录申请。
+	> 	4. sso认证中心校验用户信息，==创建用户与sso认证中心之间的会话，称为全局会话==，同时==创建授权令牌==。
+	> 	5. sso认证中心带着令牌跳转回最初的请求地址（系统1）
+	> 	6. ==系统1拿到令牌==，去sso认证中心==校验令牌是否有效==。
+	> 	7. ==sso认证中心校验令牌，返回有效，注册系统1==。
+	> 	8. ==系统1使用该令牌创建与用户的会话，称为局部会话==，返回受保护资源。
+	> 	9. 用户访问系统2的受保护资源。
+	> 	10. 系统2发现用户未登录，跳转至sso认证中心，并将自己的地址作为参数。
+	> 	11. ==sso认证中心发现用户已登录（全局会话），跳转回系统2的地址，并附上令牌==。
+	> 	12. 系统2拿到令牌，去sso认证中心校验令牌是否有效。
+	> 	13. sso认证中心校验令牌，返回有效，注册系统2。
+	> 	14. 系统2使用该令牌创建与用户的局部会话，返回受保护资源。
+	> - ==用户登录成功之后，会与sso认证中心及各个子系统建立会话==。
+	> - 用户==与sso认证中心建立的会话称为全局会话==，用户==与各个子系统建立的会话称为局部会话==。
+	> - ==局部会话建立之后，用户访问子系统受保护资源将不再通过sso认证中心==。
+
+6. ==单点注销==
+
+	> - 单点登录自然也要单点注销，==在一个子系统中注销，所有子系统的会话都将被销毁==。
+	>
+	> 	<img src="bgwROUND1.assets/797930-20161129155243068-1378377736.png" alt="3b139d2e-0b83-4a69-b4f2-316adb8997ce" style="zoom:150%;" />
+	>
+	> - ==解释==：
+	>
+	> 	1. 用户向系统1发起注销请求。
+	> 	2. 系统1根据用户与系统1建立的会话id拿到令牌，向sso认证中心发起注销请求。
+	> 	3. sso认证中心校验令牌有效，==销毁全局会话，同时取出所有用此令牌注册的系统地址==。
+	> 	4. sso认证中心==向所有注册系统发起注销请求==。
+	> 	5. ==各注册系统接收sso认证中心的注销请求，销毁局部会话==。
+	> 	6. sso认证中心引导用户至登录页面。
+
+7. ==部署图==
+
+	> - 单点登录涉及sso认证中心与众子系统，子系统与sso认证中心需要通信以交换令牌、校验令牌及发起注销请求，因而==子系统必须集成sso的客户端==，==sso认证中心则是sso服务端==，==整个单点登录过程实质是sso客户端与服务端通信的过程==，用下图描述：
+	>
+	> 	![image-20240507154519493](bgwROUND1.assets/image-20240507154519493.png)
+
+8. ==实现==
+
+	> - sso-server 和 sso-cli 需要实现的功能：
+	> 	- ==sso-client==
+	> 		1. ==拦截子系统未登录用户请求，跳转至sso认证中心==
+	> 		2. ==接收并存储sso认证中心发送的令牌==
+	> 		3. ==与sso-server通信，校验令牌的有效性==
+	> 		4. ==建立局部会话==
+	> 		5. ==拦截用户注销请求，向sso认证中心发送注销请求==
+	> 		6. ==接收sso认证中心发出的注销请求，销毁局部会话==
+	> 	- ==sso-server==
+	> 		1. ==验证用户的登录信息==
+	> 		2. ==创建全局会话==
+	> 		3. ==创建授权令牌==
+	> 		4. ==与sso-client通信发送令牌==
+	> 		5. ==校验sso-client令牌有效性==
+	> 		6. ==系统地址注册==
+	> 		7. ==接收sso-client注销请求，注销所有会话==
+
+---
+
+
+
+### 3.Servlet 的执行流程🌟🌟
+
+1. 浏览器给 tomcat 发送请求。
+2. tomcat 根据收到的 url ==在 web.xml 中查找对应的 servlet==，==如果该 servlet 是第一次被访问，则进行实例化==。并将其输出结果返回给浏览器。
+
+---
+
+
+
+### 4.Servlet 生命周期🌟🌟
+
+1. > <img src="bgwROUND1.assets/image-20240507185555463.png" alt="image-20240507185555463" style="zoom: 50%;" />
+
+---
+
+
+
+### 5.请求转发与响应重定向的区别🌟🌟
+
+1. ==请求转发==：
+
+	> <img src="bgwROUND1.assets/image-20240507185814775.png" alt="image-20240507185814775" style="zoom:50%;" />
+	>
+	> - ==服务器跳转==。
+	> - ==只有一次请求（request 是相同的）==。
+
+2. ==响应重定向==：
+
+	> <img src="bgwROUND1.assets/image-20240507185910947.png" alt="image-20240507185910947" style="zoom:50%;" />
+	>
+	> - ==浏览器跳转，地址栏变化==。
+	> - ==第一次请求返回的请求，要求浏览器重新访问另一个 url==。
+
+---
+
+
+
+### 6.Statement 和 PreparedStatement 的区别🌟🌟
+
+1. PreparedStatement 是==预编译的 SQL 语句==，效率高于 Statement。
+
+2. PreparedStatement ==支持 ? 操作符==，相对于 Statement 更加灵活。
+
+3. PreparedStatement ==可以防止 SQL 注入==。
+
+4. ==PreparedStatement==：
+
+	```sql
+	select * from user where username = ?
+	```
+
+	假如查询很多次，==只需要解释一次，因为 sql 没有改变，只需填入不同参数==。
+
+	而 ==Statement 则会解释很多次，因为 sql 直接拼接而来，因此每次的 sql 都不同==。
+
+	==将传入的参数的特殊字符转移防止 sql 注入==。
+
+---
+
+
+
+## 框架
+
+### 1.Spring 的本质系列(1) — 依赖注入🌟🌟🌟🌟🌟
+
+1. ==Spring 依赖注入==
+
+	> - ==步骤==：
+	>
+	> 	1. 解析xml，获取各种元素
+	> 	2. 通过 ==Java 反射==把各个 bean 的实例创建起来： com.coderising.OrderProcessor，OrderServiceImpl，EmailServiceImpl。
+	> 	3. 还是通过 ==Java 反射==调用 OrderProcessor 的两个方法：setOrderService(….) 和 setEmailService(…) 把orderService，emailService 实例 注入进去。
+	>
+	> - ```java
+	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
+	> 	
+	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
+	> 	
+	> 	op.process();
+	> 	```
+	>
+	> - ==既然对象的创建过程和装配过程都是Spring做的， 那Spring 在这个过程中就可以玩很多把戏了， 比如对你的业务类做点字节码级别的增强， 搞点AOP什么的， 这都不在话下了==。
+
+---
+
+
+
+### 2.Spring本质系列(2) — AOP🌟🌟🌟🌟🌟
+
+实现 AOP 的几种技术：
+
+(1) 在编译的时候， 根据AOP的配置信息，悄悄的把日志，安全，事务等“切面”代码和业务类编译到一起去。
+
+(2) 在运行期，业务类加载以后， 通过Java动态代理技术==为业务类生产一个代理类==， ==把“切面”代码放到代理类中==， Java 动态代理要求业务类==需要实现接口==才行。
+
+(3) 在运行期， 业务类加载以后， ==动态的使用字节码构建一个业务类的子类，将“切面”逻辑加入到子类当中==去，==CGLIB==就是这么做的。
+
+Spring采用的就是(1) +(2) 的方式，限于篇幅，这里不再展开各种技术了， 不管使用哪一种方式， 在运行时，==真正干活的“业务类”其实已经不是原来单纯的业务类了， 它们被AOP了== ！
+
+---
+
+
 
 
 
