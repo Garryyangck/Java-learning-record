@@ -6356,3 +6356,29 @@ Java进阶完成：
 	- [92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/)
 
 		把反转 left ~ right 递归化简为反转前 n 个。`head.next = reverseBetween(head.next, left - 1, right - 1);` and when left == 1 is true : `return reverseN(head, right - left + 1);`。
+
+
+
+# ***2024.5.8打卡	Day 98***
+
+1. 八股文一轮复习：
+
+	Mysql 刷了一些题，开始二刷 Mysql 45讲，看完了索引。
+
+2. leetcode刷题：4题
+
+	- [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
+
+		注意 Floyd 判圈法使用时，`fast = head.next.next, slow = head.next`，否则直接 break。
+
+	- [143. 重排链表](https://leetcode.cn/problems/reorder-list/)
+
+		非常综合的一道题。首先找中点分割链表，然后反转右半部分，之后将 left 和 right 按照规律进行合并，注意最后 head 的地址不能变，因此不能 new，只能改变指针指向。
+
+	- [148. 排序链表](https://leetcode.cn/problems/sort-list/)
+
+		归并思想，先将其找中点分割到最小，然后合并左右有序链表。
+
+	- [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
+
+		先求出链表总长，然后当前链表长度 >= k，则反转前n个节点，并且连接后续的递归结果。
