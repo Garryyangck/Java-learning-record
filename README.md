@@ -6382,3 +6382,47 @@ Java进阶完成：
 	- [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
 
 		先求出链表总长，然后当前链表长度 >= k，则反转前n个节点，并且连接后续的递归结果。
+
+
+
+# ***2024.5.9打卡	Day 99***
+
+1. 八股文一轮复习：
+
+	Mysql 看了锁。
+
+2. leetcode刷题：8题
+
+	- [94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
+
+		借助栈
+
+	- [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+		借助一个 helper 函数，传入 root 的左右子树
+
+	- [104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+
+		递归
+
+	- [110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
+
+		借助一个 depth 函数辅助，直接自底向上一次遍历
+
+	- [144. 二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
+
+		借助栈
+
+	- [LCR 144. 翻转二叉树](https://leetcode.cn/problems/er-cha-shu-de-jing-xiang-lcof/)
+
+		递归
+
+	- [102. 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+		借助队列辅助
+
+	- [105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+		没什么好说的，构造左右子树的 pre 和 in order
+
+	

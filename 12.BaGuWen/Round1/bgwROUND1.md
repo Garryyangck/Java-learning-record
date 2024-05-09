@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 						
+	> 								
 	> 	    private String message;
-	> 						
+	> 								
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 						
+	> 								
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 						
+	> 								
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 						
+	> 								
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 						
+	> 								
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 						
+	> 								
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 						
+	> 								
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2080,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 				
+	> 						
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 				
+	> 						
 	> 	op.process();
 	> 	```
 	>
@@ -2231,3 +2231,288 @@ Spring采用的就是(1) +(2) 的方式，限于篇幅，这里不再展开各�
 
 
 
+## 2.锁
+
+### 1.全局锁和表锁🌟🌟🌟🌟
+
+见笔记。
+
+---
+
+
+
+### 2.行锁功过：怎么减少行锁对性能的影响？🌟🌟🌟🌟
+
+见笔记。
+
+---
+
+
+
+### 3.行锁到底锁住的是什么？记录？字段？索引？
+
+1.  ==InnoDB的行锁，就是通过锁住索引来实现的==。
+
+	> ![img](bgwROUND1.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70#pic_center.png)
+
+2. ==问题一==：为什么表里面==没有索引的时候==，实验一==锁住一行数据会导致锁表==？或者说，==如果锁住的是索引，一张表没有索引怎么办==？所以，一张表有没有可能没有索引？
+
+	> 1. 如果我们定义了主键(PRIMARYKEY)，那么 InnoDB 会选择主键作为聚集索引。
+	> 2. 如果==没有显式定义主键==，则 InnoDB 会选择==第一个不包含有 NULL 值的唯一索引作为主键索引==。
+	> 3. 如果==也没有这样的唯一索引==，则 InnoDB 会选择==内置 6 字节长的 ROWID 作为隐藏的聚集索引==，它会==随着行记录的写入而主键递增==。
+	>
+	> 所以，实验一为什么锁表，是因为==查询时没有索引可使用，会进行全表扫描==，然后==把每一个隐藏的聚集索引都锁住了==。
+
+3. ==问题二==：实验二为什么==通过唯一索引给数据行加锁，主键索引也会被锁住==？
+
+	> ![在这里插入图片描述](bgwROUND1.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70#pic_center-17152272004022.png)
+
+---
+
+
+
+### 4.这次终于懂了，InnoDB的七种锁🌟
+
+1. InnoDB共有==七种类型的锁==：
+
+	> （1）自增锁(Auto-inc Locks)；
+	>
+	> （2）共享/排它锁(Shared and Exclusive Locks)；
+	>
+	> （3）意向锁(Intention Locks)；
+	>
+	> （4）插入意向锁(Insert Intention Locks)；
+	>
+	> （5）记录锁(Record Locks)；
+	>
+	> （6）间隙锁(Gap Locks)；
+	>
+	> （7）临键锁(Next-key Locks)；
+
+2. ==自增锁==（Auto-inc Locks）
+
+	> - 自增锁是一种特殊的==表级别锁==（table-level lock），==针对事务插入AUTO_INCREMENT类型的列==。
+	> - 最简单的情况，如果一个事务正在往表中插入记录，==所有其他事务的插入必须等待==，==以便第一个事务插入的行，是连续的主键值==。
+
+3. ==共享/排它锁==(Shared and Exclusive Locks)
+
+	> - （1）多个事务可以拿到一把S锁，==读读可以并行==；
+	> - （2）而只有一个事务可以拿到X锁，==写写/读写必须互斥==；
+
+4. ==意向锁(Intention Locks)==
+
+	> - 意向锁有这样一些==特点==：
+	>
+	> 	（1）首先，意向锁，是一个==表级别的锁==(table-level locking)；
+	>
+	> 	（2）意向锁分为：
+	>
+	> 	- ==意向共享锁==(intention shared lock, IS)，它预示着，事务==有意向==对表中的==某些行加共享S锁==。
+	> 	- ==意向排它锁==(intention exclusive lock, IX)，它预示着，事务==有意向==对表中的==某些行加排它X锁==。
+	>
+	> - ==例子==：
+	>
+	> 	- `select … lock in share mode`，要设置==IS锁==；
+	> 	- `select … for update`，要设置==IX锁==；
+	>
+	> - ==意向锁协议== (intention locking protocol)：
+	>
+	> 	- 事务要获得某些行的S锁，==必须先获得表的IS锁==。
+	> 	- 事务要获得某些行的X锁，==必须先获得表的IX锁==。
+	>
+	> - ![图片](bgwROUND1.assets/202202242307055.png)
+	>
+	> - ![图片](bgwROUND1.assets/202202242307604.png)
+
+5. ==插入意向锁(Insert Intention Locks)==
+
+	> - ==多个事务==，在==同一个索引，同一个范围区间插入记录==时，如果==插入的位置不冲突，不会阻塞彼此==。
+	>
+	> - *10, shenjian*
+	>
+	> 	*20, zhangsan*
+	>
+	> 	*30, lisi*
+	>
+	> 	事务A先执行，在10与20两条记录中插入了一行，还未提交：
+	>
+	> 	```sql
+	> 	insert into t values(11, xxx);
+	> 	```
+	>
+	> 	事务B后执行，也在10与20两条记录中插入了一行：
+	>
+	> 	```sql
+	> 	insert into t values(12, ooo);
+	> 	```
+	>
+	> 	（1）会使用什么锁？
+	>
+	> 	（2）事务B会不会被阻塞呢？
+	>
+	> 	==回答==：虽然事务隔离级别是RR，虽然是同一个索引，虽然是同一个区间，但==插入的记录并不冲突==，故这里：
+	>
+	> 	（1）使用的是==插入意向锁==；
+	>
+	> 	（2）并==不会阻塞事务B==；
+
+6. ==记录锁(Record Locks)==
+
+	> - ==记录锁==，它==封锁索引记录==，例如：
+	>
+	> 	```sql
+	> 	select * from t where id=1 for update;
+	> 	```
+	>
+	> 	它会在 id=1 的==索引记录上加锁==，以阻止其他事务插入，更新，删除id=1的这一行。
+	>
+	> 	==需要说明的是==：
+	>
+	> 	```sql
+	> 	select * from t where id=1;
+	> 	```
+	>
+	> 	是==快照读==(SnapShot Read)，它==并没有加锁==。
+
+7. ==间隙锁(Gap Locks)==
+
+	> - ==间隙锁==，它==封锁索引记录中的间隔==，或者第一条索引记录之前的范围，又或者最后一条索引记录之后的范围。
+	>
+	> 	*1, shenjian, m, A*
+	>
+	> 	*3, zhangsan, m, A*
+	>
+	> 	*5, lisi, m, A*
+	>
+	> 	*9, wangwu, f, B*
+	>
+	> 	```sql
+	> 	select * from t where id between 8 and 15 for update;
+	> 	```
+	>
+	> 	会==封锁区间==，以==阻止其他事务id=10的记录插入==。
+	>
+	> 	==为什么要阻止id=10的记录插入？如果能够插入成功，头一个事务执行相同的SQL语句，会发现结果集多出了一条记录，即幻影数据==。
+	>
+	> 	间隙锁的==主要目的==，就是为了==防止其他事务在间隔中插入数据，以导致“不可重复读”==。
+	>
+	> 	如果把事务的隔离级别==降级为读提交==(Read Committed, RC)，==间隙锁则会自动失效==。
+
+8. ==临键锁(Next-Key Locks)==
+
+	> - ==临键锁==，是记录锁与间隙锁的组合，它的封锁范围，既包含索引记录，又包含索引区间。
+	>
+	> - 一个会话占有了==索引记录R的共享/排他锁==，其他会话==不能==立刻在==R之前的区间插入新的索引记录==。
+	>
+	> - 表中有四条记录：
+	>
+	> 	*1, shenjian, m, A*
+	>
+	> 	*3, zhangsan, m, A*
+	>
+	> 	*5, lisi, m, A*
+	>
+	> 	*9, wangwu, f, B*
+	>
+	> 	PK上==潜在的临键锁为==：
+	>
+	> 	*(-infinity, 1]*
+	>
+	> 	*(1, 3]*
+	>
+	> 	*(3, 5]*
+	>
+	> 	*(5, 9]*
+	>
+	> 	*(9, +infinity)*
+	>
+	> 	临键锁的主要目的，也是为了==避免幻读==(Phantom Read)。如果把事务的隔离级别==降级为RC==，==临键锁则也会失效==。
+
+9. ==总结==：
+
+	> （1）==自增锁==(Auto-inc Locks)：==表级锁，专门针对事务插入AUTO_INC的列==，如果插入位置冲突，多个事务会阻塞，以保证数据一致性；
+	>
+	> （2）==共享/排它锁==(Shared and Exclusive Locks)：==行级锁==，S锁与X锁，==强锁==；
+	>
+	> （3）==意向锁==(Intention Locks)：==表级锁==，IS锁与IX锁，==弱锁==，仅==仅表明意向==；
+	>
+	> （4）==插入意向锁==(Insert Intention Locks)：==针对insert==的，如果==插入位置不冲突，多个事务不会阻塞==，以提高插入并发；
+	>
+	> （5）==记录锁==(Record Locks)：==索引记录上加锁==，对索引记录实施互斥，以保证数据一致性；
+	>
+	> （6）==间隙锁==(Gap Locks)：==封锁索引记录中间的间隔==，在RR下有效，防止间隔中被其他事务插入；
+	>
+	> （7）==临键锁==(Next-key Locks)：==封锁索引记录，以及索引记录中间的间隔==，在RR下有效，==防止幻读==；
+
+---
+
+
+
+### 5.一条sql执行的很慢的原因有哪些🌟🌟🌟🌟🌟
+
+1. ==数据库在刷新脏页我也无奈啊（偶尔很慢）==
+
+	> - 如果==数据库一直很忙，更新又很频繁==，这个时候 ==redo log 很快就会被写满了==，这个时候就没办法等到空闲的时候再把数据同步到磁盘的，==只能暂停其他操作，全身心来把数据同步到磁盘中去的==，而这个时候，==就会导致我们平时正常的SQL语句突然执行的很慢==，所以说，数据库在在同步数据到磁盘的时候，就有可能导致我们的SQL语句执行的很慢了。
+
+2. ==拿不到锁我能怎么办（偶尔很慢）==
+
+	> - 如果要判断是否真的在等待锁，我们可以用 ==show processlist ==这个命令来查看当前的状态哦。
+
+3. ==扎心了，没用到索引（一直很慢，一般都是 sql 语句的问题）==
+
+	> - ==函数操作导致没有用上索引==。
+	> - 或者 `select * from t where c - 1 = 1000;`，使用加法函数.
+
+4. ==呵呵，数据库自己选错索引了（一直很慢）==
+
+	> - ==系统是有可能走全表扫描而不走索引的。那系统是怎么判断呢？==
+	> 	- 判断来源于==系统的预测==，也就是说，如果要走 c 字段索引的话，系==统会预测走 c 字段索引大概需要扫描多少行==。如果预测到要扫描的行数很多，它可能就不走索引而直接扫描全表了。
+	> - ==系统是怎么预测判断的呢？==
+	> 	- ==索引的区分度==来判断的，一个==索引上不同的值越多，意味着出现相同数值的索引越少==，意味着索引的区分度越高。我们也把区分度称之为==基数==。
+	> 	- 系统通过==采样==的方式，来==预测索引的基数==的。
+	> 	- ==采样的时候，却很不幸，把这个索引的基数预测成很小==。例如你采样的那一部分数据刚好基数很小，然后就误以为索引的基数很小。==然后系统就不走 c 索引了，直接走全部扫描了==。
+	> - 系统判断是否走索引，==扫描行数的预测其实只是原因之一==，这条查询语句==是否需要使用使用临时表、是否需要排序==等也是会影响系统的选择的。
+
+5. 我们有时候也可以通过==强制走索引的方式来查询==，例如
+
+	```sql
+	select * from t force index(a) where c < 100 and c < 100000;
+	```
+
+	我们也可以通过
+
+	```sql
+	show index from t;
+	```
+
+	来==查询索引的基数和实际是否符合==，如果和实际很不符合的话，我们可以==重新来统计索引的基数==，可以用这条命令
+
+	```sql
+	analyze table t;
+	```
+
+	来==重新统计分析==。
+
+6. ==既然会预测错索引的基数，这也意味着，当我们的查询语句有多个索引的时候，系统有可能也会选错索引哦==，这也可能是 SQL 执行的很慢的一个原因。
+
+7. ==总结==：
+
+	> 1、大多数情况下很正常，==偶尔很慢==，则有如下原因
+	>
+	> (1) 数据库在刷新脏页，例如 ==redo log 写满了需要同步到磁盘==。
+	>
+	> (2) 执行的时候，==遇到锁==，如表锁、行锁。
+	>
+	> 2、这条 SQL 语句==一直执行==的很慢，则有如下原因。
+	>
+	> (1) ==没有用上索引==：例如该字段没有索引；由于对字段进行运算、函数操作导致无法用索引。
+	>
+	> (2) 数据库==选错了索引==。
+
+---
+
+
+
+### 6.为什么我只改一行的语句，锁这么多？🌟🌟🌟🌟
+
+1. 
