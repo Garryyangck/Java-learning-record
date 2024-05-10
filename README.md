@@ -6425,4 +6425,50 @@ Java进阶完成：
 
 		没什么好说的，构造左右子树的 pre 和 in order
 
+
+
+
+# ***2024.5.10打卡	Day 100***
+
+1. 八股文一轮复习：
+
+	Mysql 完成日志，事务，和 explain 命令的 type 字段
+
+2. leetcode刷题：4题
+
+	- [129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/)
+
+		回溯
+
+	- [145. 二叉树的后序遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+
+		注意 root != null 时，如果 root.left != null，则 root = root.left，否则 root = root.right，这样可以保证遍历到 root == null 时，栈顶的左右子树均被遍历了。
+
+	- [199. 二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/)
+
+		法一：层次遍历
+
+		法二：右侧就是先序遍历每一层被最后遍历的节点，可以先序遍历，然后传入层数，不断覆盖相应层数的值
+
+	- [236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+		法一：构造函数 hasNode，判断某一子树下有没有某个节点，然后分类
+
+		法二：
+
+		```java
+		public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		    if (root == null || root == p || root == q) return root;
+		    TreeNode left = lowestCommonAncestor(root.left, p, q);
+		    TreeNode right = lowestCommonAncestor(root.right, p, q);
+		    if (left == null) return right;
+		    if (right == null) return left;
+		    else return root;
+		}
+		```
+
+	
+
+	
+
 	
