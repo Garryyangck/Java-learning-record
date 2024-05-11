@@ -6467,8 +6467,68 @@ Java进阶完成：
 		}
 		```
 
-	
 
-	
 
-	
+
+# ***2024.5.11打卡	Day 101***
+
+1. 八股文一轮复习：
+
+	- 完成 explain 的 extra 字段，空值的影响和 count(*) 的优化
+	- 完成 redis 单线程，数据类型和持久化
+
+2. leetcode 刷题：2题
+
+	- [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
+
+		采用完全二叉树和层次遍历，插入时额外加入节点的index，每一层数量>2则末index-初index
+
+	- [124. 二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
+
+		```java
+		public int maxGain(TreeNode root) {
+		    if (root == null) return 0;
+		    int left = Math.max(maxGain(root.left), 0); // 如果左子树贡献值小于0则不相连
+		    int right = Math.max(maxGain(root.right), 0); // 如果右子树贡献值小于0则不相连
+		    max = Math.max(max, root.val + left + right); // 当前root的路径可以与左右子树相连
+		    return root.val + Math.max(left, right); // 最后只有一边可以与父节点的路径相连
+		}
+		```
+
+	- [297. 二叉树的序列化与反序列化](https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/)
+
+		采用层次遍历序列化和反序列化，注意反序列化时遇到null什么都不用做，因为默认子树已经是null了
+
+		```java
+		public TreeNode deserialize(String data) {
+		    if(data == null || data.length() <= 0)
+		        return null;
+		    String[] s = data.split(",");
+		    if(s[0].equals("null"))
+		        return null;
+		    Queue<TreeNode> queue = new LinkedList<>();
+		    TreeNode root = new TreeNode(Integer.valueOf(s[0]));
+		    queue.add(root);
+		    int i = 1;
+		    while(!queue.isEmpty()){
+		        TreeNode t = queue.poll();
+		        // 构造 t 的左子树
+		        if(!s[i].equals("null")) {
+		            TreeNode left = new TreeNode(Integer.valueOf(s[i]));
+		            t.left = left;
+		            queue.add(left);
+		        } // 是 null 则什么都不用做
+		        i++;
+		        // 构造 t 的右子树
+		        if(!s[i].equals("null")) {
+		            TreeNode right = new TreeNode(Integer.valueOf(s[i]));
+		            t.right = right;
+		            queue.add(right);
+		        }
+		        i++;
+		    }
+		    return root;
+		}
+		```
+
+		
