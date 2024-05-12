@@ -6531,4 +6531,37 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.5.12打卡	Day 102***
+
+1. 八股文一轮复习：
+
+	- 完成 Redis 剩余部分
+
+2. leetcode 刷题：2题
+
+	- [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+		先将区间按照begin排序，然后不断更新当前"队尾"合并后的区间（前面有序，只用判断结尾大小，选更大的）
+
+		```java
+		List<int[]> merged = new ArrayList<int[]>();
+		for (int i = 0; i < intervals.length; ++i) {
+		    int L = intervals[i][0], R = intervals[i][1];
+		    if(merged.isEmpty() || L > merged.get(merged.size() - 1)[1]) {
+		        merged.add(new int[]{L, R});
+		    } else {// 更新当前"队尾"合并后的区间（前面有序，只用判断结尾大小，选更大的）
+		        merged.set(merged.size() - 1, 
+		                   new int[]{merged.get(merged.size() - 1)[0],
+		                             Math.max(merged.get(merged.size() - 1)[1], R)});
+		    }
+		}
+		```
+
+	- [215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
+
+		优先队列的应用，一直维护一个peek是第K大元素的优先队列，方法就是队列里只有K个元素。
+
+		注意：PriorityQueue没有实现Deque接口，没有addFirst，addLast之类的方法！

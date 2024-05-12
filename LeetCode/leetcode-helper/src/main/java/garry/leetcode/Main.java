@@ -1,6 +1,11 @@
 package garry.leetcode;
 
+import javafx.util.Pair;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Garry
@@ -10,34 +15,44 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.coinChange(new int[]{2, 5, 1}, 11);
+        solution.merge(new int[][]{new int[]{1, 3}, new int[]{2, 6}, new int[]{8, 10}, new int[]{15, 18}});
     }
 }
 
 class Solution {
-    public int coinChange(int[] coins, int amount) {
-        int[] dp = new int[amount + 1];
-        for(int i = 0; i <= amount; i++)
-            dp[i] = Integer.MAX_VALUE;
-
-        dp[0] = 0;
-        Arrays.sort(coins);
-
-        for(int i = 0; i < coins.length; i++) {
-            for(int num = 1; num * coins[i] <= amount; num++) {
-                dp[num * coins[i]] = num;
+    public int[][] merge(int[][] intervals) {
+        int len = intervals.length;
+        if (len == 1)
+            return intervals;
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[1] != o2[1])
+                    return o1[1] - o2[1];
+                else
+                    return o1[0] - o2[0];
+            }
+        });
+        List<Pair<Integer, Integer>> ans = new ArrayList<>();
+        int begin = intervals[0][0];
+        int end = intervals[0][1];
+        for (int i = 1; i < len; i++) {
+            if (intervals[i][0] <= end) {
+                end = intervals[i][1];
+            } else {
+                ans.add(new Pair(begin, end));
+                begin = intervals[i][0];
+                end = intervals[i][1];
             }
         }
-
-        for(int i = 0; i <= amount; i++) {
-            for(int j = 0; j < coins.length; j++) {
-                if(i - coins[j] < 0)
-                    break;
-                if(dp[i - coins[j]] == Integer.MAX_VALUE)
-                    continue;
-                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
-            }
+        int[][] res = new int[ans.size()][];
+        int i = 0;
+        for (Pair<Integer, Integer> interval : ans) {
+            int[] tmp = new int[2];
+            tmp[0] = interval.getKey();
+            tmp[1] = interval.getValue();
+            res[i++] = tmp;
         }
-        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+        return res;
     }
 }
