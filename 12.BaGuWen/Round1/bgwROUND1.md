@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																			
+	> 																				
 	> 	    private String message;
-	> 																			
+	> 																				
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																			
+	> 																				
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																			
+	> 																				
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																			
+	> 																				
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																			
+	> 																				
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																			
+	> 																				
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																			
+	> 																				
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2080,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																	
+	> 																		
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																	
+	> 																		
 	> 	op.process();
 	> 	```
 	>
@@ -3023,4 +3023,6 @@ insert into user values(3,'lisi');
 ---
 
 
+
+# 5.计算机网络
 

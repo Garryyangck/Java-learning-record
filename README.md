@@ -6565,3 +6565,128 @@ Java进阶完成：
 		优先队列的应用，一直维护一个peek是第K大元素的优先队列，方法就是队列里只有K个元素。
 
 		注意：PriorityQueue没有实现Deque接口，没有addFirst，addLast之类的方法！
+
+
+
+# ***2024.5.13打卡	Day 103***
+
+1. 八股文一轮复习：
+
+	- 完成计算机网络14篇文章的复习。
+
+2. leetcode 刷题：5题
+
+	- [315. 计算右侧小于当前元素的个数](https://leetcode.cn/problems/count-of-smaller-numbers-after-self/)
+
+		在归并排序统计个数
+
+		```java
+		class Solution {
+		    List<Integer> ans = new ArrayList<>();
+		
+		    public List<Integer> countSmaller(int[] nums) {
+		        if (nums.length == 1) {
+		            ans.add(0);
+		            return ans;
+		        }
+		
+		        // 需要记录 index，以便在 ans 中进行定位
+		        List<Pair<Integer/*num*/, Integer/*index*/>> list = new ArrayList<>();
+		
+		        // 传入初始值 (num, index)
+		        for (int i = 0; i < nums.length; i++) {
+		            list.add(new Pair<>(nums[i], i));
+		        }
+		
+		        // ans 占位
+		        for (int i = 0; i < nums.length; i++) {
+		            ans.add(0);
+		        }
+		
+		        merge(list);
+		
+		        return ans;
+		    }
+		
+		    /**
+		        在归并排序的过程中，不断更新每个位置右侧上比它小的数的个数
+		    */
+		    public List<Pair<Integer, Integer>> merge(List<Pair<Integer, Integer>> list) {
+		        if (list.size() == 1) return list;
+		
+		        int mid = list.size() / 2;
+		        // 此时left中的数已经将 left 内部比它们右侧小的数的个数统计完成了，故此时只需继续统计
+		        // right 中比它们小的数的个数，加到 ans 对应位置中
+		        List<Pair<Integer, Integer>> left = merge(list.subList(0, mid));
+		        List<Pair<Integer, Integer>> right = merge(list.subList(mid, list.size()));
+		
+		        List<Pair<Integer, Integer>> merged = new ArrayList<>();
+		        int leftIndex = 0, rightIndex = 0;
+		        while (leftIndex < left.size() && rightIndex < right.size()) {
+		            // 左侧的数比右侧的数大，右侧数增大，看看左侧数的极限
+		            if (left.get(leftIndex).getKey() > right.get(rightIndex).getKey()) {
+		                merged.add(right.get(rightIndex));
+		                rightIndex++;
+		            } else { // 之所以在右侧的数大于左侧的数时进行添加，是因为右侧第一个比左侧
+		                     // 对应位置的数大的数的下标，就是右侧所有比左侧数小的个数，因此直接: 
+		                     // ans.set(left.get(leftIndex).getValue,
+		                     // 	ans.get(left.get(leftIndex).getValue) + rightIndex)
+		                ans.set(left.get(leftIndex).getValue(),
+		                        ans.get(left.get(leftIndex).getValue()) + rightIndex);
+		                merged.add(left.get(leftIndex));
+		                leftIndex++;
+		            }
+		        }
+		
+		        // 左侧剩下的数比右侧的所有数都要大，直接增加 right.size()
+		        while (leftIndex < left.size()) {
+		            ans.set(left.get(leftIndex).getValue(),
+		                    ans.get(left.get(leftIndex).getValue()) + right.size());
+		            merged.add(left.get(leftIndex));
+		            leftIndex++;
+		        }
+		
+		        while (rightIndex < right.size()) {
+		            merged.add(right.get(rightIndex));
+		            rightIndex++;
+		        }
+		
+		        return merged;
+		    }
+		}
+		```
+
+	- [69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
+
+		由于最后向下取整，对应 right = mid - 1，因此要偏右中点，同时注意 mid*mid 会超出 Integer.MAX_VALUE，因此要用 long。
+
+	- [367. 有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/)
+
+		和上面拿到题几乎一样，就是变了个问法
+
+	- [704. 二分查找](https://leetcode.cn/problems/binary-search/)
+
+		注意如果是 [1,2] 最后 left == right 的时候会刚好出循环，最后要判断 nums[left] == target
+
+	- [33. 搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
+
+		```java
+		if(nums[mid] == target) {
+		    return mid;
+		} else if(nums[left] <= nums[mid]) { // [left, mid] 有序
+		    // 注意此处必须 <=，因为是偏左中点，比如(1,3)，mid = 0时，[0,0]有序，但[0,1]不有序
+		    if(nums[left] <= target && target < nums[mid]) { // target 在该有序范围内
+		        right = mid;
+		    } else {
+		        left = mid + 1;
+		    }
+		} else { // [mid, right] 有序
+		    if(nums[right] >= target && target > nums[mid]) { // target 在该有序范围内
+		        left = mid + 1;
+		    } else {
+		        right = mid;
+		    }
+		}
+		```
+
+		

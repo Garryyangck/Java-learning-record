@@ -28,7 +28,7 @@
 
 7. 在同一个==子网==中，计算机 A 要向计算机 B 发送一个数据包，这个==数据包会包含接收者的 MAC 地址==。当发送时，计算机 A 是通过==广播==的方式发送的，这时==同一个子网中的计算机 C, D 也会收到这个数据包的==，然后收到这个数据包的计算机，会把数据包的 MAC 地址取出来，与自身的 MAC 地址对比，如果==两者相同，则接受这个数据包，否则就丢弃这个数据包==。
 
-	> ![image-20210920130630698](https://image.iamshuaidi.com/img/image-20210920130630698.png)
+	> ![image-20210920130630698](ComputerNetworks.assets/image-20210920130630698.png)
 
 #### 3. 网络层
 
@@ -66,14 +66,14 @@
 #### 1.电脑视角
 
 - 首先我要知道我的 IP 以及对方的 IP
-- 通过子网掩码判断我们是否在同一个子网
-- 在同一个子网就通过 arp 获取对方 mac 地址直接扔出去
-- 不在同一个子网就通过 arp 获取默认网关的 mac 地址直接扔出去
+- 通过子网掩码==判断我们是否在同一个子网==
+- ==在同一个子网==就通过 ==arp 获取对方 mac 地址直接扔出去==
+- ==不在同一个子网==就通过 ==arp 获取默认网关的 mac 地址直接扔出去==
 
 #### 2.交换机视角
 
-- 我收到的数据包必须有目标 MAC 地址
-- 通过 MAC 地址表查映射关系
+- 我收到的数据包必须有==目标 MAC 地址==
+- 通过 ==MAC 地址表查 MAC 地址h和端口的映射关系==
 - 查到了就按照映射关系从我的指定端口发出去
 - 查不到就所有端口都发出去
 
@@ -118,9 +118,9 @@
 
 #### 5.这三张表是怎么来的
 
-- MAC 地址表是通过以太网内各节点之间不断通过交换机通信，不断完善起来的。
-- 路由表是各种路由算法 + 人工配置逐步完善起来的。
-- arp 缓存表是不断通过 arp 协议的请求逐步完善起来的。
+- ==MAC 地址表==是通过以太网内各节点之间==不断通过交换机通信，不断完善起来的==。
+- ==路由表==是各种==路由算法 + 人工配置==逐步完善起来的。
+- ==arp 缓存表==是不断通过 ==arp 协议的请求==逐步完善起来的。
 
 #### 6.下一跳
 
@@ -164,6 +164,8 @@
 >
 > ==10.== ==F 最终收到了数据包！==并且发现目的 MAC 地址就是自己，于是收下了这个包
 
+---
+
 
 
 ### 3.从输入网址到最后浏览器呈现页面内容，中间发生了什么？
@@ -186,7 +188,7 @@
 
 3. 如果是==静态的请求（HTML文件，JavaScript文件，CSS文件，图片==等），也许自己就能搞定了（当然依赖于Nginx配置，可能转发到别的缓存服务器去），==读取本机硬盘上的相关文件==，直接返回。
 
-4. 如果是==动态的请求，需要后端服务器（如Tomcat)处理以后才能返回==，那就需要向Tomcat转发，==如果后端的Tomcat还不止一个，那就需要按照某种策略选取一个==。
+4. 如果是==动态的请求，需要后端服务器（如Tomcat）处理以后才能返回==，那就需要向Tomcat转发，==如果后端的Tomcat还不止一个，那就需要按照某种策略选取一个==。
 
 	> ![图片](https://mmbiz.qpic.cn/mmbiz_png/KyXfCrME6UJtecodDmhbLARcnicmYUxLXCPeNnuyz1ZBTHkPVlFAUIBy612Wn3GcyshlTRyjN2I8T3iaTPzuo7ibQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 	>
@@ -206,12 +208,12 @@
 
 	也可能使用I/O多路复用技术，仅仅使用若干线程来处理所有请求，即NIO模式。
 
-3. ==Http Request 都会被交给某个Servlet处理，这个Servlet又会把Http Request做转换，变成框架所使用的参数格式，然后分发给某个Controller==
+3. ==Http Request 都会被交给某个Servlet处理，这个Servlet又会把Http Request做转换，变成框架所使用的参数格式，然后分发给某个Controller==。
 
 #### 4.浏览器再次工作
 
-1. ==HTML页面中可能引用了大量其他资源==，例如js文件，CSS文件，图片等，这些资源也位于服务器端，并且可能位于另外一个域名下面
-2. 当服务器给浏览器发送JS,CSS这些文件时，==会告诉浏览器这些文件什么时候过期==
+1. ==HTML页面中可能引用了大量其他资源==，例如js文件，CSS文件，图片等，这些资源也位于服务器端，并且可能位于另外一个域名下面。
+2. 当服务器给浏览器发送JS,CSS这些文件时，==会告诉浏览器这些文件什么时候过期==。
 
 ---
 
@@ -250,10 +252,11 @@
 
 3. ==发送方==需要响应以下两个事件：
 
-	> 1. ==收到一个ACK==：在GBN协议中，对序号为n的分组的确认采取==累计确认==的方式。也就是说，==当A收到序号为n的分组时==，表明==分组n以及n之前的分组已经被B正确接受==了。
-	> 2. ==超时事件==： 当久久没有收到ACK时，A就认为它发送的分组已经丢失了，==这时A会重传所有已发送但还未被确认的分组==。
+  > 1. ==收到一个ACK==：在GBN协议中，对序号为n的分组的确认采取==累计确认==的方式。也就是说，==当A收到序号为n的分组时==，表明==分组n以及n之前的分组已经被B正确接受==了。
+  > 2. ==超时事件==： 当久久没有收到ACK时，A就认为它发送的分组已经丢失了，==这时A会重传所有已发送但还未被确认的分组==。
+  > 2. 需要注意的是，并不是为每个分组设置一个定时器，而是==在序号[base,nextseqnum-1]中，设置一个定时器==，当==base发送的那一刻，就开始计时==，当==收到一个ACK时，则刷新重新开始计时==。
 
-4. ==接收方==则需要处理一下事件：
+4. ==接收方==则需要处理以下事件：
 
 	> 1. 如果一个==序号为n的分组被正确收到==，并且按序(所谓按序就是指==n-1的分组也已经收到了==)，则B为分组n发送一个ACK，==否则，丢弃该分组，并且为最近按序接收的分组重新发送ACK==。
 
@@ -261,7 +264,7 @@
 
 #### 5.选择重传(SR)
 
-1. 选择重传和回退N步是很相似的，只是在==选择重传==中，接收方收到==失序的分组时，会把它缓存起来==，==直到拼凑到分组按序==，才把分组传输给上一层。而发送方会为==每个分组设置一个定时器==，这样，只需要==重传那些没有被接收方正确接收的分组==就可以了。
+1. 选择重传和回退N步是很相似的，只是在==选择重传==中，接收方收到==失序的分组时，会把它缓存起来==，==直到拼凑到按序的分组==，才把分组传输给上一层。而发送方会为==每个分组设置一个定时器==，这样，只需要==重传那些没有被接收方正确接收的分组==就可以了。
 
 2. > ![在这里插入图片描述](https://shuaidi-picture-1257337429.cos.ap-guangzhou.myqcloud.com/img/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3OTA3Nzk3,size_16,color_FFFFFF,t_70-20230324192737672.png)
 
@@ -285,7 +288,7 @@
 
 #### 2.交换机
 
-交换机是根据网口地址传送信息，比网线直接传送多了一个步骤，我们也说交换机工作在==数据链路层==。
+交换机是==根据网口(MAC)传送信息==，比网线直接传送多了一个步骤，我们也说交换机工作在==数据链路层==。
 
 > <img src="https://shuaidi-picture-1257337429.cos.ap-guangzhou.myqcloud.com/img/202308111609387.jpeg" alt="图片" style="zoom: 67%;" />
 >
@@ -324,7 +327,7 @@
 
 #### 3.到了瓶颈值之后怎么办？
 
-1. 回到==最初的最初的状态==，也就是说从1，2，4，8…..开始,不过这个时候我们还会==把ssthresh调小==，调为MAX值的一半，即==ssthresh = MAX / 2==。
+1. 回到==最初的状态==，也就是说从1，2，4，8…..开始,不过这个时候我们还会==把ssthresh调小==，调为MAX值的一半，即==ssthresh = MAX / 2==。
 
 2. 拥塞控制使得==每次传输可以发送尽可能多的数据包==，而==不至于很快就因网络拥塞而没能传到接收端==。
 
@@ -356,7 +359,7 @@
 
 #### 1.为什么需要流量控制?
 
-1. 双方在通信的时候，发送方的速率与接收方的速率是不一定相等，如果==发送方的发送速率太快，会导致接收方处理不过来==，这时候接收方只能==把处理不过来的数据存在缓存区==里（==失序的数据包也会被存放在缓存区里==）。
+1. 双方在通信的时候，发送方的速率与接收方的速率是不一定相等，如果==发送方的发送速率太快，会导致接收方处理不过来==，这时候接收方只能==把处理不过来的数据包存在缓存区==里（==失序的数据包也会被存放在缓存区里==）。
 
 2. 缓存区满了发送方还在发送数据，==接收方只能把收到的数据包丢掉==，大量的丢包会极大着==浪费网络资源==。
 
@@ -381,6 +384,8 @@
 
 #### 1.三次握手
 
+首先不要像以下这样干巴巴地回答：
+
 1. 第一次握手：客户端给服务器发送一个 SYN 报文。
 2. 第二次握手：服务器收到 SYN 报文之后，会应答一个 SYN+ACK 报文。
 3. 第三次握手：客户端收到 SYN+ACK 报文之后，会回应一个 ACK 报文。
@@ -400,9 +405,9 @@
 
 1. 第一次握手：客户端给服务端发一个 SYN 报文，并指明客户端的==初始化序列号== ==ISN(c)==。此时客户端处于 ==SYN_SENT== 状态。
 
-2. 第二次握手：服务器收到客户端的 SYN 报文之后，会==以自己的 SYN 报文作为应答==，并且==（在 SYN 报文中）也是指定了自己的初始化序列号 ISN(s)==，同时会把==客户端的 ISN + 1 作为 ACK 的值==，表示自己已经收到了客户端的 SYN，此时服务器处于 ==SYN_RCVD== 的状态。
+2. 第二次握手：服务器收到客户端的 SYN 报文之后，会==以自己的 SYN 报文作为应答==，并且==（在 SYN 报文中）也是指定了自己的初始化序列号 ISN(s)==，同时会把==客户端的 ISN(c) + 1 作为 ACK 的值==，表示自己已经收到了客户端的 SYN，此时服务器处于 ==SYN_RCVD== 的状态。
 
-3. 第三次握手：客户端收到 SYN 报文之后，会发送一个 ACK 报文，当然，也是一样==把服务器的 ISN + 1 作为 ACK 的值==，表示已经收到了服务端的 SYN 报文，此时客户端处于 ==establised== 状态。
+3. 第三次握手：客户端收到 SYN 报文之后，会发送一个 ACK 报文，当然，也是一样==把服务器的 ISN(s) + 1 作为 ACK 的值==，表示已经收到了服务端的 SYN 报文，此时客户端处于 ==establised== 状态。
 
 4. 服务器收到 ACK 报文之后，也处于 ==establised 状态==，此时，双方以建立起了链接。
 
@@ -411,7 +416,7 @@
 #### 4.三次握手的作用
 
 1. ==确认双方的接受能力、发送能力是否正常==。
-2. ==指定自己的初始化序列号==，为==后面的可靠传送做准备==。
+2. ==指定自己的初始化序列号==（ ==INS(c) 和 INS(s)== ），为==后面的可靠传送做准备==。
 
 #### 5.ISN是固定的吗
 
@@ -543,7 +548,7 @@ CLOSED – 没有任何连接状态；
 
 #### 3.HTTP/1.1
 
-1. 1.1 版的最大变化，就是引入了==持久连接==（persistent connection），即==TCP连接默认不关闭==，可以被多个请求复用，不用声明Connection: keep-alive。
+1. 1.1 版的最大变化，就是引入了==持久连接==（persistent connection），即==TCP连接默认不关闭==，可以被多个请求复用，==不用声明Connection: keep-alive==。
 
 2. 1.1 版还引入了==管道机制==（pipelining），即在==同一个TCP连接里面，客户端可以同时发送多个请求==。
 
@@ -638,6 +643,8 @@ CLOSED – 没有任何连接状态；
 
 6. 当客户端拿到这份数字证书之后，就会用==CA提供的公钥==来对数字证书里面的数字签名进行解密来==得到信息摘要==，然后对数字证书里服务器的==公钥以及个人信息进行Hash==得到==另外一份信息摘要==。最后把==两份信息摘要进行对比==，如果==一样，则证明这个人是服务器==，否则就不是。
 
+6. 黑客只能用 Hash 将自己服务器的信息和伪造的公钥转化为信息摘要，但是==得不到 CA 的私钥，没办法将其加密为数字签名==，因此不能伪造数字签名。
+
 ---
 
 
@@ -728,7 +735,7 @@ SSL/TLS协议的基本过程是这样的：
 
 #### 1.DNS 是什么
 
-1. DNS （==Domain Name System== 的缩写）的作用非常简单，就是==根据域名查出IP地址==。
+1. DNS（==Domain Name System== 的缩写）的作用非常简单，就是==根据域名查出IP地址==。
 
 #### 2.DNS服务器
 
@@ -738,7 +745,7 @@ SSL/TLS协议的基本过程是这样的：
 
 1. ```
 	主机名.次级域名.顶级域名.根域名
-	host.iamshuaidi.com.root
+	www.iamshuaidi.com.root
 	```
 
 2. 每一级域名都有自己的NS记录，==NS记录指向该级的域名服务器==。这些==服务器知道下一级域名的各种记录==。
@@ -759,13 +766,172 @@ SSL/TLS协议的基本过程是这样的：
 
 > （1） A：地址记录（Address），==返回域名指向的IP地址==。
 >
-> （2） NS：域名服务器记录（Name Server），返回保存==下一级域名信息的服务器地址==。该记录只能设置为域名，不能设置为IP地址。
+> （2） NS：域名服务器记录（Name Server），返回保存==下一级域名信息的服务器地址==。该记录==只能设置为域名，不能设置为IP地址==。
 >
-> （3）MX：邮件记录（Mail eXchange），返回接收==电子邮件的服务器地址==。
+> （3）MX：邮件记录（Mail Exchange），返回接收==电子邮件的服务器地址==。
 >
 > （4）CNAME：规范名称记录（Canonical Name），==返回另一个域名，即当前查询的域名是另一个域名的跳转==。如facebook.github.io的CNAME记录指向github.map.fastly.net。也就是说，用户查询facebook.github.io的时候，实际上返回的是github.map.fastly.net的IP地址。
 >
 > （5）PTR：逆向查询记录（Pointer Record），只用于==从IP地址查询域名==。
+
+#### 5.Linux 的 dnsutils 工具
+
+1. Ubuntu 环境下==安装==：
+
+	```bash
+	sudo apt-get install dnsutils
+	```
+
+2. ==查看某一域名的 ip 地址==：
+
+	```bash
+	$ dig www.iamshuaidi.com
+	
+	; <<>> DiG 9.16.48-Ubuntu <<>> www.iamshuaidi.com
+	;; global options: +cmd
+	;; Got answer:
+	;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 17775
+	;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+	
+	;; OPT PSEUDOSECTION:
+	; EDNS: version: 0, flags:; udp: 65494
+	;; QUESTION SECTION:
+	;www.iamshuaidi.com.		IN	A
+	
+	;; ANSWER SECTION:
+	www.iamshuaidi.com.	5	IN	A	114.132.151.64
+	
+	;; Query time: 8 msec
+	;; SERVER: 127.0.0.53#53(127.0.0.53) # 使用的默认 dns 服务器是 127.0.0.53
+	;; WHEN: Mon May 13 21:02:31 CST 2024
+	;; MSG SIZE  rcvd: 63
+	```
+
+3. ==默认 dns 服务器==：
+
+	```bash
+	cat /etc/resolv.conf
+	
+	# This file is managed by man:systemd-resolved(8). Do not edit.
+	#
+	# This is a dynamic resolv.conf file for connecting local clients to the
+	# internal DNS stub resolver of systemd-resolved. This file lists all
+	# configured search domains.
+	#
+	# Run "resolvectl status" to see details about the uplink DNS servers
+	# currently in use.
+	#
+	# Third party programs must not access this file directly, but only through the
+	# symlink at /etc/resolv.conf. To manage man:resolv.conf(5) in a different way,
+	# replace this symlink by a static file or a different symlink.
+	#
+	# See man:systemd-resolved.service(8) for details about the supported modes of
+	# operation for /etc/resolv.conf.
+	
+	nameserver 127.0.0.53
+	options edns0 trust-ad
+	search localdomain
+	```
+
+4. 加上 ==short 参数==：
+
+	```bash
+	$ dig +short www.iamshuaidi.com
+	
+	114.132.151.64
+	```
+
+5. ==@x.x.x.x 指定 dns 服务器==：
+
+	```bash
+	$ dig @8.8.8.8 www.iamshuaidi.com
+	
+	; <<>> DiG 9.16.48-Ubuntu <<>> @8.8.8.8 www.iamshuaidi.com
+	; (1 server found)
+	;; global options: +cmd
+	;; Got answer:
+	;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 54888
+	;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+	
+	;; OPT PSEUDOSECTION:
+	; EDNS: version: 0, flags:; udp: 512
+	;; QUESTION SECTION:
+	;www.iamshuaidi.com.		IN	A
+	
+	;; ANSWER SECTION:
+	www.iamshuaidi.com.	600	IN	A	114.132.151.64
+	
+	;; Query time: 112 msec
+	;; SERVER: 8.8.8.8#53(8.8.8.8) # 使用的 dns 服务器改为 Google 的 8.8.8.8
+	;; WHEN: Mon May 13 21:05:51 CST 2024
+	;; MSG SIZE  rcvd: 63
+	```
+
+6. ==ns 参数显示下一级域名的服务器域名==：
+
+	```bash
+	$ dig ns iamshuaidi.com
+	
+	; <<>> DiG 9.16.48-Ubuntu <<>> ns iamshuaidi.com
+	;; global options: +cmd
+	;; Got answer:
+	;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 50182
+	;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+	
+	;; OPT PSEUDOSECTION:
+	; EDNS: version: 0, flags:; udp: 65494
+	;; QUESTION SECTION:
+	;iamshuaidi.com.			IN	NS
+	
+	;; ANSWER SECTION:
+	iamshuaidi.com.		5	IN	NS	screen.dnspod.net. # 下一级域名的服务器域名
+	iamshuaidi.com.		5	IN	NS	twinkie.dnspod.net. # 下一级域名的服务器域名
+	
+	;; Query time: 7 msec
+	;; SERVER: 127.0.0.53#53(127.0.0.53)
+	;; WHEN: Mon May 13 21:15:13 CST 2024
+	;; MSG SIZE  rcvd: 96
+	```
+
+#### 6.其它 DNS 工具
+
+1. ==host 命令==：
+
+	```bash
+	host www.baidu.com
+	
+	www.baidu.com is an alias for www.a.shifen.com.
+	www.a.shifen.com has address 110.242.68.4
+	www.a.shifen.com has address 110.242.68.3
+	www.a.shifen.com has IPv6 address 2408:871a:2100:2:0:ff:b09f:237
+	www.a.shifen.com has IPv6 address 2408:871a:2100:3:0:ff:b025:348d
+	```
+
+2. ==nslookup 命令==：
+
+	```bash
+	nslookup www.baidu.com
+	
+	Server:		127.0.0.53
+	Address:	127.0.0.53#53
+	
+	Non-authoritative answer:
+	www.baidu.com	canonical name = www.a.shifen.com.
+	Name:	www.a.shifen.com
+	Address: 110.242.68.3
+	Name:	www.a.shifen.com
+	Address: 110.242.68.4
+	Name:	www.a.shifen.com
+	Address: 2408:871a:2100:3:0:ff:b025:348d
+	Name:	www.a.shifen.com
+	Address: 2408:871a:2100:2:0:ff:b09f:237
+	```
+
+3. whois 命令：
+
+	```bash
+	whois baidu.com
+	```
 
 ---
 

@@ -14,7 +14,16 @@
             <artifactId>spring-boot-starter</artifactId>
             <version>2.1.7.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-opengl</artifactId>
+            <version>3.2.3</version>
+        </dependency>
     </dependencies>
 
     <build>
