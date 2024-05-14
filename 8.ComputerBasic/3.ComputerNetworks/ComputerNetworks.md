@@ -88,7 +88,7 @@
 
 #### 4.涉及到的三张表
 
-- ==交换机（只有交换机有）==中有 ==MAC 地址==表用于映射 MAC 地址和它的端口
+- ==交换机（只有交换机有）==中有 ==MAC 地址表==用于映射 MAC 地址和它的端口
 
 	> |     MAC 地址      | 端口 |
 	> | :---------------: | :--: |
@@ -101,7 +101,7 @@
 	> | gg-gg-gg-gg-gg-gg |  6   |
 	> | hh-hh-hh-hh-hh-hh |  6   |
 
-- ==路由器（路由表当然只有路由器有啊）==中有==路由表==用于映射 IP 地址(段)和它的端口
+- ==路由器（路由表计算机和路由器都有）==中有==路由表==用于映射 IP 地址(段)和它的端口
 
 	> |   目的地址    |    子网掩码     | 下一跳 | 端口 |
 	> | :-----------: | :-------------: | :----: | :--: |
@@ -464,7 +464,7 @@ ACK = 1, seq = ISN(c) + 1, ack = ISN(s) + 1
 4. 第四次挥手：==客户端==收到 FIN 之后，一样==发送一个 ACK 报文作为应答==，且把==服务端的序列号值 + 1== 作为自己 ACK 报文的序列号值，此时客户端处于 ==TIME_WAIT== 状态。==需要过一阵子以确保服务端收到自己的 ACK 报文之后才会进入 CLOSED 状态==。
 5. ==服务端收到 ACK 报文之后==，就处于关闭连接了，处于 ==CLOSED 状态==。
 
-> ![微信截图_20240422095637](ComputerNetworks.assert/微信截图_20240422095637.png)
+> ![微信截图_20240422095637](ComputerNetworks.assets/微信截图_20240422095637.png)
 
 #### 2.为什么客户端发送 ACK 之后不直接关闭，而是要等一阵子才关闭
 
@@ -499,7 +499,7 @@ CLOSED – 没有任何连接状态；
 
 #### 4.三次握手和四次挥手
 
-> <img src="ComputerNetworks.assert/微信截图_20240421200151.png" alt="微信截图_20240421200151" style="zoom:80%;" />
+> <img src="ComputerNetworks.assets/微信截图_20240421200151.png" alt="微信截图_20240421200151" style="zoom:80%;" />
 
 ---
 
@@ -611,7 +611,7 @@ CLOSED – 没有任何连接状态；
 
 2. 服务器用明文的方式==给客户端发送自己的公钥==，==客户端收到公钥之后，会生成一把密钥(对称加密用的==)，然后用服务器的==公钥对这把密钥进行加密==，之后再把密钥传输给服务器，==服务器收到之后进行解密，最后服务器就可以安全着得到这把密钥==了，而==客户端也有一把相同的密钥==，他们就可以进行==对称加密==了。
 
-	> ![微信截图_20240422112237](ComputerNetworks.assert/微信截图_20240422112237.png)
+	> ![微信截图_20240422112237](ComputerNetworks.assets/微信截图_20240422112237.png)
 
 #### 3.非对称加密的危险
 
@@ -621,7 +621,7 @@ CLOSED – 没有任何连接状态；
 
 3. 最后中间人==再对这把密钥用刚才服务器的公钥进行加密，再发给服务器==。
 
-	> ![微信截图_20240422114000](ComputerNetworks.assert/微信截图_20240422114000.png)
+	> ![微信截图_20240422114000](ComputerNetworks.assets/微信截图_20240422114000.png)
 
 #### 4.数字证书
 
@@ -941,19 +941,19 @@ SSL/TLS协议的基本过程是这样的：
 
 #### 1.客户端请求 ip
 
-1. 通过 ==DHCP 服务器来获取 ip==，以实现本机电脑 ip 的==自动获取==。
-2. ==客户端会发送一个广播==，我们知道，广播报文是会发送局域网内的所有其他主机的，广播的目的 ==ip 是 255.255.255.255，目的端口是 68==，为了==让别人知道它是来请求一个 ip 的==，我们的客户端会把 ==0.0.0.0 作为自己的源 ip，源端口是 67==。我们把这个请求 ip 的报文称之为 ==discover 报文==。
+1. 通过 ==DHCP (Dynamic Host Configuration Protocol) 服务器来获取 ip==，实现本机电脑 ip的==自动获取==。
+2. ==客户端会发送一个广播==，我们知道，广播报文是会发送给==局域网内的所有其他主机==的，广播的目的 ==ip 是 255.255.255.255，目的端口是 68==，为了==让别人知道它是来请求一个 ip 的==，我们的客户端会把 ==0.0.0.0 作为自己的源 ip，源端口是 67==。我们把这个请求 ip 的报文称之为 ==discover 报文==。
 3. ==注意==：这里==发送的报文（如 discover 报文）都是采用 UDP 报文，而不是 TCP 报文==。
 
 #### 2.DHCP响应
 
-1. 当 DHCP ==服务器收到这个 discover 报文==之后，一看源地址是 0.0.0.0，就知道生意来了，知道这是一个请求 ip 的报文，DHCP 服务器就会给它提供一个 ip，包括 ==ip 地址，子网掩码，网关，ip 的有效期等信息==。
+1. 当 DHCP ==服务器收到这个 discover 报文==之后，一看源地址是 0.0.0.0，就知道生意来了，知道这是一个请求 ip 的 discover 报文，DHCP 服务器就会给它提供一个 ip，包括 ==ip 地址，子网掩码，网关，ip 的有效期等信息==。
 
 #### 3.客户端挑选 ip 地址
 
-1. 有可能==不止一台 DHCP 服务器收到了 discover 请求报文==，也就是说，我们的==主机可能会收到多个 offer 报文==，一般是选择最先收到的 offer 报文，选择好之后，会给对应的 DHCP 服务器次发送一个 ==request 报文==，意在告诉它，我看中了你的报文。
+1. 有可能==不止一台 DHCP 服务器==收到了 discover 请求报文，也就是说，我们的==主机可能会收到多个 offer 报文==，一般是选择最先收到的 offer 报文，选择好之后，会给对应的 DHCP 服务器次发送一个 ==request 报文==，意在告诉它，我看中了你的报文。
 2. ==DHCP== 收到 request 报文之后，会给它==回复一个 ACK 报文==，并且==把分配出去的 ip 进行登记==（例如把这个 ip 标记为已使用状态）。
-3. ==注意==：如果 ==DHCP 服务器没有在我们所在的局域网==里怎么办？这个时候，这个 ==discover 报文 就会通过网关==来进行传递，并且会==把源 ip 替换成网络的 ip==，源端口是 68，这里涉及到 NAT 地址到转换。
+3. ==注意==：如果 ==DHCP 服务器没有在我们所在的局域网==里怎么办？这个时候，这个 ==discover 报文 就会通过网关==来进行传递，并且会==把源 ip 替换成网络的 ip==，源端口是 68，这里==涉及到 NAT 地址到转换==。
 
 #### 4.租期
 
@@ -1010,25 +1010,23 @@ SSL/TLS协议的基本过程是这样的：
 ### 16.什么是 SQL 注入攻击？
 
 ```shell
-用户名： ‘or 1 = 1 --
+用户名： ' or 1 = 1 #
 密 码：
 ```
 
-```java
-String sql = “select * from user_table where username=’ “+userName+” ’ and password=’ “+password+” ‘”;
-```
-
 ```sql
-SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
+SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 ```
 
 ==应对方法==：
 
 1. ==参数绑定==：
 
-	使用==预编译手段==，绑定参数是最好的防SQL注入的方法。目前许多的ORM框架及JDBC等都实现了==SQL预编译和参数绑定功能==，==攻击者的恶意SQL会被当做SQL的参数而不是SQL命令被执行==。在mybatis的mapper文件中，对于传递的参数我们一般是使用 `#` 和`$`来获取参数值。
+  使用==预编译手段==，绑定参数是最好的防SQL注入的方法。目前许多的ORM框架及JDBC等都实现了==SQL预编译和参数绑定功能==，==攻击者的恶意SQL会被当做SQL的参数而不是SQL命令被执行==。在mybatis的mapper文件中，对于传递的参数我们一般是使用 `#` 和`$`来获取参数值。
 
-	==当使用`#`时，变量是占位符==，就是一般我们使用javajdbc的PrepareStatement时的占位符，所以==可以防止sql注入==；当==使用 `$`时，变量就是直接追加在sql中，一般会有sql注入问题==。
+  > 我所理解的预编译：==使用 ? 将需要传入的参数进行占位==，这样就能==保证 sql 语句的语义不会变化==，之后==只把传入的数据当作参数填到预编译后的 sql 语句中==，而不是进行 sql 拼接。
+
+  ==当使用`#`时，变量是占位符==，就是一般我们使用javajdbc的PrepareStatement时的占位符，所以==可以防止sql注入==；当==使用 `$`时，变量就是直接追加在sql中，一般会有sql注入问题==。
 
 2. 使用==正则表达式过滤传入的参数==，例如把出现 `--` 的过滤掉等等。
 
@@ -1072,6 +1070,8 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 ### 18.什么是 NAT 网络地址转换协议？
 
+1. NAT (Network Address Translation)，意为"网络地址转换"。
+
 1. 我们不一定需要去申请3个IP，在我们这个内网里，我们可以指定自己的规则分配 ip。
 
 	> ![图片](https://image.iamshuaidi.com/picture/640-20210910201420835.png)
@@ -1084,13 +1084,15 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 	> ![图片](https://image.iamshuaidi.com/picture/640-20210910201504599.png)
 
-3. 百度把结果返回给网关的80端口之后，==网关再通过映射表==，就可以==把结果返回给 A 的60端口==了。
+4. 百度把结果返回给网关的80端口之后，==网关再通过映射表==，就可以==把结果返回给 A 的60端口==了。
 
-	> ![图片](https://image.iamshuaidi.com/picture/640-20210910201543272.jpeg)
+  > ![图片](https://image.iamshuaidi.com/picture/640-20210910201543272.jpeg)
+  >
+  > - 虚构的 ip 地址映射到网关的某一个端口上，然后网关接收到结果后通过端口找到对应的虚拟 ip，将结果正确返还给对应的设备。
 
 4. 这种方法地址的映射转换，我们也称之为==网络地址转换== （Network Address Translation) ，简称==NAT==。
 
-	像A, B, C这样的IP地址我们也称之为==内网IP==，即==私有IP==；
+	像==A, B, C这样的虚拟 IP 地址==我们也称之为==内网IP==，即==私有IP==；
 
 	而像网关，百度这样的IP我们称之为==外网IP==，即==全球IP==。
 
@@ -1106,7 +1108,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 ### 19.如何区分LAN，WAN，WLAN ，VLAN 和VPN？
 
-#### 1.局域网LAN
+#### 1.局域网 LAN
 
 1. ==几座办公楼用网线、或光纤连在一起就是局域网 LAN==。
 
@@ -1116,7 +1118,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 3. ==这些名词的定义本身就不是那么严格==，仅仅用来描述相对的==短距离（LAN==）与相对的==长距离(WAN==)。
 
-#### 2.无线局域网WLAN
+#### 2.无线局域网 WLAN
 
 1. 通常这种无线信号的覆盖范围在100米以内，为了区别于网线连接的局域网LAN，称这种==无线局域网技术为WLAN==（Wireless Local Area Network）。
 
@@ -1126,19 +1128,203 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 	==无线局域网== Wireless Local Area Network
 
-#### 3.虚拟局域网VLAN
+#### 3.虚拟局域网 VLAN
 
-1. ==所有连接在同一台交换机的主机工作在一个广播域==。但是往往==这些主机并不在一个网段==，而==不同网段的主机不需要广播通信==。交换机的工作机制决定了，==一定会将不同网段的广播消息扩散到连在交换机上每一台主机==，无论接收的主机是否需要
+1. ==所有连接在同一台交换机的主机工作在一个广播域==。但是往往==这些主机并不在一个网段==，而==不同网段的主机不需要广播通信==。
 2. ==在交换机上将相同的网段的主机放在一个VLAN==，==一个VLAN对应一个广播域==。
-3. ==主机们只会接收属于自己VLAN的广播消息==，而不会再接收别的VLAN（网段）的广播消息。
+3. ==主机们只会接收属于自己VLAN的广播消息==，而==不会再接收别的VLAN（网段）的广播消息==。
 
-> ![微信截图_20240423111918](ComputerNetworks.assert/微信截图_20240423111918.png)
+> ![微信截图_20240423111918](ComputerNetworks.assets/微信截图_20240423111918.png)
 
-#### 4.虚拟私有网络VPN
+#### 4.虚拟私有网络 VPN
 
 1. 尽管互联网是开放的、共享的，但是可以==借助加密/解密技术==，==让互联网成为公司的虚拟私有网络 VPN==，。也可以理解为一种私有专线，但相比物理专线，价格要便宜一个数量级。
 
 ---
+
+
+
+## 视频课
+
+### 第一章：物理层和数据链路层
+
+#### 1.TCP/IP 四层模型
+
+1. **图解**：
+
+	> ![image-20240514134517812](ComputerNetworks.assets/image-20240514134517812.png)
+
+---
+
+
+
+#### 2.现代互联网的网络拓扑
+
+1. **家庭层面的网络拓扑**：
+
+	> ![image-20240514135043211](ComputerNetworks.assets/image-20240514135043211.png)
+
+2. **网络拓扑树状图**：
+
+	> ![image-20240514135433393](ComputerNetworks.assets/image-20240514135433393.png)
+
+3. 一般通过 **客户/服务器（Client/Server**）模式 或 **P2P（对等连接**）模式进行网络使用的。
+
+---
+
+
+
+#### 3.计算机网络的性能指标
+
+1. **速率**
+
+	> <img src="ComputerNetworks.assets/image-20240514140956526.png" alt="image-20240514140956526" style="zoom:50%;" />
+
+2. **时延**
+
+	> ![image-20240514140834535](ComputerNetworks.assets/image-20240514140834535.png)
+
+3. **往返时间**
+
+	> <img src="ComputerNetworks.assets/image-20240514141039502.png" alt="image-20240514141039502" style="zoom:50%;" />
+
+---
+
+
+
+#### 4.物理层概述
+
+1. **用于连接的物理设备**
+
+	> - 双绞线，我们的网线就是双绞线
+	> - 同轴电缆
+	> - 光纤，我们家庭中用的比较多
+	> - 其它的一些无线传播介质，如激光，红外线等
+
+2. **比特流**
+
+	> - 以**高低电平**进行传播
+
+3. **信道**
+
+	> - <img src="ComputerNetworks.assets/image-20240514141628992.png" alt="image-20240514141628992" style="zoom: 50%;" />
+	>
+	> - 信道的 **分用–复用技术**：
+	>
+	> 	<img src="ComputerNetworks.assets/image-20240514141943627.png" alt="image-20240514141943627" style="zoom:50%;" />
+	>
+	> 	**提高信道利用率，但是可能造成信道拥塞**。
+
+---
+
+
+
+#### 5.数据链路层概述
+
+1. **封装成帧**
+
+	> - <img src="ComputerNetworks.assets/image-20240514155527673.png" alt="image-20240514155527673" style="zoom: 50%;" />
+	> - ![image-20240514155548242](ComputerNetworks.assets/image-20240514155548242.png)
+
+2. **透明传输**
+
+	> - ![image-20240514155911471](ComputerNetworks.assets/image-20240514155911471.png)
+
+---
+
+
+
+#### 6.数据链路层的差错检测
+
+1. **奇偶校验码**
+
+	> - ![image-20240514160348548](ComputerNetworks.assets/image-20240514160348548.png)
+
+2. **循环冗余校验码 CRC**
+
+	> - 不是重点，真要学的话可以看视频里的例题
+
+---
+
+
+
+#### 7.最大传输单源 MTU
+
+1. MTU 就是数据链路层能传输的**数据帧的最大值**。
+
+---
+
+
+
+#### 8.以太网协议详解
+
+1. 以太网协议规定的**数据帧格式**：
+
+	> ![image-20240514162046874](ComputerNetworks.assets/image-20240514162046874.png)
+	>
+	> - 源地址和目的地址是设备的 MAC 地址，MAC 地址由12个16进制数组成：
+	>
+	> 	![image-20240514162248617](ComputerNetworks.assets/image-20240514162248617.png)
+
+2. **MAC 地址表**
+
+	> - 交换机拿出数据帧的前6个字节，得到目的 MAC 地址，然后到自己的 MAC 地址表中查找，没有找到则广播，让对应的设备把 MAC 地址：端口传给交换机，交换机记录到 MAC 地址表中。
+
+---
+
+
+
+### 第二章：网络层
+
+> ![image-20240514163150565](ComputerNetworks.assets/image-20240514163150565.png)
+
+---
+
+
+
+#### 1.IP 协议详解
+
+1. **ip 地址是可变的**；而 MAC 地址不可变。
+
+2. **ip 首部的格式**：
+
+	> <img src="ComputerNetworks.assets/image-20240514195314397.png" alt="image-20240514195314397" style="zoom: 67%;" />
+
+----
+
+
+
+#### 2.IP 协议的转发流程
+
+1. **路由表**
+
+	> - <img src="ComputerNetworks.assets/image-20240514215049231.png" alt="image-20240514215049231" style="zoom:67%;" />
+
+2. **IP 协议的转发流程**
+
+	> - ![image-20240514215623702](ComputerNetworks.assets/image-20240514215623702.png)
+
+---
+
+
+
+#### 3.ARP 协议和 RARP 协议
+
+1. 由于 ip 地址是变化的，因此 **ARP 缓存表并不是永久不变的**，而是**按期限进行变化的**。
+
+2. ```shell
+	arp -a
+	```
+
+3. **RARP 就是通过 MAC 地址查 ip 地址，跟 ARP 协议反过来**。
+
+---
+
+
+
+
+
+
 
 
 
@@ -1189,7 +1375,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 	> - 用来==处理连接网络的硬件部分==
 
-7. > <img src="ComputerNetworks.assert/微信截图_20240415185928.png" alt="微信截图_20240415185928" style="zoom: 67%;" />
+7. > <img src="ComputerNetworks.assets/微信截图_20240415185928.png" alt="微信截图_20240415185928" style="zoom: 67%;" />
 
 8. 在==传输层（TCP 协议）把从应用层处收到的数据（HTTP 请求报文）进行分割==，并在各个报文上==打上标记序号及端口号==后转发给网络层
 
@@ -1213,7 +1399,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 	>
 	> - 为了准确无误地将数据送达目标处，TCP 协议采用了三次握手（three-way handshaking）策略
 	>
-	> 	![微信截图_20240415193007](ComputerNetworks.assert/微信截图_20240415193007.png)
+	> 	![微信截图_20240415193007](ComputerNetworks.assets/微信截图_20240415193007.png)
 
 3. ==负责域名解析的 DNS（Domain Name System） 服务==
 
@@ -1223,7 +1409,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 5.各种协议与 HTTP 协议的关系
 
-> ![微信截图_20240415195022](ComputerNetworks.assert/微信截图_20240415195022.png)
+> ![微信截图_20240415195022](ComputerNetworks.assets/微信截图_20240415195022.png)
 
 #### 7.URI（统一资源标识符） 和 URL
 
@@ -1231,7 +1417,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 2. ==URI 的格式==
 
-	> <img src="ComputerNetworks.assert/微信截图_20240415195640.png" alt="微信截图_20240415195640" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240415195640.png" alt="微信截图_20240415195640" style="zoom:67%;" />
 
 3. 使用绝对 URI ==必须==指定待访问的==服务器地址==
 
@@ -1247,7 +1433,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 1.通过请求和响应的交换达成通信
 
-1. ![微信截图_20240416145309](ComputerNetworks.assert/微信截图_20240416145309.png)
+1. ![微信截图_20240416145309](ComputerNetworks.assets/微信截图_20240416145309.png)
 
 	> 1. 起 始 行 开 头 的 ==GET 表 示 请 求 访 问 服 务 器 的 类 型==， 称 为 ==方 法==（method）
 	> 2. 字符串 ==/index.htm 指明了请求访问的资源对象==，也叫做 ==请求 URI==（request-URI）
@@ -1255,11 +1441,11 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 2. ==请求报文==
 
-	> <img src="ComputerNetworks.assert/微信截图_20240416145846.png" alt="微信截图_20240416145846" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416145846.png" alt="微信截图_20240416145846" style="zoom:67%;" />
 
 3. ==响应报文==
 
-	> <img src="ComputerNetworks.assert/微信截图_20240416150329.png" alt="微信截图_20240416150329" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416150329.png" alt="微信截图_20240416150329" style="zoom:67%;" />
 
 #### 2.HTTP 是不保存状态的协议
 
@@ -1281,31 +1467,31 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. ==HTTP 协议使用 URI 定位互联网上的资源==。因为 URI 的特定功能，==在互联网上任意位置的资源都能访问到==
 
-2. > <img src="ComputerNetworks.assert/微信截图_20240416152207.png" alt="微信截图_20240416152207" style="zoom:67%;" />
+2. > <img src="ComputerNetworks.assets/微信截图_20240416152207.png" alt="微信截图_20240416152207" style="zoom:67%;" />
 
 3. 如果不是访问特定资源而是==对服务器本身发起请求，可以用一个 * 来代替请求 URI==。
 
 	> 下面这个例子是==查询 HTTP 服务器端支持的 HTTP 方法种类==
 	>
-	> <img src="ComputerNetworks.assert/微信截图_20240416152308.png" alt="微信截图_20240416152308" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416152308.png" alt="微信截图_20240416152308" style="zoom:67%;" />
 
 #### 4.告知服务器意图的 HTTP 方法
 
 1. ==GET：获取资源==
 
-	> <img src="ComputerNetworks.assert/微信截图_20240416153133.png" alt="微信截图_20240416153133" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416153133.png" alt="微信截图_20240416153133" style="zoom:67%;" />
 
 2. ==POST：传输实体主体==
 
 	> ==虽然用 GET 方法也可以传输实体的主体==，但一般==不用 GET 方法进行传输，而是用 POST 方法==
 	>
-	> <img src="ComputerNetworks.assert/微信截图_20240416153416.png" alt="微信截图_20240416153416" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416153416.png" alt="微信截图_20240416153416" style="zoom:67%;" />
 
 3. ==PUT：传输文件==
 
 	> 鉴于 HTTP/1.1 的 PUT 方法自身不带验证机制，任何人都可以上传文件 , 存在==安全性问题==，因此==一般的Web 网站不使用该方法==。
 	>
-	> <img src="ComputerNetworks.assert/微信截图_20240416154021.png" alt="微信截图_20240416154021" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416154021.png" alt="微信截图_20240416154021" style="zoom:67%;" />
 
 4. ==HEAD：获得报文首部==
 
@@ -1317,7 +1503,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 6. ==OPTIONS：询问支持的方法==
 
-	> <img src="ComputerNetworks.assert/微信截图_20240416154644.png" alt="微信截图_20240416154644" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416154644.png" alt="微信截图_20240416154644" style="zoom:67%;" />
 
 7. ==TRACE：追踪路径==
 
@@ -1325,7 +1511,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 	>
 	> 客户端通过 TRACE 方法可以==查询发送出去的请求是怎样被加工修改 / 篡改的==。这是因为，==请求想要连接到源目标服务器可能会通过代理中转==，TRACE 方法就是用来确认连接过程中发生的一系列操作。
 	>
-	> <img src="ComputerNetworks.assert/微信截图_20240416155559.png" alt="微信截图_20240416155559" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416155559.png" alt="微信截图_20240416155559" style="zoom:67%;" />
 
 8. ==CONNECT：要求用隧道协议连接代理==
 
@@ -1335,7 +1521,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. 浏览器浏览一个包含多张图片的 HTML 页面时，发送请求访问 HTML 页面资源的同时，==也会请求该 HTML 页面里包含的其他资源==。因此，==每次的请求都会造成无谓的 TCP 连接建立和断开，增加通信量的开销==。
 
-	> <img src="ComputerNetworks.assert/微信截图_20240416163029.png" alt="微信截图_20240416163029" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416163029.png" alt="微信截图_20240416163029" style="zoom:67%;" />
 
 2. ==持久连接==
 
@@ -1353,13 +1539,13 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. ==方法列表==：
 
-	> ![微信截图_20240417152509](ComputerNetworks.assert/微信截图_20240417152509.png)
+	> ![微信截图_20240417152509](ComputerNetworks.assets/微信截图_20240417152509.png)
 
 #### 7.使用 Cookie 的状态管理
 
 1. Cookie 根据服务器端发送的响应报文内一个叫做 ==Set-Cookie的首部字段信息==，通知客户端保存 Cookie。当==下次客户端再往该服务器发送请求时==，客户端会==自动在请求报文中加入 Cookie== 值后发送出去。
 
-2. > <img src="ComputerNetworks.assert/微信截图_20240416165502.png" alt="微信截图_20240416165502" style="zoom: 67%;" />
+2. > <img src="ComputerNetworks.assets/微信截图_20240416165502.png" alt="微信截图_20240416165502" style="zoom: 67%;" />
 
 ---
 
@@ -1389,7 +1575,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 3. ==内容编码指明应用在实体内容上的编码格式，并保持实体信息原样压缩==。==内容编码后的实体由客户端接收并负责解码==。
 
-	> <img src="ComputerNetworks.assert/微信截图_20240416171719.png" alt="微信截图_20240416171719" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416171719.png" alt="微信截图_20240416171719" style="zoom:67%;" />
 
 4. ==问题==：请求的==编码实体资源尚未全部传输完成==之前，==浏览器无法显示请求页面（要等很久才有显示）==。
 
@@ -1413,7 +1599,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 	> 对一份 10 000 字节大小的资源，如果使用范围请求，==可以只请求5001~10 000 字节内的资源==
 	>
-	> <img src="ComputerNetworks.assert/微信截图_20240416192831.png" alt="微信截图_20240416192831" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240416192831.png" alt="微信截图_20240416192831" style="zoom:67%;" />
 
 2. 针对==范围请求==，响应会==返回状态码为 206 Partial Content== 的响应报文。另外，对于==多重范围的范围请求==，响应会在首部字段 ==Content-Type标明 multipart/byteranges== 后返回响应报文。
 
@@ -1433,7 +1619,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 1.状态码告知从服务器端返回的请求结果
 
-1. > ![微信截图_20240417144437](ComputerNetworks.assert/微信截图_20240417144437.png)
+1. > ![微信截图_20240417144437](ComputerNetworks.assets/微信截图_20240417144437.png)
 
 2. 只要遵守状态码类别的定义，即使==改变 RFC2616 中定义的状态码==，或==服务器端自行创建状态码都没问题==。
 
@@ -1472,7 +1658,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 4. ==304 Not Modified==
 
 	> - 该状态码表示客户端==发送附带条件的请求时==，服务器端允许请求访问资源，但==未满足条件==的情况。
-	> - <img src="ComputerNetworks.assert/微信截图_20240417160018.png" alt="微信截图_20240417160018" style="zoom:67%;" />
+	> - <img src="ComputerNetworks.assets/微信截图_20240417160018.png" alt="微信截图_20240417160018" style="zoom:67%;" />
 
 5. ==307 Temporary Redirect==
 
@@ -1525,7 +1711,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 1. ==代理==
 
 	> - 代理不改变请求 URI，会直接发送给前方持有资源的目标服务器
-	> - ![微信截图_20240417172103](ComputerNetworks.assert/微信截图_20240417172103.png)
+	> - ![微信截图_20240417172103](ComputerNetworks.assets/微信截图_20240417172103.png)
 
 2. ==缓存代理==
 
@@ -1534,7 +1720,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 3. ==网关==
 
-	> - ![微信截图_20240417172314](ComputerNetworks.assert/微信截图_20240417172314.png)
+	> - ![微信截图_20240417172314](ComputerNetworks.assets/微信截图_20240417172314.png)
 	> - 利用网关能==提高通信的安全性==，可以在==客户端与网关之间的通信线路上加密以确保连接的安全==。
 
 4. ==隧道==
@@ -1544,13 +1730,13 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 3.保存资源的缓存
 
-1. > <img src="ComputerNetworks.assert/微信截图_20240417172627.png" alt="微信截图_20240417172627" style="zoom:67%;" />
+1. > <img src="ComputerNetworks.assets/微信截图_20240417172627.png" alt="微信截图_20240417172627" style="zoom:67%;" />
 
 2. ==客户端缓存==：
 
 	> - 缓存不仅可以存在于缓存服务器内，==还可以存在客户端浏览器中==
 	> - 浏览器缓存如果有效，就不必再向服务器请求相同的资源了，可以==直接从本地磁盘内读取==。
-	> - <img src="ComputerNetworks.assert/微信截图_20240417172758.png" alt="微信截图_20240417172758" style="zoom: 67%;" />
+	> - <img src="ComputerNetworks.assets/微信截图_20240417172758.png" alt="微信截图_20240417172758" style="zoom: 67%;" />
 
 ---
 
@@ -1562,11 +1748,11 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. ==请求报文的首部==：
 
-	> <img src="ComputerNetworks.assert/微信截图_20240418170830.png" alt="微信截图_20240418170830" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240418170830.png" alt="微信截图_20240418170830" style="zoom:67%;" />
 
 2. ==响应报文的首部==：
 
-	> <img src="ComputerNetworks.assert/微信截图_20240418170909.png" alt="微信截图_20240418170909" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240418170909.png" alt="微信截图_20240418170909" style="zoom:67%;" />
 
 #### 2.通用首部字段
 
@@ -1578,7 +1764,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 	> - 控制不再转发给代理的首部字段
 	>
-	> 	<img src="ComputerNetworks.assert/微信截图_20240418195802.png" alt="微信截图_20240418195802" style="zoom:67%;" />
+	> 	<img src="ComputerNetworks.assets/微信截图_20240418195802.png" alt="微信截图_20240418195802" style="zoom:67%;" />
 	>
 	> - 管理持久连接
 	>
@@ -1606,7 +1792,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 	> - Via 是为了==追踪客户端与服务器之间的请求和响应报文的传输路径==
 	> - 报文经过==代理或网关==时，会==先在首部字段 Via 中附加该服务器的信息==，然后再进行转发
-	> - <img src="ComputerNetworks.assert/微信截图_20240418200801.png" alt="微信截图_20240418200801" style="zoom:67%;" />
+	> - <img src="ComputerNetworks.assets/微信截图_20240418200801.png" alt="微信截图_20240418200801" style="zoom:67%;" />
 
 9. ==Warning==
 
@@ -1617,7 +1803,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 1. ==Accept==
 
 	> - Accept 首部字段可通知服务器，用户代理==能够处理的媒体类型==及媒体类型的==相对优先级==。
-	> - ![微信截图_20240418201332](ComputerNetworks.assert/微信截图_20240418201332.png)
+	> - ![微信截图_20240418201332](ComputerNetworks.assets/微信截图_20240418201332.png)
 	> - 若想要给显示的媒体类型==增加优先级==，则使用 ==q= 来额外表示权重值 A== ，用==分号（;）进行分隔==
 
 2. ==Accept-Charset==
@@ -1712,7 +1898,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 2.HTTP+ 加密 + 认证 + 完整性保护 =HTTPS
 
-1. > <img src="ComputerNetworks.assert/微信截图_20240419154136.png" alt="微信截图_20240419154136" style="zoom:67%;" />
+1. > <img src="ComputerNetworks.assets/微信截图_20240419154136.png" alt="微信截图_20240419154136" style="zoom:67%;" />
 
 2. ==HTTPS 并非是应用层的一种新协议==。只是 ==HTTP 通信接口部分==用==SSL==（Secure Socket Layer）和 ==TLS==（Transport Layer Security）协议代替而已。
 
@@ -1722,14 +1908,14 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 	> - 公开密钥加密使用==一对非对称的密钥==。一把叫做私有密钥，另一把叫做公开密钥。顾名思义，==私有密钥不能让其他任何人知道==，而==公开密钥则可以随意发布==，任何人都可以获得。
 	> - ==发送密文的一方==使用==对方的公开密钥进行加密处理==，==对方==收到被加密的信息后，再==使用自己的私有密钥==进行解密。
-	> - <img src="ComputerNetworks.assert/微信截图_20240419155357.png" alt="微信截图_20240419155357" style="zoom:67%;" />
+	> - <img src="ComputerNetworks.assets/微信截图_20240419155357.png" alt="微信截图_20240419155357" style="zoom:67%;" />
 
 5. 接到证书的==客户端==可使用==数字证书认证机构的公开密钥==，==对那张证书上的数字签名进行验证==，一旦验证通过，客户端便可明确两件事：
 
 	> - 一，认证服务器的公开密钥的是==真实有效的数字证书认证机构==。
 	> - 二，服务器的==公开密钥是值得信赖的==。
 
-6. > <img src="ComputerNetworks.assert/微信截图_20240419161504.png" alt="微信截图_20240419161504" style="zoom:67%;" />
+6. > <img src="ComputerNetworks.assets/微信截图_20240419161504.png" alt="微信截图_20240419161504" style="zoom:67%;" />
 
 7. ==SSL 的慢分两种==。一种是指通信慢。另一种是指由于大量消耗 CPU及内存等资源，导致处理速度变慢。
 
@@ -1745,7 +1931,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 1.何为认证
 
-1. > <img src="ComputerNetworks.assert/微信截图_20240419195342.png" alt="微信截图_20240419195342" style="zoom: 67%;" />
+1. > <img src="ComputerNetworks.assets/微信截图_20240419195342.png" alt="微信截图_20240419195342" style="zoom: 67%;" />
 
 #### 2.BASIC 认证
 
@@ -1753,7 +1939,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 3.DIGEST 认证
 
-1. > ![微信截图_20240419200354](ComputerNetworks.assert/微信截图_20240419200354.png)
+1. > ![微信截图_20240419200354](ComputerNetworks.assets/微信截图_20240419200354.png)
 
 #### 4.SSL 客户端认证
 
@@ -1772,7 +1958,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 #### 1.HTTP 的瓶颈
 
-1. > <img src="ComputerNetworks.assert/微信截图_20240420111412.png" alt="微信截图_20240420111412" style="zoom:67%;" />
+1. > <img src="ComputerNetworks.assets/微信截图_20240420111412.png" alt="微信截图_20240420111412" style="zoom:67%;" />
 
 2. ==SPDY 的目标==：陆续出现的 Ajax 和 Comet 等提高易用性的技术，一定程度上使HTTP 得到了改善，但 ==HTTP 协议本身的限制也令人有些束手无策==。为了进行==根本性的改善==，需要有一些==协议层面上的改动==。
 
@@ -1780,7 +1966,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. SPDY 没有完全改写 HTTP 协议，而是==在 TCP/IP 的应用层与运输层之间通过新加会话层的形式运作==。同时，考虑到安全性问题，SPDY规定通信中使用 SSL。
 
-	> <img src="ComputerNetworks.assert/微信截图_20240420112117.png" alt="微信截图_20240420112117" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240420112117.png" alt="微信截图_20240420112117" style="zoom:67%;" />
 
 2. 使用 SPDY 后，HTTP 协议==额外获得以下功能==：
 
@@ -1801,13 +1987,13 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 2. ==握手将 HTTP 协议切换为 WebSocket 协议==
 
-	> <img src="ComputerNetworks.assert/微信截图_20240420114611.png" alt="微信截图_20240420114611" style="zoom:67%;" />
+	> <img src="ComputerNetworks.assets/微信截图_20240420114611.png" alt="微信截图_20240420114611" style="zoom:67%;" />
 
 #### 4.Web 服务器管理文件的 WebDAV
 
 1. ==WebDAV==（Web-based Distributed Authoring and Versioning，基于万维网的分布式创作和版本控制）是一个==可对 Web 服务器上的内容直接进行文件复制、编辑等操作的分布式文件系统==。
 
-2. > <img src="ComputerNetworks.assert/微信截图_20240420120510.png" alt="微信截图_20240420120510" style="zoom:67%;" />
+2. > <img src="ComputerNetworks.assets/微信截图_20240420120510.png" alt="微信截图_20240420120510" style="zoom:67%;" />
 
 ----
 
@@ -1827,13 +2013,13 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. CGI（==Common Gateway Interface，通用网关接口==）是指 Web 服务器在==接收到客户端发送过来的请求==后==转发给程序的一组机制==。
 
-2. > <img src="ComputerNetworks.assert/微信截图_20240420122144.png" alt="微信截图_20240420122144" style="zoom:67%;" />
+2. > <img src="ComputerNetworks.assets/微信截图_20240420122144.png" alt="微信截图_20240420122144" style="zoom:67%;" />
 
 #### 4.Servlet
 
 1. ==Servlet 运行在与 Web 服务器相同的进程中==，因此受到的负载较小 A 。==Servlet 的运行环境叫做 Web 容器==或 Servlet 容器。
 
-2. > <img src="ComputerNetworks.assert/微信截图_20240420122602.png" alt="微信截图_20240420122602" style="zoom:67%;" />
+2. > <img src="ComputerNetworks.assets/微信截图_20240420122602.png" alt="微信截图_20240420122602" style="zoom:67%;" />
 
 #### 5.可扩展标记语言 XML
 
@@ -1855,9 +2041,9 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. XSS 是攻击者利用预先设置的陷阱触发的被动攻击
 
-	> - ![微信截图_20240420151847](ComputerNetworks.assert/微信截图_20240420151847.png)
+	> - ![微信截图_20240420151847](ComputerNetworks.assets/微信截图_20240420151847.png)
 	> - 当用户在表单内输入 ID 和密码之后，就会==直接发送到攻击者的网站（也就是 hackr.jp==），导致个人登录信息被窃取。
-	> - ![微信截图_20240420152155](ComputerNetworks.assert/微信截图_20240420152155.png)
+	> - ![微信截图_20240420152155](ComputerNetworks.assets/微信截图_20240420152155.png)
 
 #### 2.SQL注入
 
@@ -1881,7 +2067,7 @@ SELECT * FROM user_table WHERE username=’’or 1 = 1 –- and password=’’
 
 1. DoS 攻击（==Denial of Service attack==）是一种让运行中的服务呈停止状态的攻击。
 
-2. > <img src="ComputerNetworks.assert/微信截图_20240420163155.png" alt="微信截图_20240420163155" style="zoom:67%;" />
+2. > <img src="ComputerNetworks.assets/微信截图_20240420163155.png" alt="微信截图_20240420163155" style="zoom:67%;" />
 
 3. 多台计算机发起的 DoS 攻击称为 DDoS 攻击（==Distributed Denial of Service attack==）。==DDoS 攻击通常利用那些感染病毒的计算机作为攻击者的攻击跳板==。
 

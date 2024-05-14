@@ -6689,4 +6689,33 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.5.14打卡	Day 104***
+
+1. 八股文一轮复习：
+
+	- 完成计算机网络视频课物理层，数据链路层，网络层一半。
+
+2. leetcode 刷题：5题
+
+	- [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+		就是二分查找找到后外加向左向右遍历
+
+	- [26. 删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
+
+		双指针，left 表示不重复的数的位置，这样实现空间 O(1)
+
+	- [88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+		双指针
+
+	- [11. 盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
+
+		双指针，判断当前left高于right还是right高于left
+
+	- [15. 三数之和](https://leetcode.cn/problems/3sum/)
+
+		first 和 third 遍历，动态生成 second，while(sum < 0 && second < third) second++，如果得到的值依然 <0，则 break
