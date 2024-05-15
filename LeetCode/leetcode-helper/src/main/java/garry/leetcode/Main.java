@@ -1,7 +1,8 @@
 package garry.leetcode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,29 +18,24 @@ public class Main {
 }
 
 class Solution {
-    public List<List<Integer>> threeSum(int[] nums) {
-        int n = nums.length;
-        Arrays.sort(nums);
-        List<List<Integer>> ans = new ArrayList<>();
-        for (int first = 0; first < n; first++) {
-            if (first > 0 && nums[first] == nums[first - 1])
-                continue;
-            for (int third = n - 1; third >= 0; third--) {
-                if (third < n - 1 && nums[third] == nums[third + 1])
-                    continue;
-                for (int second = first + 1; second < third; second++) {
-                    if (second > first + 1 && nums[second] == nums[second - 1])
-                        continue;
-                    if (nums[first] + nums[second] + nums[third] == 0) {
-                        List<Integer> list = new ArrayList<>();
-                        list.add(nums[first]);
-                        list.add(nums[second]);
-                        list.add(nums[third]);
-                        ans.add(list);
-                    }
-                }
-            }
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        Deque<Integer/* index */> deque = new LinkedList<>(); // 存储index，按nums[i]单调递减
+        // 初始化第一个滑动窗口
+        for (int i = 0; i < k; i++) {
+            while (!deque.isEmpty() && nums[deque.getLast()] <= nums[i])
+                deque.removeLast();
+            deque.addLast(i);
         }
-        return ans;
+        List<Integer> ans = new ArrayList<>();
+        ans.add(nums[deque.getFirst()]);
+        for (int i = k; i < nums.length; i++) {
+            while (!deque.isEmpty() && deque.getFirst() <= i - k)
+                deque.removeFirst();
+            while (!deque.isEmpty() && nums[deque.getLast()] <= nums[i])
+                deque.removeLast();
+            deque.addLast(i);
+            ans.add(nums[deque.getFirst()]);
+        }
+        return ans.toArray(new int[ans.size()]);
     }
 }

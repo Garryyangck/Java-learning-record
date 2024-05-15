@@ -6719,3 +6719,78 @@ Java进阶完成：
 	- [15. 三数之和](https://leetcode.cn/problems/3sum/)
 
 		first 和 third 遍历，动态生成 second，while(sum < 0 && second < third) second++，如果得到的值依然 <0，则 break
+
+
+
+# ***2024.5.15打卡	Day 105***
+
+1. 八股文一轮复习：
+
+	- 完成计算机网络视频课剩余部分完成。
+
+2. leetcode 刷题：6题
+
+	- [287. 寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number/)
+
+		由于数的大小不超过 `nums.length - 1`，因此可以使用"负号"用于标记该数是否已经出现。
+
+	- [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+
+		左括号直接入栈，右括号匹配对应的左括号
+
+	- [155. 最小栈](https://leetcode.cn/problems/min-stack/)
+
+		最小栈保存了当前位置下的最小值，即push的时候如果val<栈顶，则push val，否则push当前栈顶。
+
+	- [225. 用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues/)
+
+		```java
+		public void push(int x) {
+		    if (queue.isEmpty()) {
+		        queue.offer(x);
+		    } else {
+		        while (!queue.isEmpty())
+		            helper.offer(queue.poll());
+		        queue.offer(x); // 新增的数据放在队头，模拟栈顶
+		        while (!helper.isEmpty()) // 再把之前的数据顺序放回来
+		            queue.offer(helper.poll());
+		    }
+		}
+		```
+
+	- [232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)
+
+		```java
+		private void checkLeft() {
+		    if (left.isEmpty()) // 左栈为空时将右栈全部放过来
+		    // (left peek)[]  [1,2,3](right peek) -> (left peek)[1,2,3]  [](right peek)
+		        while (!right.isEmpty())
+		            left.add(right.pop());
+		}
+		```
+
+	- [239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
+
+		单调栈，储存index，按照nums[index]的大小递减以保持单调。
+
+		```java
+		Deque<Integer/* index */> deque = new LinkedList<>(); // 存储index，按nums[i]单调递减
+		// 初始化第一个滑动窗口
+		for (int i = 0; i < k; i++) {
+		    while (!deque.isEmpty() && nums[deque.getLast()] <= nums[i])
+		        deque.removeLast();
+		    deque.addLast(i);
+		}
+		List<Integer> ans = new ArrayList<>();
+		ans.add(nums[deque.getFirst()]);
+		for (int i = k; i < nums.length; i++) {
+		    while (!deque.isEmpty() && deque.getFirst() <= i - k)
+		        deque.removeFirst();
+		    while (!deque.isEmpty() && nums[deque.getLast()] <= nums[i])
+		        deque.removeLast();
+		    deque.addLast(i);
+		    ans.add(nums[deque.getFirst()]);
+		}
+		```
+
+		

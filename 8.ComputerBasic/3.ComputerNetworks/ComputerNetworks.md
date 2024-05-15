@@ -469,7 +469,7 @@ ACK = 1, seq = ISN(c) + 1, ack = ISN(s) + 1
 #### 2.为什么客户端发送 ACK 之后不直接关闭，而是要等一阵子才关闭
 
 1. 要==确保服务器是否已经收到了我们的 ACK 报文==，如果==没有收到的话，服务器会重新发 FIN 报文==给客户端，客户端再次收到 FIN 报文之后，就知道==之前的 ACK 报文丢失==了，然后==再次发送 ACK 报文==。
-2. 至于 ==TIME_WAIT 持续的时间至少是一个报文的来回时间==，一般会设置一个计时。
+2. 至于 ==TIME_WAIT 持续的时间至少是一个报文的来回时间 (2MSL)==，一般会设置一个计时。
 
 #### 3.每个状态的意义
 
@@ -1150,7 +1150,7 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 1.TCP/IP 四层模型
 
-1. **图解**：
+1. ==图解==：
 
 	> ![image-20240514134517812](ComputerNetworks.assets/image-20240514134517812.png)
 
@@ -1160,15 +1160,15 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 2.现代互联网的网络拓扑
 
-1. **家庭层面的网络拓扑**：
+1. ==家庭层面的网络拓扑==：
 
 	> ![image-20240514135043211](ComputerNetworks.assets/image-20240514135043211.png)
 
-2. **网络拓扑树状图**：
+2. ==网络拓扑树状图==：
 
 	> ![image-20240514135433393](ComputerNetworks.assets/image-20240514135433393.png)
 
-3. 一般通过 **客户/服务器（Client/Server**）模式 或 **P2P（对等连接**）模式进行网络使用的。
+3. 一般通过 ==客户/服务器（Client/Server==）模式 或 ==P2P（对等连接==）模式进行网络使用的。
 
 ---
 
@@ -1176,15 +1176,15 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 3.计算机网络的性能指标
 
-1. **速率**
+1. ==速率==
 
 	> <img src="ComputerNetworks.assets/image-20240514140956526.png" alt="image-20240514140956526" style="zoom:50%;" />
 
-2. **时延**
+2. ==时延==
 
 	> ![image-20240514140834535](ComputerNetworks.assets/image-20240514140834535.png)
 
-3. **往返时间**
+3. ==往返时间==
 
 	> <img src="ComputerNetworks.assets/image-20240514141039502.png" alt="image-20240514141039502" style="zoom:50%;" />
 
@@ -1194,26 +1194,26 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 4.物理层概述
 
-1. **用于连接的物理设备**
+1. ==用于连接的物理设备==
 
 	> - 双绞线，我们的网线就是双绞线
 	> - 同轴电缆
 	> - 光纤，我们家庭中用的比较多
 	> - 其它的一些无线传播介质，如激光，红外线等
 
-2. **比特流**
+2. ==比特流==
 
-	> - 以**高低电平**进行传播
+	> - 以==高低电平==进行传播
 
-3. **信道**
+3. ==信道==
 
 	> - <img src="ComputerNetworks.assets/image-20240514141628992.png" alt="image-20240514141628992" style="zoom: 50%;" />
 	>
-	> - 信道的 **分用–复用技术**：
+	> - 信道的 ==分用–复用技术==：
 	>
 	> 	<img src="ComputerNetworks.assets/image-20240514141943627.png" alt="image-20240514141943627" style="zoom:50%;" />
 	>
-	> 	**提高信道利用率，但是可能造成信道拥塞**。
+	> 	==提高信道利用率，但是可能造成信道拥塞==。
 
 ---
 
@@ -1221,12 +1221,12 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 5.数据链路层概述
 
-1. **封装成帧**
+1. ==封装成帧==
 
 	> - <img src="ComputerNetworks.assets/image-20240514155527673.png" alt="image-20240514155527673" style="zoom: 50%;" />
 	> - ![image-20240514155548242](ComputerNetworks.assets/image-20240514155548242.png)
 
-2. **透明传输**
+2. ==透明传输==
 
 	> - ![image-20240514155911471](ComputerNetworks.assets/image-20240514155911471.png)
 
@@ -1236,11 +1236,11 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 6.数据链路层的差错检测
 
-1. **奇偶校验码**
+1. ==奇偶校验码==
 
 	> - ![image-20240514160348548](ComputerNetworks.assets/image-20240514160348548.png)
 
-2. **循环冗余校验码 CRC**
+2. ==循环冗余校验码 CRC==
 
 	> - 不是重点，真要学的话可以看视频里的例题
 
@@ -1250,7 +1250,7 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 7.最大传输单源 MTU
 
-1. MTU 就是数据链路层能传输的**数据帧的最大值**。
+1. MTU 就是数据链路层能传输的==数据帧的最大值==。
 
 ---
 
@@ -1258,7 +1258,7 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 8.以太网协议详解
 
-1. 以太网协议规定的**数据帧格式**：
+1. 以太网协议（Ehternet）规定的==数据帧格式==：
 
 	> ![image-20240514162046874](ComputerNetworks.assets/image-20240514162046874.png)
 	>
@@ -1266,7 +1266,7 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 	>
 	> 	![image-20240514162248617](ComputerNetworks.assets/image-20240514162248617.png)
 
-2. **MAC 地址表**
+2. ==MAC 地址表==
 
 	> - 交换机拿出数据帧的前6个字节，得到目的 MAC 地址，然后到自己的 MAC 地址表中查找，没有找到则广播，让对应的设备把 MAC 地址：端口传给交换机，交换机记录到 MAC 地址表中。
 
@@ -1284,9 +1284,9 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 1.IP 协议详解
 
-1. **ip 地址是可变的**；而 MAC 地址不可变。
+1. ==IP 地址是可变的==；而 MAC 地址不可变。
 
-2. **ip 首部的格式**：
+2. ==IP 数据报首部的格式==：
 
 	> <img src="ComputerNetworks.assets/image-20240514195314397.png" alt="image-20240514195314397" style="zoom: 67%;" />
 
@@ -1296,11 +1296,11 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 2.IP 协议的转发流程
 
-1. **路由表**
+1. ==路由表==
 
 	> - <img src="ComputerNetworks.assets/image-20240514215049231.png" alt="image-20240514215049231" style="zoom:67%;" />
 
-2. **IP 协议的转发流程**
+2. ==IP 协议的转发流程==
 
 	> - ![image-20240514215623702](ComputerNetworks.assets/image-20240514215623702.png)
 
@@ -1310,21 +1310,398 @@ SELECT * FROM user_table WHERE username = '' or 1 = 1 # and password=’’
 
 #### 3.ARP 协议和 RARP 协议
 
-1. 由于 ip 地址是变化的，因此 **ARP 缓存表并不是永久不变的**，而是**按期限进行变化的**。
+1. 由于 ip 地址是变化的，因此 ==ARP 缓存表并不是永久不变的==，而是==按期限进行变化的==。
 
 2. ```shell
 	arp -a
 	```
 
-3. **RARP 就是通过 MAC 地址查 ip 地址，跟 ARP 协议反过来**。
+3. ==RARP 就是通过 MAC 地址查 ip 地址，跟 ARP 协议反过来==。
 
 ---
 
 
 
+#### 4.IP 地址的子网划分
+
+1. ==IP 地址分类==：
+
+	> - ![image-20240515081518543](ComputerNetworks.assets/image-20240515081518543.png)
+
+2. ==特殊的主机号==
+
+	> - 主机号==全为0表示当前网络段==，不可分配为特定主机
+	> - 主机号==全为1表示广播地址==，向当前网络段所有主机发消息
+
+3. ==特殊的网络号==
+
+	> - A类地址网络段全0(00000000)表示特殊网络
+	> - A类地址网络段后7位全1(01111111:127)表示回环地址
+	> - B类地址网络段(10000000.00000000:128.0)是不可使用的
+	> - C类地址网络段(192.0.0)是不可使用的
+
+4. ==三类 IP 地址比较==
+
+	> - ![image-20240515082432473](ComputerNetworks.assets/image-20240515082432473.png)
+
+5. ==本机回环地址==
+
+	> - ==127.0.0.1==，通常被称为本地回环地址(Loopback Address)，==不属于任何一个有类别地址类==。
+	> - ==只要本机启动了，那么本地回环地址永远都是通的==。
+
+6. ==划分子网==
+
+	> - 好处：==减少 IP 地址的浪费==，比如一个100人的公司申请一个 C 类地址，主机号一共有254个，这样就会造成大量 IP 地址的浪费。但是如果在此基础上继续划分子网，则能大大减少浪费。
+	> - ![image-20240515082911989](ComputerNetworks.assets/image-20240515082911989.png)
+
+7. ==子网掩码==
+
+	> - <img src="ComputerNetworks.assets/image-20240515083338203.png" alt="image-20240515083338203"  />
+
+8. ==无分类编址 CIDR==
+
+	> - ![image-20240515083552695](ComputerNetworks.assets/image-20240515083552695.png)
+	>
+	> - ==CIDR 的应用==
+	>
+	> 	![image-20240515083750219](ComputerNetworks.assets/image-20240515083750219.png)
+	> 	
+	> - 本机即使用 CIDR
+	>
+	>   ![image-20240515114457048](ComputerNetworks.assets/image-20240515114457048.png)
+
+---
 
 
 
+#### 5.网络地址转换 NAT 技术
+
+1. ==演示图==：
+
+	> - ![image-20240515090239192](ComputerNetworks.assets/image-20240515090239192.png)
+
+2. NAT 技术用于==多个主机通过一个公有IP访问互联网==的私有网络中。
+
+3. NAT ==减缓了 IP 地址的消耗==，但是增加了网络通信的复杂度。
+
+---
+
+
+
+#### 6.ICMP 协议详解
+
+1. ==ICMP (Internet Controll Message Protocol)，网际控制报文协议==。
+
+2. ICMP 协议==辅助 IP 协议以更好地传输数据==。
+
+3. ==ICMP 报文首部==：
+
+	> - <img src="ComputerNetworks.assets/image-20240515093206660.png" alt="image-20240515093206660" style="zoom: 67%;" />
+
+4. ==ICMP 协议封装在 IP 报文中==：
+
+	> - ![image-20240515093346214](ComputerNetworks.assets/image-20240515093346214.png)
+
+5. ==ICMP 协议报文种类==
+
+	> - <img src="ComputerNetworks.assets/image-20240515093551154.png" alt="image-20240515093551154" style="zoom:67%;" />
+	> - <img src="ComputerNetworks.assets/image-20240515093622943.png" alt="image-20240515093622943" style="zoom:67%;" />
+
+6. ==图解==：
+
+	> - ![image-20240515092025491](ComputerNetworks.assets/image-20240515092025491.png)
+	> - ==ICMP 报文是封装在 IP 报文里面的==。
+	> - 通过 IP 报文进行传输。
+	> - ==主要进行网络中传输的错误和异常的报告==。
+
+---
+
+
+
+#### 7.ICMP 协议的应用
+
+1. ==Traceruote==：
+
+	> - ![image-20240515115139935](ComputerNetworks.assets/image-20240515115139935.png)
+
+---
+
+
+
+#### 8.网络层的路由概述
+
+1. ==自治系统（Autonomous System）==：
+
+	> - 一个自治系统(AS)是==处于一个管理机构（ISP）下的网络设备群==。
+	> - ==AS内部网络自行管理==，AS对外提供一个或者多个出(入)口。
+	> - ![image-20240515120027816](ComputerNetworks.assets/image-20240515120027816.png)
+	> - ==公司，校园，家庭等可以理解为一个小的 AS==。
+
+---
+
+
+
+### 第三章：传输层
+
+> <img src="ComputerNetworks.assets/image-20240515120414433.png" alt="image-20240515120414433" style="zoom: 50%;" />
+>
+> - ==网络通信的本质是浏览器进程和网址后台进程间的通信，即进程和进程间的通信==。
+> - ==端口使用16个比特位表示(0~65535==)。
+>
+> ![image-20240515211640917](ComputerNetworks.assets/image-20240515211640917.png)
+
+#### 1.UDP 协议详解
+
+1. ==UDP 协议的位置==：
+
+	> - ![image-20240515143239164](ComputerNetworks.assets/image-20240515143239164.png)
+
+2. ==UDP 数据报首部==：
+
+	> - ![image-20240515143454955](ComputerNetworks.assets/image-20240515143454955.png)
+
+3. UDP 协议是==无连接协议==。
+
+4. UDP ==不保证可靠的数据交付，即 UDP 协议不能保证数据在网络中是否会丢失==。
+
+5. UDP 是==面向报文传输==的，即==不会对应用层传来的数据做处理，而是直接塞到 UDP 协议的数据中==。
+
+6. UDP ==没有拥塞控制==。
+
+7. UDP 的==首部开销很小（总共8个字节）==。
+
+---
+
+
+
+#### 2.TCP 协议详解
+
+1. ==TCP 协议的位置==：
+
+	> - ![image-20240515144053036](ComputerNetworks.assets/image-20240515144053036.png)
+
+2. TCP 是==面向连接==的协议。
+
+3. TCP 的一个连接有两端(==点对点通信==)。
+
+4. TCP 提供==可靠的传输服务==。
+
+5. TCP 是==面向字节流==的协议，即可以取出一部分字节流传输，然后在传输剩余部分。
+
+6. ==TCP 协议首部==：
+
+	> - ![image-20240515144604471](ComputerNetworks.assets/image-20240515144604471.png)
+
+7. ==序号==
+
+	> - ==数据的首字节序号==。
+	> - <img src="ComputerNetworks.assets/image-20240515145538824.png" alt="image-20240515145538824" style="zoom:50%;" />
+
+8. ==确认号==
+
+	> - 我==希望收到的下一个数据的首字节序号==。
+	> - <img src="ComputerNetworks.assets/image-20240515145636637.png" alt="image-20240515145636637" style="zoom:50%;" />
+
+9. ==数据偏移==
+
+	> - 由于==不确定 TCP 可选项的长度而导致的数据偏移==，占4个比特位，表示0~15个偏移位，每个偏移位的长度为32个比特位(4字节)。
+	> - 因为首部的长度最小为20个字节(固定的)，最大为$15 \times 4 = 60$个字节。
+
+10. ==TCP 标记==
+
+	> - ![image-20240515151346689](ComputerNetworks.assets/image-20240515151346689.png)
+
+11. ==窗口==
+
+	> - ==一次可以接收的最大数据量==。
+
+12. ==紧急指针==
+
+	> - ==指定紧急数据在报文中的位置（必须 URG = 1 才会有紧急数据==）
+
+---
+
+
+
+#### 3.可靠传输的基本原理
+
+1. ==停止等待协议==
+
+	> - ==超时定时器==：==每发送一个消息，都需要设置一个定时器==。
+	> - 缺点：对==信道的利用率不高（毕竟传一个数据包就要等，一直占着信道不干活）==。
+
+2. ==连续 ARQ 协议==
+
+	> - <img src="ComputerNetworks.assets/image-20240515153937023.png" alt="image-20240515153937023" style="zoom:67%;" />
+	> - TCP 的==滑动窗口是以字节为单位==的。
+
+---
+
+
+
+#### 4.TCP 协议的可靠传输
+
+1. ==TCP 协议的可靠传输基于连续的 ARQ 协议==。
+
+2. ==回退 N 步==
+
+	> ![image-20240515162637783](ComputerNetworks.assets/image-20240515162637783.png)
+
+3. ==选择重传==
+
+	> - 把==需要重传的边界序号==存储在 TCP 选项中。
+
+---
+
+
+
+#### 5.TCP 协议的流量控制
+
+1. ==防止发送方发送数据速度过快，超过了接收方的窗口大小==，接受方没办法将其存储，只能丢弃。
+
+2. ==图解==：
+
+	> - ![image-20240515163946922](ComputerNetworks.assets/image-20240515163946922.png)
+
+3. ==坚持定时器==：
+
+	> - 发送方==每隔一段时间==就发送一个==窗口探测报文（防止接收方 rwnd=1000 丢失，造成死锁等待）==。
+
+---
+
+
+
+#### 6.TCP 协议的拥塞等待
+
+1. 有可能太多主机正在使用信道资源，导致==网络拥塞==了，而 A 发送的==数据包被堵在了半路==，迟迟==没有到达 B==。这个时候 A 就会误认为是发生了丢包情况，进而==重新传输这个数据包==。
+2. 结果就是不仅==浪费了信道资源==，还会==使网络更加拥塞==。因此，我们需要进行==拥塞控制==。
+3. ==判断方法：发送的报文超时==。
+4. 拥塞控制算法见上面的文章。
+
+---
+
+
+
+#### 7.TCP 连接的三次握手
+
+1. ==图解==：
+
+	> - ![image-20240515204115880](ComputerNetworks.assets/image-20240515204115880.png)
+
+2. ==三次握手而两次不行的原因==：
+
+	> - ==避免以及失效的连接请求报文传送到对方，引起错误（和文章讲的有点不一样==）。
+	> - ![image-20240515204710719](ComputerNetworks.assets/image-20240515204710719.png)
+
+---
+
+
+
+#### 8.TCP 连接的四次挥手
+
+1. ==图解==：
+
+	> - ![image-20240515205148036](ComputerNetworks.assets/image-20240515205148036.png)
+
+2. ==客户端等待计时器==：
+
+	> - ==等待时间：2MSL（Max Segment Lifetime 最长报文段寿命==）
+
+3. ==为什么需要等待（TIME_WAIT==）
+
+	> - 由于最后一次挥手服务端不会回复，因此为了==确保第四次挥手的报文能成功送达服务器，客户端等待 2MSL==，如果==服务端没有收到第四次挥手的报文，则会重发第三次挥手的报文==，这时客户端收到之后就会重发 ACK 报文。
+
+---
+
+
+
+#### 9.套接字和套接字编程
+
+1. **TCP 连接有两个套接字组成**
+
+	> - <img src="ComputerNetworks.assets/image-20240515210827401.png" alt="image-20240515210827401" style="zoom:50%;" />
+
+---
+
+
+
+### 第四章：应用层
+
+> - 应用层是**直接面向用户的层**。
+> - 而**传输层及其以下的层则是提供完整的通信服务**。
+
+#### 1.DNS 详解
+
+1. 根域名(root)=》顶级域名(com)=》次级域名(baidu)=》主机名(www)
+
+2. > ![image-20240515212251865](ComputerNetworks.assets/image-20240515212251865.png)
+
+3. > ![image-20240515212625956](ComputerNetworks.assets/image-20240515212625956.png)
+
+4. **查询流程**：
+
+	> - **首先查询本地域名服务器，如果有则直接返回**；
+	> - **没有则访问根域名服务器**，然后一层层向下查。
+
+---
+
+
+
+#### 2.DHCP 协议详解
+
+1. DHCP 是一个**局域网协议**。
+
+2. DHCP 是一个**应用 UDP 协议的应用层协议**。
+
+3. **流程**：
+
+	> - ![image-20240515213951325](ComputerNetworks.assets/image-20240515213951325.png)
+
+---
+
+
+
+#### 3.HTTP 协议详解
+
+1. **流程**：
+
+	> - ![image-20240515220612694](ComputerNetworks.assets/image-20240515220612694.png)
+
+---
+
+
+
+#### 4.HTTP 工作的结构
+
+1. **Web 缓存**
+2. **Web 代理：比如防火墙，屏蔽服务器部署的结构**。正向代理代理客户端，反向代理则是服务端。
+3. **CDN：把一些大型的多媒体应用备份到某些地区，这样该地区用户访问这些多媒体的速度会加快**。
+4. **爬虫**：爬取互联网的资源。
+
+---
+
+
+
+#### 5.HTTPS 协议详解
+
+1. **非对称加密**（防止窃听）。
+
+2. **数字证书**（防止伪装）。
+
+3. **SSL**
+
+	> - <img src="ComputerNetworks.assets/image-20240515221658187.png" alt="image-20240515221658187" style="zoom:50%;" />
+
+4. **HTTPS 流程**
+
+	> - <img src="ComputerNetworks.assets/image-20240515221756363.png" alt="image-20240515221756363" style="zoom:50%;" />
+
+5. **SSL 安全参数握手的步骤**：
+
+	> - ![image-20240515222005890](ComputerNetworks.assets/image-20240515222005890.png)
+	> - ![image-20240515221923283](ComputerNetworks.assets/image-20240515221923283.png)
+
+---
 
 
 
