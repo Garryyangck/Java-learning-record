@@ -6793,4 +6793,35 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.5.16打卡	Day 106***
+
+1. 八股文一轮复习：
+
+	- 计算机网络面试题4题。
+
+2. leetcode 刷题：5题
+
+	- [LCR 126. 斐波那契数](https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/)
+
+		注意要递推，递归的复杂度为$O(2^n)$
+
+	- [70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
+		简单动态规划
+
+	- [LCR 127. 跳跃训练](https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/)
+
+		和上面那题一样
+
+	- [121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+		动规则分三种状态
+
+		递推就维护当前的min和income
+
+	- [LCR 161. 连续天数的最高销售额](https://leetcode.cn/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/)
+
+		简单dp
