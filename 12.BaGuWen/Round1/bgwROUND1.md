@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																					
+	> 																								
 	> 	    private String message;
-	> 																					
+	> 																								
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																					
+	> 																								
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																					
+	> 																								
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																					
+	> 																								
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																					
+	> 																								
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																					
+	> 																								
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																					
+	> 																								
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2080,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																			
+	> 																						
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																			
+	> 																						
 	> 	op.process();
 	> 	```
 	>
@@ -3162,3 +3162,24 @@ insert into user values(3,'lisi');
 
 
 
+### 5.HTTP1.0，1.1，2.0 的版本区别
+
+==我的回答==：
+
+1. ==HTTP1.0 每个 TCP 连接只能发送一个请求==，如果还需发送其它的请求，那么就需要重新建立连接。==新建连接的成本较高==，比如需要进行三次握手，因此如果请求一个需要大量外部资源的网页，那么这个缺点就会进一步被放大，因此 HTTP1.0 的效率较低。
+2. HTTP1.1 支持持久连接和管道，==持久连接指一个 TCP 连接在发出一个请求之后不会立即断开==。而==管道则是在同一个连接里，客户端可以发送多个请求==，同时服务端可以发送多个回应。但是既然允许发送多个请求，就必须有方法可以区分每个回应，HTTP1.1 中采取的方式是在报文中加入报文长度，这样浏览器就能判断哪一串字节流是一个回应了。
+3. HTTP1.1 中的数据体既可以是二进制流，也可以是文本。而在 ==HTTP2.0 中，数据体只能是二进制流==，而这就==方便将数据分割成更小的消息和帧==，并对它们==进行二进制编码==。除此以外，HTTP2.0 支持多路复用，即再一次连接中，客户端和服务端均可以发送多个请求和回应，且不用按照顺序一一对应，而==多路复用的前提则是上面提到的二进制分帧==。
+
+**参考答案**：
+
+- **HTTP/1.0**：**HTTP/1.0规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个TCP连接，服务器完成请求处理后立即断开TCP连接**。
+
+
+
+暂时止步于此，主要感觉有点厌倦了，先学一些其它的东西调节一下。
+
+---
+
+
+
+# 6.操作系统

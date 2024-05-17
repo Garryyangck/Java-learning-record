@@ -6825,3 +6825,50 @@ Java进阶完成：
 	- [LCR 161. 连续天数的最高销售额](https://leetcode.cn/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/)
 
 		简单dp
+
+
+
+# ***2024.5.17打卡	Day 107***
+
+1. 八股文一轮复习：
+
+	- 计算机网络面试题暂停一下，有点厌倦了。
+
+2. leetcode 刷题：5题
+
+	- [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
+
+		`dp[i][j] = d[i+1][j-1] && s.charAt(i)==s.charAt(j)`
+
+	- [62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+
+		简单dp
+
+	- [64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
+
+		`dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]) + grid[i][j]`
+
+	- [198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
+
+		三种情况：
+
+		1. 今天不抢，`dp[i-1]`
+		2. 今天在前天的基础上抢，`dp[i-2]+nums[i]`
+		3. 在大前天的基础上，可以抢今天，也可能抢的是昨天`dp[i-3]+Math.max(nums[i],nums[i-1])`
+		4. 当然，`i-4` 天肯定可以白嫖 `i-2` 天，因此不用考虑
+
+		```java
+		dp[i] = Math.max(Math.max(dp[i-1], dp[i-2] + nums[i]), dp[i-3] + Math.max(nums[i], nums[i-1]));
+		```
+
+	- [221. 最大正方形](https://leetcode.cn/problems/maximal-square/)
+
+		dp 代表以`(i,j)`为右下角的最大正方形边长，即右下角必须是1的正方形，这样便于寻找关系
+
+		随后如果当前遍历的格子为1，则 `dp[i][j]` 为上、下、左上方最小值+1
+
+		```java
+		dp[i][j] = Math.min(Math.min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1;
+		```
+
+		
