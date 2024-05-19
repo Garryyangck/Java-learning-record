@@ -1,6 +1,6 @@
 server:
   # 应用服务 WEB 访问端口
-  port: 8081
+  port: 8080
   # 设置session过期时间
   servlet:
     session:
@@ -33,7 +33,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     # 控制台输出sql语句
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   # 解决*Mapper.xml文件找不到的问题，classpath本质是编译后的target/classes目录
 #  mapper-locations: classpath:mapper/*.xml
 

@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																								
+	> 																									
 	> 	    private String message;
-	> 																								
+	> 																									
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																								
+	> 																									
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																								
+	> 																									
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																								
+	> 																									
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																								
+	> 																									
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																								
+	> 																									
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																								
+	> 																									
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2080,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																						
+	> 																							
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																						
+	> 																							
 	> 	op.process();
 	> 	```
 	>
@@ -3170,9 +3170,9 @@ insert into user values(3,'lisi');
 2. HTTP1.1 支持持久连接和管道，==持久连接指一个 TCP 连接在发出一个请求之后不会立即断开==。而==管道则是在同一个连接里，客户端可以发送多个请求==，同时服务端可以发送多个回应。但是既然允许发送多个请求，就必须有方法可以区分每个回应，HTTP1.1 中采取的方式是在报文中加入报文长度，这样浏览器就能判断哪一串字节流是一个回应了。
 3. HTTP1.1 中的数据体既可以是二进制流，也可以是文本。而在 ==HTTP2.0 中，数据体只能是二进制流==，而这就==方便将数据分割成更小的消息和帧==，并对它们==进行二进制编码==。除此以外，HTTP2.0 支持多路复用，即再一次连接中，客户端和服务端均可以发送多个请求和回应，且不用按照顺序一一对应，而==多路复用的前提则是上面提到的二进制分帧==。
 
-**参考答案**：
+==参考答案==：
 
-- **HTTP/1.0**：**HTTP/1.0规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个TCP连接，服务器完成请求处理后立即断开TCP连接**。
+- ==HTTP/1.0==：==HTTP/1.0规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个TCP连接，服务器完成请求处理后立即断开TCP连接==。
 
 
 
@@ -3183,3 +3183,41 @@ insert into user values(3,'lisi');
 
 
 # 6.操作系统
+
+### 1.进程之间的通信有哪些？
+
+1. ==管道==：
+
+	> - ==匿名管道==就是我们常用的 `|` ，意为把前一条命令的输出作为后一条命令的输入。
+	> - ==命名管道==则是通过 `>` 和 `<` 实现，但是==命名管道中的数据没有被另一个进程读取，这条命令就会一直停留在这里==。
+	> - 因此==管道就像是缓存==，一个进程吧数据放在一个缓存区域，等待其它进程去拿，但是==必须要等待其它进程拿走这份数据后，原进程才能返回==，因此管道的==效率较为低下==。
+
+2. ==消息队列==：
+
+	> - 这种通信方式也==类似于缓存==，只不过数据的发送方==只需把数据甩到消息队列就可以返回==。
+	> - 缺点是如果==数据占用的内存较大==，且进程之间的==通信频繁==的话，==发送消息阶段就会占用很多时间==。
+
+3. ==共享内存==：
+
+	> - ==共享内存==这个通信方式就可以很好着==解决拷贝所消耗的时间==。
+	> - 系统加载一个进程的时候，分配给进程的内存并不是==实际物理内存==，而是==虚拟内存空间==。那么我们可以让两个进程==各自拿出一块虚拟地址空间来，然后映射到相同的物理内存==中，这样，==两个进程虽然有着独立的虚拟内存空间，但有一部分却是映射到相同的物理内存==，就完成了==内存共享==机制了。
+
+4. ==信号量==：
+
+	> - 信号量的本质就是一个==计数器==，用来实现进程之间的互斥与同步，以==解决多个线程并发访问共享内存而带来的线程安全问题==。
+	> - 例如信号量的初始值是 1，然后 a 进程来访问==内存1==的时候，我们就把信号量的值设为 0，然后进程b 也要来访问==内存1==的时候，看到信号量的值为 0 就知道已经有进程在访问==内存1==了，这个时候进程 b 就会访问不了==内存1==。所以说，信号量也是进程之间的一种通信方式。
+
+5. ==Socket==
+
+---
+
+
+
+### 2.进程和线程的区别
+
+1. ==进程相当一个容器，而线程只是里面的一个东西==，并且程==序本质是线程在执行==，基于这个，再去回答他们的其他区别，比如通信，内存结构，等等。
+
+---
+
+
+

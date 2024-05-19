@@ -23,12 +23,12 @@ public class ShippingServiceImplTest extends MallApplicationTest {
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private final Integer UID = 1;
+    private final Integer UID = 5;
 
     @Test
     public void add() {
         ShippingForm shippingForm = new ShippingForm();
-        shippingForm.setReceiverName("Garry");
+        shippingForm.setReceiverName("zhangsan");
         shippingForm.setReceiverAddress("BIT");
         shippingForm.setReceiverMobile("16666666666");
         shippingForm.setReceiverPhone("010");

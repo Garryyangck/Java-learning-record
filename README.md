@@ -6871,4 +6871,137 @@ Java进阶完成：
 		dp[i][j] = Math.min(Math.min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1;
 		```
 
+
+
+
+# ***2024.5.18打卡	Day 108***
+
+1. 八股文一轮复习：
+
+	- 完成操作系统高频面试题。
+
+2. leetcode 刷题：4题
+
+	- [322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+		可以先将硬币排序，这样大的在后面，在初始化的时候公因数会最终分配为大面额硬币，数量少。
+
+	- [518. 零钱兑换 II](https://leetcode.cn/problems/coin-change-ii/)
+
+		直接每一个面额遍历一次所有硬币加起来即可
+
+	- [718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
+
+		```java
+		// 以第i、j个数结尾的最长子数组长度
+		int[][] dp = new int[len1 + 1][len2 + 1];
+		int max = 0;
+		for (int i = 1; i <= len1; i++) {
+		    for (int j = 1; j <= len2; j++) {
+		        if (nums1[i - 1] == nums2[j - 1]) {
+		            dp[i][j] = dp[i - 1][j - 1] + 1;
+		        } else {
+		            // 已经初始化为0了，不用再赋为0了
+		        }
+		        max = Math.max(max, dp[i][j]);
+		    }
+		}
+		return max;
+		```
+
+	- [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+		以第i个数结尾的递增子序列的长度：`int[] dp = new int[nums.length];`
+
+		```java
+		// 向前遍历
+		for (int j = i - 1; j >= 0; j--) {
+		    if (nums[j] < nums[i]) {
+		        maxLen = Math.max(maxLen, dp[j] + 1);
+		    }
+		}
+		```
+
+
+
+
+# ***2024.5.19打卡	Day 109***
+
+1. 今天主要在整学校里的东西，下周要考试。。。明天看Linux八股文。
+
+2. 学校课程的需要，复习了电商项目的业务逻辑。
+
+3. leetcode 刷题：3题
+
+	- [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
+
+		注意while循环的退出条件为 `left<=right` 而不是 `left < right`，因为右侧找到最高点时会 right-\-，此时 right 为最高点的左边一个，如果 `left < right` 的话这个点会被忽视。
+
+		比如 `[5,5,1,7,1,1,5,2,7,6]` 中的2就会因为 left < right 的限制不会被统计，因为找到右边的7时，此时的 right 正好指向2而不是7。
+
+		```java
+		while(left <= right) {
+		    while(left <= right && maxLeft <= maxRight) {
+		        if(height[left] > maxLeft) {
+		            maxLeft = height[left];
+		        } else {
+		            ans += maxLeft - height[left];
+		        }
+		        left++;
+		    }
+		    while(left <= right && maxRight < maxLeft) {
+		        if(height[right] > maxRight) {
+		            maxRight = height[right];
+		        } else {
+		            ans += maxRight - height[right];
+		        }
+		        right--;;
+		    }
+		}
+		```
+
+	- [72. 编辑距离](https://leetcode.cn/problems/edit-distance/)
+
+		替换 `dp[i-1][j-1]`
+
+		增加 `dp[i][j-1] + 1`，相当于现在都后面少一个的次数+1
+
+		删除 `dp[i-1][j] + 1`，自己少一个到现在的次数+1
+
+	- [10. 正则表达式匹配](https://leetcode.cn/problems/regular-expression-matching/)
+
+		```java
+		for (int j = 2; j < len2; j++) {
+		    // 以j结尾，则最后一个字符在j-1
+		    if (p.charAt(j - 1) == '*') {
+		        dp[0][j] = dp[0][j - 2];
+		    }
+		}
+		
+		// 遍历
+		for (int i = 1; i <= len1; i++) {
+		    for (int j = 1; j <= len2; j++) {
+		        // 不是*
+		        if (p.charAt(j - 1) != '*') {
+		            // 匹配成功
+		            if (p.charAt(j - 1) == '.' || p.charAt(j - 1) == s.charAt(i - 1)) {
+		                dp[i][j] = dp[i - 1][j - 1];
+		            } else {// 匹配失败
+		                dp[i][j] = false;
+		            }
+		        } else {// 是*p.charAt(j-2)可以有0或n个
+		            // 当前这个无法匹配，只能匹配0个
+		            if (p.charAt(j - 2) != s.charAt(i - 1) && p.charAt(j - 2) != '.') {
+		                dp[i][j] = dp[i][j - 2];
+		                // p.charAt(j - 2) 可以匹配 s.charAt(i - 1)
+		            } else {
+		                dp[i][j] = dp[i][j - 2]/* 匹配0个 */
+		                    || dp[i - 1][j - 2]/* 匹配一个 */
+		                    || dp[i - 1][j];/* 匹配多个，相当于抵消s[i]，即继续递归匹配s.get(i-1) */
+		            }
+		        }
+		    }
+		}
+		```
+
 		

@@ -1898,14 +1898,15 @@ public class BestPayConfig {
 	> }
 	> ```
 
-21. ==单测中使用@Before规定该方法最先执行==
+21. ==单测中使用@Before规定该方法在其它所有方法执行前都执行一次==
 
 	> 比如我希望注册方法最先执行
 	>
 	> ```java
 	> @Before
 	> public void register() {
-	>     User user = new User(USERNAME, PASSWORD, "jack@qq.com", RoleEnum.CUSTOMER.getCode());
+	>     User user = new User(USERNAME, PASSWORD, "jack@qq.com",
+	>                          RoleEnum.CUSTOMER.getCode());
 	>     userService.register(user);
 	> }
 	> ```
@@ -1978,7 +1979,6 @@ public class UserServiceImpl implements IUserService {
         return ResponseVo.success("注册成功");
     }
 }
-
 ```
 
 ### controller
@@ -2021,11 +2021,11 @@ public class UserController {
 > @ControllerAdvice
 > @ResponseStatus(HttpStatus.FORBIDDEN/*403*/)
 > public class RuntimeExceptionHandler {
->  @ExceptionHandler(RuntimeException.class)
->  @ResponseBody
->  public ResponseVo handle(RuntimeException e) {
->      return ResponseVo.error(ResponseEnum.ERROR, e.getMessage());
->  }
+>      @ExceptionHandler(RuntimeException.class)
+>      @ResponseBody
+>      public ResponseVo handle(RuntimeException e) {
+>            return ResponseVo.error(ResponseEnum.ERROR, e.getMessage());
+>      }
 > }
 > ```
 
