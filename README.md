@@ -7004,4 +7004,45 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.5.20打卡	Day 110***
+
+1. 今天主要在整学校的东西，准备考试+实验+大作业，上个大学怎么这么多事儿啊…
+
+2. 八股文进度还在看 Linux 性能排查方面的问题。
+
+3. leetcode刷题：
+
+	- [455. 分发饼干](https://leetcode.cn/problems/assign-cookies/)
+
+		排序，小饼干分给小孩子
+
+	- [122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+		最经典买卖股票例子
+
+	- [435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/)
+
+		相当于那道最多安排活动的题，难点是按照结束时间递增排序
+
+		```java
+		Arrays.sort(intervals, new Comparator<>(){ // 注意此处是<>()，而不仅仅是<>
+		    @Override
+		    public int compare(int[] o1, int[]o2) {
+		        if(o1[1] != o2[1])
+		            return o1[1] - o2[1];
+		        else
+		            return o1[0] - o2[0];
+		    }
+		});
+		```
+
+	- [714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
+
+		在上面那道经典模板的基础上加一个fee
+
+	- [921. 使括号有效的最少添加](https://leetcode.cn/problems/minimum-add-to-make-parentheses-valid/)
+
+		经典括号匹配题，就是最后统计一下stack剩余的元素个数即可

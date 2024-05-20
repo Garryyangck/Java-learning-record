@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																									
+	> 																											
 	> 	    private String message;
-	> 																									
+	> 																											
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																									
+	> 																											
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																									
+	> 																											
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																									
+	> 																											
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																									
+	> 																											
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																									
+	> 																											
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																									
+	> 																											
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2080,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																							
+	> 																									
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																							
+	> 																									
 	> 	op.process();
 	> 	```
 	>
@@ -3216,6 +3216,80 @@ insert into user values(3,'lisi');
 ### 2.进程和线程的区别
 
 1. ==进程相当一个容器，而线程只是里面的一个东西==，并且程==序本质是线程在执行==，基于这个，再去回答他们的其他区别，比如通信，内存结构，等等。
+
+---
+
+
+
+# 7.Linux
+
+### 1.你使用过监控软件吗？说说其特点
+
+1. ==top==
+
+	> - 它提供了实时的系统状态，包括==CPU使用率、内存使用、进程信息==等。它非常适合于快速查看系统的当前状态。
+	> - ![image-20240520091954865](bgwROUND1.assets/image-20240520091954865.png)
+
+2. ==htop==
+
+	> - 相比于top，htop提供了一个更为友好的用户界面，支持==彩色显示==，可以==通过键盘操作来管理进程（如杀死进程）==。它还显示了==CPU的使用情况分布在所有核心上的视图==，使得信息的获取更直观。
+	> - ![image-20240520092638325](bgwROUND1.assets/image-20240520092638325.png)
+
+3. ==iotop==
+
+	> - 这个工具==专注于磁盘I/O==，它显示了==哪些进程正在进行磁盘读写操作以及操作的强度==。这==对于识别磁盘I/O瓶颈非常有用==。
+	> - ![image-20240520093420901](bgwROUND1.assets/image-20240520093420901.png)
+
+4. ==vmstat==
+
+	> - 它提供了关于==虚拟内存、进程、CPU活动以及I/O阻塞==的信息。vmstat能够以时间序列的方式显示系统性能指标，有助于识别性能趋势。
+	> - ![image-20240520093724588](bgwROUND1.assets/image-20240520093724588.png)
+
+5. ==dstat==
+
+	> - dstat是一个强大的工具，可以看作是==vmstat、iotop和ifstat的结合体==。它能够报告关于==CPU、内存、磁盘以及网络性能的综合视图==，支持自定义输出以关注特定的性能指标。
+	> - ![image-20240520094045813](bgwROUND1.assets/image-20240520094045813.png)
+
+6. ==Prometheus和Grafana==
+
+	> - 这是一种更现代的监控解决方案，Prometheus负责收集和存储性能数据，而Grafana用于数据的可视化。这种组合支持高度自定义的仪表板，能够显示复杂的时间序列数据，适用于大规模环境的监控。
+
+7. ==例子==
+
+	> - 如果我们想要监控一个Web服务器的性能，我们可以使用`top`或`htop`来观察哪些进程消耗了最多的CPU和内存资源。如果发现磁盘I/O是性能瓶颈，那么`iotop`可以帮助我们确定是哪个进程导致的磁盘压力。而对于长期的性能监控和趋势分析，则可以部署`Prometheus`和`Grafana`，通过精美的图表来直观展示性能数据，从而帮助我们做出相应的优化决策。
+
+---
+
+
+
+### 2.Linux如何查看CPU运行状态?
+
+1. ==top命令==：
+
+	> - 这是最基础的命令之一，可以实时显示系统进程的动态运行情况，包括==CPU使用率、内存使用、以及进程信息==。在top界面中，CPU状态显示在顶部，包括各个核心的使用情况。
+
+2. ==htop命令==：
+
+	> - htop是top命令的一个增强版，提供了一个更友好的用户界面，支持==彩色显示==，并且可以通过==键盘直接操作进程（如结束进程）==。它显示了每个CPU核心的使用情况，并且提供了更多的信息和更好的视觉体验。
+
+3. ==vmstat命令==：
+
+	> - vmstat（Virtual Memory Statistics）命令报告关于==虚拟内存、进程、CPU活动==等的信息。它可以显示==系统的平均负载以及CPU的空闲时间、用户时间、系统时间和等待I/O的时间==。
+	> - ![image-20240520214251288](bgwROUND1.assets/image-20240520214251288.png)
+
+4. ==mpstat命令==：
+
+	> - ==mpstat是sysstat包的一部分==，用于显示各个CPU或者核心的性能统计。它可以报告==CPU的使用细节==，包括==每个CPU在用户模式、系统模式下的时间花费，以及空闲时间==等。
+	> - ![image-20240520214552056](bgwROUND1.assets/image-20240520214552056.png)
+
+5. ==lscpu命令==：
+
+	> - lscpu显示了CPU架构的信息，包括==CPU的数量、每个CPU的核数、每个核的线程数、CPU的家族、型号==等。这个命令更多地提供了==CPU的静态信息==，而不是动态的性能数据。
+	> - ![image-20240520214829490](bgwROUND1.assets/image-20240520214829490.png)
+
+6. ==cat /proc/cpuinfo==：
+
+	> - 这个命令提供了关于==CPU的详细信息==，包括==每个CPU的型号、核心数、速度==等。`/proc/cpuinfo`文件包含了当前系统CPU的所有详细信息。
 
 ---
 
