@@ -7046,3 +7046,80 @@ Java进阶完成：
 	- [921. 使括号有效的最少添加](https://leetcode.cn/problems/minimum-add-to-make-parentheses-valid/)
 
 		经典括号匹配题，就是最后统计一下stack剩余的元素个数即可
+
+
+
+# ***2024.5.21打卡	Day 111***
+
+1. 八股文一轮复习：
+
+	- 完成Linux系统性能排查和常用命令部分。
+
+2. leetcode 刷题：3题
+
+	- [401. 二进制手表](https://leetcode.cn/problems/binary-watch/)
+
+		法一：枚举，使用 `Integer.bineryCount(int)` 获得当前数的二进制1的个数。
+
+		法二：回溯
+
+		```java
+		// 把path当作一个二进制数，它的前四位和后六位分别表示时和分，index为10位按键的index
+		private void backtrace(int path, int index, int len, int total/*还需按的键数*/, List<String> res) {
+		    if(total == 0) {
+		        String time = convert(path); // path 转时间函数
+		        if(!"".equals(time))
+		            res.add(time);
+		        return;
+		    }
+		
+		    if(index + total > len) // 肯定剩余的按键不够total了，直接返回
+		        return;
+		
+		    // 当前index键不按
+		    backtrace(path, index + 1, len, total, res);
+		    // 当前index键按
+		    path |= (1 << index);
+		    backtrace(path, index + 1, len, total - 1, res);
+		}
+		```
+
+	- [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+		回溯函数包含两个参数，left(当前左括号个数) 和 right(当前右括号个数)
+
+		如果当前左括号小于等于右括号，那么只能添加左括号
+
+		否则既可以添加左括号，也能添加右括号
+
+		注意 StringBuffer 的 api：deleteCharAt(int) 和 length() 和 delete(int start, int end)
+
+		```java
+		void backTrace(int left/* 左括号数 */, int right/* 右括号数 */) {
+		    if (left >= n && right >= n) {
+		        ans.add(new String(buffer));
+		        return;
+		    }
+		
+		    if (left <= right && left < n) {
+		        buffer.append("(");
+		        backTrace(left + 1, right);
+		        buffer.deleteCharAt(buffer.length() - 1);
+		    } else if (left > right && right < n) {
+		        if (left < n) {
+		            buffer.append("(");
+		            backTrace(left + 1, right);
+		            buffer.deleteCharAt(buffer.length() - 1);
+		        }
+		        buffer.append(")");
+		        backTrace(left, right + 1);
+		        buffer.deleteCharAt(buffer.length() - 1);
+		    }
+		}
+		```
+
+	- [39. 组合总和](https://leetcode.cn/problems/combination-sum/)
+
+		排序原数组，然后去重，注意去重时要保证 `i > index`，防止第一个数被误跳过，导致缺失情况
+
+		然后 `backTrace(i)` 即可实现单个数选取无数次
