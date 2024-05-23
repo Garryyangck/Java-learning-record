@@ -7123,3 +7123,115 @@ Java进阶完成：
 		排序原数组，然后去重，注意去重时要保证 `i > index`，防止第一个数被误跳过，导致缺失情况
 
 		然后 `backTrace(i)` 即可实现单个数选取无数次
+
+
+
+# ***2024.5.22打卡	Day 112***
+
+1. 八股文一轮复习：
+
+	- Linux 高频面试题完成，后续开始看 Kafka, Zookeeper, MQ, Docker, Nginx 等中间件，然后刷完一轮复习的消息队列八股文，并结束八股文一轮复习。八股文一轮复习结束后完善和部署项目，之后使用八股文突击题库进行二轮复习，完成后填写简历准备下学期日常实习的实战面试。
+
+2. leetcode 刷题：5题
+
+	- [46. 全排列](https://leetcode.cn/problems/permutations/)
+
+		简单回溯，因为数组中的数字不重复，因此无需考虑组合的重复情况。
+
+	- [90. 子集 II](https://leetcode.cn/problems/subsets-ii/)
+
+		排序以去重，由于需要的是子集，因此只要 size < length 就把当前的 now 加入 ans，这样最初的 now = null 的结果即空集也会加入 ans，满足子集的需要。
+
+		```java
+		private void backTrace(int start) {
+		    if (now.size() > nums.length)
+		        return;
+			// 只要 size < length 就把当前的 now 加入 ans，
+		    // 这样最初的 now = null 的结果即空集也会加入 ans，满足子集的需要
+		    ans.add(new ArrayList(now));
+		
+		    for(int i = start; i < nums.length; i++) {
+		        if(i > start && nums[i] == nums[i - 1]) {
+		            continue;
+		        }
+		        now.add(nums[i]);
+		        backTrace(i + 1);
+		        now.remove(now.size() - 1);
+		    }
+		}
+		```
+
+	- [93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
+
+		```java
+		public void backTrace(String s, int segId/* segments的index */, int segStart/* 本次遍历s的start */) {
+		
+		    // 如果找到了 4 段 IP 地址并且遍历完了字符串，那么就是一种答案
+		    if (segId == SEG_COUNT) {
+		        if (segStart == s.length()) {
+		            StringBuffer buffer = new StringBuffer();
+		            for (int i = 0; i < SEG_COUNT; ++i) {
+		                buffer.append(segments[i]);
+		                if (i != SEG_COUNT - 1) {
+		                    buffer.append('.');
+		                }
+		            }
+		            ans.add(buffer.toString());
+		        }
+		        return; // 找到4个数字直接return
+		    }
+		
+		    // 如果还没有找到 4 段 IP 地址就已经遍历完了字符串，那么提前回溯
+		    if (segStart >= s.length()) {
+		        return;
+		    }
+		
+		    // 由于不能有前导零，如果当前数字为 0，那么这一段 IP 地址只能为 0
+		    if (s.charAt(segStart) == '0') {
+		        segments[segId] = 0;
+		        backTrace(s, segId + 1, segStart + 1);
+		        return;
+		    }
+		
+		    int num = 0;
+		    for (int i = segStart; i < s.length(); i++) {
+		        num = num * 10 + (int) (s.charAt(i) - '0');
+		        if (num > 0 && num <= 255) {
+		            segments[segId] = num;
+		            backTrace(s, segId + 1, i + 1);
+		        } else {
+		            break; // 此时已经超出255，直接break回退到上一个IP数字
+		        }
+		    }
+		}
+		```
+
+	- [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
+
+		简单回溯，`backTrace(i+1)`
+
+	- [51. N 皇后](https://leetcode.cn/problems/n-queens/)
+
+		做了很多次了，本质就是一个map表示当前的格子有没有被其它皇后波及
+
+
+
+# ***2024.5.23打卡	Day 113***
+
+1. 八股文一轮复习：
+
+	- Kafka视频课一部分。
+
+2. leetcode 刷题：5题
+
+	- [130. 被围绕的区域](https://leetcode.cn/problems/surrounded-regions/)
+
+		没有用并查集，用的广度优先搜索，判断当前的“岛屿”是否在边上即可。
+
+	- [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+
+		和上面那题类似，广度优先搜索。
+
+	- [695. 岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+	
+		同样类似的广度优先搜索
