@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																														
+	> 																																
 	> 	    private String message;
-	> 																														
+	> 																																
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																														
+	> 																																
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																														
+	> 																																
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																														
+	> 																																
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																														
+	> 																																
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																														
+	> 																																
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																														
+	> 																																
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2080,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																												
+	> 																														
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																												
+	> 																														
 	> 	op.process();
 	> 	```
 	>
@@ -3328,12 +3328,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 				
+	> 						
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 				
+	> 						
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -3946,7 +3946,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 	
+	> 			
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now
@@ -4145,3 +4145,73 @@ insert into user values(3,'lisi');
 
 
 
+# 8.消息队列
+
+### 1.体验一下面试官对于消息队列的7个连环炮
+
+1. 从一个点开始谈，然后由浅入深，步步深挖。
+
+---
+
+
+
+### 2.如何进行消息队列的技术选型？
+
+1. **为什么使用消息队列**？
+
+	> - 面试官心理：看看你是不是真的知道这个技术的运用场景，防止你进入团队后乱用不懂的技术，给团队挖坑。
+	>
+	> - **解耦**：
+	>
+	> 	- **不用消息队列产生严重耦合的场景**：
+	>
+	> 		![image-20240524212054780](bgwROUND1.assets/image-20240524212054780.png)
+	>
+	> 		A 系统有一个重要数据，需要发给其它系统，但是一会儿又来一个新的系统要求 A 系统把数据给它也发一份，这时候 A 系统就不得不修改代码，调用 E 系统的接口。又可能过一会儿 D 系统又不需要 A 系统的数据了，A 系统又要删除对 D 系统接口的调用。这就是因为 **A 系统和其它乱七八糟系统严重耦合，导致代码写死了，难以维护和扩展**。
+	>
+	> 	- **使用消息队列解耦**：
+	>
+	> 		![image-20240524213120300](bgwROUND1.assets/image-20240524213120300.png)
+	>
+	> 		A 系统只需要把这个重要数据放到消息队列中，这样其它系统需要这个数据，就不要找 A 系统了，而是自己去消息队列里找。这样一来 **A 系统只用调用消息队列的 api，而无需关注其它系统获取重要数据的业务逻辑，实现了 A 系统和其它乱七八糟的系统的解耦**。
+	>
+	> 		实际上，这里的消息队列可以理解为一个**发布/订阅模式**，其它系统订阅拥有重要数据的消息队列，从中获取数据即可。
+	>
+	> - **异步**：
+	>
+	> 	- **不用消息队列导致同步情况下的高延迟请求**：
+	>
+	> 		![image-20240524214330890](bgwROUND1.assets/image-20240524214330890.png)
+	>
+	> 		比如有一个用户，发起了一个请求，**这个请求需要调用其它系统的接口。假如要调用的其它系统比较多，而且每个接口调用的时间比较长**，这样最后**整个请求的完成时间可能会很长**，比如超过了1秒，这就**严重影响了用户的体验**。
+	>
+	> 	- **异步化之后大幅提升调用高延迟接口的用户体验**：
+	>
+	> 		![image-20240524214832205](bgwROUND1.assets/image-20240524214832205.png)
+	>
+	> 		系统 A 只需要把其它乱七八糟的系统需要的数据**丢到消息队列里，然后就不管了，直接返回**，这样响应用户的速度很快，用户的体验很好。而那些乱七八糟的系统发现消息队列里有消息之后取出来，调用指定的接口完成这些业务，这样异步后**用户几乎感觉不到调用高延迟接口的延迟**。
+	>
+	> - **消峰**：
+	>
+	> 	- **不用消息队列高峰期大量请求涌入 Mysql 挂了**
+	>
+	> 	- **使用消息队列进行消峰**：
+	>
+	> 		比如高峰期一秒5000个请求，但是 Mysql 每秒能处理的请求极限为2000个，那么这个时候，就可以在请求送到 Mysql 之前**先全部放进消息队列，然后规定每秒最多从消息队列中读取2000条请求，这样就可以保证 Mysql 肯定不会挂掉**。然后等到低峰期再把积压的消息处理了。
+
+2. **消息队列的优点和缺点**？
+
+	> - 面试官心理：防止你不知道某个技术可能带来的风险就乱用，给团队挖坑。
+	> - **系统可用性降低**：
+	> 	- 本来直接调用接口没问题，结果多加了一个 MQ 进来，导致下面的问题：
+	> 		1. **MQ 挂掉**：A 系统无法把重要的数据放到消息队列，同时下面那些**乱七八糟的系统全部都没办法从 MQ 中获取数据，服务全崩溃**了。
+	> 		2. **消费者挂了**：A 系统放到 MQ 中的消息**迟迟没人消费，导致 MQ 满了，占用大量磁盘空间**。
+	> 		3. **A 系统和 MQ 的联调出了问题**：比如 A 系统只想放一条消息，结果最终放的时候放了两条，那么下面的系统就消费两条数据，处理了两次业务。
+	> - **系统复杂性上升**：
+	> 	- 重复消费，消息丢失，顺序性问题。
+	> - **一致性问题**：
+	> 	- 比如本来是所有系统都执行成功，才给用户返回。但**结果其中一个消费者执行失败**了，但是**此时 A 系统早就已经给用户返回执行成功了，这就导致用户收到的信息和后台实际情况不一致**。
+
+3. **ActiceMQ, RocketMQ, RabbitMQ, Kafka**
+
+	> - 

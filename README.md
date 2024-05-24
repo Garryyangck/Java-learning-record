@@ -7235,3 +7235,50 @@ Java进阶完成：
 	- [695. 岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
 	
 		同样类似的广度优先搜索
+
+
+
+# ***2024.5.24打卡	Day 114***
+
+1. 八股文一轮复习：
+
+	- Kafka视频课一部分，以及消息队列面试题视频一部分。
+
+2. leetcode 刷题：2题
+
+	- [1. 两数之和](https://leetcode.cn/problems/two-sum/)
+
+		不断用 map 记录当前遍历的元素。
+
+	- [146. LRU 缓存](https://leetcode.cn/problems/lru-cache/)
+
+		使用双向链表实现O(1)时间复杂度下的移动节点
+
+		```java
+		public int get(int key) {
+		    if (map.containsKey(key)) {
+		        moveToHead(map.get(key));
+		        return map.get(key).value;
+		    }
+		    return -1;
+		}
+		
+		public void put(int key, int value) {
+		    if (map.containsKey(key)) {
+		        map.get(key).value = value;
+		        moveToHead(map.get(key));
+		    } else {
+		        if (size >= capacity) {
+		            map.remove(tail.pre.key);
+		            delete(tail.pre);
+		            size--;
+		        }
+		        Node newNode = new Node(key, value);
+		        map.put(key, newNode);
+		        insertToHead(newNode);
+		        size++;
+		    }
+		}
+		```
+
+		
