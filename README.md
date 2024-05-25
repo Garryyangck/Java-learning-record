@@ -7281,4 +7281,48 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.5.25打卡	Day 115***
+
+1. 八股文一轮复习：
+
+	- 消息队列面试题视频一部分。
+
+2. leetcode 刷题：
+
+	- [460. LFU 缓存](https://leetcode.cn/problems/lfu-cache/)
+
+		这道题好像就用不上双向链表了，只需保存KV以及该节点的cnt即可。
+
+		```java
+		private final Map<Integer/* key */, DLinkedNode/* specific node */> map
+		    = new HashMap<>();
+		private final Map<Integer/* count */, List<DLinkedNode>/* count list */> counter
+		    = new HashMap<>();
+		```
+
+		这样一来，和 LRU 的区别就是 moveToHead 变为了 addCnt，而关于 counter 的修改则全部放在 addCnt 中。
+
+		```java
+		private void addCnt(DLinkedNode node) {
+		    List<DLinkedNode> preNodeList = counter.get(node.cnt);
+		    if (preNodeList != null)
+		        preNodeList.remove(node);
+		    if (minCnt == node.cnt && (preNodeList == null || preNodeList.size() == 0))
+		        minCnt++; // 被删掉的是之前最小值集合的最后一个元素，因此minCnt要手动++了
+		    else
+		        minCnt = Math.min(minCnt, node.cnt + 1);
+		    node.cnt++;
+		    List<DLinkedNode> nodeList = counter.get(node.cnt);
+		    if (nodeList == null)
+		        nodeList = new ArrayList<>();
+		    nodeList.add(node);
+		    counter.put(node.cnt, nodeList);
+		}
+		```
+
+	- [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
+	
+		第一个缺失的整数肯定为1~length+1，用负号标记被遍历的正数即可
