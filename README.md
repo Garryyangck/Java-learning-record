@@ -7326,3 +7326,46 @@ Java进阶完成：
 	- [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
 	
 		第一个缺失的整数肯定为1~length+1，用负号标记被遍历的正数即可
+
+
+
+# ***2024.5.26打卡	Day 116***
+
+1. 八股文一轮复习：
+
+	- 消息队列面试题视频完成。
+
+2. leetcode 刷题：
+
+	- [9. 回文数](https://leetcode.cn/problems/palindrome-number/)
+
+		化成字符串，双指针。
+
+	- [415. 字符串相加](https://leetcode.cn/problems/add-strings/)
+
+		记录当前是否进位，最后利用 StringBuffer 的 reverse 函数将逆序的 buffer 翻转过来。
+
+	- [8. 字符串转换整数 (atoi)](https://leetcode.cn/problems/string-to-integer-atoi/)
+
+		注意消除前导空格和前导0，还有比如`word and 987`，结果是0而不是987，因为'w'不是正负号或数字
+
+	- [31. 下一个排列](https://leetcode.cn/problems/next-permutation/)
+
+		```java
+		public void nextPermutation(int[] nums) {
+		    int i = nums.length - 2;
+		    while (i >= 0 && nums[i] >= nums[i + 1]) {
+		        i--;
+		    }
+		    if (i >= 0) {
+		        int j = nums.length - 1;
+		        while (j >= 0 && nums[i] >= nums[j]) {
+		            j--;
+		        }
+		        swap(nums, i, j); // 此时把最靠后的两个(小,大)swap为(大,小)
+		    }
+		    reverse(nums, i + 1); // 此时后面部分严格从大到小，把后面部分反转为从小到大
+		}
+		```
+
+		

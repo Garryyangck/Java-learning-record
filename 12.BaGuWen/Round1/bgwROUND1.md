@@ -1488,23 +1488,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																																	
+	> 																																				
 	> 	    private String message;
-	> 																																	
+	> 																																				
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																																	
+	> 																																				
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																																	
+	> 																																				
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																																	
+	> 																																				
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1512,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																																	
+	> 																																				
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																																	
+	> 																																				
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																																	
+	> 																																				
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2080,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																															
+	> 																																		
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																															
+	> 																																		
 	> 	op.process();
 	> 	```
 	>
@@ -3328,12 +3328,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 							
+	> 										
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 							
+	> 										
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -3946,7 +3946,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 				
+	> 							
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now
@@ -4203,16 +4203,16 @@ insert into user values(3,'lisi');
 
 2. ==消息队列的优点和缺点==？
 
-  > - 面试官心理：防止你不知道某个技术可能带来的风险就乱用，给团队挖坑。
-  > - ==系统可用性降低==：
-  > 	- 本来直接调用接口没问题，结果多加了一个 MQ 进来，导致下面的问题：
-  > 		1. ==MQ 挂掉==：A 系统无法把重要的数据放到消息队列，同时下面那些==乱七八糟的系统全部都没办法从 MQ 中获取数据，服务全崩溃==了。
-  > 		2. ==消费者挂了==：A 系统放到 MQ 中的消息==迟迟没人消费，导致 MQ 满了，占用大量磁盘空间==。
-  > 		3. ==A 系统和 MQ 的联调出了问题==：比如 A 系统只想放一条消息，结果最终放的时候放了两条，那么下面的系统就消费两条数据，处理了两次业务。
-  > - ==系统复杂性上升==：
-  > 	- 重复消费，消息丢失，顺序性问题。
-  > - ==一致性问题==：
-  > 	- 比如本来是所有系统都执行成功，才给用户返回。但==结果其中一个消费者执行失败==了，但是==此时 A 系统早就已经给用户返回执行成功了，这就导致用户收到的信息和后台实际情况不一致==。
+      > - 面试官心理：防止你不知道某个技术可能带来的风险就乱用，给团队挖坑。
+      > - ==系统可用性降低==：
+      > 	- 本来直接调用接口没问题，结果多加了一个 MQ 进来，导致下面的问题：
+      > 		1. ==MQ 挂掉==：A 系统无法把重要的数据放到消息队列，同时下面那些==乱七八糟的系统全部都没办法从 MQ 中获取数据，服务全崩溃==了。
+      > 		2. ==消费者挂了==：A 系统放到 MQ 中的消息==迟迟没人消费，导致 MQ 满了，占用大量磁盘空间==。
+      > 		3. ==A 系统和 MQ 的联调出了问题==：比如 A 系统只想放一条消息，结果最终放的时候放了两条，那么下面的系统就消费两条数据，处理了两次业务。
+      > - ==系统复杂性上升==：
+      > 	- 重复消费，消息丢失，顺序性问题。
+      > - ==一致性问题==：
+      > 	- 比如本来是所有系统都执行成功，才给用户返回。但==结果其中一个消费者执行失败==了，但是==此时 A 系统早就已经给用户返回执行成功了，这就导致用户收到的信息和后台实际情况不一致==。
 
 ---
 
@@ -4247,6 +4247,86 @@ insert into user values(3,'lisi');
 2. 当然，如果出现消费者==准备提交下一个编号，但是重启了，提交失败==的情况，那么如果这时 ==Kafka 恰好出现了重传，那么还是会把重复的消息传给消费者==。
 3. 因此一种可行的方式是在==消费者消费一条数据后，在内存或 Redis 中采用 set 记录自己消费过的消息的序号==，在消费一条新的消息时==先去 set 中查找判断是否重复消费==。
 4. 另一种可行方法是==利用数据库的唯一键来限制不能插入多次==。比如==消费者出现意外任然像数据库插入两条数据，这时由于有唯一键约束，就不会插入成功==。
+
+---
+
+
+
+### 5.啥？我发到消息队列里面的数据怎么不见了？
+
+1. ==rabbitMQ 弄丢消息有三种情况==：生产者发送的消息由于网络阻塞或丢包没能到达 MQ；MQ 将消息存在内存中，重启时丢失这部分数据；消费者将消息存在内存中，重启时丢失这部分数据。
+
+2. ==rabbitMQ 的生产者没能发送到 MQ==：
+
+	> 1. 采用==事务机制==。在事务中发送消息到 MQ，如果 MQ 没收到或内部出了一些问题，就能在==事务中捕获到异常，并采取回滚重发的方法==。
+	>
+	> 	这样做最大的缺点是采取==同步等待==的方式，等待 MQ 的 acknowledge 消息，==降低吞吐量==。
+	>
+	> 2. 采取 ==comfirm 机制==。==将 MQ 的某一个 channel 设置为 comfirm==。发送消息后，如果 MQ 收到，则==回调生产者的一个方法告诉其收到==，同理没收到也会==回调并要求生产者重发==。
+	>
+	> 	这样做最大的好处是==异步确认==。生产者只需将消息塞到 MQ 中即可继续发送下一条消息，不会被阻塞在此，因此这也是常用的方法。
+
+3. ==rabbitMQ 自己弄丢数据==：
+
+	> - 首先==创建 queue 时将 queue 设置为持久化==，这样可以==持久化 queue 的元数据==。
+	> - 然后将发送的==消息的 deliveryMode 设置为2==，这样 MQ 收到消息后会==将消息持久化到磁盘上==。
+	> - 这样就算是重启，MQ 可以==从磁盘上的持久化文件中获取 queue 的元数据及其存储的数据==，可以保证重启时数据不丢失。
+	> - 然而==这样也不是万无一失的==，如果某个 MQ 上的==数据在持久化到磁盘上之前，MQ 挂了==，那么这部分数据就真的丢了。
+
+4. ==rabbitMQ 消费者把数据丢了==：
+
+	> - 消费者弄丢数据==只有一种情况，就是消费者开启了 autoACK 机制==。autoACK 机制指的是：==只要消费者收到了 MQ 的消息，就马上通知其自己 ACK 了，即时此时还没有消费完这条数据==。这时宕机了话，MQ 误以为消费者消费完了这条数据，就直接发送下一条数据了。
+	> - 解决方式就是==关闭消费者的 autoACK 机制==，这样你可以在业务代码中==自定义什么时候告诉 MQ 消费者消息消费完成==。如果出现宕机时消费者没有消费完的情况，==MQ 发现自己没有收到 ACK，就会把这条消息再发给其它消费者进行消费==。
+
+5. ==Kafka 的消费者丢失数据==：
+
+	> - 类似于 rabbitMQ 的消费者弄丢数据的情况，就是 ==auto 提交 offset 给 Kafka，让 Kafka 误以为你已经完成提交了==。也是关闭自动提交 offset 的机制，让消费者消费完数据之后再提交 offset 到 Kafka 中。
+
+6. ==Kafka 自己弄丢数据==：
+
+	> - ![image-20240526150348473](bgwROUND1.assets/image-20240526150348473.png)
+	> - 设置==每个 patition 至少有两个 follower==，并且要求 ==leader 能感知到至少有一个 follower 还能正常同步数据==，这样才能保证 leader 挂了之后至少还有一个副本存储了数据，数据不丢。
+
+7. ==Kafka 的生产者弄丢数据==：
+
+	> - 生产者必须保证==一条数据成功写入 patition 的 leader 及其所有 follower 之后，这条消息才算发送成功==，否则就会==无限次地重复发送消息，直到全部 replica 收到消息==。
+
+---
+
+
+
+### 6.我该怎么保证从消息队列里拿到的数据按顺序执行？
+
+1. ==RabbitMQ 保证顺序性==：
+
+	> - ![image-20240526214332658](bgwROUND1.assets/image-20240526214332658.png)
+	> - 给每一个消费者单独开一个 queue，把需要保证顺序的数据全部放在同一个 queue 中，这样一个消费者会顺序读取这些数据，这样就保证了数据的顺序性。
+
+2. ==Kafka 保证顺序性==：
+
+	> - ![image-20240526214939202](bgwROUND1.assets/image-20240526214939202.png)
+	>
+	> - 解决方法，==一个线程顺序地从一个内存队列中取数据来读==，因此只需==将需要保证顺序的数据根据它们相同的 key 值全部分发到同一个内存队列==中，被==同一个线程顺序执行==。
+	>
+	> 	![image-20240526215251458](bgwROUND1.assets/image-20240526215251458.png)
+
+---
+
+
+
+### 7.生产事故！几百万消息在消息队列里积压了几个小时！
+
+1. ==问题解释==：消费者挂了，导致积压大量数据，需要消费者恢复后快速处理完成。
+2. ==方法==：假如原来只有三个消费者，它们把积压的数据写入数据要1个小时，太慢了。我们可以让这三个消费者读取到数据之后不写入数据库，而是重新开一个 topic，它的下面有 30 个 patition，==让原来的三个消费者将数据写到这新开的 30 个 patition 中==，然后==重新部署一台机器==，让它==起 30 个线程消费这 30 个patition 中的数据（即写入数据库）==，这样就能以原来 ==10 倍的速度==消费积压数据。
+3. ==磁盘都积压满了怎么办==？为了避免磁盘满导致机器挂掉，让==原来的消费者读取到数据后直接扔掉，快速清理掉数据==。==之后单独写程序查出被扔掉的数据，再手动写到 MQ 中处理==。
+
+---
+
+
+
+### 8.如果让你来开发一个消息队列中间件，你会怎么设计架构？
+
+1. > ![image-20240526221644391](bgwROUND1.assets/image-20240526221644391.png)
 
 ---
 
