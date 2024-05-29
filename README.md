@@ -7516,3 +7516,31 @@ Java进阶完成：
 	- [238. 除自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/)
 
 		前缀和，先从左到右的前缀和，再记录从右到左的前缀和，最后把它们两个乘起来即可。
+
+
+
+# ***2024.5.29打卡	Day 119***
+
+1. 数据结构：
+
+	- 重学了不太清楚的冒泡排序和希尔排序
+
+2. leetcode 刷题：4题
+
+	- [剑指 Offer 18. 删除链表的节点](https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
+
+		pre 节点法
+
+	- [剑指 Offer 22. 链表中倒数第k个节点](https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+		fast, slow 指针法
+
+	- [剑指 Offer 25. 合并两个排序的链表](https://leetcode.cn/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/)
+
+		法一：while 循环，直到某一个遍历完
+
+		法二：递归，设置一个 newNode 即可，稍微比递推慢一点，估计是往递归栈中插入和销毁栈帧占用了额外的时间
+
+	- [剑指 Offer 52. 两个链表的第一个公共节点](https://leetcode.cn/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/)
+
+		拼接两个链表，注意 while 循环的退出条件是 `while(p1 != p2)`，这样如果没有公共节点它们会在 null 处相遇，然后退出返回 null

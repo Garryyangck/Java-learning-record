@@ -66,24 +66,24 @@
 	> 6. ```java
 	> 	class UnionFind {
 	> 	    int[] parent;
-	> 			
+	> 					
 	> 	    public UnionFind(int n) {
 	> 	        parent = new int[n];
 	> 	        for (int i = 0; i < n; i++)
 	> 	            parent[i] = i; // 每个元素最开始没有连接的时候，都指向自己，表示独立
 	> 	    }
-	> 			
+	> 					
 	> 	    /*
 	> 	     * 联合，本质就是将它们各自唯一的根节点连接起来
 	> 	     */
 	> 	    public void union(int index1, int index2) {
 	> 	        parent[find(index2)] = find(index1); // index2 的根节点的父节点设置为 index1 的根节点
 	> 	    }
-	> 			
+	> 					
 	> 	    public boolean isConnected(int index1, int index2) {
 	> 	        return find(index1) == find(index2);
 	> 	    }
-	> 			
+	> 					
 	> 	    /*
 	> 	     * 查询 index 的根节点
 	> 	     */
@@ -107,7 +107,7 @@
       > 	    private final int[] parent;
       > 	    // 通过以 index 为根节点的树的节点的个数，优化 union 方法，降低树的高度
       > 	    private final int[] size;
-      > 			
+      > 					
       > 	    public UnionFind(int n) {
       > 	        parent = new int[n];
       > 	        rank = new int[n];
@@ -116,7 +116,7 @@
       > 	            size[i] = 1; // 每棵树的节点个数初始为1
       > 	        }
       > 	    }
-      > 			
+      > 					
       > 	    public void union(int index1, int index2) {
       > 	        int rootIndex1 = find(index1);
       > 	        int rootIndex2 = find(index2);
@@ -140,7 +140,7 @@
       > 	    private final int[] parent;
       > 	    // 通过以 index 为根节点的树的高度，优化 union 方法，降低树的高度
       > 	    private final int[] rank;
-      > 	
+      > 			
       > 	    public UnionFind(int n) {
       > 	        parent = new int[n];
       > 	        rank = new int[n];
@@ -149,7 +149,7 @@
       > 	            rank[i] = 1; // 每棵树的高度初始为1
       > 	        }
       > 	    }
-      > 	
+      > 			
       > 	    public void union(int index1, int index2) {
       > 	        int rootIndex1 = find(index1);
       > 	        int rootIndex2 = find(index2);
@@ -172,7 +172,7 @@
 
 
 
-## 堆
+## 堆 & 堆排序
 
 1. **寻找父节点和子节点**
 
@@ -261,79 +261,247 @@
 
 ## 快速排序
 
-1. ```java
-	public void sort(int[] arr, int left, int right) {
-	    if (left >= right)
-	        return;
-	
-	    int base = arr[left]; // 选取基准点
-	    int i = left + 1; // i 是右侧的结束位置，并用于遍历
-	    int j = left; // j 是左侧的结束位置
-	    /*
-	            =============== 初始化left, right, i, j
-	            l             r
-	            4 6 5 2 3 8 7 1
-	            j i
-	            =============== 如果arr[i]比arr[left]大，则继续遍历，因为i是右侧的边界嘛
-	            l             r
-	            4 6 5 2 3 8 7 1
-	            j   i
-	            =============== 此时arr[i]比arr[left]小，则说明左侧需要扩大了，++j，然后交换
-	            l             r
-	            4 6 5 2 3 8 7 1
-	            j     i
-	            =============== ++j
-	            l             r
-	            4 6 5 2 3 8 7 1
-	              j   i
-	            =============== 交换
-	            l             r
-	            4 2 5 6 3 8 7 1
-	              j   i
-	            =============== 遇到3比4小，同理++j，然后交换
-	            l             r
-	            4 2 5 6 3 8 7 1
-	              j     i
-	            ===============
-	            l             r
-	            4 2 5 6 3 8 7 1
-	                j   i
-	            ===============
-	            l             r
-	            4 2 3 6 5 8 7 1
-	                j   i
-	            ===============
-	            l             r
-	            4 2 3 6 5 8 7 1
-	                j     i
-	            ===============
-	            l             r
-	            4 2 3 6 5 8 7 1
-	                j       i
-	            ===============
-	            l             r
-	            4 2 3 6 5 8 7 1
-	                j         i
-	            =============== 最后[l+1, j]为左侧，[j+1, i]为右侧
-	            l             r
-	            4 2 3 1 5 8 7 6
-	                  j       i
-	            =============== 交换arr[left]和arr[j]
-	            l             r
-	            1 2 3 4 5 8 7 6
-	                  j       i
-	            =============== 之后进一步递归即可
-	         */
-	    while (i <= right) {
-	        if (comparator.compare(base, arr[i]) >= 0) // 当前的数换到左侧去
-	            swap(arr, ++j, i);
-	        i++;
+1. **单路快速排序**
+
+  > - ```java
+  > 	public void sort(int[] arr, int left, int right) {
+  > 	    if (left >= right)
+  > 	        return;
+  > 		
+  > 	    int base = arr[left]; // 选取基准点
+  > 	    int i = left + 1; // i 是右侧的结束位置，并用于遍历
+  > 	    int j = left; // j 是左侧的结束位置
+  > 	    /*
+  > 	            =============== 初始化left, right, i, j
+  > 	            l             r
+  > 	            4 6 5 2 3 8 7 1
+  > 	            j i
+  > 	            =============== 如果arr[i]比arr[left]大，则继续遍历，因为i是右侧的边界嘛
+  > 	            l             r
+  > 	            4 6 5 2 3 8 7 1
+  > 	            j   i
+  > 	            =============== 此时arr[i]比arr[left]小，则说明左侧需要扩大了，++j，然后交换
+  > 	            l             r
+  > 	            4 6 5 2 3 8 7 1
+  > 	            j     i
+  > 	            =============== ++j
+  > 	            l             r
+  > 	            4 6 5 2 3 8 7 1
+  > 	              j   i
+  > 	            =============== 交换
+  > 	            l             r
+  > 	            4 2 5 6 3 8 7 1
+  > 	              j   i
+  > 	            =============== 遇到3比4小，同理++j，然后交换
+  > 	            l             r
+  > 	            4 2 5 6 3 8 7 1
+  > 	              j     i
+  > 	            ===============
+  > 	            l             r
+  > 	            4 2 5 6 3 8 7 1
+  > 	                j   i
+  > 	            ===============
+  > 	            l             r
+  > 	            4 2 3 6 5 8 7 1
+  > 	                j   i
+  > 	            ===============
+  > 	            l             r
+  > 	            4 2 3 6 5 8 7 1
+  > 	                j     i
+  > 	            ===============
+  > 	            l             r
+  > 	            4 2 3 6 5 8 7 1
+  > 	                j       i
+  > 	            ===============
+  > 	            l             r
+  > 	            4 2 3 6 5 8 7 1
+  > 	                j         i
+  > 	            =============== 最后[l+1, j]为左侧，[j+1, i]为右侧
+  > 	            l             r
+  > 	            4 2 3 1 5 8 7 6
+  > 	                  j       i
+  > 	            =============== 交换arr[left]和arr[j]
+  > 	            l             r
+  > 	            1 2 3 4 5 8 7 6
+  > 	                  j       i
+  > 	            =============== 之后进一步递归即可
+  > 	         */
+  > 	    while (i <= right) {
+  > 	        if (comparator.compare(base, arr[i]) >= 0) // 当前的数换到左侧去
+  > 	            swap(arr, ++j, i);
+  > 	        i++;
+  > 	    }
+  > 	    swap(arr, left, j);
+  > 		
+  > 	    sort(arr, left, j - 1);
+  > 	    sort(arr, j + 1, right);
+  > 	}
+  > 	```
+
+2. **双路快速排序**
+
+  > - 主要是为了解决当所有元素都相同时，将相同的元素全部放到左侧或者右侧，导致快速排序的性能从 O(nlogn) 退化到 O(n2) 的问题。
+  >
+  > - ```java
+  > 	private int partition2(int[] arr, int left, int right) {
+  > 	    int base = arr[left]; // 选取基准点
+  > 	    int i = left + 1;
+  > 	    int j = right;
+  > 	    while (i <= j) {
+  > 	        while (i <= j && !(arr[i] >= base)) { // 找到第一个>=base的数
+  > 	            i++;
+  > 	        }
+  > 	        while (i <= j && !(arr[j] <= base)) { // 找到第一个<=base的数
+  > 	            j--;
+  > 	        }
+  > 	        if (i <= j) { // 防止i出界，比如从小到大排序，比如[4,1]，i找不到>=4的数而出界，j找到的第一个<=4的数是4本身
+  > 	            swap(arr, i, j);
+  > 	            i++; // 如果已经i>j了，那么就不用再i++，j--了
+  > 	            j--;
+  > 	        }
+  > 	    }
+  > 	    swap(arr, left, j); // 交换left和j的位置，注意必须是j，因为i可能出界，但是j肯定不会出界，因为它可以遍历到left，arr[left]是满足<=arr[left]的
+  > 	    return j;
+  > 	}
+  > 	```
+
+3. **三路快速排序**
+
+  > - 将区间划分为 `<V, ==V, >V` 三部分，这样遇到全部相同的情况时，直接就能返回，而无需像双路快速排序一样再遍历左侧和右侧相同的0。
+  >
+  > - ![image-20240529111719838](DataStructure.assets/image-20240529111719838.png)
+  >
+  > - ```java
+  > 	/**
+  > 	     * 三路快速排序
+  > 	     * 将区间分成三部分，在解决所有元素都相同的情况下，只需遍历一级就直接返回，在这种情况下比双路更快
+  > 	     *
+  > 	     * @param arr
+  > 	     * @param left
+  > 	     * @param right
+  > 	     */
+  > 	public void sort3Ways(int[] arr, int left, int right) {
+  > 	    if (left >= right)
+  > 	        return;
+  > 		
+  > 	    int base = arr[left];
+  > 		
+  > 	    /*
+  > 	            [left + 1, lt] 小于基准点，初始时由于 lt = left < left + 1，因此其为空区间，符合逻辑
+  > 	            [lt + 1, gt - 1] 等于基准点
+  > 	            [gt, r] 小于基准点，初始时由于 gt = right + 1 > right，因此其为空区间，符合逻辑
+  > 	         */
+  > 	    int lt = left;
+  > 	    int i = left + 1;
+  > 	    int gt = right + 1;
+  > 		
+  > 	    while (i < gt) { // i == gt 时就说明所有元素都已经遍历完了
+  > 	        while (i < gt && comparator.compare(arr[i], base) == 0) { // 和基准点相等，i++，因为i的部分就是和基准点相等的部分
+  > 	            i++;
+  > 	        }
+  > 	        while (i < gt && comparator.compare(arr[i], base) < 0) { // 小于基准点，和左侧交换
+  > 	            swap(arr, ++lt, i++);
+  > 	        }
+  > 	        while (i < gt && comparator.compare(arr[i], base) > 0) { // 大于基准点，和右侧交换
+  > 	            swap(arr, --gt, i);
+  > 	        }
+  > 	    }
+  > 	    swap(arr, left, lt); // 最后left必须和lt交换，因为如果和gt交换可能出界！
+  > 		
+  > 	    sort3Ways(arr, left, lt - 1);
+  > 	    sort3Ways(arr, gt, right);
+  > 	}
+  > 	```
+
+---
+
+
+
+## 冒泡排序
+
+1. 可以优化，记录如果当前的一次冒泡是有序的，那么直接 break。
+
+2. 还能优化，如果一次冒泡之后发现不止最后一个元素是有序的，还发现后面一连好几个数都属有序的，这时候我们就可以记录最后一次交换发生的地方即可。
+
+	```java
+	public void sort(int[] arr) {
+	    for (int i = 0; i < arr.length; i++) {
+	        boolean sorted = true;
+	        int lastSortIndex = 0; // 最后一次交换的索引
+	        for (int j = 0; j < arr.length - 1 - i; j++) {
+	            if (arr[j] > arr[j + 1]) {
+	                swap(arr, j, j + 1);
+	                sorted = false;
+	                lastSortIndex = j;
+	            }
+	        }
+	        if (sorted)
+	            break;
+	        i += (arr.length - 2 - lastSortIndex); // 最坏的情况下，lastSortIndex = arr.length - 2，因此在此种情况下 i += 0
 	    }
-	    swap(arr, left, j);
-	
-	    sort(arr, left, j - 1);
-	    sort(arr, j + 1, right);
 	}
 	```
 
-	
+---
+
+
+
+## 希尔排序
+
+1. 原理图：
+
+	> - <img src="DataStructure.assets/image-20240529140824177.png" alt="image-20240529140824177" style="zoom:50%;" />
+	> - <img src="DataStructure.assets/image-20240529140906098.png" alt="image-20240529140906098" style="zoom:50%;" />
+	> - 就是不断缩小间距进行插入排序。
+
+2. ```java
+	public void shellSort(int[] arr) {
+	    int n = arr.length;
+	    int h = n >> 1;
+	    while ((h = h >> 1) >= 1) { // h初始为n>>1，之后逐渐减小，直到最小为1
+	        for (int i = 0; i < h; i++) { // i为每个分组的开头
+	            for (int j = i + h; j < n; j += h) { // j为遍历每个分组后续的数
+	                // 下面为一个分组内的插入排序
+	                int key = arr[j];
+	                int k = j - h;
+	                while (k >= 0 && comparator.compare(arr[k], key) > 0) {
+	                    arr[k + h] = arr[k];
+	                    k -= h;
+	                }
+	                arr[k + h] = key;
+	            }
+	        }
+	    }
+	}
+	```
+
+3. 可以修改步长序列以进一步改善算法效率：
+
+	```java
+	public void shellSort(int[] arr) {
+	    int n = arr.length;
+	    int h = 1;
+	    while (h < n)
+	        h = h * 3 + 1; // 如此处将1,2,4,8...改为1,4,13,40...
+	    
+	    while ((h = (h - 1) / 3) >= 1) { // h初始为n>>1，之后逐渐减小，直到最小为1
+	        for (int i = 0; i < h; i++) { // i为每个分组的开头
+	            for (int j = i + h; j < n; j += h) { // j为遍历每个分组后续的数
+	                // 下面为一个分组内的插入排序
+	                int key = arr[j];
+	                int k = j - h;
+	                while (k >= 0 && comparator.compare(arr[k], key) > 0) {
+	                    arr[k + h] = arr[k];
+	                    k -= h;
+	                }
+	                arr[k + h] = key;
+	            }
+	        }
+	    }
+	}
+	```
+
+---
+
+
+
