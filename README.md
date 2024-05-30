@@ -7544,3 +7544,28 @@ Java进阶完成：
 	- [剑指 Offer 52. 两个链表的第一个公共节点](https://leetcode.cn/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/)
 
 		拼接两个链表，注意 while 循环的退出条件是 `while(p1 != p2)`，这样如果没有公共节点它们会在 null 处相遇，然后退出返回 null
+
+
+
+# ***2024.5.30打卡	Day 120***
+
+1. 简历书写完成。明天开始完善项目。
+
+2. leetcode 刷题：3题
+
+	- [剑指 Offer 06. 从尾到头打印链表](https://leetcode.cn/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/)
+
+		递归反转链表
+
+	- [剑指 Offer 24. 反转链表](https://leetcode.cn/problems/fan-zhuan-lian-biao-lcof/)
+
+		同上题
+
+	- [剑指 Offer 35. 复杂链表的复制](https://leetcode.cn/problems/fu-za-lian-biao-de-fu-zhi-lcof/)
+
+		分为三个部分：
+
+		1. 创建新链表，新旧链表使用next相连，新链表在后面，便于设置random
+		2. 设置新链表的random为旧链表.random.next
+		3. 断开新旧链表
+

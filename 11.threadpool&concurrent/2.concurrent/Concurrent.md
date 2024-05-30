@@ -1029,10 +1029,10 @@
   > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
   > 	3: dup - 复制栈顶的lockObject引用。
   > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
-  > 	    
+  > 	    	
   > 	// 管程开始同步
   > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
-  > 	    
+  > 	    	
   > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
   > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
   > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
@@ -1043,7 +1043,7 @@
   > 	24: aload_1 - 加载InterruptedException到栈顶。
   > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
   > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    
+  > 	    	
   > 	// 结束管程同步
   > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
   > 	    
@@ -1051,7 +1051,7 @@
   > 	30: goto          38 - 跳转到第38行，结束方法。
   > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
   > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    
+  > 	    	
   > 	// 退出管程
   > 	35: monitorexit - 退出lockObject的监视器。
   > 	    
@@ -1190,7 +1190,7 @@
 
 
 
-### 5.一文读懂 synchronized
+### 5.一文读懂 synchronized 关键字
 
 1. synchronized 并非一开始就该对象加上重量级锁，也是==从偏向锁，轻量级锁，再到重量级锁的过程==。
 
@@ -1445,60 +1445,60 @@
 	
 4. ==Semaphore==
 
-  > - semaphore 是信号量的意思，通过这个类，可以==控制某个资源最多可以被几个线程所持有==。
-  >
-  > - ==常用方法==：
-  >
-  > 	```java
-  > 	// 如果还有许可，则继续执行，否则将进入WAITING状态，直到有许可
-  > 	public void acquire() throws InterruptedException {
-  > 	    sync.acquireSharedInterruptibly(1);
-  > 	}
-  > 	
-  > 	// 释放持有的许可
-  > 	public void release() {
-  > 	    sync.releaseShared(1);
-  > 	}
-  > 	```
-  >
-  > - 演示：一个银行4个窗口，10个人前来办理业务。
-  >
-  > 	```java
-  > 	public class SemaphoreTest {
-  > 	
-  > 	    // 假设有4个许可证，每次都需要一个许可证
-  > 	    static Semaphore semaphore = new Semaphore(4);
-  > 	
-  > 	    static class EatingThread implements Runnable{
-  > 	        @Override
-  > 	        public void run() {
-  > 	            // 尝试是否能够拿到可用的许可证
-  > 	            try {
-  > 	                semaphore.acquire(); // 尝试获取许可，没有则WAITING，直到有许可
-  > 	                System.out.println(Thread.currentThread() + "拿到许可证了，窗口办理事情中");
-  > 	                Thread.sleep(10000);
-  > 	            } catch (Exception e) {
-  > 	                e.printStackTrace();
-  > 	            }finally {
-  > 	                // 释放持有的许可证
-  > 	                semaphore.release();
-  > 	            }
-  > 	
-  > 	        }
-  > 	    }
-  > 	
-  > 	    // 开始测试
-  > 	    public static void main(String[] args) {
-  > 	        // 10个人来银行办理，不过总共只有3个窗口，每次只能有三个人同时在办理
-  > 	        for (int i = 0; i < 10; i++) {
-  > 	            Thread t = new Thread(new EatingThread());
-  > 	            t.start();
-  > 	        }
-  > 	    }
-  > 	}
-  > 	```
-  >
-  > - 这个类的主要特点是，可以==对资源的同时访问人数进行控制==。
+      > - semaphore 是信号量的意思，通过这个类，可以==控制某个资源最多可以被几个线程所持有==。
+      >
+      > - ==常用方法==：
+      >
+      > 	```java
+      > 	// 如果还有许可，则继续执行，否则将进入WAITING状态，直到有许可
+      > 	public void acquire() throws InterruptedException {
+      > 	    sync.acquireSharedInterruptibly(1);
+      > 	}
+      > 	
+      > 	// 释放持有的许可
+      > 	public void release() {
+      > 	    sync.releaseShared(1);
+      > 	}
+      > 	```
+      >
+      > - 演示：一个银行4个窗口，10个人前来办理业务。
+      >
+      > 	```java
+      > 	public class SemaphoreTest {
+      > 	
+      > 	    // 假设有4个许可证，每次都需要一个许可证
+      > 	    static Semaphore semaphore = new Semaphore(4);
+      > 	
+      > 	    static class EatingThread implements Runnable{
+      > 	        @Override
+      > 	        public void run() {
+      > 	            // 尝试是否能够拿到可用的许可证
+      > 	            try {
+      > 	                semaphore.acquire(); // 尝试获取许可，没有则WAITING，直到有许可
+      > 	                System.out.println(Thread.currentThread() + "拿到许可证了，窗口办理事情中");
+      > 	                Thread.sleep(10000);
+      > 	            } catch (Exception e) {
+      > 	                e.printStackTrace();
+      > 	            }finally {
+      > 	                // 释放持有的许可证
+      > 	                semaphore.release();
+      > 	            }
+      > 	
+      > 	        }
+      > 	    }
+      > 	
+      > 	    // 开始测试
+      > 	    public static void main(String[] args) {
+      > 	        // 10个人来银行办理，不过总共只有3个窗口，每次只能有三个人同时在办理
+      > 	        for (int i = 0; i < 10; i++) {
+      > 	            Thread t = new Thread(new EatingThread());
+      > 	            t.start();
+      > 	        }
+      > 	    }
+      > 	}
+      > 	```
+      >
+      > - 这个类的主要特点是，可以==对资源的同时访问人数进行控制==。
 
 ---
 
