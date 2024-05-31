@@ -7569,3 +7569,37 @@ Java进阶完成：
 		2. 设置新链表的random为旧链表.random.next
 		3. 断开新旧链表
 
+
+
+# ***2024.5.31打卡	Day 121***
+
+1. 为完善项目正在学 Docker。
+
+2. leetcode 刷题：3题
+
+	- [字节真题：单链表相加](https://www.playoffer.cn/question/3483.html)
+
+		先把逆序的数字链表反转，然后设置进位记录符，`while(num1 != null || num2 != null || jinwei)`，最后反转回来即可
+
+	- [剑指 Offer 09. 用两个栈实现队列](https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
+
+		就是在delete时候，判断 left 是否为空，如果为空，则将 right 全部转移到 left
+
+	- [225. 用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues/)
+
+		```java
+		public void push(int x) {
+		    if (queue.isEmpty()) {
+		        queue.offer(x);
+		    } else {
+		        while (!queue.isEmpty())
+		            helper.offer(queue.poll());
+		        queue.offer(x); // 新增的数据放在队头，模拟栈顶
+		        while (!helper.isEmpty()) // 再把之前的数据顺序放回来
+		            queue.offer(helper.poll());
+		    }
+		}
+		```
+
+
+
