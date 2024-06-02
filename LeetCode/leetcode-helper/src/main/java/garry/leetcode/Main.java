@@ -1,6 +1,6 @@
 package garry.leetcode;
 
-import garry.leetcode.utils.ListNode;
+import garry.leetcode.utils.TreeNode;
 
 /**
  * @author Garry
@@ -9,41 +9,32 @@ import garry.leetcode.utils.ListNode;
 
 public class Main {
     public static void main(String[] args) {
-        ListNode node1 = new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9))));
-        ListNode node2 = new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9))));
-        ListNode plus = new Solution().plus(node1, node2);
+        TreeNode A = new TreeNode(1, new TreeNode(0, new TreeNode(-4), new TreeNode(-3)), new TreeNode(1));
+        TreeNode B = new TreeNode(1, new TreeNode(-4), null);
+        boolean subStructure = new Solution().isSubStructure(A, B);
+        System.out.println(subStructure);
     }
 }
 
 class Solution {
-    public ListNode plus(ListNode head1, ListNode head2) {
-        if (head1 == null) return head2;
-        if (head2 == null) return head1;
-        ListNode num1 = reverse(head1);
-        ListNode num2 = reverse(head2);
-        boolean jinwei = false;
-        ListNode pre = new ListNode(-1);
-        ListNode ans = pre;
-        while (num1 != null || num2 != null || jinwei) {
-            int num = jinwei ? 1 : 0;
-            if (num1 != null) num += num1.val;
-            if (num2 != null) num += num2.val;
-            if (num >= 10) jinwei = true;
-            else jinwei = false;
-            pre.next = new ListNode(num % 10);
-            if (num1 != null) num1 = num1.next;
-            if (num2 != null) num2 = num2.next;
-            pre = pre.next;
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if (A == null || B == null)
+            return false;
+        if (A.val == B.val) {
+            boolean left = false;
+            if (B.left == null)
+                left = true;
+            else if (A.left != null && A.left.val == B.left.val)
+                left = isSubStructure(A.left, B.left);
+            boolean right = false;
+            if (B.right == null)
+                right = true;
+            else if (A.right != null && A.right.val == B.right.val)
+                right = isSubStructure(A.right, B.right);
+            if (left && right)
+                return true;
         }
-        return reverse(ans.next);
-    }
-
-    private ListNode reverse(ListNode head) {
-        if (head == null || head.next == null) return head;
-        ListNode newNode = reverse(head.next);
-        head.next.next = head;
-        head.next = null;
-        return newNode;
+        return isSubStructure(A.left, B) || isSubStructure(A.right, B);
     }
 }
 

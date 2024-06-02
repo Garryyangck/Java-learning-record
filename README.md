@@ -7603,3 +7603,99 @@ Java进阶完成：
 
 
 
+# ***2024.6.1打卡	Day 122***
+
+1. Docker视频课完成。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 30. 包含min函数的栈](https://leetcode.cn/problems/bao-han-minhan-shu-de-zhan-lcof/)
+
+		最小栈不断维护其栈顶为最小的元素即可
+
+	- [剑指 Offer 31. 栈的压入、弹出序列](https://leetcode.cn/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/)
+
+		用index记录当前需要出栈的元素，如果当前需要入栈的元素就是当前需要出栈的元素，则它不入栈，而是index++，并且此时要遍历以及入栈的元素是否符合当前继续出栈的要求（这一点很关键）
+
+		```java
+		class Solution {
+		    public boolean validateBookSequences(int[] putIn, int[] takeOut) {
+		        Stack<Integer> stack = new Stack<>();
+		        int len = putIn.length;
+		        int index = 0;
+		        for (int i = 0; i < len; i++) {
+		            if (putIn[i] != takeOut[index])
+		                stack.add(putIn[i]);
+		            else // 如果当前需要入栈的元素就是当前需要出栈的元素，则它不入栈，而是index++
+		                index++;
+		            // 此时要遍历以及入栈的元素是否符合当前继续出栈的要求（这一点很关键）
+		            while(!stack.isEmpty() && stack.peek() == takeOut[index]) {
+		                stack.pop();
+		                index++;
+		            }
+		        }
+		        while (!stack.isEmpty()) { // 最后遍历完了之后，剩下的元素必须按照剩下的takeOut的顺序出栈，不满足则返回false
+		            if (stack.peek() == takeOut[index]) {
+		                stack.pop();
+		                index++;
+		            } else {
+		                return false;
+		            }
+		        }
+		        // 最后必须栈空（刚好全部出栈），且出栈序列遍历完才行
+		        return (stack.isEmpty() && index == len) ? true : false;
+		    }
+		}
+		```
+
+		
+
+# ***2024.6.2打卡	Day 123***
+
+1. Nginx视频课完成。
+
+2. leetcode 刷题：5题
+
+	- [剑指 Offer 55 – I. 二叉树的深度](https://leetcode.cn/problems/er-cha-shu-de-shen-du-lcof/)
+
+		递归
+
+	- [剑指 Offer 55 – II. 平衡二叉树](https://leetcode.cn/problems/ping-heng-er-cha-shu-lcof/)
+
+		可以使用辅助函数depth内部判断维护balanced，这样就可以一次搜索完成判断，否则就要调用depth两次（left和right各一次）才能完成判断。
+
+	- [剑指 Offer 27. 二叉树的镜像](https://leetcode.cn/problems/er-cha-shu-de-jing-xiang-lcof)
+
+		简单递归
+
+	- [剑指 Offer 28. 对称的二叉树](https://leetcode.cn/problems/dui-cheng-de-er-cha-shu-lcof)
+
+		使用辅助函数helper，传入left和right作为参数，方便进行逻辑判断
+
+	- [剑指 Offer 26. 树的子结构](https://leetcode.cn/problems/shu-de-zi-jie-gou-lcof)
+
+		首先A和B都不能是null
+
+		然后要么A的左子树中有B作为子树，要么A的右子树中有，如果A和B的val相同，那么就可以借助辅助函数判断当前的B是否"属于"A
+
+		```java
+		class Solution {
+		    public boolean isSubStructure(TreeNode A, TreeNode B) {
+		        if(A == null || B == null)
+		            return false;
+		        return recur(A, B) || // A.val == B.val，直接判断B是否属于A
+		            // 判断B左右子树中是否在A的左右子树中
+		            isSubStructure(A.left, B) || isSubStructure(A.right, B);
+		    }
+		    // 判断B左右子树中是否在A的左右子树中
+		    public boolean recur(TreeNode A,TreeNode B){
+		        if(B == null) 
+		            return true;
+		        if(A == null || A.val != B.val) 
+		            return false;
+		        return recur(A.left, B.left) && recur(A.right, B.right);
+		    }
+		}
+		```
+
+		
