@@ -7698,4 +7698,23 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.6.3打卡	Day 124***
+
+1. 今天尝试去完善项目，但是好多地方都记不清了，就不得不查之前的笔记，听之前的课，感觉没做出来什么。
+
+2. leetcode 刷题：3题
+
+	- [剑指 Offer 32 – I. 从上到下打印二叉树](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-lcof)
+
+		经典层次遍历
+
+	- [剑指 Offer 32 – II. 从上到下打印二叉树](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof)
+
+		同上
+
+	- [剑指 Offer 32 – III. 从上到下打印二叉树](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof)
+
+		记录一下当前的行为奇数还是偶数即可

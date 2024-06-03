@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="anti-piracy">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/anti-piracy.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
