@@ -1,0 +1,15 @@
+server:
+  # 应用服务 WEB 访问端口
+  port: 8080
+  # 设置session过期时间
+  servlet:
+    session:
+      timeout: 1800
+
+logging:
+  pattern:
+    # 修改日志的格式
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %magenta(%-5level) %green([%-50.50class]) >>> %cyan(%msg) %n"
+  level:
+    # 设置日志最低级别
+    garry.community: debug
