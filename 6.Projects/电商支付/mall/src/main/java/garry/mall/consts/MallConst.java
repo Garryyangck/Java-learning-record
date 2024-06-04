@@ -17,4 +17,6 @@ public class MallConst {
     public static final Integer ROOT_PARENT_ID = 0;//根目录id
 
     public static final String CART_REDIS_KEY_TEMPLATE = "cart_%s";//购物车id模板
+
+    public static final String QUEUE_PAY_NOTIFY = "payNotify";
 }

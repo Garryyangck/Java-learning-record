@@ -23,10 +23,13 @@ mybatis:
   # 解决*Mapper.xml文件找不到的问题，classpath本质是编译后的target/classes目录
 #  mapper-locations: classpath:mapper/*.xml
 
-# 修改日志的格式
 logging:
   pattern:
-    console: "[%thread] %-5level %logger{36} - %msg%n"
+    # 修改日志的格式
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %magenta(%-5level) %green([%-50.50class]) >>> %cyan(%msg) %n"
+  level:
+    # 设置日志最低级别
+    garry.community: debug
 
 # wx支付的相关配置
 wx:

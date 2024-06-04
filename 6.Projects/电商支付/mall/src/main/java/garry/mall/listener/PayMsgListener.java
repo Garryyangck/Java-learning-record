@@ -1,6 +1,7 @@
 package garry.mall.listener;
 
 import com.google.gson.Gson;
+import garry.mall.consts.MallConst;
 import garry.mall.pojo.PayInfo;
 import garry.mall.service.impl.OrderServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
  **/
 @Slf4j
 @Component
-@RabbitListener(queues = {"payNotify"})//监听的消息队列
+@RabbitListener(queues = {MallConst.QUEUE_PAY_NOTIFY})//监听的消息队列
 public class PayMsgListener {
 
     private final Gson gson = new Gson();
@@ -30,7 +31,7 @@ public class PayMsgListener {
 
         PayInfo payInfo = gson.fromJson(msg, PayInfo.class);
 
-        if (payInfo.getPlatformStatus().equals("支付成功")) {
+        if ("支付成功".equals(payInfo.getPlatformStatus())) {
             orderService.paid(payInfo.getOrderNo());
         }
     }

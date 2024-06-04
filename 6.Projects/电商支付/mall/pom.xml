@@ -90,6 +90,8 @@
                 </configuration>
             </plugin>
         </plugins>
+        <!--打包为jar包后的包名，mall.jar-->
+        <finalName>mall</finalName>
     </build>
 
 </project>

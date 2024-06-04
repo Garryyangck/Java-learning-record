@@ -7718,3 +7718,53 @@ Java进阶完成：
 	- [剑指 Offer 32 – III. 从上到下打印二叉树](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof)
 
 		记录一下当前的行为奇数还是偶数即可
+
+
+
+# ***2024.6.4打卡	Day 125***
+
+1. 在学完docker，nginx，MQ，Linux基础之后成功将电商支付项目部署到虚拟机上，可惜前端代码写死了，导致有些功能使用不了，很可惜。
+
+2. leetcode 刷题：
+
+	- [剑指 Offer 07. 重建二叉树](https://leetcode.cn/problems/zhong-jian-er-cha-shu-lcof/)
+
+		递归，`Arrays.copyOfRange(int[], int, int)`
+
+	- [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
+
+		没做出来
+
+		```java
+		class Solution {
+		    public boolean verifyPostorder(int[] postorder) {
+		        if (postorder == null) {
+		            return true;
+		        }
+		
+		        return f(postorder, 0, postorder.length - 1);
+		    }
+		
+		    private boolean f(int[] postorder, int i, int j) {
+		        if (i >= j) {
+		            return true;
+		        }
+		
+		        int root = postorder[j];
+		        int p = i;
+		        // 获取第一个大于或者等于 root 等元素的位置
+		        while (postorder[p] < root)
+		            p++;
+		        // 判断 p ~ j -1 这个范围是否存在小于root的元素
+		        for (int k = p; k < j; k++) {
+		            if (postorder[k] < root) {
+		                return false;
+		            }
+		        }
+		
+		        return f(postorder, i, p - 1) && f(postorder, p, j - 1);
+		    }
+		}
+		```
+
+		

@@ -2,6 +2,8 @@ package garry.leetcode;
 
 import garry.leetcode.utils.TreeNode;
 
+import java.util.Arrays;
+
 /**
  * @author Garry
  * ---------2024/3/22 11:40
@@ -9,10 +11,11 @@ import garry.leetcode.utils.TreeNode;
 
 public class Main {
     public static void main(String[] args) {
-        TreeNode A = new TreeNode(1, new TreeNode(0, new TreeNode(-4), new TreeNode(-3)), new TreeNode(1));
-        TreeNode B = new TreeNode(1, new TreeNode(-4), null);
-        boolean subStructure = new Solution().isSubStructure(A, B);
-        System.out.println(subStructure);
+        int[] arr = {1, 2};
+        int[] ans = Arrays.copyOfRange(arr, 0, 0);
+        for (int i = 0; i < ans.length; i++) {
+            System.out.println(ans[i]);
+        }
     }
 }
 

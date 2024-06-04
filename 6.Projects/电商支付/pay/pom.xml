@@ -67,7 +67,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <!--Spring下的rabbitMQ依赖-->
+        <!--Spring下的rabbitMQ依赖，实际上是amqp，因为amqp是一套消息队列api规范-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
