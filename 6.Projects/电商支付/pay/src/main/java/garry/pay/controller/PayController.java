@@ -38,7 +38,7 @@ public class PayController {
     public ModelAndView create(@RequestParam(value = "orderId") String orderId,
                                @RequestParam(value = "amount") String amount) {
         //payService创建订单，返回服务器的response，response.getCodeUrl()
-        PayResponse response = payService.create(orderId, new BigDecimal(amount));
+        PayResponse response = payService.create(orderId, new BigDecimal("0.01"));
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderId", orderId/*就是orderNo*/);

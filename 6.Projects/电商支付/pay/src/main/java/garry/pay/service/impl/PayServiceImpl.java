@@ -94,7 +94,7 @@ public class PayServiceImpl implements IPayService {
             throw new RuntimeException("通过order_no=" + payResponse.getOrderId() + "查询到的结果是null");
         }
         //查询到的状态不是已支付
-        if (!payInfo.getPlatformStatus().equals(OrderStatusEnum.SUCCESS.getDesc())) {
+        if (!OrderStatusEnum.SUCCESS.getDesc().equals(payInfo.getPlatformStatus())) {
             //比较金额，如果不相同
             if (payInfo.getPayAmount().compareTo(BigDecimal.valueOf(payResponse.getOrderAmount())) != 0) {
                 throw new RuntimeException("异步通知金额和数据库金额不一致，orderNo=" + payResponse.getOrderId());

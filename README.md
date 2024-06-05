@@ -7735,6 +7735,16 @@ Java进阶完成：
 
 		没做出来
 
+		思路：如果是二叉搜索树，那么根节点右侧的节点都>=根节点的值
+		
+		如果存在右子树中小于根节点的节点，那么肯定就不是二叉搜索树
+		
+		因此就要确定右子树的范围
+		
+		如果找到一个>=根节点的值，由于后序遍历的顺序是【左子树，右子树，根节点】，因此该节点属于右子树，其右边的值都应该>=根节点的值，如果存在<根节点的节点，就肯定不是二叉搜索树
+		
+		最后递归（还不清楚其合理性和意义）
+		
 		```java
 		class Solution {
 		    public boolean verifyPostorder(int[] postorder) {
@@ -7766,5 +7776,26 @@ Java进阶完成：
 		    }
 		}
 		```
-
 		
+
+
+
+# ***2024.6.5打卡	Day 126***
+
+1. 把电商支付项目的pay模块和mall都成功部署，并且使用nginx的反向代理将前端代码中和我们实际部署中不同的接口请求（比如192.xxx.xxx.xxx/api/products）进行映射（比如将/api/(注意要加右边的反斜线)映射到127.0.0.1:8080/products/），并且在`/etc/systemd/system`中创建`mall.service`和`pay.service`将运行jar包的命令服务化，可以用`systemctl`直接启动。
+
+2. 完成rabbitmq入门视频。
+
+3. leetcode 刷题：3题
+
+	- [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)
+
+		与中序遍历的非递归版本相结合即可
+
+	- [剑指 Offer 68 – I. 二叉搜索树的最近公共祖先](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-zui-jin-gong-gong-zu-xian-lcof/)
+
+		由于是二叉搜索树，因此可以根据p和q的val大小判断其所在的子树，都在某一侧或分布在两侧
+
+	- [剑指 Offer 37. 序列化二叉树](https://leetcode.cn/problems/xu-lie-hua-er-cha-shu-lcof/)
+
+		使用层次遍历序列化和反序列化，序列化很好理解，不为null就queue.offer其左右子树，为null就不加入queue，只buffer.append("null,")；而反序列化相对复杂一点，首先split(",")，然后queue中存放创建的新节点，首先创建root节点，然后类似地poll，注意这里的queue只需offer左右子树中不为Null的即可，因为本来新创建的节点默认子树为Null，并且加入的队列的节点都要调用.left，.right，如果节点是null的话显然会空指针异常。
