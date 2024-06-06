@@ -7799,3 +7799,24 @@ Java进阶完成：
 	- [剑指 Offer 37. 序列化二叉树](https://leetcode.cn/problems/xu-lie-hua-er-cha-shu-lcof/)
 
 		使用层次遍历序列化和反序列化，序列化很好理解，不为null就queue.offer其左右子树，为null就不加入queue，只buffer.append("null,")；而反序列化相对复杂一点，首先split(",")，然后queue中存放创建的新节点，首先创建root节点，然后类似地poll，注意这里的queue只需offer左右子树中不为Null的即可，因为本来新创建的节点默认子树为Null，并且加入的队列的节点都要调用.left，.right，如果节点是null的话显然会空指针异常。
+
+
+
+# ***2024.6.6打卡	Day 127***
+
+1. 完成 Kafka 入门视频。明天部署社区项目。
+
+2. leetcode 刷题：2题
+
+	- [543. 二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree/)
+
+		在depth函数中获取ans，ans=left+right
+
+	- [199. 二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/)
+
+		法一：层次遍历，每层的最右节点
+
+		法二：先序遍历，记录层号，每层的最后一个元素（不断覆盖即可）
+
+
+
