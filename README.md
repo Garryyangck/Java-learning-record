@@ -7820,3 +7820,20 @@ Java进阶完成：
 
 
 
+# ***2024.6.7打卡	Day 128***
+
+1. 感觉今天没做什么，就只把社区项目部署工作的环境准备了一下。
+
+2. leetcode 刷题：6题
+
+	- 二叉搜索的四个模板
+
+	- [剑指 Offer 53 – I. 在排序数组中查找](https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof)
+
+		注意最后出循环的时候可能刚刚为target的位置，因此最后的return要用三目运算
+
+	- [剑指 Offer 53 – II. 0～n-1中缺失的数字](https://leetcode.cn/problems/que-shi-de-shu-zi-lcof)
+
+		法一：以下标的负号标记
+
+		法二：因为这里的数和index是一一对应的，因此可以直接二分搜索，本质就是找第一个不满足的index。

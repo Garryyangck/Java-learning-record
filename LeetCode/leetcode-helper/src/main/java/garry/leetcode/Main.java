@@ -1,7 +1,5 @@
 package garry.leetcode;
 
-import garry.leetcode.utils.TreeNode;
-
 /**
  * @author Garry
  * ---------2024/3/22 11:40
@@ -9,28 +7,39 @@ import garry.leetcode.utils.TreeNode;
 
 public class Main {
     public static void main(String[] args) {
-        TreeNode treeNode = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3));
-        new Solution().diameterOfBinaryTree(treeNode);
+        int[] arr = new int[]{1};
+        int target = 1;
+        new Solution().countTarget(arr, target);
     }
 }
 
 class Solution {
-    int ans;
-
-    public int diameterOfBinaryTree(TreeNode root) {
-        ans = 1;
-        depth(root);
-        return ans;
-    }
-
-    public int depth(TreeNode node) {
-        if (node == null) {
-            return 0; // 访问到空节点了，返回0
+    public int countTarget(int[] scores, int target) {
+        if (scores.length == 0)
+            return 0;
+        int left = 0;
+        int right = scores.length - 1;
+        while (left < right) {
+            int mid = (left + right) / 2; // 左偏中点
+            if (scores[mid] == target) {
+                int cnt = 0;
+                int i = mid;
+                while (i - 1 >= 0 && scores[i] == scores[i - 1]) {
+                    i--;
+                    cnt++;
+                }
+                i = mid;
+                while (i + 1 < scores.length && scores[i] == scores[i + 1]) {
+                    i++;
+                    cnt++;
+                }
+                return cnt + 1;
+            } else if (scores[mid] > target) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
         }
-        int L = depth(node.left); // 左儿子为根的子树的深度
-        int R = depth(node.right); // 右儿子为根的子树的深度
-        ans = Math.max(ans, L + R ); // 计算d_node即L+R+1 并更新ans
-        return Math.max(L, R) + 1; // 返回该节点为根的子树的深度
+        return scores[left] == target ? 1 : 0;
     }
 }
-
