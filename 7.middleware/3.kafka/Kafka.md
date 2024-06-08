@@ -57,8 +57,7 @@ bin/kafka-topics.sh --create --zookeeper zookeepr部署的ip地址:2181 --replic
 ### 4.查看当前 topic
 
 ```bash
-bin/kafka-topics.sh --list --zookeeper zookeepr部署的ip地址:2181
-# Kafka 本身是基于 zookeeper 的，要先查 zookeeper 然后再获取 zookeeper 的信息
+bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 ```
 
 ### 5.发送消息

@@ -7837,3 +7837,74 @@ Java进阶完成：
 		法一：以下标的负号标记
 
 		法二：因为这里的数和index是一一对应的，因此可以直接二分搜索，本质就是找第一个不满足的index。
+
+
+
+# ***2024.6.8打卡	Day 129***
+
+1. 社区项目部署完成，这次是在服务器上安装tomcat，打包成war包放到tomcat上运行，相比于打包成jar包，需要额外安装tomcat，但是好处是可以将源码传过去，然后在服务器上mvn clean pakage -Dmaven.test.skip=true打包，这样可以直接使用服务器上的jdk环境，避免开发和生产环境不一样，导致开发环境打的包在生产环境上用不了。
+
+2. leetcode 刷题：3题
+
+	- [剑指 Offer 11. 旋转数组的最小数字](https://leetcode.cn/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof)
+
+		```java
+		public int stockManagement(int[] numbers) {
+		    // O（n)
+		    // logN O1
+		    int l = 0;
+		    int r = numbers.length - 1;
+		    while (l < r) {
+		        // 当出现中点在右半边等于最左侧数的情况时l++，
+		        // 比如[10,1,10,10,10]，第一次判断后l++，此时[1,10,10,10]完全有序直接返回1
+		        // 或者l=mid+1后刚好全部有序，这时如果有序则直接返回有序
+		        // 比如在[4,5,8,3,4]中，8>4，l=mid+1，左边直接跑到3的位置，此时[3,4]已经有序
+		        // 由于之前的[l,mid]有序，而[mid+1,r]也有序，因此mid+1为ans
+		        if (numbers[l] < numbers[r]) {
+		            return numbers[l];
+		        }
+		
+		        int mid = (r + l) / 2;
+		        if (numbers[mid] > numbers[l]) {
+		            l = mid + 1;
+		        } else if (numbers[mid] < numbers[l]) {
+		            r = mid;
+		        } else {
+		            l++;
+		        }
+		    }
+		
+		    return numbers[l];
+		}
+		
+		```
+
+	- [剑指 Offer 15. 二进制中1的个数](https://leetcode.cn/problems/er-jin-zhi-zhong-1de-ge-shu-lcof)
+
+		```java
+		while(n != 0) {
+		    n &= (n - 1);
+		    ans++;
+		}
+		```
+
+		比如n=110，最后一位已经是零，不管n-1是多少，最后一位无论怎么&都会是0
+
+		而n-1相比于n，n的最后一个不为0的尾数肯定会变成0，则这最后一位变成0
+
+		因此&的次数就是"1"的个数
+
+	- [剑指 Offer 16. 数值的整数次方](https://leetcode.cn/problems/shu-zhi-de-zheng-shu-ci-fang-lcof)
+
+		快速幂
+
+		```java
+		while(n != 0) {
+		    if((n & 1) != 0)
+		        ans *= x;
+		    x *= x;
+		    n >>>= 1; // 全部位都右移，其实也没必要，毕竟取了绝对值
+		}
+		```
+
+		
