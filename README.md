@@ -7907,4 +7907,19 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.6.9打卡	Day 130***
+
+1. 今天主要准备学校的考试，然后看了一下java8新特性。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 56 – I. 数组中数字出现的次数](https://leetcode.cn/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/)
+
+		通过两个数亦或的最后一个不为0的位，将原数组分为两部分，然后再亦或
+
+	- [剑指 Offer 56 – II. 数组中数字出现的次数 II](https://leetcode.cn/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-ii-lcof/)
+
+		遍历32次，每次一个比特位，找出每个比特位为1出现的次数，然后%3不为0则说明有这一位

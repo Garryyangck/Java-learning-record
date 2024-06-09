@@ -1405,6 +1405,8 @@
 
 
 
+
+
 # 2.设计模式+框架
 
 ## 1.设计模式
@@ -1488,23 +1490,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																																				
+	> 																																					
 	> 	    private String message;
-	> 																																				
+	> 																																					
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																																				
+	> 																																					
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																																				
+	> 																																					
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																																				
+	> 																																					
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1512,14 +1514,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																																				
+	> 																																					
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																																				
+	> 																																					
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																																				
+	> 																																					
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2080,9 +2082,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																																		
+	> 																																			
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																																		
+	> 																																			
 	> 	op.process();
 	> 	```
 	>
@@ -3215,7 +3217,7 @@ insert into user values(3,'lisi');
 
 ### 2.进程和线程的区别
 
-1. ==进程相当一个容器，而线程只是里面的一个东西==，并且程==序本质是线程在执行==，基于这个，再去回答他们的其他区别，比如通信，内存结构，等等。
+1. ==进程相当一个容器，而线程只是里面的一个东西==，并且==程序本质是线程在执行==，基于这个，再去回答他们的其他区别，比如通信，内存结构，等等。
 
 ---
 
@@ -3328,12 +3330,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 										
+	> 											
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 										
+	> 											
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -3946,7 +3948,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 							
+	> 								
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now

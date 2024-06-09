@@ -14,32 +14,24 @@ public class Main {
 }
 
 class Solution {
-    public int countTarget(int[] scores, int target) {
-        if (scores.length == 0)
-            return 0;
-        int left = 0;
-        int right = scores.length - 1;
-        while (left < right) {
-            int mid = (left + right) / 2; // 左偏中点
-            if (scores[mid] == target) {
-                int cnt = 0;
-                int i = mid;
-                while (i - 1 >= 0 && scores[i] == scores[i - 1]) {
-                    i--;
-                    cnt++;
-                }
-                i = mid;
-                while (i + 1 < scores.length && scores[i] == scores[i + 1]) {
-                    i++;
-                    cnt++;
-                }
-                return cnt + 1;
-            } else if (scores[mid] > target) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
+    public int[] sockCollocation(int[] sockets) {
+        int ans = 0;
+        for (int i = 0; i < sockets.length; i++) {
+            ans ^= sockets[i];
         }
-        return scores[left] == target ? 1 : 0;
+        int diff = 1;
+        while (ans != 0) {
+            if ((diff & ans) != 0)
+                break;
+            diff <<= 1;
+        }
+        int res1 = 0, res2 = 0;
+        for (int i = 0; i < sockets.length; i++) {
+            if ((sockets[i] & diff) == 0)
+                res1 ^= sockets[i];
+            else
+                res2 ^= sockets[i];
+        }
+        return new int[]{res1, res2};
     }
 }
