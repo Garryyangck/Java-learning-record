@@ -7923,3 +7923,80 @@ Java进阶完成：
 	- [剑指 Offer 56 – II. 数组中数字出现的次数 II](https://leetcode.cn/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-ii-lcof/)
 
 		遍历32次，每次一个比特位，找出每个比特位为1出现的次数，然后%3不为0则说明有这一位
+
+
+
+# ***2024.6.10打卡	Day 131***
+
+1. 今天主要在整课程的论文，没怎么看八股文。
+
+2. leetcode 刷题：3题
+
+	- [剑指 Offer 14- I. 剪绳子](https://leetcode.cn/problems/jian-sheng-zi-lcof)
+
+		尽量分割成长度为3的小段可以使得积最大
+
+		可以简单枚举+说明，如果长度是2，继续分反而变小；如果长度是3，继续分同样会变小；如果长度是4的话，继续分割积为4，没有变小，因此最小长度选择3，可以让段数更多。
+
+		```java
+		public int cuttingBamboo(int bamboo_len) {
+		    if(bamboo_len == 2)
+		        return 1;
+		    if(bamboo_len == 3)
+		        return 2;
+		    int cnt = bamboo_len / 3;
+		    int flag = bamboo_len % 3;
+		    if(flag == 0)
+		        return (int)Math.pow(3, cnt);
+		    if(flag == 1)
+		        return (int)Math.pow(3, cnt - 1) * 4;
+		    if(flag == 2)
+		        return (int)Math.pow(3, cnt) * 2;
+		    return -1;
+		}
+		```
+
+	- [剑指 Offer 14- II. 剪绳子 II](https://leetcode.cn/problems/jian-sheng-zi-ii-lcof)
+
+		修改pow方法，注意返回值必须是long类型，否则会产生强制类型转换（long -> int）带来的误差
+
+		```java
+		long pow(int a, int n) {
+		    long res = 1;
+		
+		    for (int i = 1; i <= n; i++) {
+		        res = res * a % p; // 每乘一项%一次和得出最后结果再%的结果是一样的
+		    }
+		
+		    return res;
+		}
+		```
+
+	- [剑指 Offer 43. 1～n 整数中 1 出现的次数](https://leetcode.cn/problems/1nzheng-shu-zhong-1chu-xian-de-ci-shu-lcof/)
+
+		```java
+		// 几个变量计算：cur = (n/bit)%10, low = n % bit, high = n / bit / 10
+		// 几个公示
+		// cur > 1 => (high + 1) * bit
+		// cur == 1 => (high * bit) + (1 + low)
+		// cur = 0 => high * bit
+		
+		long bit = 1;
+		long sum = 0;
+		while (bit <= n) { // 思路，bit增大后，n / bit，这样不断缩小n进行归约
+		    long cur = (n / bit) % 10;
+		    long low = n % bit;
+		    long high = n / bit / 10;
+		
+		    if (cur > 1) {
+		        sum += (high + 1) * bit;
+		    } else if (cur == 1) {
+		        sum += (high * bit) + (1 + low);
+		    } else {
+		        sum += high * bit;
+		    }
+		    bit = bit * 10;
+		}
+		```
+
+		
