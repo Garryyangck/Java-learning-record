@@ -7999,4 +7999,42 @@ Java进阶完成：
 		}
 		```
 
+
+
+
+# ***2024.6.11打卡	Day 132***
+
+1. 今天还在整课程的论文，以及复习考试，没怎么看八股文。
+
+2. leetcode 刷题：1题
+
+	- [剑指 Offer 44. 数字序列中某一位的数字](https://leetcode.cn/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/)
+
+		```java
+		public int findKthNumber(int n) {
+		    if (n == 0) {
+		        return 0;
+		    }
 		
+		    long bit = 1;
+		    int i = 1;
+		    long count = 9;
+		
+		    while (count < n) {
+		        n = (int) (n - count);
+		        bit = bit * 10;
+		        i++;
+		        count = bit * i * 9;
+		    }
+		    // 确定是在这个区间的哪个数
+		    long num = bit + (n - 1) / i;
+		    // 确定在 Num 的那个字符
+		    int index = (n - 1) % i + 1;
+		    int res = (int) (num / Math.pow(10, i - index)) % 10;
+		
+		    return res;
+		}
+		```
+
+
+
