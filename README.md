@@ -8038,3 +8038,32 @@ Java进阶完成：
 
 
 
+# ***2024.6.12打卡	Day 133***
+
+1. 今天论文写完了，然后复习快要考试的《数据库原理与设计》。这么课讲得比较系统，和训练营Mysql课程的区别是它涵盖的面特别广，但是很多都讲得不深入。复习这门课的同时也在回顾当初Mysql原理课程的笔记，可以有助于我理解一些当初觉得很突兀的概念和原理。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 39. 数组中出现次数超过一半的数字](https://leetcode.cn/problems/shu-zu-zhong-chu-xian-ci-shu-chao-guo-yi-ban-de-shu-zi-lcof/)
+
+		摩尔投票法
+
+		```java
+		int ans = stock[0];
+		int num = 0;
+		for (int i = 0; i < stock.length; i++) {
+		    if (stock[i] == ans)
+		        num++;
+		    else
+		        num--;
+		    if (num < 0) {
+		        ans = stock[i]; // 小于0后，产生新的ans
+		        num = 1; // 新的ans的记数为1
+		    }
+		}
+		```
+
+	- [剑指 Offer 61. 扑克牌中的顺子](https://leetcode.cn/problems/bu-ke-pai-zhong-de-shun-zi-lcof/)
+
+		先排序，遇到0就continue，然后如果出现非0重复的数就false，最后return非0数max-min<5
+
