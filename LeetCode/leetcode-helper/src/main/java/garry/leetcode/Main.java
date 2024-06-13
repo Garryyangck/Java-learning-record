@@ -1,5 +1,9 @@
 package garry.leetcode;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Garry
  * ---------2024/3/22 11:40
@@ -7,31 +11,33 @@ package garry.leetcode;
 
 public class Main {
     public static void main(String[] args) {
-        int[] arr = new int[]{1};
-        int target = 1;
-        new Solution().countTarget(arr, target);
+        new Solution().maxAltitude(new int[]{14, 2, 27, -5, 28, 13, 39}, 3);
     }
 }
 
 class Solution {
-    public int[] sockCollocation(int[] sockets) {
-        int ans = 0;
-        for (int i = 0; i < sockets.length; i++) {
-            ans ^= sockets[i];
+    public int[] maxAltitude(int[] heights, int limit) {
+        LinkedList<Integer/* 存放index，要求heights[index]递减 */> deque = new LinkedList<>();
+        for (int i = 0; i < limit; i++) {
+            // 将前面<=的都出队，因为等于时后面的index更大，更后受到出队的限制
+            while (!deque.isEmpty() && heights[deque.getLast()] <= heights[i])
+                deque.removeLast();
+            deque.addLast(i);
         }
-        int diff = 1;
-        while (ans != 0) {
-            if ((diff & ans) != 0)
-                break;
-            diff <<= 1;
+        List<Integer> ans = new ArrayList<>();
+        ans.add(heights[deque.getFirst()]);
+        for (int i = limit; i < heights.length; i++) {
+            while (!deque.isEmpty() && heights[deque.getLast()] <= heights[i])
+                deque.removeLast();
+            while (!deque.isEmpty() && deque.getFirst() <= i - limit)
+                deque.removeFirst();
+            deque.addLast(i);
+            ans.add(heights[deque.getFirst()]);
         }
-        int res1 = 0, res2 = 0;
-        for (int i = 0; i < sockets.length; i++) {
-            if ((sockets[i] & diff) == 0)
-                res1 ^= sockets[i];
-            else
-                res2 ^= sockets[i];
+        int[] res = new int[ans.size()];
+        for (int i = 0; i < ans.size(); i++) {
+            res[i] = ans.get(i);
         }
-        return new int[]{res1, res2};
+        return res;
     }
 }

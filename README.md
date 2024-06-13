@@ -8067,3 +8067,24 @@ Java进阶完成：
 
 		先排序，遇到0就continue，然后如果出现非0重复的数就false，最后return非0数max-min<5
 
+
+
+# ***2024.6.13打卡	Day 134***
+
+1. 今天把学校数据库原理课程看完了。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 57 – II. 和为s的连续正数序列](https://leetcode.cn/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/)
+
+		经典滑动窗口，sum<target，++right；sum>target，left++。
+
+	- [剑指 Offer 59 – I. 滑动窗口的最大值](https://leetcode.cn/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/)
+
+		老生常谈
+
+		```java
+		LinkedList<Integer/* 存放index，要求heights[index]递减 */> deque = new LinkedList<>();
+		```
+
+		注意编译类型要为LinkList，否则使用不了getFirst, addLast, removeLast 等 api。
