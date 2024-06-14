@@ -1,8 +1,7 @@
 package garry.leetcode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * @author Garry
@@ -11,33 +10,26 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        new Solution().maxAltitude(new int[]{14, 2, 27, -5, 28, 13, 39}, 3);
+        System.out.println(new Solution().crackPassword(new int[]{0, 30, 3, 34, 5, 9}));
     }
 }
 
 class Solution {
-    public int[] maxAltitude(int[] heights, int limit) {
-        LinkedList<Integer/* 存放index，要求heights[index]递减 */> deque = new LinkedList<>();
-        for (int i = 0; i < limit; i++) {
-            // 将前面<=的都出队，因为等于时后面的index更大，更后受到出队的限制
-            while (!deque.isEmpty() && heights[deque.getLast()] <= heights[i])
-                deque.removeLast();
-            deque.addLast(i);
+    public String crackPassword(int[] password) {
+        String[] arr = new String[password.length];
+        for (int i = 0; i < password.length; i++) {
+            arr[i] = String.valueOf(password[i]);
         }
-        List<Integer> ans = new ArrayList<>();
-        ans.add(heights[deque.getFirst()]);
-        for (int i = limit; i < heights.length; i++) {
-            while (!deque.isEmpty() && heights[deque.getLast()] <= heights[i])
-                deque.removeLast();
-            while (!deque.isEmpty() && deque.getFirst() <= i - limit)
-                deque.removeFirst();
-            deque.addLast(i);
-            ans.add(heights[deque.getFirst()]);
+        Arrays.sort(arr, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return (s1 + s2).compareTo(s2 + s1);
+            }
+        });
+        StringBuffer ans = new StringBuffer();
+        for (int i = 0; i < password.length; i++) {
+            ans.append(arr[i]);
         }
-        int[] res = new int[ans.size()];
-        for (int i = 0; i < ans.size(); i++) {
-            res[i] = ans.get(i);
-        }
-        return res;
+        return new String(ans);
     }
 }

@@ -8088,3 +8088,57 @@ Java进阶完成：
 		```
 
 		注意编译类型要为LinkList，否则使用不了getFirst, addLast, removeLast 等 api。
+
+
+
+# ***2024.6.14打卡	Day 135***
+
+1. 今天状态奇差无比，期末太浮躁了，又看不进去八股文，又看不进去学校的课，浑浑噩噩的一天。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 21. 调整数组顺序使奇数位于偶数前面](https://leetcode.cn/problems/diao-zheng-shu-zu-shun-xu-shi-qi-shu-wei-yu-ou-shu-qian-mian-lcof)
+
+		可以使用类似于二路快速排序的patition的方法解决此题：
+
+		```java
+		int left = 0, right = actions.length - 1;
+		while(left < right) {
+		    // 左指针找到第一个偶数
+		    while(left < right && actions[left] % 2 == 1)
+		        left++;
+		    // 右指针找到第一个奇数
+		    while(left < right && actions[right] % 2 == 0)
+		        right--;
+		    if(left < right) {
+		        swap(actions, left, right);
+		        left++;
+		        right--;
+		    }
+		}
+		```
+
+	- [剑指 Offer 45. 把数组排成最小的数](https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/)
+
+		这道题的难点在于Comparator怎么定义
+
+		比如遇到3和30，如果直接用String.compareTo的话，会把3排在前面
+
+		但是330>303，这样反而排反了。究其原因是字符串长度不一样。
+
+		那就可以考虑将字符串长度变成一样再来compareTo。
+
+		`return (s1 + s2).compareTo(s2 + s1);`，这样拼接之后长度一致，并且符合题意的拼接思路。
+
+		再看3和30的例子，3+30=330，30+3=303，这样就会把303排到前面去
+
+		```java
+		Arrays.sort(arr, new Comparator<String>() {
+		    @Override
+		    public int compare(String s1, String s2) {
+		        return (s1 + s2).compareTo(s2 + s1);
+		    }
+		});
+		```
+
+		
