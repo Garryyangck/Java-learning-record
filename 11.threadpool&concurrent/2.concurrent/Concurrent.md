@@ -236,24 +236,23 @@
 
 	> - ```java
 	> 	class Account {
-	> 	  private int balance;
-	> 	  // 转账
-	> 	  synchronized void transfer(
-	> 	      Account target, int amt){
-	> 	    if (this.balance > amt) {
-	> 	      this.balance -= amt;
-	> 	      target.balance += amt;
-	> 	    }
-	> 	  } 
+	> 	    private int balance;
+	> 	    // 转账
+	> 	    synchronized void transfer(Account target, int amt) {
+	> 	        if (this.balance > amt) {
+	> 	            this.balance -= amt;
+	> 	            target.balance += amt;
+	> 	        }
+	> 	    } 
 	> 	}
 	> 	```
-	>
-	> - 假设线程 1 执行账户 A 转账户 B 的操作，线程 2 执行账户 B 转账户 C 的操作。这两个线程分别在两颗 CPU 上同时执行，那它们是互斥的吗？我们期望是，但实际上并不是。
-	>
-	> - 最终账户 B 的余额可能是 300（线程 1 后于线程 2 写 B.balance，线程 2 写的 B.balance 值被线程 1 覆盖），可能是 100（线程 1 先于线程 2 写 B.balance，线程 1 写的 B.balance 值被线程 2 覆盖），就是不可能是 200。
-	>
-	> - ![并发转账示意图](Concurrent.assets/202201211508818.png)
-
+	> 	
+	>- 假设线程 1 执行账户 A 转账户 B 的操作，线程 2 执行账户 B 转账户 C 的操作。这两个线程分别在两颗 CPU 上同时执行，那它们是互斥的吗？我们期望是，但实际上并不是。
+	> 
+	>- 最终账户 B 的余额可能是 300（线程 1 后于线程 2 写 B.balance，线程 2 写的 B.balance 值被线程 1 覆盖），可能是 100（线程 1 先于线程 2 写 B.balance，线程 1 写的 B.balance 值被线程 2 覆盖），就是不可能是 200。
+	> 
+	>- ![并发转账示意图](Concurrent.assets/202201211508818.png)
+	
 3. ==使用锁的正确姿势==
 
 	> - ![img](Concurrent.assets/202201192205980.png)
@@ -267,8 +266,8 @@
 
 1. ==向现实世界要答案==
 
-	> - 用两把锁就实现了，转出账本一把，转入账本另一把。在 transfer() 方法内部，我们首先尝试锁定转出账户 this（先把转出账本拿到手），然后尝试锁定转入账户 target（再把转入账本拿到手），==只有当两把锁都获取时，才执行转账操作==。这个逻辑可以图形化为下图这个样子。
-	> - ![两个转账操作并行示意图](Concurrent.assets/202201211508575.png)
+  > - 用两把锁就实现了，转出账本一把，转入账本另一把。在 transfer() 方法内部，我们首先尝试锁定转出账户 this（先把转出账本拿到手），然后尝试锁定转入账户 target（再把转入账本拿到手），==只有当两把锁都获取时，才执行转账操作==。这个逻辑可以图形化为下图这个样子。
+  > - ![两个转账操作并行示意图](Concurrent.assets/202201211508575.png)
 
 2. ==没有免费的午餐==
 
@@ -1029,10 +1028,10 @@
   > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
   > 	3: dup - 复制栈顶的lockObject引用。
   > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
-  > 	    	
+  > 	    		
   > 	// 管程开始同步
   > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
-  > 	    	
+  > 	    		
   > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
   > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
   > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
@@ -1043,7 +1042,7 @@
   > 	24: aload_1 - 加载InterruptedException到栈顶。
   > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
   > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    	
+  > 	    		
   > 	// 结束管程同步
   > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
   > 	    
@@ -1051,7 +1050,7 @@
   > 	30: goto          38 - 跳转到第38行，结束方法。
   > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
   > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    	
+  > 	    		
   > 	// 退出管程
   > 	35: monitorexit - 退出lockObject的监视器。
   > 	    

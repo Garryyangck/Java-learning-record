@@ -8141,4 +8141,83 @@ Java进阶完成：
 		});
 		```
 
+
+
+
+# ***2024.6.15打卡	Day 136***
+
+1. 今天看了Java并发专题线程安全的八股文。
+
+2. leetcode 刷题：3题
+
+	- [剑指 Offer 40. 最小的k个数](https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/)
+
+		可以使用最大堆维护最小的k个数。
+
+		也可以直接使用快速排序，如果一次交换后的基准点左侧恰有k个数，那么它们就是最小的k个数。
+
+		```java
+		public int[] quickSort(int[] stock, int cnt, int l, int r) {
+		    int i = l;
+		    int j = r;
+		
+		    // 以左边界作为哨兵，二路快速排序
+		    while(i < j) {
+		        while(i < j && stock[j] >= stock[l]) j--;
+		        while(i < j && stock[i] <= stock[l]) i++;
+		        swap(stock, i, j);
+		    }
+		    // 把哨兵放到两段中间位置,跳出while循环的时候，i==j
+		    swap(stock, i, l);
+		    
+		    if(i > cnt) return quickSort(stock, cnt, l, i-1);
+		    if(i < cnt) return quickSort(stock, cnt, i+1, r);
+		    return Arrays.copyOf(stock, cnt);
+		
+		}
+		```
+
+	- [剑指 Offer 41. 数据流中的中位数](https://leetcode.cn/problems/shu-ju-liu-zhong-de-zhong-wei-shu-lcof/)
+
+		维护两个堆，left为最大堆，right为最小堆
+
+		```java
+		public void addNum(int num) {
+		    if (left.size() == right.size()) { // 让左边变多
+		        if (left.isEmpty()) { // 防止后序 peek 空指针异常
+		            left.add(num);
+		        } else { // 此时右侧==左侧==不为空
+		            if (num > right.peek()) { // 比右侧最小的大，添加到右侧
+		                left.add(right.poll());
+		                right.add(num);
+		            } else { // 直接添加到左侧
+		                left.add(num);
+		            }
+		        }
+		    } else { // 让右边变多
+		        if (num < left.peek()) { // 这里不用考虑空指针，因为left必定不为空
+		            right.add(left.poll());
+		            left.add(num);
+		        } else {
+		            right.add(num);
+		        }
+		    }
+		}
+		```
+
+	- [剑指 Offer 51. 数组中的逆序对](https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/)
+
+		直接使用冒泡排序会超时，因此使用归并排序，在归并的时候顺便统计逆序对
+
+		```java
+		while (i < left.length && j < right.length) {
+		    if (left[i] <= right[j]) {
+		        res[index++] = left[i++];
+		    } else { // 此时右边的比左边的小，出现逆序对，如[7,9] [4,5,6]，遍历到4就产生两个逆序对
+		        ans += (left.length - i);
+		        res[index++] = right[j++];
+		    }
+		}
+		```
+
 		
