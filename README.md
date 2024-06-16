@@ -8220,4 +8220,19 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.6.16打卡	Day 137***
+
+1. 今天看了Java并发专题Java多线程基础八股文，复习考试周。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 12. 矩阵中的路径](https://leetcode.cn/problems/ju-zhen-zhong-de-lu-jing-lcof)
+
+		采用深度搜索，visit+四个方向遍历，比较常规，但是我由于太久没做回溯，竟然忘记最后把添加的数据还原了！
+
+	- [剑指 Offer 13. 机器人的运动范围](https://leetcode.cn/problems/ji-qi-ren-de-yun-dong-fan-wei-lcof)
+
+		这道题也是走迷宫，可以广搜，也可以深搜，搜到一个点，入队 OR backTrace(当前点坐标)，ans++

@@ -348,7 +348,7 @@
 	> - ![notify() 操作工作原理图](Concurrent.assets/202201211508906.png)
 	> - 当条件满足时调用 notify()，会通知等待队列（==互斥锁的等待队列==）中的线程，告诉它==条件曾经满足过==。因为 ==notify() 只能保证在通知时间点，条件是满足的==。而被通知线程的==执行时间点和通知的时间点基本上不会重合==，所以==当线程执行的时候，很可能条件已经不满足了（如有其他线程插队==）。
 	> - ==被通知的线程要想重新执行，仍然需要获取到互斥锁==（曾经获取的锁在调用 wait() 时释放了）。
-	> - 所以如果 synchronized 锁定的是 this，那么对应的一定是 this.wait()、this.notify()、this.notifyAll()；==如果 synchronized 锁定的是 target，那么对应的一定是 target.wait()、target.notify()、target.notifyAll() ==。
+	> - 所以如果 synchronized 锁定的是 this，那么对应的一定是 this.wait()、this.notify()、this.notifyAll()；==如果 synchronized 锁定的是 target，那么对应的一定是 target.wait()、target.notify()、target.notifyAll()==。
 
 5. ==小试牛刀：一个更好地资源分配器==
 
@@ -420,7 +420,7 @@
 	> - ==“锁”的过度使用可能导致串行化的范围过大，这样就不能够发挥多线程的优势==了，而我们之所以使用多线程搞并发程序，为的就是提升性能。
 	> - ==Java SDK 并发包里之所以有那么多东西，有很大一部分原因就是要提升在某个特定领域的性能==。
 	> - ==解决使用锁导致并发性能下降问题的方案==：
-	> 	1. 第一，既然使用锁会带来性能问题，那最好的方案自然就是==使用无锁的算法和数据结构==了。在这方面有很多相关的技术，例如线程本地存储 (==Thread Local== Storage, TLS)、==写入时复制 (Copy-on-write，Redis RDB fork 子进程时使用写时复制，使得执行快照时依然可以进行写操作)==、==乐观锁==等；Java ==并发包里面的原子类也是一种无锁的数据结构==；==Disruptor 则是一个无锁的内存队列==，性能都非常好……
+	> 	1. 第一，既然使用锁会带来性能问题，那最好的方案自然就是==使用无锁的算法和数据结构==了。在这方面有很多相关的技术，例如线程本地存储 (==Thread Local== Storage, TLS)、==写入时复制 (Copy-on-write，Redis RDB fork 子进程时使用写时复制，使得执行快照时依然可以进行写操作)==、==乐观锁==等；Java ==并发包里面的原子类 AtomicInteger 也是一种无锁的数据结构==；==Disruptor 则是一个无锁的内存队列==，性能都非常好……
 	> 	2. 第二，==减少锁持有的时间==。==互斥锁本质上是将并行的程序串行化==，所以要增加并行度，一定要减少持有锁的时间。这个方案具体的实现技术也有很多，例如使用==细粒度的锁==，一个典型的例子就是 Java 并发包里的 ==ConcurrentHashMap，它使用了所谓分段锁的技术==（这个技术后面我们会详细介绍）；还可以使用==读写锁，也就是读是无锁的，只有写的时候才会互斥==。
 	> - ==检验性能的三个指标==
 	> 	1. ==吞吐量==：指的是==单位时间内能处理的请求数量==。吞吐量越高，说明性能越好。
@@ -536,7 +536,7 @@
 	> - ==管程==是一个解决并发问题的==模型==，你可以参考医院就医的流程来加深理解。理解这个模型的重点在于理解==条件变量==及其==等待队列==的工作原理。
 	> - ==Java 参考了 MESA 模型，语言内置的管程（synchronized==）对 MESA 模型进行了精简。==MESA 模型中，条件变量可以有多个==，==Java 语言内置的管程（synchronized）里只有一个条件变量==。
 	> - ![Java中的管程示意图](Concurrent.assets/202201211509375.png)
-	> - Java 内置的管程方案（synchronized）使用简单，==synchronized 关键字修饰的代码块，在编译期会自动生成相关加锁和解锁的代码==，但是==仅支持一个条件变量==；而 ==Java SDK 并发包实现的管程支持多个条件变量==，不过==并发包里的锁，需要开发人员人为进行加锁和解锁操作==。
+	> - Java 内置的管程方案（synchronized）使用简单，==synchronized 关键字修饰的代码块，在编译期会自动生成相关加锁和解锁的代码（编译期在代码块前生成 monitorenter, 代码块后生成 monitorexit）==，并且==仅支持一个条件变量==；而 ==Java SDK 并发包实现的管程支持多个条件变量（比如 ReenTrantLock，可以在一个 lock 下自定义多个 Condition，但是需要手动 lock 和 unlock）==，不过==并发包里的锁，需要开发人员人为进行加锁和解锁操作==。
 
 ---
 
@@ -741,7 +741,7 @@
 
 	```java
 	public interface Callable<V> {
-	    /==
+	    /* *
 	     * Computes a result, or throws an exception if unable to do so.
 	     *
 	     * @return computed result
@@ -752,7 +752,7 @@
 	```
 
 	```java
-	/==
+		/* *
 	     * Creates a {@code FutureTask} that will, upon running, execute the
 	     * given {@code Callable}.
 	     *
@@ -783,7 +783,7 @@
 	if(!task.isDone()){
 	    System.out.println("task has not finished, please wait!");
 	}
-	System.out.println("task return:"+task.qet());
+	System.out.println("task return:" + task.get());
 	```
 
 	==使用线程池==，向线程池传入 Callable，然后获取返回的 Future 对象，Future.isDone。
@@ -1028,10 +1028,10 @@
   > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
   > 	3: dup - 复制栈顶的lockObject引用。
   > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
-  > 	    		
+  > 	    			
   > 	// 管程开始同步
   > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
-  > 	    		
+  > 	    			
   > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
   > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
   > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
@@ -1042,7 +1042,7 @@
   > 	24: aload_1 - 加载InterruptedException到栈顶。
   > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
   > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    		
+  > 	    			
   > 	// 结束管程同步
   > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
   > 	    
@@ -1050,7 +1050,7 @@
   > 	30: goto          38 - 跳转到第38行，结束方法。
   > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
   > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    		
+  > 	    			
   > 	// 退出管程
   > 	35: monitorexit - 退出lockObject的监视器。
   > 	    
@@ -1504,6 +1504,10 @@
 
 
 ### 8.AQS 原理（暂时没看）
+
+
+
+### 9.什么是 CAS 机制（还没看）
 
 
 
