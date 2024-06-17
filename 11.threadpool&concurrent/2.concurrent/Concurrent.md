@@ -840,7 +840,7 @@
 
 1. 为什么 stop 被废弃了？==stop 强制中断线程，不会自动释放其锁资源==，可能存在锁资源永远不被释放。
 2. ==调用interrupt()，通知线程应该中断了==。
-	- 如果线程处于==被阻塞状态==，那么线程将==立即退出被阻塞状态==，并==抛出InterruptedException异常==。
+	- 如果线程处于==被阻塞状态==，那么线程将==立即退出被阻塞状态==，并==抛出 InterruptedException 异常==。
 	- 如果线程处于==正常活动状态==，那么会将该线程的==中断标志设置为true==。==被设置中断标志的线程将继续正常运行，不受影响==。
 3. 因此==被调用的线程需要配合中断==。
 	- 在==正常运行==任务时，==经常检查本线程的中断标志位==，如果被设置了中断标志就自行停止线程。
@@ -884,185 +884,181 @@
 	
 3. ==synchronized 的字节码==：
 
-  > - ==java 源代码==：
-  >
-  > 	```java
-  > 	public class Test {
-  > 	    public static final Object lockObject = new Object();//随便创建一个对象
-  > 	
-  > 	    public static void main(String[] args) {
-  > 	        for (int i = 0; i < 10; i++) {
-  > 	            new Thread(new Runnable() {
-  > 	                @Override
-  > 	                public void run() {
-  > 	                    f();
-  > 	                }
-  > 	            }).start();
-  > 	        }
-  > 	    }
-  > 	
-  > 	    public static void f() {
-  > 	        synchronized (lockObject) {
-  > 	            System.out.println("hello synchronized");
-  > 	            try {
-  > 	                Thread.sleep(1000);
-  > 	            } catch (InterruptedException e) {
-  > 	                e.printStackTrace();
-  > 	            }
-  > 	        }
-  > 	    }
-  > 	}
-  > 	```
-  >
-  > - ==字节码==：
-  >
-  > 	```
-  > 	Compiled from "Test.java"
-  > 	public class Test {
-  > 	  public static final java.lang.Object lockObject;
-  > 	
-  > 	  public Test();
-  > 	    Code:
-  > 	       0: aload_0
-  > 	       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
-  > 	       4: return
-  > 	
-  > 	  public static void main(java.lang.String[]);
-  > 	    Code:
-  > 	       0: iconst_0
-  > 	       1: istore_1
-  > 	       2: iload_1
-  > 	       3: bipush        10
-  > 	       5: if_icmpge     31
-  > 	       8: new           #2                  // class java/lang/Thread
-  > 	      11: dup
-  > 	      12: new           #3                  // class Test$1
-  > 	      15: dup
-  > 	      16: invokespecial #4                  // Method Test$1."<init>":()V
-  > 	      19: invokespecial #5                  // Method java/lang/Thread."<init>":(Ljava/lang/Runnable;)V
-  > 	      22: invokevirtual #6                  // Method java/lang/Thread.start:()V
-  > 	      25: iinc          1, 1
-  > 	      28: goto          2
-  > 	      31: return
-  > 	
-  > 	  public static void f();
-  > 	    Code:
-  > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
-  > 	       3: dup
-  > 	       4: astore_0
-  > 	       5: monitorenter
-  > 	       6: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;
-  > 	       9: ldc           #9                  // String hello synchronized
-  > 	      11: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-  > 	      14: ldc2_w        #11                 // long 1000l
-  > 	      17: invokestatic  #13                 // Method java/lang/Thread.sleep:(J)V
-  > 	      20: goto          28
-  > 	      23: astore_1
-  > 	      24: aload_1
-  > 	      25: invokevirtual #15                 // Method java/lang/InterruptedException.printStackTrace:()V
-  > 	      28: aload_0
-  > 	      29: monitorexit
-  > 	      30: goto          38
-  > 	      33: astore_2
-  > 	      34: aload_0
-  > 	      35: monitorexit
-  > 	      36: aload_2
-  > 	      37: athrow
-  > 	      38: return
-  > 	    Exception table:
-  > 	       from    to  target type
-  > 	          14    20    23   Class java/lang/InterruptedException
-  > 	           6    30    33   any
-  > 	          33    36    33   any
-  > 	
-  > 	  static {};
-  > 	    Code:
-  > 	       0: new           #16                 // class java/lang/Object
-  > 	       3: dup
-  > 	       4: invokespecial #1                  // Method java/lang/Object."<init>":()V
-  > 	       7: putstatic     #7                  // Field lockObject:Ljava/lang/Object;
-  > 	      10: return
-  > 	}
-  > 	
-  > 	Process finished with exit code 0
-  > 	
-  > 	```
-  >
-  > - ==主要看 f() 的字节码==：
-  >
-  > 	```java
-  > 	public static void f();
-  > 	    Code:
-  > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
-  > 	       3: dup
-  > 	       4: astore_0
-  > 	       5: monitorenter
-  > 	       6: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;
-  > 	       9: ldc           #9                  // String hello synchronized
-  > 	      11: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-  > 	      14: ldc2_w        #11                 // long 1000l
-  > 	      17: invokestatic  #13                 // Method java/lang/Thread.sleep:(J)V
-  > 	      20: goto          28
-  > 	      23: astore_1
-  > 	      24: aload_1
-  > 	      25: invokevirtual #15                 // Method java/lang/InterruptedException.printStackTrace:()V
-  > 	      28: aload_0
-  > 	      29: monitorexit
-  > 	      30: goto          38
-  > 	      33: astore_2
-  > 	      34: aload_0
-  > 	      35: monitorexit
-  > 	      36: aload_2
-  > 	      37: athrow
-  > 	      38: return
-  > 	    Exception table:
-  > 	       from    to  target type
-  > 	          14    20    23   Class java/lang/InterruptedException
-  > 	           6    30    33   any
-  > 	          33    36    33   any
-  > 	```
-  >
-  > - ==AI 给出的解释==：
-  >
-  > 	```java
-  > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
-  > 	3: dup - 复制栈顶的lockObject引用。
-  > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
-  > 	    			
-  > 	// 管程开始同步
-  > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
-  > 	    			
-  > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
-  > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
-  > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
-  > 	14: ldc2_w        #11 - 将长整型1000l（1000毫秒）加载到栈顶。
-  > 	17: invokestatic  #13 - 调用Thread.sleep方法，使当前线程暂停1000毫秒。
-  > 	20: goto          28 - 如果没有异常发生，跳转到第28行。
-  > 	23: astore_1 - 如果Thread.sleep抛出InterruptedException异常，将其存储在局部变量槽1中。
-  > 	24: aload_1 - 加载InterruptedException到栈顶。
-  > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
-  > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    			
-  > 	// 结束管程同步
-  > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
-  > 	    
-  > 	    
-  > 	30: goto          38 - 跳转到第38行，结束方法。
-  > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
-  > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-  > 	    			
-  > 	// 退出管程
-  > 	35: monitorexit - 退出lockObject的监视器。
-  > 	    
-  > 	    
-  > 	36: aload_2 - 加载局部变量槽2中的异常到栈顶。
-  > 	37: athrow - 重新抛出存储在局部变量槽2中的异常。
-  > 	38: return - 方法正常结束，返回。
-  > 	Exception table: - 异常表，列出了可能抛出的异常及其处理方式：
-  > 	from 14 to 20 target 23 type java/lang/InterruptedException - 如果在Thread.sleep期间发生InterruptedException，则跳转到第23行处理。
-  > 	from 6 to 30 target 33 type any - 如果在进入监视器到退出监视器之间的任何位置发生任何类型的异常，则跳转到第33行处理。
-  > 	from 33 to 36 target 33 type any - 如果在退出监视器时发生任何类型的异常，则跳转到第33行处理。
-  > 	```
+      > - ==java 源代码==：
+      >
+      > 	```java
+      > 	public class Test {
+      > 	    public static final Object lockObject = new Object();//随便创建一个对象
+      >
+      > 	    public static void main(String[] args) {
+      > 	        for (int i = 0; i < 10; i++) {
+      > 	            new Thread(new Runnable() {
+      > 	                @Override
+      > 	                public void run() {
+      > 	                    f();
+      > 	                }
+      > 	            }).start();
+      > 	        }
+      > 	    }
+      >
+      > 	    public static void f() {
+      > 	        synchronized (lockObject) {
+      > 	            System.out.println("hello synchronized");
+      > 	            try {
+      > 	                Thread.sleep(1000);
+      > 	            } catch (InterruptedException e) {
+      > 	                e.printStackTrace();
+      > 	            }
+      > 	        }
+      > 	    }
+      > 	}
+      > 	```
+      >
+      > - ==字节码==：
+      >
+      > 	```
+      > 	Compiled from "Test.java"
+      > 	public class Test {
+      > 	  public static final java.lang.Object lockObject;
+      >
+      > 	  public Test();
+      > 	    Code:
+      > 	       0: aload_0
+      > 	       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+      > 	       4: return
+      >
+      > 	  public static void main(java.lang.String[]);
+      > 	    Code:
+      > 	       0: iconst_0
+      > 	       1: istore_1
+      > 	       2: iload_1
+      > 	       3: bipush        10
+      > 	       5: if_icmpge     31
+      > 	       8: new           #2                  // class java/lang/Thread
+      > 	      11: dup
+      > 	      12: new           #3                  // class Test$1
+      > 	      15: dup
+      > 	      16: invokespecial #4                  // Method Test$1."<init>":()V
+      > 	      19: invokespecial #5                  // Method java/lang/Thread."<init>":(Ljava/lang/Runnable;)V
+      > 	      22: invokevirtual #6                  // Method java/lang/Thread.start:()V
+      > 	      25: iinc          1, 1
+      > 	      28: goto          2
+      > 	      31: return
+      >
+      > 	  public static void f();
+      > 	    Code:
+      > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
+      > 	       3: dup
+      > 	       4: astore_0
+      > 	       5: monitorenter
+      > 	       6: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      > 	       9: ldc           #9                  // String hello synchronized
+      > 	      11: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      > 	      14: ldc2_w        #11                 // long 1000l
+      > 	      17: invokestatic  #13                 // Method java/lang/Thread.sleep:(J)V
+      > 	      20: goto          28
+      > 	      23: astore_1
+      > 	      24: aload_1
+      > 	      25: invokevirtual #15                 // Method java/lang/InterruptedException.printStackTrace:()V
+      > 	      28: aload_0
+      > 	      29: monitorexit
+      > 	      30: goto          38
+      > 	      33: astore_2
+      > 	      34: aload_0
+      > 	      35: monitorexit
+      > 	      36: aload_2
+      > 	      37: athrow
+      > 	      38: return
+      > 	    Exception table:
+      > 	       from    to  target type
+      > 	          14    20    23   Class java/lang/InterruptedException
+      > 	           6    30    33   any
+      > 	          33    36    33   any
+      >
+      > 	  static {};
+      > 	    Code:
+      > 	       0: new           #16                 // class java/lang/Object
+      > 	       3: dup
+      > 	       4: invokespecial #1                  // Method java/lang/Object."<init>":()V
+      > 	       7: putstatic     #7                  // Field lockObject:Ljava/lang/Object;
+      > 	      10: return
+      > 	}
+      >
+      > 	Process finished with exit code 0
+      >
+      > 	```
+      >
+      > - ==主要看 f() 的字节码==：
+      >
+      > 	```java
+      > 	public static void f();
+      > 	    Code:
+      > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
+      > 	       3: dup
+      > 	       4: astore_0
+      > 	       5: monitorenter
+      > 	       6: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      > 	       9: ldc           #9                  // String hello synchronized
+      > 	      11: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      > 	      14: ldc2_w        #11                 // long 1000l
+      > 	      17: invokestatic  #13                 // Method java/lang/Thread.sleep:(J)V
+      > 	      20: goto          28
+      > 	      23: astore_1
+      > 	      24: aload_1
+      > 	      25: invokevirtual #15                 // Method java/lang/InterruptedException.printStackTrace:()V
+      > 	      28: aload_0
+      > 	      29: monitorexit
+      > 	      30: goto          38
+      > 	      33: astore_2
+      > 	      34: aload_0
+      > 	      35: monitorexit
+      > 	      36: aload_2
+      > 	      37: athrow
+      > 	      38: return
+      > 	    Exception table:
+      > 	       from    to  target type
+      > 	          14    20    23   Class java/lang/InterruptedException
+      > 	           6    30    33   any
+      > 	          33    36    33   any
+      > 	```
+      >
+      > - ==AI 给出的解释==：
+      >
+      > 	```java
+      > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
+      > 	3: dup - 复制栈顶的lockObject引用。
+      > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
+      > 		
+      > 	// 管程开始同步
+      > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
+      > 		
+      > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
+      > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
+      > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
+      > 	14: ldc2_w        #11 - 将长整型1000l（1000毫秒）加载到栈顶。
+      > 	17: invokestatic  #13 - 调用Thread.sleep方法，使当前线程暂停1000毫秒。
+      > 	20: goto          28 - 如果没有异常发生，跳转到第28行。
+      > 	23: astore_1 - 如果Thread.sleep抛出InterruptedException异常，将其存储在局部变量槽1中。
+      > 	24: aload_1 - 加载InterruptedException到栈顶。
+      > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
+      > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
+      > 		
+      > 	// 结束管程同步
+      > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
+      > 	30: goto          38 - 跳转到第38行，结束方法。
+      > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
+      > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
+      > 		
+      > 	// 退出管程
+      > 	35: monitorexit - 退出lockObject的监视器。
+      > 	36: aload_2 - 加载局部变量槽2中的异常到栈顶。
+      > 	37: athrow - 重新抛出存储在局部变量槽2中的异常。
+      > 	38: return - 方法正常结束，返回。
+      > 	Exception table: - 异常表，列出了可能抛出的异常及其处理方式：
+      > 	from 14 to 20 target 23 type java/lang/InterruptedException - 如果在Thread.sleep期间发生InterruptedException，则跳转到第23行处理。
+      > 	from 6 to 30 target 33 type any - 如果在进入监视器到退出监视器之间的任何位置发生任何类型的异常，则跳转到第33行处理。
+      > 	from 33 to 36 target 33 type any - 如果在退出监视器时发生任何类型的异常，则跳转到第33行处理。
+      >
 
 ---
 
@@ -1126,33 +1122,45 @@
 	}
 	```
 
-	> 一个简简单单的自增操作，就加了 synchronized 进行同步，好像有点大材小用的感觉，加了 synchronized 关键词之后，当有很多线程去竞争 increment 这个方法的时候，拿不到锁的方法是会被==阻塞==在方法外面的，最后再来唤醒他们，而==阻塞/唤醒这些操作，是非常消耗时间的==。
+	> 一个简简单单的自增操作，就加了 synchronized 进行同步，好像有点大材小用的感觉，加了 synchronized 关键词之后，当有很多线程去竞争 increment 这个方法的时候，拿不到锁的方法是会被==阻塞==在方法外面的，最后再来唤醒他们，而==阻塞/唤醒这些操作，涉及到操作系统内核态和用户态的转换，是非常消耗时间的==。
 
 2. ==CAS 是什么==
 
-	> - 1、线程从内存中读取 i 的值，假如此时 i 的值为 0，我们把这个值称为 k 吧，即此时 k = 0。
-	>
-	> - 2、令 j = k + 1。
-	>
-	> - 3、用 k 的值与内存中i的值相比，如果==相等==，这意味着==没有其他线程修改过 i 的值==，我们就==把 j（此时为1） 的值写入内存==；如果==不相等（意味着i的值被其他线程修改过==），我们就==不把j的值写入内存，而是重新跳回步骤 1==，继续这三个操作。
-	>
-	> 	```java
-	> 	public static void increment() {
-	> 	    do{
-	> 	        int k = i;
-	> 	        int j = k + 1;
-	> 	    }while (compareAndSet(i, k, j))
-	> 	}
-	> 	```
-	>
-	> - 我们就把 compareAndSet 称为 ==CAS==。
+  > - 1、线程从内存中读取 i 的值，假如此时 i 的值为 0，我们把这个值称为 k 吧，即此时 k = 0。
+  >
+  > - 2、令 j = k + 1。
+  >
+  > - 3、用 k 的值与内存中 i 的值相比，如果==相等==，这意味着==没有其他线程修改过 i 的值==，我们就==把 j（此时为1） 的值写入内存==；如果==不相等（意味着i的值被其他线程修改过==），我们就==不把 j 的值写入内存，而是重新跳回步骤 1（自旋操作）==，继续这三个操作。
+  >
+  >   ```java
+  >   public static void increment() {
+  >       do{
+  >           int k = i;
+  >           int j = k + 1;
+  >       } while (compareAndSet(i, k, j)) // 如果有其它线程，则 i 在创建 k 和 j 的这段
+  >           							 // 时间内被其它线程修改，导致 i 和 k 不一样
+  >           							 // 需要重新进行 i++ 操作
+  >   }
+  >   ```
+  >
+  > - 我们就把 compareAndSet 称为 ==CAS==。
+  >
+  > - ==原子操作类的底层就使用 CAS== 实现线程同步。例如 AtomicBoolean，==AtomicInteger==，AtomicLong。
+  >
+  > - ==`compareAndSet` 方法底层是 `unsafe.compareAndSwapInt` 方法，涉及到硬件系统的原子操作==，因此 ==`compareAndSet` 方法是具有原子性==的。
 
 3. ==CAS：谁偷偷更改了我的值==
 
-	> - 虽然这种 CAS 的机制能够保证increment() 方法，但依然有一些问题，例如，当线程A即将要执行第三步的时候，线程 B 把 i 的值加1，之后又马上把 i 的值减 1，然后，线程 A 执行第三步，这个时候线程 A 是认为并没有人修改过 i 的值，因为 i 的值并没有发生改变。而这，就是我们平常说的==ABA问题==。
+	> - 虽然这种 CAS 的机制能够保证 increment() 方法，但依然有一些问题，例如，当线程A即将要执行==判断 i 和 k 是否还相等==的时候，==线程 B 把 i 的值加1，之后又马上把 i 的值减 1==，然后，线程 A 执行第三步，这个时候==线程 A 是认为并没有人修改过 i 的值==，因为 i 的值并没有发生改变。而这，就是我们平常说的==ABA问题==。
 	> - 对于基本类型的值来说，这种把==数字改变了在改回原来的值==是没有太大影响的，但如果是==对于引用类型的话，就会产生很大的影响==了。
 	> - ==来个版本控制吧==：
-	> - 为了解决这个 ABA 的问题，我们可以引入版本控制，例如，==每次有线程修改了引用的值，就会进行版本的更新，虽然两个线程持有相同的引用，但他们的版本不同==，这样，我们就可以预防 ABA 问题了。Java 中提供了 AtomicStampedReference 这个类，就可以进行版本控制了。
+	> - 为了解决这个 ABA 的问题，我们可以==引入版本控制==，例如，==每次有线程修改了引用的值，就会进行版本的更新，虽然两个线程持有相同的引用，但他们的版本不同==，这样，我们就可以预防 ABA 问题了。Java 中提供了 AtomicStampedReference 这个类，就可以进行版本控制了。
+	
+4. ==CAS 的缺点==：
+
+  > - ==CPU 开销大==：反复高频地获取一个变量的值，给 CPU 带来巨大的压力。
+  > - ==只能保证一个变量的原子性，不能保证代码块的原子性==。
+  > - 上面提到的 ==ABA 问题==，即在判断前其它线程修改变量的值，又改了回去。可以通过==版本控制==解决 ABA 问题，即对变量进行操作时更新版本号。
 
 ---
 
@@ -1506,8 +1514,6 @@
 ### 8.AQS 原理（暂时没看）
 
 
-
-### 9.什么是 CAS 机制（还没看）
 
 
 

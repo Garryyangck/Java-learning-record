@@ -1,7 +1,7 @@
 package garry.leetcode;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Garry
@@ -10,26 +10,39 @@ import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(new Solution().crackPassword(new int[]{0, 30, 3, 34, 5, 9}));
     }
 }
 
 class Solution {
-    public String crackPassword(int[] password) {
-        String[] arr = new String[password.length];
-        for (int i = 0; i < password.length; i++) {
-            arr[i] = String.valueOf(password[i]);
+    private String goods;
+    private StringBuffer buffer;
+    private boolean[] visit;
+    private List<String> ans;
+
+    public String[] goodsOrder(String goods) {
+        this.buffer = new StringBuffer();
+        this.goods = goods;
+        this.visit = new boolean[goods.length()];
+        this.ans = new ArrayList<>();
+        backTrace(0);
+        return ans.toArray(new String[ans.size()]);
+    }
+
+    private void backTrace(int num) {
+        if (num == goods.length()) {
+            ans.add(new String(buffer));
+            return;
         }
-        Arrays.sort(arr, new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                return (s1 + s2).compareTo(s2 + s1);
+
+        for (int i = 0; i < goods.length(); i++) {
+            if (!visit[i]) {
+                char ch = goods.charAt(i);
+                buffer.append(ch);
+                visit[i] = true;
+                backTrace(num + 1);
+                buffer.deleteCharAt(buffer.length() - 1);
+                visit[i] = false;
             }
-        });
-        StringBuffer ans = new StringBuffer();
-        for (int i = 0; i < password.length; i++) {
-            ans.append(arr[i]);
         }
-        return new String(ans);
     }
 }

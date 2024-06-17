@@ -8236,3 +8236,36 @@ Java进阶完成：
 	- [剑指 Offer 13. 机器人的运动范围](https://leetcode.cn/problems/ji-qi-ren-de-yun-dong-fan-wei-lcof)
 
 		这道题也是走迷宫，可以广搜，也可以深搜，搜到一个点，入队 OR backTrace(当前点坐标)，ans++
+
+
+
+# ***2024.6.17打卡	Day 138***
+
+1. 考试+Java并发CAS部分八股文。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode.cn/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)
+
+		注意要在叶子节点处判断，如果在null处判断，则同一个序列会加入两次
+
+	- [剑指 Offer 38. 字符串的排列](https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/)
+
+		```java
+		for (int i = 0; i < goods.length(); i++) {
+		    if (!visit[i]) {
+		        char ch = chars[i];
+		        // 最关键的一步，去重的条件是：
+		        // 前面和自己一样，并且前面的数还没有加入（此处换成 == true也正确）
+		        if (i > 0 && chars[i] == chars[i - 1] && visit[i - 1] == false)
+		            continue;
+		        buffer.append(ch);
+		        visit[i] = true;
+		        backTrace(num + 1);
+		        buffer.deleteCharAt(buffer.length() - 1);
+		        visit[i] = false;
+		    }
+		}
+		```
+
+		
