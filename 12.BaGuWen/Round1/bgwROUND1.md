@@ -1582,7 +1582,239 @@
 
 ### 3.【并发专题】CAS连环炮🌟🌟🌟🌟🌟
 
-**问题一**：
+==问题一==：==简单介绍一下 CAS，什么是 CAS ？==
+
+==我的回答==：
+
+1. CAS 是实现乐观锁进行并发控制的一种算法，是 ==compareAndSwap== 的缩写。
+
+2. 该算法包括三个变量，分别是 value，expectedValue，newValue，其中 value 是需要进行并发控制的变量，而 expectedValue 表示进行 swap 操作（更新 value 的值）前所期望 value 的值。
+
+3. ==如果 `value == expectedValue`，则可以进行 swap 操作==，否则说明有其它线程正在并发操作 value 变量，因此当前线程操作失败，可以自行决定后续操作（自旋 OR 阻塞）。
+
+4. ```java
+	public volatile int value;
+	
+	public static void increment() {
+	    do {
+	        int expectedValue = this.value;
+	        int newValue = expectedValue + 1;
+	    } while (!compareAndSwap(expectedValue, newValue)) 
+	        // 如果有其它线程，则 value 在创建 expectedValue 和 newValue 的这段
+	        // 时间内被其它线程修改，导致 value 和 expectedValue 不一样
+	        // 需要重新进行 value++ 操作
+	        // 否则将 value 设置为 newValue
+	}
+	
+	public boolean compareAndSwap(int expectedValue, int newValue) {
+	    if(this.value == expectedValue) { // compare 操作
+	        this.value = newValue; // swap 操作
+	        return true;
+	    }
+	    return false;
+	}
+	```
+
+==参考答案==：
+
+- CAS 是==比较并交换==的缩写，是==并发编程中的一个原子操作==。它包含三个操作数：内存位置、预期原值和新值。在操作期间会==先比较「内存位置上的值」和「预期原值」是否相等，如果相等则交换成新值，如果不相等则不交换==。
+
+==问题二==：==CAS 包含了 Compare 和 Swap 两个操作，它又如何保证原子性呢？==
+
+==我的回答==：
+
+1. compareAndSet 方法的==底层是调用了 unsafe.compareAndSwapInt==：
+
+  ```java
+  public final boolean compareAndSet(int expect, int update) {
+      return unsafe.compareAndSwapInt(this, valueOffset, expect, update);
+  }
+  ```
+
+2. 这里的 unsafe 是 JVM 为我们提供的一个==直接访问操作系统的接口==，为我们提供了可以进行==操作系统底层硬件级别的原子操作的 api==。
+
+3. 而至于 `unsafe.compareAndSwapInt` 的参数 ==valueOffset，则是 value 属性在内存中的偏移量，其类型为 long 类型，因此可以将其理解为 value 的地址==，以便进行 swap 操作。
+
+==参考答案==：
+
+- 这个主要是通过==操作系统底层硬件级别的支持==，来实现 CAS 操作的原子性的。比如现代 x86 架构的处理器，是用 cmpxchg 指令将 CAS 的多个操作通过一条处理器指令实现。
+- 再往下说，处理器指令的原子性通常由处理器提供「总线锁定」和「缓存锁定」两个机制来保证。
+- 总线锁定本质上就是一个 LOCK# 信号，当一个处理器在总线上发出这个信号时，其它处理器的请求将被阻塞，那么此时这个处理器就可以独占共享内存。这种锁定方式的开销很大，直接把 CPU 和内存之间的通信给锁住了，导致在锁定期间其他处理器也不能操作其它内存地址的数据。
+- 缓存锁定主要是利用了 MESI ，也就是缓存一致性协议，通过跟踪和维护各处理器缓存行的状态，确保多处理器对同一内存地址读写的一致性。这个过程是处理器直接操作数据的内存地址，不会影响其它处理器对其它内存地址的操作。
+
+==问题三==：==CAS是如何解决 ABA 问题的？==
+
+==我的回答==：
+
+1. ABA 问题是指在进行 compare 前，==其它的线程将 value 的值进行修改后，又改回了 oldValue 的值==，这对于 compare 来说依然会认为此时没有出现并发访问的问题。
+2. 解决 ABA 问题的方法是==给 value 加上版本号==，任何一个线程在修改 value 时都会更新版本号，这样把 compare 的内容从 value 的值改为版本号的值即可。
+
+==参考答案==：
+
+- 可以在==每次修改值时带上版本号==就行。
+
+- 比如 JUC atomic 包下的 ==AtomicStampedReference== 类，通过==引入一个整数戳（stamp）==，在对对象的引用修改时，也会改对应的整数戳，避免了 ABA 问题。
+
+	```java
+	public boolean compareAndSet(V   expectedReference,
+	                             V   newReference,
+	                             int expectedStamp,
+	                             int newStamp) {
+	    Pair<V> current = pair;
+	    return
+	        expectedReference == current.reference &&
+	        expectedStamp == current.stamp && // 同时比较整数戳是否相同
+	        ((newReference == current.reference &&
+	          newStamp == current.stamp) ||
+	         casPair(current, Pair.of(newReference, newStamp)));
+	}
+	```
+
+==问题四==：==比起其他锁，CAS 这种锁有哪些优缺点呢？CAS 适用于哪些应用场景呢？==
+
+==我的回答==：
+
+1. 优点是可以==避免==使用悲观锁时涉及到的大量==操作系统内核态和用户态之间的转换，节约时间==。
+2. 缺点有会产生 ==ABA 问题==，这可以用加版本号解决；在高并发下，如果 CAS 操作反复不成功，会导致==占用大量 CPU 资源==；==只能并发控制一个共享变量==，如果涉及到多个共享对象或代码块的时候，还是需要使用悲观锁。
+3. CAS 机制可以用于实现乐观锁，比如 AtomicInteger 中就是用 CAS 机制来实现对 Integer 的并发控制。
+
+**参考答案**：
+
+- CAS 是乐观锁的一种实现，是非常轻量级的操作，效率很高。但也有缺点。首先就是 ==ABA== 问题，可以带上版本号解决；还有就是==循环时间长开销大==，高并发情况下，自旋 CAS 如果长时间不成功，会白白浪费 CPU；同时 CAS 也==只能保证一个共享变量的原子操作==。当需要对多个共享变量操作时，就带考虑使用锁，或者把多个变量放在一个对象里，使用 AtomicReference 保证引用对象操作的原子性。
+- CAS 操作可以用于实现乐观锁，像 AtomicInteger 之类的。也可以用于一些并发容器底层同步状态的设置，比如 JDK 中 AQS 和 ReetrantLock 都有的 tryAcquire( )，都是用 CAS 操作独占式地获取并设置当前线程的同步状态。还有 Java 中的偏向锁和轻量级锁底层也用到了 CAS，作用类似。
+
+**问题五**：**我们说了，在高并发情况下，CAS 或许效率更低，那么对此，你觉得可以怎么优化 CAS 呢？（PS：Java8 就有进行了一些优化）**
+
+**我的回答**：
+
+1. CAS 在高并发下性能降低的原因主要是反复自旋长时间获取不到共享变量，占用大量 CPU 资源。因此可以==设置自旋次数的上限==。
+
+**参考答案**：
+
+- 高并发下主要是 CAS 自旋带来的性能问题，可以对线程==加入自旋次数的限制==，超过限制时可以根据情况调整自旋次数。
+
+- 还有就是 Java 8 中引入了 **LongAdder** 类，它用「**分段计数**」的方法来优化 CAS，具体来说，LongAdder 将内部的数值分为多个段，每个段都是独立的计数器。当多个线程同时更新数据时，会将这些更新分发给不同的段，减少了竞争。
+
+	<img src="bgwROUND1.assets/image-20240618162151189.png" alt="image-20240618162151189" style="zoom:67%;" />
+
+---
+
+
+
+### 4.【并发专题】Volitale 连环炮🌟🌟🌟🌟🌟
+
+**问题一**：**Volitale 了解吗？简单介绍一下（指导：回答它的三个作用）**
+
+**我的回答**：
+
+1. volatie 用于保证所修饰变量对所有线程的**可见性**和**顺序性**。
+2. volatile **最初的语义就是禁用 CPU 缓存**，让**多个处理器读取的数据都来自于内存**，从而保证可见性。可见性就是指当一个线程修改一个共享变量时，另外一个线程能立马读到这个修改的值。
+3. volatile 还可以**防止重排序**。即保证**被 volatile 修饰的变量之前的代码一定会在其之前执行**，但是并不能保证后面的代码不会进行重排序。
+4. 但是被 volatile 修饰的变量**还是可能出现线程不安全的问题**，因为 **volatile 不能保证原子性**。
+
+**参考答案**：
+
+- volatie 用于保证所修饰变量对所有线程的**可见性**和**顺序性**。
+- 可见性就是指当一个线程修改一个共享变量时，另外一个线程能立马读到这个修改的值。顺序性就是指对 **volatile 变量的读写操作都是按顺序执行**的，不会出现重排序情况。
+- 没有原子性是因为，它**只对单个 volatile 变量的读写具有原子性**，如果是**多个 volatile 操作或是 volatile++ 这种复合操作，整体上不保证原子性**。
+
+**问题二**：**Volitale 可见性底层实现了解不？简单说一下**
+
+**我的回答**：
+
+1. 当被 volatile 修饰的变量在编译之前，会==在下面加一行以 `lock` 开头的指令==，当处理器读取到以 `lock` 开头的指令时，不会再锁住总线，而是会检查数据所在的内存区域，如果==该数据是在处理器的内部缓存中，则会锁定此缓存区域，处理完后把缓存写回到主存中==，并且会利用==缓存一致性协议（MESI 协议）==来保证==其他处理器中的缓存数据的一致性==。
+
+**参考答案**：
+
+- 其实就是在对 volatile 变量进行写操作的汇编代码之前，**加了一条 Lock 前缀指令**。这个 Lock 前缀指令在多核处理器下会将：当前**处理器缓存行的数据写回到内存**并使**其它 CPU 里缓存了该内存地址的数据无效**。后者主要是通过处理器遵循 **MESI 协议**来实现的，每个处理器通过嗅探总线来检查自己的数据是否过期，并做对应的处理。
+
+**问题三**：**你觉得什么样的场景下需要用到 volitale，可以你见过的一些例子吗？**
+
+**我的回答**：
+
+1. 现实场景中如果要用到 volatile，可以利用它的可见性和顺序性。
+2. 利用**可见性**的例子：用于**标记状态变量**，比如在多线程的条件下某一个线程将此状态变量更改为 false，那么**其它的线程可以立即对此变化做出响应**。
+3. 利用**顺序性**的例子：比如**单例模式**中可以使用 **volatile 修饰单例实例对象**，**防止在编译期间对其进行重排序，导致先赋地址，在创建实例对象，造成可能的空指针异常**。
+
+ **参考答案**：
+
+- volatile 基于可见性，比较适合用于**标记一个状态变量**。比如在多线程间控制循环或者任务的执行。当一个线程修改了 volatile 修饰的状态变量后，**其他线程能立马感知并做对应的处理**。
+- 除此之外，单例模式的一种实现是利用双重检查锁定来创建对象，其中就用到了 **volatile 来修饰那个单例实例**，目的就在于**避免 new 对象时可能出现的指令重排序，导致错误结果**。这个过程主要用到了 volatile 的顺序性。
+
+----
+
+
+
+### 5.【并发专题】synchronized 连环炮🌟🌟🌟🌟🌟
+
+**问题一**：**简单说一下 synchronized 的作用？**
+
+**我的回答**：
+
+1. synchronized 关键字一般用于**并发控制**，它是一种**重量级锁**，被 synchronized 修饰的共享变量或共享代码块最多只能有一个线程进行访问和操作。线程在进入临界区之前，会尝试获取锁，如果获取不到则进入阻塞状态，等待其它线程释放锁后唤醒。比如在电商系统中存在商品超卖的问题，因为这个过程有三个操作，由于线程调度，在任意一个操作完成之后都可能切换到另一个线程上，因此不能保证原子性。而如果用 synchronized 关键字修饰此代码块，就能保证其原子性，从而解决商品超卖问题。
+
+**参考答案**：
+
+- synchronized 主要用来实现同步，**被 synchronized 修饰的代码块或方法称为临界区代码**，在进入临界区之前，**线程会尝试获取锁**，如果锁可用，则线程会获取锁并进入临界区，执行相应的代码。否则线程将被**阻塞**，直到获取到锁为止。
+
+**问题二**：**synchronized 加在类方法，非类方法，代码块上时，有什么不同？**
+
+> **synchronized 不能修饰属性**。
+
+**我的回答**：
+
+1. 当 synchronized 加在被 static 修饰的类方法上时，锁是默认夹在类的 Class 对象上的。
+2. 加在非类方法上时，锁默认加在当前的实例对象上。
+3. 加载代码块上时，锁加载 synchronized 后面括号中指定的对象上。
+
+**参考答案**：
+
+- 对于普通同步方法，锁的是当前的实例对象；对于静态同步方法，锁的是当前类的 Class 对象；对于同步代码块，锁的是 synchronized 括号里配置的对象。
+
+**问题三**：**讲一下 synchronized 的底层是怎么实现的？（PS：加在实例上和加在方法上，实现不一样，都要说明，一个从字节码角度说，一个从对象头角度说）**
+
+**我的回答**：
+
+1. ==被 synchronized 修饰的代码块会在编译的代码前后分别添加 monitorenter 和 monitorexit 指令==。JVM 确保被 synchronized 锁定的对象都会对应一个 **monitor**，当线程执行到 **monitorenter 时会尝试获取当前的 monitor 对象**，也就是加锁操作，如果获取不到则会进入阻塞状态。同样的，执行到 **monitorexit 指令时会释放这个 monitor**，也就是解锁操作，以供其它线程获取。
+2. 而对于**被 synchronized 修饰的方法**而言，处理器首先**查看字节码的方法表的 access_flags 字段是否有 ACC_SYNCHRONIZED 标志**。如果有则尝试获取 monitor 锁，并在执行完后释放。
+
+**参考答案**：
+
+- 对于**方法级**的同步来说，JVM 利用**方法常量池中的 ACC_SYNCHRONIZED 标志**（**方法字节码的 access_flags 字段**）来区分一个方法是否为同步方法。当线程访问同步方法时，首先会检查这个标志是否被设置，如果是，则需要先获得监视器锁，然后开始执行方法，执行结束会释放监视器锁。
+- 对于**同步代码块**来说，JVM 是在编译后代码块的开始和结束处，**插入 monitorenter 和 monitorexit 指令**来实现的。任何对象都会对应一个 monitor，线程执行到 monitorenter 时会尝试获取对象所对应的 monitor 的所有权，也就是加锁。执行到 monitorexit 时会释放 monitor 的所有权，也就是解锁。
+
+**问题四**：**在 Java 中，synchronized 属于重量级锁，为了让 synchronized 效率更快，JDK做了哪些升级？**
+
+**我的回答**：
+
+1. 由于重量级锁涉及到大量的线程阻塞和唤醒操作，这使得操作系统频繁的在用户态和内核态之间切换，消耗大量的时间。因此为了提升效率，可以考虑减少阻塞和唤醒操作的频率。
+2. 具体的措施是**首先使用偏向锁，如果产生冲突则降级为轻量级锁，再产生冲突才降级为重量级锁**。
+
+**参考答案**：
+
+- Java 1.6 以后主要引入了偏向锁，轻量级锁和适应性自旋等特性。总体上来说，锁升级的过程为：无锁->偏向锁->轻量级锁->重量级锁。
+- 对于偏向锁来说，首次获取时需要用 CAS 设置 Java 对象头中 mark word 字段的线程 id ，之后持有偏向锁的线程每次进入这个锁相关的同步块时，只需比对一下是否为本线程，如果是则直接获取锁成功。==这适用在一个线程反复获取同一个锁的情况==，可以提高带有同步但无竞争的程序性能。
+- 偏向锁中发生线程竞争，会升级为轻量级锁。轻量级锁在每次获取时都需要用 **CAS** 比较并替换对象头中的整个 Mark Wrod 字段，如果 CAS 成功则代表获取锁成功。由于绝大部分的锁在整个生命周期内都不会存在竞争，那么在多线程交替执行同步块的情况下，轻量级锁可以避免重量级锁引起的性能消耗。
+- 轻量级锁释放时若存在其它线程竞争，锁将膨胀为重量级锁，**任何没有竞争到锁的线程都会被阻塞，直到被其它线程唤醒**。但线程唤醒的过程涉及到操作系统的调用，会有额外的开销。
+- 为了避免这个问题，在线程竞争轻量级锁失败后，**膨胀为重量级锁之前线程会尝试适应性自旋（循环多次尝试获取锁，而不是没得到就直接阻塞）**，**自旋的次数根据前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定**。如果这个锁很少自旋成功，那么以后有可能省略掉自旋过程以避免 CPU 资源浪费。
+
+---
+
+
+
+### 6.【并发专题】AQS 连环炮🌟🌟（还没学呢）
+
+
+
+### 7.【并发专题】ReentrantLock连环炮🌟🌟
+
+**问题一**：**简单介绍下 ReentrantLock？**
+
+**我的回答**：
+
+1. ReenTrantLock 意为可重入锁，即已经
+
+
 
 
 
@@ -1608,17 +1840,17 @@
 
 2. ==工厂设计模式==
 
-	> - Spring使用工厂模式可以通过 `BeanFactory` 或 `ApplicationContext` 创建 bean 对象。
-	>
-	> - ApplicationContext的三个实现类：
-	>
-	> 	1. `ClassPathXmlApplication`：把上下文文件当成类路径资源。
-	> 	2. `FileSystemXmlApplication`：从文件系统中的 XML 文件载入上下文定义信息。
-	> 	3. `XmlWebApplicationContext`：从Web系统中的XML文件载入上下文定义信息。
-	>
-	> - ```java
-	> 	ApplicationContext context = new FileSystemXmlApplicationContext("C:/work/IOC/Containers/springframework.applicationcontext/src/main/resources/bean-factory-config.xml");
-	> 	```
+  > - Spring使用工厂模式可以通过 `BeanFactory` 或 `ApplicationContext` 创建 bean 对象。
+  >
+  > - ApplicationContext的三个实现类：
+  >
+  > 	1. `ClassPathXmlApplication`：把上下文文件当成类路径资源。
+  > 	2. `FileSystemXmlApplication`：从文件系统中的 XML 文件载入上下文定义信息。
+  > 	3. `XmlWebApplicationContext`：从Web系统中的XML文件载入上下文定义信息。
+  >
+  > - ```java
+  > 	ApplicationContext context = new FileSystemXmlApplicationContext("C:/work/IOC/Containers/springframework.applicationcontext/src/main/resources/bean-factory-config.xml");
+  > 	```
 
 3. ==单例设计模式==
 
@@ -1669,23 +1901,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																																								
+	> 																																										
 	> 	    private String message;
-	> 																																								
+	> 																																										
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																																								
+	> 																																										
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																																								
+	> 																																										
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																																								
+	> 																																										
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -1693,14 +1925,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																																								
+	> 																																										
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																																								
+	> 																																										
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																																								
+	> 																																										
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -2261,9 +2493,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																																						
+	> 																																								
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																																						
+	> 																																								
 	> 	op.process();
 	> 	```
 	>
@@ -3509,12 +3741,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 														
+	> 																
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 														
+	> 																
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -4127,7 +4359,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 											
+	> 													
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now

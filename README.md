@@ -8257,6 +8257,9 @@ Java进阶完成：
 		        char ch = chars[i];
 		        // 最关键的一步，去重的条件是：
 		        // 前面和自己一样，并且前面的数还没有加入（此处换成 == true也正确）
+		        // 也可以这么解释：发生重复时，情况数会变成两倍，因为重复的数可以一前一后，
+		        // 这一前一后就对应了遍历到后面那个数时前面的数已经加入 OR 还没加入
+		        // 因此让前面的数已经加入 OR 还没加入任意一种情况 continue j
 		        if (i > 0 && chars[i] == chars[i - 1] && visit[i - 1] == false)
 		            continue;
 		        buffer.append(ch);
@@ -8265,6 +8268,61 @@ Java进阶完成：
 		        buffer.deleteCharAt(buffer.length() - 1);
 		        visit[i] = false;
 		    }
+		}
+		```
+
+
+
+
+# ***2024.6.18打卡	Day 139***
+
+1. Java 并发八股文 volatile + synchronized + ReenTrantLock。
+
+2. leetcode 刷题：4题
+
+	- [剑指 Offer 42. 连续子数组的最大和](https://leetcode.cn/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/)
+
+		```java
+		// 以第i天结尾的连续天数的最高销售额
+		int[] dp = new int[sales.length];
+		```
+
+	- [LeetCode 64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
+
+		老生常谈
+
+	- [剑指 Offer 63. 股票的最大利润](https://leetcode.cn/problems/gu-piao-de-zui-da-li-run-lcof/)
+
+		法一：采用 dp\[n]\[3]
+
+		法二：记录遍历到当前的最低点，max = max(max, prices\[i] - minPrice)
+
+	- [剑指 Offer 47. 礼物的最大价值](https://leetcode.cn/problems/li-wu-de-zui-da-jie-zhi-lcof/)
+
+		简单二维dp，可以转换为一维dp
+
+		一维dp：
+
+		```java
+		public int maxValue(int[][] grid) {
+		    int n = grid.length;
+		    int m = grid[0].length;
+		
+		    int[]dp = new int[m];
+		    dp[0] = grid[0][0];
+		
+		    for(int j = 1; j < m; j++) {
+		        dp[j] = dp[j-1] + grid[0][j];
+		    }
+		
+		    for(int i = 1; i < n; i++) {
+		        dp[0] = dp[0] + grid[i][0];
+		        
+		        for(int j = 1; j < m; j++) {
+		            dp[j] = Math.max(dp[j], dp[j-1]) + grid[i][j];
+		        }
+		    }
+		    return dp[m-1];
 		}
 		```
 
