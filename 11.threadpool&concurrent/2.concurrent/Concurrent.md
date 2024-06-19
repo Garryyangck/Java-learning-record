@@ -1028,10 +1028,10 @@
       > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
       > 	3: dup - 复制栈顶的lockObject引用。
       > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
-      > 						
+      > 							
       > 	// 管程开始同步
       > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
-      > 						
+      > 							
       > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
       > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
       > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
@@ -1042,13 +1042,13 @@
       > 	24: aload_1 - 加载InterruptedException到栈顶。
       > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
       > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-      > 						
+      > 							
       > 	// 结束管程同步
       > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
       > 	30: goto          38 - 跳转到第38行，结束方法。
       > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
       > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-      > 						
+      > 							
       > 	// 退出管程
       > 	35: monitorexit - 退出lockObject的监视器。
       > 	36: aload_2 - 加载局部变量槽2中的异常到栈顶。
@@ -1264,15 +1264,14 @@
 	    TimeUnit unit,
 	    BlockingQueue<Runnable> workQueue,
 	    ThreadFactory threadFactory,
-	    RejectedExecutionHandler handler) 
-	{
-	    ... // 省略一些参数校验
+	    RejectedExecutionHandler handler) {
+	    	... // 省略一些参数校验
 	        this.corePoolSize = corePoolSize;
-	    this.maximumPoolSize = maximumPoolSize;
-	    this.workQueue = workQueue;
-	    this.keepAliveTime = unit.toNanos(keepAliveTime);
-	    this.threadFactory = threadFactory;
-	    this.handler = handler;
+	    	this.maximumPoolSize = maximumPoolSize;
+	    	this.workQueue = workQueue;
+	    	this.keepAliveTime = unit.toNanos(keepAliveTime);
+	    	this.threadFactory = threadFactory;
+	    	this.handler = handler;
 	}
 	
 	int corePoolSize：// 核心线程数
@@ -1283,10 +1282,10 @@
 	ThreadFactory threadFactory：// 线程工厂
 	RejectedExecutionHandler handler：// 拒绝策略
 	```
-
+	
 3. ==线程池执行流程==：
 
-	> ![图片](Concurrent.assets/640-17149675855482.webp)
+	> <img src="Concurrent.assets/640-17149675855482.webp" alt="图片" style="zoom:150%;" />
 
 4. ==两个常见问题==：
 
@@ -1533,9 +1532,93 @@
 
 
 
-### 9.什么是 ThreadLocal？（暂时没看）
+### 9.ThreadLocal 源码分析和应用实例
 
+1. ==ThreadLocal 有一个内存类 ThreadLocalMap==：
 
+	> ![image-20240619115950487](Concurrent.assets/image-20240619115950487.png)
+
+2. ==Thread 有一个 ThreadLocal.ThreadLocalMap 类型的属性 threadLocals==：
+
+	> <img src="Concurrent.assets/image-20240619120245422.png" alt="image-20240619120245422" style="zoom: 80%;" />
+	>
+	> ```java
+	> public class Thread implements Runnable {
+	>     ...
+	>     /* ThreadLocal values pertaining to this thread. This map is maintained
+	>  	 * by the ThreadLocal class. */
+	>     ThreadLocal.ThreadLocalMap threadLocals = null;
+	>     ...
+	> }
+	> ```
+	>
+	> - 根据 threadLocals 的注释可得：==Thread 的 threadLocals 属性是由 ThreadLocal 维护==。
+	> - 实际上，==ThreadLocal 的 get 和 set 方法中，都会尝试获取调用它的线程的 Thread 对象，然后获取该 Thread 对象的 threadLocals 属性==，从而对其进行维护。
+
+3. `ThreadLocal.set()` 方法的==源码分析==：
+
+	> ```java
+	> public void set(T value) {
+	>     Thread t = Thread.currentThread(); // 首先获取当前的线程
+	>     ThreadLocalMap map = getMap(t); // 然后获取线程的threadLocals属性，即这里的map
+	>     if (map != null)
+	>         map.set(this, value); // 将当前的ThreadLocal实例this作为key，
+	>     						  // 加入到当前线程的threadLocals属性中
+	>     else
+	>         createMap(t, value);
+	> }
+	> ```
+	>
+	> 效果：
+	>
+	> <img src="Concurrent.assets/image-20240619121236804.png" alt="image-20240619121236804" style="zoom: 80%;" />
+	>
+	> ==为什么以 ThreadLocal 的实例对象作为 Thread.threadLocals 的 key 呢==：
+	>
+	> - threadLocals 是 Thread 类的属性，并由 ThreadLocal 类进行维护，因此对于多个线程都会访问的数据，我们可以创建一个对应的 ThreadLocal 类。==如果将来还有其它类似的数据，只需要创建新的 ThreadLoacl 类即可，这样便于扩展和维护==。
+
+4. `ThreadLocal.get()` 方法的==源码分析==：
+
+	> - ```Java
+	> 	public T get() {
+	> 	    Thread t = Thread.currentThread(); // 获取当前的线程
+	> 	    ThreadLocalMap map = getMap(t); // 获取线程的threadLocals属性，即map
+	> 	    if (map != null) {
+	> 	        ThreadLocalMap.Entry e = map.getEntry(this); // 根据当前ThreadLocal的类型
+	> 	        											 // 获取对应的Entry实例
+	> 	        if (e != null) {
+	> 	            @SuppressWarnings("unchecked")
+	> 	            T result = (T)e.value; // 获取Entry实例的value，即需要get的value
+	> 	            return result;
+	> 	        }
+	> 	    }
+	> 	    return setInitialValue(); // 返回初始value，即null
+	> 	}
+	> 	```
+
+5. ==应用实例==（以论坛项目中==存储各线程的User对象的ThreadLocal包装类HostHolder==为例）
+
+	> ```java
+	> @Component
+	> public class HostHolder {
+	>     // 创建存储各线程的User对象的ThreadLocal类users
+	>     private final ThreadLocal<User> users = new ThreadLocal<>();
+	> 
+	>     public void setUser(User user) {
+	>         users.set(user); // 将当前thread的User对象存储到thread.threadLocals中
+	>     }
+	> 
+	>     public User getUser() {
+	>         return users.get(); // 以(ThreadLocal)users为key，从threadLocals中获取value
+	>     }
+	> 
+	>     public void remove() {
+	>         users.remove(); // 移除threadLocals中以(ThreadLocal)users为key的键值对
+	>     }
+	> }
+	> ```
+
+---
 
 
 
@@ -1677,7 +1760,6 @@
 	    }
 	
 	    static class Task implements Runnable {
-	
 	        @Override
 	        public void run() {
 	            try {
@@ -1746,7 +1828,7 @@
 
 ### 8.暂停和恢复线程池
 
-==自定义==线程池，使用==钩子方法==pause和resume==实现线程池的暂停和恢复==。
+==自定义==线程池，使用==钩子方法== pause 和 resume ==实现线程池的暂停和恢复==。
 
 ```java
 public class PauseableThreadPool extends ThreadPoolExecutor {
@@ -1770,6 +1852,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
     }
 
     public PauseableThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, RejectedExecutionHandler handler) {
+        
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, handler);
     }
 
@@ -1777,7 +1860,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
     }
 
-    /==
+    /*
      * 在任务执行前判断当前线程是否处于暂停状态
      */
     @Override
@@ -1796,7 +1879,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
 
     }
 
-    /==
+    /*
      * 让当前线程暂停
      */
     public void pause() {
@@ -1813,7 +1896,7 @@ public class PauseableThreadPool extends ThreadPoolExecutor {
         try {
             isPaused = false;
             unpaused.signal();
-            unpaused.signalAll(); // 唤醒该Condition上全部的线程
+            unpaused.signalAll(); // 唤醒该Condition(条件变量)上全部的线程
         } catch (Exception e) {
             lock.unlock();
         }

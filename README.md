@@ -8326,4 +8326,70 @@ Java进阶完成：
 		}
 		```
 
+
+
+
+# ***2024.6.19打卡	Day 140***
+
+1. Java 并发八股文 ThreadLocal 和 线程池，Java 并发八股文完成。
+
+2. leetcode 刷题：2题
+
+	- [剑指 Offer 48. 最长不含重复字符的子字符串](https://leetcode.cn/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/)
+
+		滑动窗口，可以用 boolean[256] 表示所有字符的出现情况。
+
+	- [剑指 Offer 19. 正则表达式匹配](https://leetcode.cn/problems/zheng-ze-biao-da-shi-pi-pei-lcof)
+
+		p 的前 j 个字符能不能匹配 s 的前 i 个字符
+
+		```java
+		boolean[][] dp = new boolean[len1 + 1][len2 + 1];
+		```
+
+		首先处理特殊情况，如果 s 的前 0 个字符，那么这时 p 的所有 * 只能匹配 0 个
+
+		```java
+		dp[0][0] = true;
+		for (int j = 2; j <= len2; j++) {
+		    // s为空，因此*必须全部匹配0个才有可能成功
+		    if (p.charAt(j - 1) == '*') {
+		        dp[0][j] = dp[0][j - 2];
+		    }
+		}
+		```
+
+		最后遍历，分是 * 和不是 * 两种情况来讨论即可
+
+		```java
+		for (int i = 1; i <= len1; i++) {
+		    for (int j = 1; j <= len2; j++) {
+		        // 不是*的情况
+		        if(p.charAt(j - 1) != '*') {
+		            // 匹配成功
+		            if(p.charAt(j - 1) == '.' || p.charAt(j - 1) == s.charAt(i - 1)) {
+		                dp[i][j] = dp[i - 1][j - 1];
+		            }
+		            // 匹配不成功，寄
+		            else {
+		                dp[i][j] = false;
+		            }
+		        }
+		        // 是*的情况
+		        else {
+		            // 匹配不成功，只能匹配0个
+		            if(p.charAt(j - 2) != '.' && p.charAt(j - 2) != s.charAt(i - 1)) {
+		                dp[i][j] = dp[i][j - 2];
+		            }
+		            // 匹配成功，可以尝试匹配0个，1个，多个
+		            else {
+		                dp[i][j] = dp[i][j - 2] ||
+		                    dp[i - 1][j - 2] ||
+		                    dp[i - 1][j]; // 匹配多个，相当于用这两个字符继续向前匹配s的字符
+		            }
+		        }
+		    }
+		}
+		```
+
 		
