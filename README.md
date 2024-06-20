@@ -8392,4 +8392,50 @@ Java进阶完成：
 		}
 		```
 
-		
+
+
+
+# ***2024.6.20打卡	Day 141***
+
+1. Java IO + Java8 新特性八股文完成。
+
+2. leetcode 刷题：3题
+
+	- [剑指 Offer 49. 丑数](https://leetcode.cn/problems/chou-shu-lcof/)
+
+		```java
+		public int nthUglyNumber(int n) {
+		    int[] dp = new int[1690];
+		    // 由于后续的丑数必定是前面丑数乘2、3、5的结果，因此直接记录每个数当前遍历到的位置
+		    int twoIndex = 0, threeIndex = 0, fiveIndex = 0;
+		    dp[0] = 1;
+		    for (int i = 1; i < dp.length; i++) {
+		        int twoMul = 2 * dp[twoIndex];
+		        int threeMul = 3 * dp[threeIndex];
+		        int fiveMul = 5 * dp[fiveIndex];
+		        // 这里直接找出最小的数即可，然后最小数对应的index++
+		        int min = Math.min(Math.min(twoMul, threeMul), fiveMul);
+		        if (twoMul == min)
+		            twoIndex++;
+		        // 注意比如6，twoIndex和threeIndex都要++，避免出现两个6
+		        if (threeMul == min)
+		            threeIndex++;
+		        if (fiveMul == min)
+		            fiveIndex++;
+		        dp[i] = min;
+		    }
+		    return dp[n - 1];
+		}
+		```
+
+	- [剑指 Offer 60. n个骰子的点数](https://leetcode.cn/problems/nge-tou-zi-de-dian-shu-lcof/)
+
+		`dp[n + 1][6 * n + 1]`：i 个骰子得到 j 的总数
+
+		`dp[i][j] += dp[i - 1][j - k]`。
+
+	- [LeetCode 42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
+
+		法一：双指针，找左右当前最高点
+
+		法二：dp，左遍历一次，右遍历一次，最后取每个位置的最小值
