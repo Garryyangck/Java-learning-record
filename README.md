@@ -8439,3 +8439,80 @@ Java进阶完成：
 		法一：双指针，找左右当前最高点
 
 		法二：dp，左遍历一次，右遍历一次，最后取每个位置的最小值
+
+
+
+# ***2024.6.21打卡	Day 142***
+
+1. 复习一门考试。
+
+2. leetcode 刷题：4题
+
+	- [LeetCode 198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
+
+		```java
+		// dp[i-1]      dp[i-2] + nums[i]     dp[i-3] + max(nums[i-1], nums[i])
+		for (int i = 3; i < nums.length; i++)
+		    dp[i] = Math.max(Math.max(dp[i - 1], dp[i - 2] + nums[i]), dp[i - 3] + Math.max(nums[i - 1], nums[i]));
+		```
+
+	- [LeetCode 322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+		```java
+		for(int i = 0; i <= amount; i++) {
+		    for(int j = 0; j < coins.length; j++) {
+		        if(i - coins[j] >= 0) {
+		            if(dp[i - coins[j]] != Integer.MAX_VALUE) { // 可以到达
+		                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+		            }
+		        }
+		    }
+		}
+		```
+
+	- [LeetCode 174. 地下城游戏](https://leetcode.cn/problems/dungeon-game/)
+
+		没做出来。。。
+
+		```java
+		class Solution {
+		    public int calculateMinimumHP(int[][] dungeon) {
+		        int n = dungeon.length, m = dungeon[0].length;
+		        // 到达(i,j)的最小血量，多了一圈防止最外面的一圈出界i+1, j+1
+		        int[][] dp = new int[n + 1][m + 1];
+		        // 防止后续取最小值误取到0
+		        for (int i = 0; i <= n; ++i) {
+		            Arrays.fill(dp[i], Integer.MAX_VALUE);
+		        }
+		        dp[n][m - 1] = dp[n - 1][m] = 1;
+		        for (int i = n - 1; i >= 0; --i) {
+		            for (int j = m - 1; j >= 0; --j) {
+		                // 找到下一步所需的最小血量
+		                int minn = Math.min(dp[i + 1][j], dp[i][j + 1]);
+		                // 这一步的最小血量，下一步所需的-当前的值，当然至少要为1
+		                dp[i][j] = Math.max(minn - dungeon[i][j], 1);
+		            }
+		        }
+		        return dp[0][0];
+		    }
+		}
+		```
+
+	- [LeetCode 72. 编辑距离](https://leetcode.cn/problems/edit-distance/)
+
+		```java
+		for(int i = 1; i <= word1.length(); i++) {
+		    for(int j = 1; j <= word2.length(); j++) {
+		        if(word1.charAt(i - 1) == word2.charAt(j - 1)) {
+		            dp[i][j] = dp[i - 1][j - 1];
+		        } else {
+		            int change = dp[i - 1][j - 1] + 1;
+		            int add = dp[i - 1][j] + 1;
+		            int remove = dp[i][j - 1] + 1;
+		            dp[i][j] = Math.min(Math.min(add, remove), change);
+		        }
+		    }
+		}
+		```
+
+		
