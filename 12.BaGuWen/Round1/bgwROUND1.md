@@ -2153,13 +2153,13 @@
 	> 	public class LambdaStreamExample {
 	> 	    public static void main(String[] args) {
 	> 	        List numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-	> 	
+	> 		
 	> 	        // 使用Lambda和Stream API过滤和映射集合
 	> 	        List result = numbers.stream()
 	> 	            .filter(n -> n % 2 != 0) // 过滤掉偶数
 	> 	            .map(n -> n * 2) // 将剩下的数字加倍
 	> 	            .toList();
-	> 	
+	> 		
 	> 	        // 输出结果
 	> 	        System.out.println(result); // 输出: [2, 6, 10, 14, 18]
 	> 	    }
@@ -2172,26 +2172,26 @@
 	>
 	> - ```java
 	> 	public static void main(String[] args) {
-	> 	
+	> 		
 	> 	    // 创建一个包含非空值的Optional对象
 	> 	    Optional<String> optional1 = Optional.of("Hello World");
-	> 	
+	> 		
 	> 	    // 创建一个为空的Optional对象
 	> 	    Optional<String> optional2 = Optional.empty();
-	> 	
+	> 		
 	> 	    // 输出Optional对象的值
 	> 	    System.out.println(optional1.get()); // Hello World
-	> 	
+	> 		
 	> 	    // 如果Optional对象为空，则抛出NoSuchElementException异常
 	> 	    System.out.println(optional2.get()); // 抛出NoSuchElementException异常
-	> 	
+	> 		
 	> 	    // 判断Optional对象是否有值
 	> 	    System.out.println(optional1.isPresent()); // true
 	> 	    System.out.println(optional2.isPresent()); // false
-	> 	
+	> 		
 	> 	    // 如果Optional对象为空，则返回指定的默认值
 	> 	    System.out.println(optional2.orElse("Default Value")); // Default Value
-	> 	
+	> 		
 	> 	    // 如果Optional对象为空，则执行指定的操作
 	> 	    optional2.ifPresent(value -> System.out.println("Value is present"));
 	> 	}
@@ -2270,16 +2270,16 @@
 	>
 	> 	```java
 	> 	public class MethodReferenceExample {
-	> 	
+	> 		
 	> 	    public static void main(String[] args) {
 	> 	        // 使用 Lambda 表达式
 	> 	        Supplier<Person> supplier1 = () -> new Person();
-	> 	
+	> 		
 	> 	        // 使用方法引用
 	> 	        Supplier<Person> supplier2 = Person::new;
 	> 	    }
 	> 	}
-	> 	
+	> 		
 	> 	class Person {
 	> 	    public Person() {
 	> 	    }
@@ -2527,23 +2527,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																																													
+	> 																																														
 	> 	    private String message;
-	> 																																													
+	> 																																														
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																																													
+	> 																																														
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																																													
+	> 																																														
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																																													
+	> 																																														
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -2551,14 +2551,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																																													
+	> 																																														
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																																													
+	> 																																														
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																																													
+	> 																																														
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -3107,7 +3107,7 @@
 
 ## 3.框架
 
-### 1.Spring 的本质系列(1) — 依赖注入🌟🌟🌟🌟🌟
+### 1.Spring 的本质系列 (1) — 依赖注入🌟🌟🌟🌟🌟
 
 1. ==Spring 依赖注入==
 
@@ -3119,9 +3119,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																																											
+	> 																																												
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																																											
+	> 																																												
 	> 	op.process();
 	> 	```
 	>
@@ -3131,7 +3131,7 @@
 
 
 
-### 2.Spring本质系列(2) — AOP🌟🌟🌟🌟🌟
+### 2.Spring的本质系列 (2) — AOP🌟🌟🌟🌟🌟
 
 实现 AOP 的几种技术：
 
@@ -3144,6 +3144,34 @@
 Spring采用的就是(1) +(2) 的方式，限于篇幅，这里不再展开各种技术了， 不管使用哪一种方式， 在运行时，==真正干活的“业务类”其实已经不是原来单纯的业务类了， 它们被AOP了== ！
 
 ---
+
+
+
+## 4.题目
+
+### 1.【Spring专题】
+
+#### 1.AOP 原理
+
+**我的回答**：
+
+1. AOP 是面向切面编程，在 **Spring 中使用动态代理**实现。如果某一个 Bean 被配置为切面，那么 **Spring 在创建它的时候，就会再创建一个该 Bean 的代理类**，由代理类在该 Bean 的基础上实现切面的逻辑。**我们在调用该 Bean 的方法时，实际上是在调用代理类对应的方法**。Spring 中实现动态代理的方法有 Java 原生的 **JDK 动态代理**和 **CGLib 动态代理**。
+2. **JDK 动态代理**要求被代理的 Bean **必须实现某个接口**，然后**创建一个实现 InvocatorHandler 的动态代理类**，之后**调用 java.reflect.Proxy.newProxyInstance 方法，传入目标类的类加载器，所有接口，以及刚刚创建的动态代理类，即可得到代理实例**。这个操作的底层是利用**反射获取到 Method 并 invoke**。
+3. **CGLib 动态代理**则不需要目标类实现接口，而是**创建一个继承自目标类的子类**，通过反射获取目标类的所有方法，然后在此基础上进行**重写**，实现代理的逻辑。
+4. JDK 动态代理不需要外部依赖，但是会受到目标类必须实现接口的限制；而 CGLib 没有此限制，但是属于外部依赖，同时，**由于其需要继承目标类，如果目标类被 final 修饰就无法继承，并且需要重写的方法如果是 private 或 final，则也无法重写**。
+
+**参考答案**：
+
+- Spring 的 AOP 是用**动态代理**实现的。如果我们为 Spring 的某个 bean 配置了切面，那么 **Spring 在创建这个 Bean 时会直接创建这个 Bean 的代理对象**。后续对 Bean 方法的调用，**实际调用的是代理类重写的代理方法**。Spring 的 AOP 采用了两种方法实现动态代理，分别是 **JDK 动态代理**和 **CGLib 动态代理**。
+- 其中 Spring 默认使用 JDK 的动态代理实现 AOP，前提条件是类要**实现了某个借口**，然后借助 reflect 包下的 **Proxy 类和 InvocationHandler 接口来动态生成代理对象**。当我们通过代理对象**调用方法时，底层将通过反射**，去调用我们实现的代理方法。
+- 正式由于 JDK 的动态代理存在类必须实现接口的限制，**Spring 在其他情况下会使用 CGLib 动态代理来代理对象**。CGLib 实现动态代理的原理是，底层采用了ASM 字节码生成框架，**直接对需要代理的类的字节码进行操作，生成这个类的一个子类，并重写类中所有可以重写的方法**，**在重写的过程中，将我们定义的额外的逻辑织入到方法中，对方法进行增强**。
+- 两种方式各有优劣，JDK 动态代理是 JDK 原生的，不需要任何依赖即可使用。缺点是目标类必须实现了某个接口，才能用 JDK 动态代理。CGLib 动态代理不需要目标类必须实现接口，侵入性小。但 CGLib 是通过继承的方式，生成一个目标类的子类作为代理类，因此**假如目标类是 final 类也无法使用 CGLib 代理**。并且 CGLib 实现代理方法的方式是重写目标类的方法，所以**无法对 final，private 方法进行代理**。
+
+---
+
+
+
+
 
 
 
@@ -4367,12 +4395,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 																			
+	> 																				
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 																			
+	> 																				
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -4985,7 +5013,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 																
+	> 																	
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now

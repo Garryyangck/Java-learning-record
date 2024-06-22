@@ -8516,3 +8516,65 @@ Java进阶完成：
 		```
 
 		
+
+# ***2024.6.22打卡	Day 143***
+
+1. 考试+复习最后一门。
+
+2. leetcode 刷题：6题
+
+	- [剑指 Offer 10- I. 斐波那契数列](https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/)
+
+		简单dp
+
+	- [剑指 Offer 10- II. 青蛙跳台阶问题](https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/)
+
+		简单dp
+
+	- [剑指 Offer 62. 圆圈中最后剩下的数字](https://leetcode.cn/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/)
+
+		```java
+		class Solution {
+		    public int iceBreakingGame(int n, int target) {
+		        if(n == 0) return n;
+		        // 递归做法，经过了数学
+		        return (iceBreakingGame(n - 1, m) + m) % n;
+		    }
+		}
+		```
+		
+	- [剑指 Offer 03. 数组中重复的数字](https://leetcode.cn/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
+	
+		用负号来表示该index的数被遍历过了
+	
+	- [剑指 Offer 04. 二维数组中的查找](https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/)
+
+		```java
+		class Solution {
+		    public boolean findTargetIn2DPlants(int[][] matrix, int target) {
+		        if (matrix == null || matrix.length <= 0 || matrix[0].length <= 0) {
+		            return false;
+		        }
+		        int rows = matrix.length;
+		        int cols = matrix[0].length;
+		        // 初始位置选择左下角
+		        int row = rows - 1;
+		        int col = 0;
+		        // 向上向右走的过程中不能出界
+		        while (row >= 0 && col < cols) {
+		            if (target > matrix[row][col]) {
+		                col++;
+		            } else if (target < matrix[row][col]) {
+		                row--;
+		            } else {
+		                return true;
+		            }
+		        }
+		        return false;
+		    }
+		}
+		```
+	
+	- [剑指 Offer 29. 顺时针打印矩阵](https://leetcode.cn/problems/shun-shi-zhen-da-yin-ju-zhen-lcof)
+	
+		api，记录最外圈顺时针数字，记录完一圈后，递归调用左右缩小，上下缩小的小矩形，直到左右的left>right或上下的up>down。

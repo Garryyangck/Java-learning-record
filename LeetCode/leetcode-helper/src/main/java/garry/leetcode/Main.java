@@ -7,28 +7,31 @@ package garry.leetcode;
 
 public class Main {
     public static void main(String[] args) {
-        new Solution().nthUglyNumber(10);
     }
 }
 
 class Solution {
-    public int nthUglyNumber(int n) {
-        int[] dp = new int[1600];
-        int twoIndex = 0, threeIndex = 0, fiveIndex = 0;
-        dp[0] = 1;
-        for (int i = 1; i < dp.length; i++) {
-            int twoMul = 2 * dp[twoIndex];
-            int threeMul = 3 * dp[threeIndex];
-            int fiveMul = 5 * dp[fiveIndex];
-            int min = Math.min(Math.min(twoMul, threeMul), fiveMul);
-            if (twoMul == min)
-                twoIndex++;
-            if (threeMul == min)
-                threeIndex++;
-            if (fiveMul == min)
-                fiveIndex++;
-            dp[i] = min;
+    public boolean findTargetIn2DPlants(int[][] matrix, int target) {
+        if(matrix == null || matrix.length <= 0 || matrix[0].length <= 0){
+            return false;
         }
-        return dp[n - 1];
+        // 这里 cols 表示多少行的意思（但是有人说 cols 是表示列，那我可能记错了）
+        int rows = matrix.length;
+        // rows 表示多少列的意思
+        int cols = matrix[0].length;
+        // 左下角的位置
+        int row = rows - 1;
+        int col = 0;
+        // 向上向右走的过程中不能出界
+        while(row >= 0 && col < cols){
+            if(target > matrix[row][col]){
+                col++;
+            } else if(target < matrix[row][col]){
+                row--;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 }
