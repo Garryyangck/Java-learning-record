@@ -31,11 +31,11 @@ SpringMVC可以==简化JavaEE中的servlet==
 ### ==pom.xml依赖spring-webmvc==
 
 ```xml
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-webmvc</artifactId>
-    <version>5.1.9.RELEASE</version>
-</dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>5.1.9.RELEASE</version>
+    </dependency>
 ```
 
 ### ==web.xml配置DispatcherServlet==

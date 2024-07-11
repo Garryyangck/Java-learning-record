@@ -7,31 +7,27 @@ package garry.leetcode;
 
 public class Main {
     public static void main(String[] args) {
+        new Solution().mySqrt(Integer.MAX_VALUE);
     }
 }
 
 class Solution {
-    public boolean findTargetIn2DPlants(int[][] matrix, int target) {
-        if(matrix == null || matrix.length <= 0 || matrix[0].length <= 0){
-            return false;
-        }
-        // 这里 cols 表示多少行的意思（但是有人说 cols 是表示列，那我可能记错了）
-        int rows = matrix.length;
-        // rows 表示多少列的意思
-        int cols = matrix[0].length;
-        // 左下角的位置
-        int row = rows - 1;
-        int col = 0;
-        // 向上向右走的过程中不能出界
-        while(row >= 0 && col < cols){
-            if(target > matrix[row][col]){
-                col++;
-            } else if(target < matrix[row][col]){
-                row--;
+    public int mySqrt(int x) {
+        if (x == 0 || x == 1)
+            return x;
+
+        int left = 0, right = x;
+        while (left < right) {
+            int mid = (left + right + 1) / 2; // 偏右中点，让最后答案偏左，得到省略小数部分的结果
+            if (mid * 1L * mid == x)
+                return mid;
+            if (mid * 1L * mid < x) {
+                left = mid;
             } else {
-                return true;
+                right = mid - 1;
             }
         }
-        return false;
+
+        return left;
     }
 }

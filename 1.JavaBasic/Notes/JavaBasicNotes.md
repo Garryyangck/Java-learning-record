@@ -12,7 +12,7 @@ public class Test{
 
 ### 解释性语言
 
-解释性语言：iavascript，PHP，iava 编译性语言：c/c++
+解释性语言：javascript，PHP，java 编译性语言：c/c++
 
 - ==解释性语言==：==编译后==的代码，==不能==直接被机器执行，==需要解释器==来执行
 
