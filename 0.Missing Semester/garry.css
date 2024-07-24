@@ -1,0 +1,413 @@
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+/* 全局属性 */
+html {
+    background-color: #f3f2ee;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: Consolas,"Microsoft Yahei","Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.8;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+#write > ul:first-child,
+#write > ol:first-child {
+    margin-top: 30px;
+}
+
+/* 链接 */
+a {
+    text-decoration: none;
+    word-wrap: break-word;
+    font-weight: bold;
+    color: #4183C4;
+}
+
+/*标题*/
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+    margin: 1.2em 0 1em;
+    padding: 0px;
+    font-weight: bold;
+    color: black;
+}
+
+#write h1 {
+    text-align: center; /* 添加此行来居中标题 */
+    font-size: 2rem;
+    border-bottom: 2px solid rgb(239, 112, 96);
+}
+#write h1 span {
+    display: inline-block;
+    font-weight: bold;
+    background: rgb(239, 112, 96);
+    color: #ffffff;
+    padding: 3px 300px 1px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+#write h2 {
+    text-align: center; /* 添加此行来居中标题 */
+    font-size: 1.5rem;
+    border-bottom: 2px solid rgb(239, 112, 96);
+}
+#write h2 span {
+    display: inline-block;
+    font-weight: bold;
+    background: rgb(239, 112, 96);
+    color: #ffffff;
+    padding: 3px 10px 1px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+#write h3 {
+    font-size: 1.3rem;
+    border-bottom: 2px solid rgb(239, 112, 96);
+}
+#write h3 span {
+    display: inline-block;
+    font-weight: bold;
+    background: rgb(239, 112, 96);
+    color: #ffffff;
+    padding: 3px 10px 1px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+#write h4 {
+    font-size: 1.2rem;
+}
+#write h4 span {
+    display: inline-block;
+    font-weight: bold;
+    background: rgb(239, 112, 96);
+    color: #ffffff;
+    padding: 3px 10px 1px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+#write h5 {
+    font-size: 1.1rem;
+}
+#write h6 {
+    font-size: 1rem;
+}
+
+p,
+blockquote,
+ul,
+ol,
+dl,
+table {
+    margin: 0.8em 0;
+}
+
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+
+/* 分割线 */
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: rgb(239, 112, 96);
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+
+ul,
+ol {
+    padding-left: 30px;
+}
+
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+
+/* ==强调符== */
+mark {
+    border: .1em solid #0000ff;
+    color: #0000ff;
+    background-color: transparent;
+    padding: .1rem .5rem;
+    border-radius: 2rem;
+    margin: 0 .2rem;
+    font-size: .95rem;
+}
+
+/* 引用块 */
+blockquote {
+  display: block;
+  font-size: .9em;
+  overflow: auto;
+  border-left: 3px solid #ff6100;
+  color: #6a737d;
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  background: #fff9f9;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+
+/* 表格 */
+table {
+    margin-top: 1rem;
+    word-break: initial;
+}
+table tr {
+    margin: 0;
+    padding: 0;
+}
+table th {
+    border-bottom: .1em solid #6a737d;
+    font-weight: bold;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+    text-align: center; /* 添加居中显示 */
+}
+table td {
+    border-top: .1em solid #6a737d;
+    margin: 0;
+    padding: 6px 13px;
+    text-align: center; /* 添加居中显示 */
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+/* `行内代码块` */
+code {
+    background-color: #f3f4f4;
+    color: rgb(239, 112, 96);
+    padding: 0 2px 0 2px;
+}
+
+/* 代码块 */
+.md-fences {
+    border-left: 3px solid #0000ff;
+    padding: 10px 15px 10px 15px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    background: #fff9f9;
+}
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.outline-active {
+    border: .1em solid rgb(239, 112, 96);
+    color: rgb(239, 112, 96);
+    padding: .1rem .5rem;
+    border-radius: 2rem;
+    margin: 0 .2rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+/*.html-for-mac {
+    --item-hover-bg-color: #E6F0FE;
+}*/
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+    opacity: 0.4;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+.menu-item-container a.menu-style-btn {
+    background-color: #f5f8fa;
+    background-image: linear-gradient( 180deg , hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0)); 
+}
+
+.typora-node.pin-outline:not(.megamenu-opened):not(.typora-sourceview-on) #typora-sidebar {
+	background-color: #f3f2ee;
+}
