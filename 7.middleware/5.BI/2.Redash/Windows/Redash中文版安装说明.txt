@@ -1,0 +1,40 @@
+﻿适用操作系统版本：
+Windows7/10的64位版本，Windows server 2012/2016/2019的64位版本
+
+官方网站：www.dazdata.com
+官方QQ群：940897906
+微信公众号：Dazdata
+技术咨询：18171315526(微信同号)
+代理合作：18171325526
+
+一、安装成功后登录：
+1、进chrome浏览器访问 localhost:5000
+2、进入网页后，初次使用按提示注册管理员账户，激活即可使用。
+
+
+二、卸载:
+先通过控制面板，卸载Python3.8,Python Launcher和Redash.
+Postgres 9.6和Redis on Windows如果不再需要Redash则可卸载，如果是重装或更新Redash可以不用卸载。
+
+
+三、彻底清除重装:
+1、先通过控制面板，卸载Python3.8、Python Launcher、Redash、Postgres 9.6和Redis on Windows，
+2、停止并移除Widows服务：
+在命令行模式进C:\Program Files\Dazdata\Redash目录，分别执行
+nssm stop redash_scheduler
+nssm stop redash_server
+nssm stop redash_worker
+nssm remove redash_scheduler
+nssm remove redash_server
+nssm remove redash_worker
+3、删除相关目录：
+删除C:\Program Files\Dazdata目录
+删除C:\Program Files\PostgreSQL目录
+删除C:\Program Files\Redis目录
+
+
+四、重装Postgres
+postgresql-9.6.23-2-windows-x64.exe --install_runtimes 0 --mode unattended --unattendedmodeui minimal --superpassword dazdata
+在命令行模式进C:\Program Files\Dazdata\Redash目录，执行
+"C:\Program Files\Dazdata\Python38\python.exe" manage.py database create_tables
+创建工作数据库表结构

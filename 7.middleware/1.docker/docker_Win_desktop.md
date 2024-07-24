@@ -1,6 +1,6 @@
 # Docker Desktop下载攻略！
 
-​																																						==（Win11家庭版）==
+==（Win11家庭版）==
 
 1. Docker Desktop国内镜像windows系统==安装包==：https://smartidedl.blob.core.chinacloudapi.cn/docker/20210926/Docker-win.exe
 
@@ -14,7 +14,7 @@
 	>
 	> 讲下述代码复制在txt文本里，并重命名为Hyper.cmd，右键以管理员方式运行，最后输入“Y”重启电脑
 	>
-	> ```
+	> ```powershell
 	> pushd "%~dp0"
 	> dir /b %SystemRoot%\servicing\Packages\*Hyper-V*.mum >hyper-v.txt
 	> for /f %%i in ('findstr /i . hyper-v.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
@@ -37,4 +37,6 @@
 6. ==配置阿里云镜像加速地址==
 
 	> 参考文章https://zhuanlan.zhihu.com/p/441965046，主要看后半部分
+
+---
 

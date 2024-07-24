@@ -6,15 +6,15 @@
 
 ==我的回答==：
 
-1. Object 的常用方法包括  getClass(), equals(Object), hashCode(), toString(), notify(), notifyAll(), wait(无参/long/long, int), finalize() ，下面我将一一进行介绍。
+1. Object 的常用方法包括 getClass(), equals(Object), hashCode(), toString(), notify(), notifyAll(), wait(无参/long/long, int), finalize()，下面我将一一进行介绍。
 
-2. getClass() 方法用于返回对象==运行时的类对象(Class对象)==。可进一步获取某一对象运行时类的信息。
+2. getClass() 方法用于返回对象==运行时的类对象(Class对象)==。可进一步获取运行时对象。
 
-	> ```java
-	> /* Returns the runtime class of this {@code Object}.
-	> ```
+	```java
+	/* Returns the runtime class of this {@code Object}.
+	```
 
-3. equals 方法==默认情况下使用 == ， 比较引用类型是否相等==。比如 String 类中就重写了此方法，优先比较两对象的地址和运行时类是否相同，随后以比较字符串的方式比较两个 String 对象。
+3. equals 方法==默认情况下使用 = = ， 比较引用类型是否相等==。比如 String 类中就重写了此方法，优先比较两对象的地址和运行时类是否相同，随后以比较字符串的方式比较两个 String 对象。
 
 4. hashCode  方法==在默认情况下根据对象的内存地址返回一个int整数==。
 
@@ -105,7 +105,7 @@
 
 ==我的回答==：
 
-1. ====是一个操作符==，可以比较==基本数据类型==之间和==引用数据类型==之间是否相等。而 ==equals 是 Object 类的一个方法==，==只能比较两个引用数据类型==是否相等。
+1. === =是一个操作符==，可以比较==基本数据类型==之间和==引用数据类型==之间是否相等。而 ==equals 是 Object 类的一个方法==，==只能比较两个引用数据类型==是否相等。
 
 2. 具体地说，==比较基本数据类型时，就直接比较值是否相等==。比如int就比较整型值是否相等，boolean就比较布尔值。而==比较引用数据类型时，则比较对象的内存地址是否一致==。
 
@@ -1607,7 +1607,7 @@
 	}
 	
 	public boolean compareAndSwap(int expectedValue, int newValue) {
-	    if(this.value == expectedValue) { // compare 操作
+	    if (this.value == expectedValue) { // compare 操作
 	        this.value = newValue; // swap 操作
 	        return true;
 	    }
@@ -2153,13 +2153,13 @@
 	> 	public class LambdaStreamExample {
 	> 	    public static void main(String[] args) {
 	> 	        List numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-	> 					
+	> 																		
 	> 	        // 使用Lambda和Stream API过滤和映射集合
 	> 	        List result = numbers.stream()
 	> 	            .filter(n -> n % 2 != 0) // 过滤掉偶数
 	> 	            .map(n -> n * 2) // 将剩下的数字加倍
 	> 	            .toList();
-	> 					
+	> 																		
 	> 	        // 输出结果
 	> 	        System.out.println(result); // 输出: [2, 6, 10, 14, 18]
 	> 	    }
@@ -2172,26 +2172,26 @@
 	>
 	> - ```java
 	> 	public static void main(String[] args) {
-	> 					
+	> 																		
 	> 	    // 创建一个包含非空值的Optional对象
 	> 	    Optional<String> optional1 = Optional.of("Hello World");
-	> 					
+	> 																		
 	> 	    // 创建一个为空的Optional对象
 	> 	    Optional<String> optional2 = Optional.empty();
-	> 					
+	> 																		
 	> 	    // 输出Optional对象的值
 	> 	    System.out.println(optional1.get()); // Hello World
-	> 					
+	> 																		
 	> 	    // 如果Optional对象为空，则抛出NoSuchElementException异常
 	> 	    System.out.println(optional2.get()); // 抛出NoSuchElementException异常
-	> 					
+	> 																		
 	> 	    // 判断Optional对象是否有值
 	> 	    System.out.println(optional1.isPresent()); // true
 	> 	    System.out.println(optional2.isPresent()); // false
-	> 					
+	> 																		
 	> 	    // 如果Optional对象为空，则返回指定的默认值
 	> 	    System.out.println(optional2.orElse("Default Value")); // Default Value
-	> 					
+	> 																		
 	> 	    // 如果Optional对象为空，则执行指定的操作
 	> 	    optional2.ifPresent(value -> System.out.println("Value is present"));
 	> 	}
@@ -2270,16 +2270,16 @@
 	>
 	> 	```java
 	> 	public class MethodReferenceExample {
-	> 					
+	> 																		
 	> 	    public static void main(String[] args) {
 	> 	        // 使用 Lambda 表达式
 	> 	        Supplier<Person> supplier1 = () -> new Person();
-	> 					
+	> 																		
 	> 	        // 使用方法引用
 	> 	        Supplier<Person> supplier2 = Person::new;
 	> 	    }
 	> 	}
-	> 					
+	> 																		
 	> 	class Person {
 	> 	    public Person() {
 	> 	    }
@@ -2612,17 +2612,17 @@
 
 2. ==工厂设计模式==
 
-  > - Spring使用工厂模式可以通过 `BeanFactory` 或 `ApplicationContext` 创建 bean 对象。
-  >
-  > - ApplicationContext的三个实现类：
-  >
-  > 	1. `ClassPathXmlApplication`：把上下文文件当成类路径资源。
-  > 	2. `FileSystemXmlApplication`：从文件系统中的 XML 文件载入上下文定义信息。
-  > 	3. `XmlWebApplicationContext`：从Web系统中的XML文件载入上下文定义信息。
-  >
-  > - ```java
-  > 	ApplicationContext context = new FileSystemXmlApplicationContext("C:/work/IOC/Containers/springframework.applicationcontext/src/main/resources/bean-factory-config.xml");
-  > 	```
+      > - Spring使用工厂模式可以通过 `BeanFactory` 或 `ApplicationContext` 创建 bean 对象。
+      >
+      > - ApplicationContext的三个实现类：
+      >
+      > 	1. `ClassPathXmlApplication`：把上下文文件当成类路径资源。
+      > 	2. `FileSystemXmlApplication`：从文件系统中的 XML 文件载入上下文定义信息。
+      > 	3. `XmlWebApplicationContext`：从Web系统中的XML文件载入上下文定义信息。
+      >
+      > - ```java
+      > 	ApplicationContext context = new FileSystemXmlApplicationContext("C:/work/IOC/Containers/springframework.applicationcontext/src/main/resources/bean-factory-config.xml");
+      > 	```
 
 3. ==单例设计模式==
 
@@ -2673,23 +2673,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																																																	
+	> 																																																														
 	> 	    private String message;
-	> 																																																	
+	> 																																																														
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																																																	
+	> 																																																														
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																																																	
+	> 																																																														
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																																																	
+	> 																																																														
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -2697,14 +2697,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																																																	
+	> 																																																														
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																																																	
+	> 																																																														
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																																																	
+	> 																																																														
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -3265,9 +3265,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																																															
+	> 																																																												
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																																															
+	> 																																																												
 	> 	op.process();
 	> 	```
 	>
@@ -4013,8 +4013,6 @@ insert into user values(3,'lisi');
 
 # 4.Redis
 
-## 一轮复习中的问题
-
 ### 1.Redis单线程为啥还能这么快？🌟🌟🌟🌟🌟
 
 1. ==memcached 与 redis 的区别==：
@@ -4238,8 +4236,6 @@ insert into user values(3,'lisi');
 
 
 # 5.计算机网络
-
-## 计算机网络面试题
 
 > 笔记直接看 ComputerNetworks
 
@@ -4541,12 +4537,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 																							
+	> 																																				
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 																							
+	> 																																				
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -5159,7 +5155,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 																				
+	> 																																	
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now
@@ -5360,8 +5356,6 @@ insert into user values(3,'lisi');
 
 # 8.消息队列
 
-## 1.视频课
-
 ### 1.体验一下面试官对于消息队列的7个连环炮
 
 1. 从一个点开始谈，然后由浅入深，步步深挖。
@@ -5448,7 +5442,7 @@ insert into user values(3,'lisi');
 	> - ![image-20240525211531362](bgwROUND1.assets/image-20240525211531362.png)
 	> - 把==一个 topic 里的数据分散到多个 partition 中==，防止出现一台机器存储不了大量的数据。
 	> - 但是如果只是分散到多个 partition 中，并不能实现高可用，因为==一旦某一个 partition 挂了，那么我们就会损失一部分 MQ 的数据==，这是我们无法接收的。
-	> - 那么我们可以==对每一个 partition 分别实现主从集群==，即生产者写数据只往每一个 partition 的主节点中写数据，然后再同步到从节点。如果==主节点挂了，就会选举新的从节点==。
+	> - 那么我们可以==对每一个 partition 分别实现主从集群==，即==生产者写数据只往每一个 partition 的主节点中写数据，然后再同步到从节点==。如果==主节点挂了，就会选举新的从节点==。
 
 ---
 
@@ -5488,21 +5482,21 @@ insert into user values(3,'lisi');
 
 4. ==rabbitMQ 消费者把数据丢了==：
 
-	> - 消费者弄丢数据==只有一种情况，就是消费者开启了 autoACK 机制==。autoACK 机制指的是：==只要消费者收到了 MQ 的消息，就马上通知其自己 ACK 了，即时此时还没有消费完这条数据==。这时宕机了话，MQ 误以为消费者消费完了这条数据，就直接发送下一条数据了。
-	> - 解决方式就是==关闭消费者的 autoACK 机制==，这样你可以在业务代码中==自定义什么时候告诉 MQ 消费者消息消费完成==。如果出现宕机时消费者没有消费完的情况，==MQ 发现自己没有收到 ACK，就会把这条消息再发给其它消费者进行消费==。
-
-5. ==Kafka 的消费者丢失数据==：
-
-	> - 类似于 rabbitMQ 的消费者弄丢数据的情况，就是 ==auto 提交 offset 给 Kafka，让 Kafka 误以为你已经完成提交了==。也是关闭自动提交 offset 的机制，让消费者消费完数据之后再提交 offset 到 Kafka 中。
-
-6. ==Kafka 自己弄丢数据==：
-
-	> - ![image-20240526150348473](bgwROUND1.assets/image-20240526150348473.png)
-	> - 设置==每个 patition 至少有两个 follower==，并且要求 ==leader 能感知到至少有一个 follower 还能正常同步数据==，这样才能保证 leader 挂了之后至少还有一个副本存储了数据，数据不丢。
+  > - 消费者弄丢数据==只有一种情况，就是消费者开启了 autoACK 机制==。autoACK 机制指的是：==只要消费者收到了 MQ 的消息，就马上通知其自己 ACK 了，即时此时还没有消费完这条数据==。这时宕机了话，MQ 误以为消费者消费完了这条数据，就直接发送下一条数据了。
+  > - 解决方式就是==关闭消费者的 autoACK 机制==，这样你可以在业务代码中==自定义什么时候告诉 MQ 消费者消息消费完成==。如果出现宕机时消费者没有消费完的情况，==MQ 发现自己没有收到 ACK，就会把这条消息再发给其它消费者进行消费==。
 
 7. ==Kafka 的生产者弄丢数据==：
 
-	> - 生产者必须保证==一条数据成功写入 patition 的 leader 及其所有 follower 之后，这条消息才算发送成功==，否则就会==无限次地重复发送消息，直到全部 replica 收到消息==。
+	> - 生产者必须保证==一条数据成功写入 patition 的 leader 及其所有 follower 之后，这条消息才算发送成功==，否则就会==无限次地重复发送消息，直到全部 replica（副本） 收到消息==。
+	
+6. ==Kafka 自己弄丢数据==：
+
+  > - ![image-20240526150348473](bgwROUND1.assets/image-20240526150348473.png)
+  > - 设置==每个 patition 至少有两个 follower==，并且要求 ==leader 能感知到至少有一个 follower 还能正常同步数据==，这样才能保证 leader 挂了之后至少还有一个副本存储了数据，数据不丢。
+
+7. ==Kafka 的消费者丢失数据==：
+
+  > - 类似于 rabbitMQ 的消费者弄丢数据的情况，就是 ==auto 提交 offset 给 Kafka，让 Kafka 误以为你已经完成提交了==。也是关闭自动提交 offset 的机制，让消费者消费完数据之后再提交 offset 到 Kafka 中。
 
 ---
 

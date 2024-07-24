@@ -28,7 +28,7 @@ rpm -e --nodeps mysql-libs-5.1.52-1.el6_0.1.x86_64　　# 强力删除模式，�
 rpm -e --nodeps mariadb-libs-5.5.56-2.el7.x86_64
 ```
 
-> ![image-20240604210305328](CentOS7中·按照mysql.assets/image-20240604210305328.png)
+> ![image-20240604210305328](CentOS7中安装mysql.assets/image-20240604210305328.png)
 
 ---
 
@@ -137,7 +137,7 @@ cd /usr/local/mysql-5.7.26/bin/ # 进入bin目录下
 cat /data/mysql/mysql.err | grep 'temporary password'
 ```
 
-![image-20240604211557810](CentOS7中·按照mysql.assets/image-20240604211557810.png)
+![image-20240604211557810](CentOS7中安装mysql.assets/image-20240604211557810.png)
 
 ---
 
@@ -159,7 +159,7 @@ cp /usr/local/mysql-5.7.26/support-files/mysql.server /etc/init.d/mysql
 service mysql start
 ```
 
-> ![image-20240604212419518](CentOS7中·按照mysql.assets/image-20240604212419518.png)
+> ![image-20240604212419518](CentOS7中安装mysql.assets/image-20240604212419518.png)
 
 ---
 
@@ -205,7 +205,7 @@ update user set host = '%' where user = 'root'; #使root能再任何host访问
 FLUSH PRIVILEGES;
 ```
 
-> ![image-20240604213257597](CentOS7中·按照mysql.assets/image-20240604213257597.png)
+> ![image-20240604213257597](CentOS7中安装mysql.assets/image-20240604213257597.png)
 
 ---
 

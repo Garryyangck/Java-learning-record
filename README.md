@@ -84,14 +84,14 @@
 
 	- 26.删除有序数组中的重复项，双指针
 
-		```java
-		while (right < num) {
-		    if (nums[right - 1] != nums[right]) {
-		    	nums[++left] = nums[right];//此处需用赋值运算符，不能交换，会对后续的判断会有影响
-		    }
-		    right++;
-		}
-		```
+	  ```java
+	  while (right < num) {
+	      if (nums[right - 1] != nums[right]) {
+	      	nums[++left] = nums[right];//此处需用赋值运算符，不能交换，会对后续的判断会有影响
+	      }
+	      right++;
+	  }
+	  ```
 
 	- 209.长度最小的子数组，双指针
 

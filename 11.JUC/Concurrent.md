@@ -920,13 +920,13 @@
       > 	Compiled from "Test.java"
       > 	public class Test {
       > 	  public static final java.lang.Object lockObject;
-      >
+      >	
       > 	  public Test();
       > 	    Code:
       > 	       0: aload_0
       > 	       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
       > 	       4: return
-      >
+      >	
       > 	  public static void main(java.lang.String[]);
       > 	    Code:
       > 	       0: iconst_0
@@ -944,7 +944,7 @@
       > 	      25: iinc          1, 1
       > 	      28: goto          2
       > 	      31: return
-      >
+      >	
       > 	  public static void f();
       > 	    Code:
       > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
@@ -974,7 +974,7 @@
       > 	          14    20    23   Class java/lang/InterruptedException
       > 	           6    30    33   any
       > 	          33    36    33   any
-      >
+      >	
       > 	  static {};
       > 	    Code:
       > 	       0: new           #16                 // class java/lang/Object
@@ -983,14 +983,13 @@
       > 	       7: putstatic     #7                  // Field lockObject:Ljava/lang/Object;
       > 	      10: return
       > 	}
-      >
+      >	
       > 	Process finished with exit code 0
-      >
-      > 	```
-      >
-      > - ==主要看 f() 的字节码==：
-      >
-      > 	```java
+      >	```
+      > 	
+      >- ==主要看 f() 的字节码==：
+      > 
+      >	```java
       > 	public static void f();
       > 	    Code:
       > 	       0: getstatic     #7                  // Field lockObject:Ljava/lang/Object;
@@ -1021,18 +1020,18 @@
       > 	           6    30    33   any
       > 	          33    36    33   any
       > 	```
-      >
-      > - ==AI 给出的解释==：
-      >
-      > 	```java
+      > 
+      >- ==AI 给出的解释==：
+      > 
+      >	```java
       > 	0: getstatic     #7 - 加载静态字段lockObject到栈顶。#7是一个指向常量池的索引，常量池中存储了lockObject的引用。
       > 	3: dup - 复制栈顶的lockObject引用。
       > 	4: astore_0 - 将复制的lockObject引用存储到局部变量槽0中。
-      > 							
-      > 	// 管程开始同步
+      > 	
+      > 								// 管程开始同步
       > 	5: monitorenter - 进入lockObject对象的监视器（也就是开始同步）。
-      > 							
-      > 	6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
+      > 	
+      > 								6: getstatic     #8 - 加载静态字段java/lang/System.out到栈顶，这是System.out的PrintStream对象。
       > 	9: ldc           #9 - 将字符串"hello synchronized"加载到栈顶。
       > 	11: invokevirtual #10 - 调用PrintStream.println方法输出字符串。
       > 	14: ldc2_w        #11 - 将长整型1000l（1000毫秒）加载到栈顶。
@@ -1042,14 +1041,14 @@
       > 	24: aload_1 - 加载InterruptedException到栈顶。
       > 	25: invokevirtual #15 - 调用InterruptedException.printStackTrace方法，打印异常堆栈。
       > 	28: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-      > 							
-      > 	// 结束管程同步
+      > 	
+      > 								// 结束管程同步
       > 	29: monitorexit - 退出lockObject的监视器（也就是结束同步）。
       > 	30: goto          38 - 跳转到第38行，结束方法。
       > 	33: astore_2 - 如果在退出监视器之前发生任何异常，将其存储在局部变量槽2中。
       > 	34: aload_0 - 加载局部变量槽0中的lockObject引用到栈顶。
-      > 							
-      > 	// 退出管程
+      > 	
+      > 								// 退出管程
       > 	35: monitorexit - 退出lockObject的监视器。
       > 	36: aload_2 - 加载局部变量槽2中的异常到栈顶。
       > 	37: athrow - 重新抛出存储在局部变量槽2中的异常。
@@ -1058,7 +1057,7 @@
       > 	from 14 to 20 target 23 type java/lang/InterruptedException - 如果在Thread.sleep期间发生InterruptedException，则跳转到第23行处理。
       > 	from 6 to 30 target 33 type any - 如果在进入监视器到退出监视器之间的任何位置发生任何类型的异常，则跳转到第33行处理。
       > 	from 33 to 36 target 33 type any - 如果在退出监视器时发生任何类型的异常，则跳转到第33行处理。
-      >
+      > 
 
 ---
 
