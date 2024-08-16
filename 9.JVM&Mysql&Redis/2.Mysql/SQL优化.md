@@ -173,7 +173,7 @@
 	> 	explain select * from mysql.time_zone;
 	> 	```
 	>
-	> 	上例中，从系统库mysql的系统表 time_zone 里查询数据，扫码类型 为system，==这些数据已经加载到内存里，不需要进行磁盘IO==。因此这类扫描是速度最快的。
+	> 	上例中，从系统库 mysql 的系统表 time_zone 里查询数据，扫码类型 为 system，==这些数据已经加载到内存里，不需要进行磁盘 IO==。因此这类扫描是速度最快的。
 	>
 	> - ```sql
 	> 	explain select * from (select * from user where id=1) tmp;
@@ -185,20 +185,18 @@
 
 	> - const扫描的条件为：
 	>
-	> 	（1）命中==主键(primary key)==或者==唯一索引(unique)==；
+	>   （1）命中==主键(primary key)==或者==唯一索引(unique)==；
 	>
-	> 	（2）被==连接的部分是一个常量(const)值（右边的值为常量）==；
+	>   （2）被==连接的部分是一个常量(const)值（右边的值为常量）==；
 	>
-	> 	```sql
-	> 	explain select * from user where id=1;
-	> 	```
+	>   ```sql
+	>   explain select * from user where id=1;
+	>   ```
 	>
-	> 	如上例，id是PK，连接部分是常量1。
+	>   如上例，id是PK，连接部分是常量1。
 	>
-	> - ==画外音：别搞什么类型转换的幺蛾子。==
-	>
-	> 	这类扫描效率极高，返回数据量少，速度非常快。
-
+	>   这类扫描效率极高，返回数据量少，速度非常快。
+	
 5. ==eq_ref==
 
 	> - eq_ref扫描的条件为，对于==前表的每一行(row)==，==后表只有一行被扫描==。
@@ -221,7 +219,7 @@
 
 6. ==ref==
 
-	> - 如果把上例eq_ref案例中的==主键索引，改为普通非唯一(non unique)索引==。
+	> - 如果把上例eq_ref案例中的主键索引，改为普通==非唯一(non unique)索引==。
 	>
 	> 	```sql
 	> 	explain select * from user,user_ex where user.id=user_ex.id;
@@ -237,11 +235,17 @@
 
 	> - 像上例中的 ==between，in，>== 都是典型的范围(range)查询。
 	>
-	> 	==画外音：必须是索引，否则不能批量”跳过”。==
+	> 	==必须是索引，否则不能批量“跳过”。==
 
 8. ==index==
 
-	> - 如果id上不建索引，对于前表的每一行(row)，后表都要被全表扫描。
+      > - 需要扫描索引上的所有数据。
+      > - 使用场景：count(\*)的时候扫描索引上的所有数据。
+
+9. ==All==
+
+      > - 没有索引的全局扫描。
+      > - 比如上述的 user_id 和 user_ex.id 上不建索引，对于前表的每一行(row)，后表都要被全表扫描。
 
 9. ==总结==：
 
@@ -249,15 +253,14 @@
 	> - ==const==：==PK或者unique==上的==等值查询（右侧是常量）==
 	> - ==eq_ref==：==PK或者unique==上的==join查询==，==等值匹配（多表联立）==，对于前表的每一行(row)，后表只有一行命中
 	> - ==ref==：==非唯一索引，等值匹配==，可能有多行命中
-	> - ==range==：索引上的==范围扫描==，例如：==between/in/>==
+	> - ==range==：索引上的==范围扫描==，例如：==between、in、>\===
 	> - ==index==：索引上的==全集扫描==，例如：InnoDB的==count==
 	> - ==ALL==最慢：全表扫描(full table scan)
-
----
 
 ### 9.explain 的 Extra 字段有什么用？
 
 1. ```sql
+	drop table if exists `user`;
 	create table user (
 	    id int primary key,
 	    name varchar(20),
@@ -270,31 +273,26 @@
 	insert into user values(3, 'lisi', 'yes');
 	insert into user values(4, 'lisi', 'no');
 	```
-
+	
 2. ==Using where==
 
 	> - Extra为Using where说明，==SQL使用了where条件过滤数据==。
 
 3. ==Using index==
 
-	> - Extra为Using index说明，==SQL所需要返回的所有列数据均在一棵索引树上==，而无需访问实际的行记录。
+	> - Extra为Using index说明，==SQL所需要返回的所有列数据均在一棵索引树上==，而无需访问实际的行记录（比如索引覆盖中，返回的字段都在索引树上，不需要进行回表）。
 	>
-	> - 如：
-	>
-	> 	```sql
-	> 	explain select id,name from user where name='shenjian';
-	> 	```
-
+	> - ```sql
+	>  explain select id, name from user where name='shenjian';
+	>   ```
+	
 4. ==Using index condition==
 
-	> - Extra为Using index condition说明，确实==命中了索引，但不是所有的列数据都在索引树上==，还需要访问实际的行记录。
-	>
-	> - 如：
-	>
-	> 	```sql
-	> 	explain select id,name,sex from user # sex 没有索引
-	> 	where name='shenjian';
-	> 	```
+      > - Extra 为 Using index condition 说明，确实==命中了索引，但不是所有的列数据都在索引树上==，还需要访问实际的行记录。
+      >
+      > - ```sql
+      > 	explain select id,name,sex from user where name like 'li';
+      > 	```
 
 5. ==Using filesort==
 
@@ -302,43 +300,35 @@
 	> 	explain select * from user order by sex;
 	> 	```
 	>
-	> 	结果说明：
-	>
-	> - Extra为Using filesort说明，得到==所需结果集，需要对所有记录进行文件排序==。
+	> - Extra为 Using filesort 说明，得到==所需结果集，需要对所有记录进行文件排序==。
 	>
 	> - 这类SQL语句==性能极差==，需要进行优化。
 	>
 	> - 典型的，==在一个没有建立索引的列上进行了order by，就会触发filesort==，常见的==优化方案==是，在==order by的列上添加索引==，==避免每次查询都全量排序==。
-
+	
 6. ==Using temporary==
 
 	> - ```sql
 	> 	explain select * from user group by name order by sex;
 	> 	```
 	>
-	> 	结果说明：
-	>
 	> - Extra为Using temporary说明，==需要建立临时表(temporary table)来暂存中间结果==。
 	>
 	> - 这类SQL语句==性能较低==，往往也需要进行优化。
 	>
-	> - 典型的，==group by和order by同时存在，且作用于不同的字段时，就会建立临时表==，以便计算出最终的结果集。
-
+	> - 典型的，==group by 和 order by 同时存在，且作用于不同的字段时，就会建立临时表==，以便计算出最终的结果集。
+	
 7. ==Using join buffer (Blocked Nested Loop)==
 
 	> - ```sql
-	> 	explain select * from user where id in(select id from user where sex='no');
+	> 	explain select * from user join (select * from user where sex = 'no') tmp on user.sex = tmp.sex;
 	> 	```
-	>
-	> 	结果说明：
 	>
 	> - Extra为Using join buffer (Block Nested Loop)说明，需要进行==嵌套循环计算==。
 	>
-	> - *画外音：内层和外层的 type均为 ALL，rows均为4，需要循环进行 4\*4次计算。*
-	>
 	> - 这类SQL语句==性能往往也较低==，需要进行优化。
 	>
-	> - 典型的，两个关联表join，关联字段均未建立索引，就会出现这种情况。常见的优化方案是，==在关联字段上添加索引，避免每次嵌套循环计算==。
+	> - 典型的，两个关联表 join，关联字段均未建立索引，就会出现这种情况。常见的优化方案是，==在关联字段上添加索引，避免每次嵌套循环计算==。
 
 ---
 

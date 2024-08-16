@@ -90,7 +90,7 @@
 
 ## 12.分离头指针
 
-1. 分离头指针是指==当前的HEAD指针没有指向任何一个分支，而是指向了某一个commit==，你==任然可以在没有指向任何分支的情况下commit==，但是危险的是==如果checkout到其它分支，那么分离头指针上的修改可能就没了==。
+1. 分离头指针是指==当前的HEAD指针没有指向任何一个分支，而是指向了某一个commit==，你==仍然可以在没有指向任何分支的情况下commit==，但是危险的是==如果checkout到其它分支，那么分离头指针上的修改可能就没了==。
 
 2. > ![image-20240425110018312](Git.assets/image-20240425110018312.png)
 	>
@@ -362,7 +362,7 @@
 ## 24.消除最近的几次提交
 
 1. ```bash
-	git reset --hard <code> # 慎用...
+	git reset --hard <code> # 慎用...git
 	```
 
 ---
@@ -372,7 +372,7 @@
 ## 25.比较不同的版本差异
 
 1. ```bash
-	git diff <from name/code> <to_name/code> -- <filename>
+	git diff <from_name/code> <to_name/code> -- <filename>
 	```
 
 ---
