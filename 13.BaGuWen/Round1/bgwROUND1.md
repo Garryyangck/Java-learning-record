@@ -6,78 +6,80 @@
 
 ==我的回答==：
 
-1. Object 的常用方法包括 getClass(), equals(Object), hashCode(), toString(), notify(), notifyAll(), wait(无参/long/long, int), finalize()，下面我将一一进行介绍。
-
-2. getClass() 方法用于返回对象==运行时的类对象(Class对象)==。可进一步获取运行时对象。
-
-	```java
-	/* Returns the runtime class of this {@code Object}.
-	```
-
-3. equals 方法==默认情况下使用 = = ， 比较引用类型是否相等==。比如 String 类中就重写了此方法，优先比较两对象的地址和运行时类是否相同，随后以比较字符串的方式比较两个 String 对象。
-
-4. hashCode  方法==在默认情况下根据对象的内存地址返回一个int整数==。
-
-	```java
-	/* This is typically implemented by converting the internal address of the object into an integer
-	```
-
-	==值得注意的是：由于 hashCode 方法可以被重写，因此其返回值不能直接和对象的内存地址挂钩==。hashCode 方法可以用于==帮助 HashMap 实现哈希映射==，但是一个对象在 HashMap 中映射的结果并不等同于其 hashCode，而是基于 hashCode 做了一层封装。
-
-	```java
-	static final int hash(Object key) {
-	    int h;
-	    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
-	}
-	```
-
-	此外还规定：==如果两个对象使用 equals 方法得到 true 的话，那么它们的 hashCode 必须相同==。
-
-	```java
-	/* If two objects are equal according to the {@code equals(Object)} method, then calling the {@code hashCode} method on each of the two objects must produce the same integer result.
-	```
-
-	所以==一般两个方法会一同被重写==。
-
-	```java
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true; // 先判断内存地址是否一致，相同则必然相等
-	    if (o == null || getClass() != o.getClass()) return false; // 然后判断两对象的运行
-	    // 时类型（getClass( )方法）是否与该对象一致，不一致就肯定不相等
-	    ThisClass that = (ThisClass) o;
-	    return field1 == that.field1 && // 基本数据类型字段直接判断值是否相等
-	        field2.equals(that.field2) && // 引用类型则调用其各自的 equals 方法
-	        field3.equals(that.field3); // field1 为基本类型，2、3为引用类型
-	}
-	
-	@Override
-	public int hashCode() { // 同时重写 hashCode 方法
-	    return Objects.hash(field1, field2, field3);
-	}
-	```
-
-5.  toString  方法用于生成一个 String 字符串以描述一个对象。==默认情况下为==
-
-	```java
-	object.getClass().getName() + "@" + Integer.toHexString(object.hashCode())
-	```
-
-	==建议所有的类都自行实现 toString 方法==，以更友好的方式告诉程序员某个对象。
-
-6. wait(无参/long/long, int) 方法用于==将此对象上的线程置于等待状态==，直到它被另一个线程以该对象的 notify 方法或 notifyAll() 方法唤醒。
-
-7. notify(), notifyAll() 用于==唤醒某一对象上处于等待状态的线程==。值得注意的是， notify() 随机挑选一个线程唤醒，而另一个则唤醒全部线程。
-
-8. finalize() 方法用于在JVM垃圾回收阶段，==当一个对象将被回收时，会先调用其 finalize() 方法==，目的是==尝试让该对象获得 GC Roots 的引用以逃过这次回收==。
+> 1. Object 的常用方法包括 getClass(), equals(Object), hashCode(), toString(), notify(), notifyAll(), wait(无参/long/long, int), finalize()，下面我将一一进行介绍。
+>
+> 2. getClass() 方法用于返回对象==运行时的类对象(Class对象)==。可进一步获取运行时对象。
+>
+> 	```java
+> 	/* Returns the runtime class of this {@code Object}.
+> 	```
+>
+> 3. equals 方法==默认情况下使用 = = ， 比较引用类型是否相等==。比如 String 类中就重写了此方法，优先比较两对象的地址和运行时类是否相同，随后以比较字符串的方式比较两个 String 对象。
+>
+> 4. hashCode  方法==在默认情况下根据对象的内存地址返回一个int整数==。
+>
+> 	```java
+> 	/* This is typically implemented by converting the internal address of the object into an integer
+> 	```
+>
+> 	==值得注意的是：由于 hashCode 方法可以被重写，因此其返回值不能直接和对象的内存地址挂钩==。hashCode 方法可以用于==帮助 HashMap 实现哈希映射==，但是一个对象在 HashMap 中映射的结果并不等同于其 hashCode，而是基于 hashCode 做了一层封装。
+>
+> 	```java
+> 	static final int hash(Object key) {
+> 	    int h;
+> 	    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+> 	}
+> 	```
+>
+> 	此外还规定：==如果两个对象使用 equals 方法得到 true 的话，那么它们的 hashCode 必须相同==。
+>
+> 	```java
+> 	/* If two objects are equal according to the {@code equals(Object)} method, then calling the {@code hashCode} method on each of the two objects must produce the same integer result.
+> 	```
+>
+> 	所以==一般两个方法会一同被重写==。
+>
+> 	```java
+> 	@Override
+> 	public boolean equals(Object o) {
+> 	    if (this == o) return true; // 先判断内存地址是否一致，相同则必然相等
+> 	    if (o == null || getClass() != o.getClass()) return false; // 然后判断两对象的运行
+> 	    // 时类型（getClass( )方法）是否与该对象一致，不一致就肯定不相等
+> 	    ThisClass that = (ThisClass) o;
+> 	    return field1 == that.field1 && // 基本数据类型字段直接判断值是否相等
+> 	        field2.equals(that.field2) && // 引用类型则调用其各自的 equals 方法
+> 	        field3.equals(that.field3); // field1 为基本类型，2、3为引用类型
+> 	}
+> 	
+> 	@Override
+> 	public int hashCode() { // 同时重写 hashCode 方法
+> 	    return Objects.hash(field1, field2, field3);
+> 	}
+> 	```
+>
+> 5.  toString  方法用于生成一个 String 字符串以描述一个对象。==默认情况下为==
+>
+> 	```java
+> 	object.getClass().getName() + "@" + Integer.toHexString(object.hashCode())
+> 	```
+>
+> 	==建议所有的类都自行实现 toString 方法==，以更友好的方式告诉程序员某个对象。
+>
+> 6. wait(无参/long/long, int) 方法用于==将此对象上的线程置于等待状态==，直到它被另一个线程以该对象的 notify 方法或 notifyAll() 方法唤醒。
+>
+> 7. notify(), notifyAll() 用于==唤醒某一对象上处于等待状态的线程==。值得注意的是， notify() 随机挑选一个线程唤醒，而另一个则唤醒全部线程。
+>
+> 8. finalize() 方法用于在JVM垃圾回收阶段，==当一个对象将被回收时，会先调用其 finalize() 方法==，目的是==尝试让该对象获得 GC Roots 的引用以逃过这次回收==。
+>
 
 ==参考答案==：
 
-- Object 类常见的方法有 toString( )，equals( ) 和 hashCode( )，wait( ) 和 notify( ) 等等。下面分别说一下：
-- ==toString( ) 返回的是对象的字符串表示==，==默认为 「class 名 + @ + hashCode 的十六进制表示」==，我们一般会在子类将它重写为打印各个字段的值，==在调试和打日志中用的多==。
-- ==equals( ) 和 hashCode( ) 通常用于对象之间的比较==。其中 equals( ) 用于判断两个对象是否相等，==默认使用 “= =” 判断==，hashCode( ) 用于获取对象的哈希码，==默认以对象的内存地址为参考==。在实践中，==为了保证元素在 HashMap 和 HashSet 等集合中的正确存储，通常需要将它俩一起重写==。
-- wait( )，notify( ) 以及 notifyAll( ) 通常用于==线程间的协作和同步==。其中 ==wait( ) 使当前线程释放锁并进入等待状态==，直至被其它线程的 notify 或 notifyAll 唤醒。
-- notify( ) 会在对该对象调用了 wait( ) 的线程中，==随机挑选一个唤醒，解除其阻塞状态==。而 notifyAll( ) 会唤醒==所有==在该对象上等待的线程。==wait( ) 搭配 notify( ) 可以实现一个简单的“生产-消费模型”：生产者线程产生消息后，调用 notify( ) 唤醒消费者。消费者被唤醒后消费消息，消费完成后调用 wait( ) 等待==。
+> - Object 类常见的方法有 toString( )，equals( ) 和 hashCode( )，wait( ) 和 notify( ) 等等。下面分别说一下：
+> - ==toString( ) 返回的是对象的字符串表示==，==默认为 「class 名 + @ + hashCode 的十六进制表示」==，我们一般会在子类将它重写为打印各个字段的值，==在调试和打日志中用的多==。
+> - ==equals( ) 和 hashCode( ) 通常用于对象之间的比较==。其中 equals( ) 用于判断两个对象是否相等，==默认使用 “= =” 判断==，hashCode( ) 用于获取对象的哈希码，==默认以对象的内存地址为参考==。在实践中，==为了保证元素在 HashMap 和 HashSet 等集合中的正确存储，通常需要将它俩一起重写==。
+> - wait( )，notify( ) 以及 notifyAll( ) 通常用于==线程间的协作和同步==。其中 ==wait( ) 使当前线程释放锁并进入等待状态==，直至被其它线程的 notify 或 notifyAll 唤醒。
+> - notify( ) 会在对该对象调用了 wait( ) 的线程中，==随机挑选一个唤醒，解除其阻塞状态==。而 notifyAll( ) 会唤醒==所有==在该对象上等待的线程。==wait( ) 搭配 notify( ) 可以实现一个简单的“生产-消费模型”：生产者线程产生消息后，调用 notify( ) 唤醒消费者。消费者被唤醒后消费消息，消费完成后调用 wait( ) 等待==。
+>
 
 > 参考答案里举了更多的例子，使得回答更形象具体，让面试官感觉你是真的懂并且能够正确运用，而不是只会干巴巴地背诵。
 
@@ -89,13 +91,15 @@
 
 ==我的回答==：
 
-1. 首先我想说说==什么是平台无关性语言==。平台无关性语言是指“==一次编译，处处运行(Write once, run anywhere)==”的语言，平台无关性是java的设计者在设计java时的美好愿景。
-2. Java实现“一次编译，处处运行”的方法是通过==javac编译器将Java源代码编译为的字节码==，而==不同的操作系统有不同的JVM==，==JVM将同一份字节码翻译为对应操作系统的指令集==，这样就让原本不能跨平台的Java源代码实现了平台无关性。
+> 1. 首先我想说说==什么是平台无关性语言==。平台无关性语言是指“==一次编译，处处运行(Write once, run anywhere)==”的语言，平台无关性是java的设计者在设计java时的美好愿景。
+> 2. Java实现“一次编译，处处运行”的方法是通过==javac编译器将Java源代码编译为的字节码==，而==不同的操作系统有不同的JVM==，==JVM将同一份字节码翻译为对应操作系统的指令集==，这样就让原本不能跨平台的Java源代码实现了平台无关性。
+>
 
 ==参考答案==：
 
-- 平台无关性是说，==一种语言在一台计算机上的运行不受平台的限制，一次编译，到处运行==。
-- Java 语言具有平台无关性的关键在于 JVM。虽然==不同的操作系统使用不同的机器指令集来执行任务，同一份代码在不同的操作系统上可能无法直接执行==，但是 Java 源文件经过 ==javac 编译器编译后形成的二进制字节码，可以被各个操作系统的 JVM 翻译成该操作系统所需的指令集==，进而执行。这可以提高 Java 程序的可移植性，因为==只需针对不同操作系统提供对应的 JVM 即可，无需修改源代码==。
+> - 平台无关性是说，==一种语言在一台计算机上的运行不受平台的限制，一次编译，到处运行==。
+> - Java 语言具有平台无关性的关键在于 JVM。虽然==不同的操作系统使用不同的机器指令集来执行任务，同一份代码在不同的操作系统上可能无法直接执行==，但是 Java 源文件经过 ==javac 编译器编译后形成的二进制字节码，可以被各个操作系统的 JVM 翻译成该操作系统所需的指令集==，进而执行。这可以提高 Java 程序的可移植性，因为==只需针对不同操作系统提供对应的 JVM 即可，无需修改源代码==。
+>
 
 ---
 
@@ -105,43 +109,45 @@
 
 ==我的回答==：
 
-1. === =是一个操作符==，可以比较==基本数据类型==之间和==引用数据类型==之间是否相等。而 ==equals 是 Object 类的一个方法==，==只能比较两个引用数据类型==是否相等。
-
-2. 具体地说，==比较基本数据类型时，就直接比较值是否相等==。比如int就比较整型值是否相等，boolean就比较布尔值。而==比较引用数据类型时，则比较对象的内存地址是否一致==。
-
-3. 而 ==equals 方法在 Object 方法中就是使用 == 比较两个对象是否相等==：
-
-	```java
-	public boolean equals(Object obj) {
-	    return (this == obj);
-	}
-	```
-
-	但是==我们可以根据不同对象的意义重写此方法==，以自定义的方式判断两个对象是否相等。比如 String 类就重写了 equals 方法，优先判断两个对象的内存地址和运行时类型是否一致，然后以比较字符串的方法判断两个 String 对象是否相等。==由于要求 equals 为 true 的两个对象的 hashCode 也必须相同，因此一般该方法的重写会伴随着 hashCode 方法的重写==。
-
-	```java
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true; // 先判断内存地址是否一致，相同则必然相等
-	    if (o == null || getClass() != o.getClass()) return false; // 然后判断两对象的运行
-	    // 时类型（getClass( )方法）是否与该对象一致，不一致就肯定不相等
-	    ThisClass that = (ThisClass) o;
-	    return field1 == that.field1 && // 基本数据类型字段直接判断值是否相等
-	        field2.equals(that.field2) && // 引用类型则调用其各自的 equals 方法
-	        field3.equals(that.field3); // field1 为基本类型，2、3为引用类型
-	}
-	
-	@Override
-	public int hashCode() { // 同时重写 hashCode 方法
-	    return Objects.hash(field1, field2, field3);
-	}
-	```
+> 1. === =是一个操作符==，可以比较==基本数据类型==之间和==引用数据类型==之间是否相等。而 ==equals 是 Object 类的一个方法==，==只能比较两个引用数据类型==是否相等。
+>
+> 2. 具体地说，==比较基本数据类型时，就直接比较值是否相等==。比如int就比较整型值是否相等，boolean就比较布尔值。而==比较引用数据类型时，则比较对象的内存地址是否一致==。
+>
+> 3. 而 ==equals 方法在 Object 方法中就是使用 == 比较两个对象是否相等==：
+>
+> 	```java
+> 	public boolean equals(Object obj) {
+> 	    return (this == obj);
+> 	}
+> 	```
+>
+> 	但是==我们可以根据不同对象的意义重写此方法==，以自定义的方式判断两个对象是否相等。比如 String 类就重写了 equals 方法，优先判断两个对象的内存地址和运行时类型是否一致，然后以比较字符串的方法判断两个 String 对象是否相等。==由于要求 equals 为 true 的两个对象的 hashCode 也必须相同，因此一般该方法的重写会伴随着 hashCode 方法的重写==。
+>
+> 	```java
+> 	@Override
+> 	public boolean equals(Object o) {
+> 	    if (this == o) return true; // 先判断内存地址是否一致，相同则必然相等
+> 	    if (o == null || getClass() != o.getClass()) return false; // 然后判断两对象的运行
+> 	    // 时类型（getClass( )方法）是否与该对象一致，不一致就肯定不相等
+> 	    ThisClass that = (ThisClass) o;
+> 	    return field1 == that.field1 && // 基本数据类型字段直接判断值是否相等
+> 	        field2.equals(that.field2) && // 引用类型则调用其各自的 equals 方法
+> 	        field3.equals(that.field3); // field1 为基本类型，2、3为引用类型
+> 	}
+> 	
+> 	@Override
+> 	public int hashCode() { // 同时重写 hashCode 方法
+> 	    return Objects.hash(field1, field2, field3);
+> 	}
+> 	```
+>
 
 ==参考答案==：
 
-- 首先 === = 是一个操作符== ，==equals 是超类 Object 中的方法==，==默认==是用 = = 来比较的。也就是说，对于没有重写 equals 方法的子类，equals 和 = = 是一样的。
-- 而 = = 在比较时，根据所比较的类的类型不同，功能也有所不同：对于==基础数据类型==，如 int 类型等，==比较的是具体的值==；而对于==引用数据类型==，比较的是==引用的地址==是否相同。
-- 对于重写的 equals 方法，比的内容==取决于这个方法的实现==。
+> - 首先 === = 是一个操作符== ，==equals 是超类 Object 中的方法==，==默认==是用 = = 来比较的。也就是说，对于没有重写 equals 方法的子类，equals 和 = = 是一样的。
+> - 而 = = 在比较时，根据所比较的类的类型不同，功能也有所不同：对于==基础数据类型==，如 int 类型等，==比较的是具体的值==；而对于==引用数据类型==，比较的是==引用的地址==是否相同。
+> - 对于重写的 equals 方法，比的内容==取决于这个方法的实现==。
+>
 
 ---
 
@@ -151,44 +157,46 @@
 
 ==我的回答==：
 
-1. 首先我想说说 equals 和 hashCode 方法。它们都是 Object 类的方法。在==默认情况下，equals 方法采用 == 操作符比较引用类型的内存地址==，而 ==hashCode 方法默认情况下根据内存地址返回哈希值==。
-
-2. 由于 equals 方法默认只能比较引用类型的内存地址，而==在业务中我们常常有自己判断两个对象是否相等的逻辑==，比如一个 Person 类有 name 和 identity 两个字段，我们可以认为这两个字段都相同的 Person 实例对象相等，于是就可以重写 Person 类的 equals 方法。
-
-3. 由于有==规定：如果两个对象使用 equals 方法相同，那么它们的 hashCode 也必须相同==。因此 ==equals 方法的重写一般也伴随着 hashCode 方法的重写==。
-
-4. 至于重写的方法，还是以上述的 Person 类为例，重写 equals 方法时，可以==先判断内存地址是否一致==，相同则必然相等，然后==判断两对象的运行时类型（getClass( )方法）是否与该对象一致==，不一致就肯定不相等，最后对于==基本数据类型字段直接判断值==是否相等，而==引用类型则调用其各自的 equals 方法==。
-
-	```java
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true; // 先判断内存地址是否一致，相同则必然相等
-	    if (o == null || getClass() != o.getClass()) return false; // 然后判断两对象的运行
-	    // 时类型（getClass( )方法）是否与该对象一致，不一致就肯定不相等
-	    ThisClass that = (ThisClass) o;
-	    return field1 == that.field1 && // 基本数据类型字段直接判断值是否相等
-	        field2.equals(that.field2) && // 引用类型则调用其各自的 equals 方法
-	        field3.equals(that.field3); // field1 为基本类型，2、3为引用类型
-	}
-	```
-
-5. 重写 hashCode 方法可以使用==工具类 Objects 的 hash 方法==根据所有指定字段返回一个哈希值。
-
-	```java
-	@Override
-	public int hashCode() { // 同时重写 hashCode 方法
-	    return Objects.hash(field1, field2, field3);
-	}
-	```
+> 1. 首先我想说说 equals 和 hashCode 方法。它们都是 Object 类的方法。在==默认情况下，equals 方法采用 == 操作符比较引用类型的内存地址==，而 ==hashCode 方法默认情况下根据内存地址返回哈希值==。
+>
+> 2. 由于 equals 方法默认只能比较引用类型的内存地址，而==在业务中我们常常有自己判断两个对象是否相等的逻辑==，比如一个 Person 类有 name 和 identity 两个字段，我们可以认为这两个字段都相同的 Person 实例对象相等，于是就可以重写 Person 类的 equals 方法。
+>
+> 3. 由于有==规定：如果两个对象使用 equals 方法相同，那么它们的 hashCode 也必须相同==。因此 ==equals 方法的重写一般也伴随着 hashCode 方法的重写==。
+>
+> 4. 至于重写的方法，还是以上述的 Person 类为例，重写 equals 方法时，可以==先判断内存地址是否一致==，相同则必然相等，然后==判断两对象的运行时类型（getClass( )方法）是否与该对象一致==，不一致就肯定不相等，最后对于==基本数据类型字段直接判断值==是否相等，而==引用类型则调用其各自的 equals 方法==。
+>
+> 	```java
+> 	@Override
+> 	public boolean equals(Object o) {
+> 	    if (this == o) return true; // 先判断内存地址是否一致，相同则必然相等
+> 	    if (o == null || getClass() != o.getClass()) return false; // 然后判断两对象的运行
+> 	    // 时类型（getClass( )方法）是否与该对象一致，不一致就肯定不相等
+> 	    ThisClass that = (ThisClass) o;
+> 	    return field1 == that.field1 && // 基本数据类型字段直接判断值是否相等
+> 	        field2.equals(that.field2) && // 引用类型则调用其各自的 equals 方法
+> 	        field3.equals(that.field3); // field1 为基本类型，2、3为引用类型
+> 	}
+> 	```
+>
+> 5. 重写 hashCode 方法可以使用==工具类 Objects 的 hash 方法==根据所有指定字段返回一个哈希值。
+>
+> 	```java
+> 	@Override
+> 	public int hashCode() { // 同时重写 hashCode 方法
+> 	    return Objects.hash(field1, field2, field3);
+> 	}
+> 	```
+>
 
 ==参考答案==：
 
-- 首先 equals( ) 是 Object 中的方法，默认是用 = = 来比较的。hashCode( ) 也是 Object 类的方法，根据一定的规则将与对象相关的信息，比如对象的内存地址，映射成一个数值，这个数值称作为哈希值。
-- 有时候我们想要==自定义类的比较规则时，需要重写 equals( )==，但是为了==保证类在 HashSet 和 HashMap 等集合中的正确存储，也要同时重写 hashCode( )== 。
-- 以 HashMap 为例， ==HashMap底层在添加相同的元素时，会先调用两个对象的 hashCode( ) 是否相同，如果相同还会再用 equals( ) 比较两个对象是否相同==。
-- 假设有一个 Person 类，有 name 和 age 两个字段，我们现在重写 equals( ) 规定只有两个 Person 的 name 和 age 都相同时，才认为两个 Person 相等。现在 new 出两个 name 和 age 都相同的 Person，分别添加到 HashMap 中。
-- ==我们期望最后 HashMap 中只有一个 Person，但其实是有两个==。原因在于添加第二个 Person 时，先比较的是两个 Person 的 hashCode( )，注意此时我们==没有重写 hashCode( ) ==，那么分别 new 出来的 Person 的哈希值肯定是不同的，到这里 HashMap 就会将两个 Person 认定为不同的元素添加进去。
-- 解决的办法就是重写 hashCode( )，最简单的返回 name 和 age 的哈希值的乘积即可。
+> - 首先 equals( ) 是 Object 中的方法，默认是用 = = 来比较的。hashCode( ) 也是 Object 类的方法，根据一定的规则将与对象相关的信息，比如对象的内存地址，映射成一个数值，这个数值称作为哈希值。
+> - 有时候我们想要==自定义类的比较规则时，需要重写 equals( )==，但是为了==保证类在 HashSet 和 HashMap 等集合中的正确存储，也要同时重写 hashCode( )== 。
+> - 以 HashMap 为例， ==HashMap底层在添加相同的元素时，会先调用两个对象的 hashCode( ) 是否相同，如果相同还会再用 equals( ) 比较两个对象是否相同==。
+> - 假设有一个 Person 类，有 name 和 age 两个字段，我们现在重写 equals( ) 规定只有两个 Person 的 name 和 age 都相同时，才认为两个 Person 相等。现在 new 出两个 name 和 age 都相同的 Person，分别添加到 HashMap 中。
+> - ==我们期望最后 HashMap 中只有一个 Person，但其实是有两个==。原因在于添加第二个 Person 时，先比较的是两个 Person 的 hashCode( )，注意此时我们==没有重写 hashCode( ) ==，那么分别 new 出来的 Person 的哈希值肯定是不同的，到这里 HashMap 就会将两个 Person 认定为不同的元素添加进去。
+> - 解决的办法就是重写 hashCode( )，最简单的返回 name 和 age 的哈希值的乘积即可。
+>
 
 ---
 
@@ -2153,13 +2161,13 @@
 	> 	public class LambdaStreamExample {
 	> 	    public static void main(String[] args) {
 	> 	        List numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-	> 																		
+	> 																			
 	> 	        // 使用Lambda和Stream API过滤和映射集合
 	> 	        List result = numbers.stream()
 	> 	            .filter(n -> n % 2 != 0) // 过滤掉偶数
 	> 	            .map(n -> n * 2) // 将剩下的数字加倍
 	> 	            .toList();
-	> 																		
+	> 																			
 	> 	        // 输出结果
 	> 	        System.out.println(result); // 输出: [2, 6, 10, 14, 18]
 	> 	    }
@@ -2172,26 +2180,26 @@
 	>
 	> - ```java
 	> 	public static void main(String[] args) {
-	> 																		
+	> 																			
 	> 	    // 创建一个包含非空值的Optional对象
 	> 	    Optional<String> optional1 = Optional.of("Hello World");
-	> 																		
+	> 																			
 	> 	    // 创建一个为空的Optional对象
 	> 	    Optional<String> optional2 = Optional.empty();
-	> 																		
+	> 																			
 	> 	    // 输出Optional对象的值
 	> 	    System.out.println(optional1.get()); // Hello World
-	> 																		
+	> 																			
 	> 	    // 如果Optional对象为空，则抛出NoSuchElementException异常
 	> 	    System.out.println(optional2.get()); // 抛出NoSuchElementException异常
-	> 																		
+	> 																			
 	> 	    // 判断Optional对象是否有值
 	> 	    System.out.println(optional1.isPresent()); // true
 	> 	    System.out.println(optional2.isPresent()); // false
-	> 																		
+	> 																			
 	> 	    // 如果Optional对象为空，则返回指定的默认值
 	> 	    System.out.println(optional2.orElse("Default Value")); // Default Value
-	> 																		
+	> 																			
 	> 	    // 如果Optional对象为空，则执行指定的操作
 	> 	    optional2.ifPresent(value -> System.out.println("Value is present"));
 	> 	}
@@ -2270,16 +2278,16 @@
 	>
 	> 	```java
 	> 	public class MethodReferenceExample {
-	> 																		
+	> 																			
 	> 	    public static void main(String[] args) {
 	> 	        // 使用 Lambda 表达式
 	> 	        Supplier<Person> supplier1 = () -> new Person();
-	> 																		
+	> 																			
 	> 	        // 使用方法引用
 	> 	        Supplier<Person> supplier2 = Person::new;
 	> 	    }
 	> 	}
-	> 																		
+	> 																			
 	> 	class Person {
 	> 	    public Person() {
 	> 	    }
@@ -2298,75 +2306,86 @@
 
 ==我的回答==：
 
-1. 同步是指多个任务不能同时执行，必须按照顺序一个一个执行。
-2. 异步则允许多个任务同时执行，它们之间互不干扰。
-3. ==阻塞就是某个事件由于某些原因不能进行，需要停下等待，不过这期间可以干其它的事==。
-4. 非阻塞就是程序运行时畅通无阻，不需要等待。
+> 1. 同步是指多个任务不能同时执行，必须按照顺序一个一个执行。
+> 2. 异步则允许多个任务同时执行，它们之间互不干扰。
+> 3. ==阻塞就是某个事件由于某些原因不能进行，需要停下等待，不过这期间可以干其它的事==。
+> 4. 非阻塞就是程序运行时畅通无阻，不需要等待。
+>
 
 ==参考答案==：
 
-- 同步就是指多个事件不能同时进行，需要按照一定的次序一个一个进行。异步就是指多个事件能够同时进行，互不干扰。
-- ==阻塞就是某个事件由于某些原因不能进行，需要停下来等待，但在等待的期间可以干其他事情==。非阻塞就是事件的进行畅通无阻，没有阻碍。
+> - 同步就是指多个事件不能同时进行，需要按照一定的次序一个一个进行。异步就是指多个事件能够同时进行，互不干扰。
+> - ==阻塞就是某个事件由于某些原因不能进行，需要停下来等待，但在等待的期间可以干其他事情==。非阻塞就是事件的进行畅通无阻，没有阻碍。
+>
 
 ==问题二==：==同步/异步 和 阻塞/非阻塞 有什么区别？==
 
 ==我的回答==：
 
-1. 同步和异步的区别在于==任务是否可以同时执行==；阻塞和非阻塞的区别在于==任务能不能继续执行==。
+> 1. 同步和异步的区别在于==任务是否可以同时执行==；阻塞和非阻塞的区别在于==任务能不能继续执行==。
+>
 
 ==参考答案==：
 
-- 同步/异步关心的是事件之间能不能同时进行，阻塞/非阻塞关心的是当前事件能不能够继续进行。
-- 也可以把它们两两组合，以线程为例子：
-- 同步阻塞，相当与同一时刻只能运行一个线程，并且此时还在等待。
-- 同步非阻塞，相当与一个线程在正常运行。
-- 异步阻塞，相当与同一时刻可以运行多个线程，但此时某些线程在等待。
-- 异步非阻塞，相等于多个线程都在同时正常运行。
+> - 同步/异步关心的是事件之间能不能同时进行，阻塞/非阻塞关心的是当前事件能不能够继续进行。
+> - 也可以把它们两两组合，以线程为例子：
+> - 同步阻塞，相当与同一时刻只能运行一个线程，并且此时还在等待。
+> - 同步非阻塞，相当与一个线程在正常运行。
+> - 异步阻塞，相当与同一时刻可以运行多个线程，但此时某些线程在等待。
+> - 异步非阻塞，相等于多个线程都在同时正常运行。
+>
 
 ==问题三==：==解释下我们常说的 IO 是指什么？==
 
 ==我的回答==：
 
-1. IO 指的是线程在==等待数据==和==拷贝数据==的过程。
-2. 以网络 IO 为例，==等待数据是客户端的资源通过网络传输到服务端的过程==；而拷贝数据则是在==服务端，将接收到的资源在用户态和内核态中拷贝的过程==。
+> 1. IO 指的是线程在==等待数据==和==拷贝数据==的过程。
+> 2. 以网络 IO 为例，==等待数据是客户端的资源通过网络传输到服务端的过程==；而拷贝数据则是在==服务端，将接收到的资源在用户态和内核态中拷贝的过程==。
+>
 
 ==参考答案==：
 
-- ==IO 是读/写数据的过程，以及等待数据进行读/写的过程==。拿网络 IO 来说，==等待的过程就是数据从网络到网卡再到内核空间==，==真正读写的过程是数据从内核空间到用户空间的相互拷贝==。
+> - ==IO 是读/写数据的过程，以及等待数据进行读/写的过程==。拿网络 IO 来说，==等待的过程就是数据从网络到网卡再到内核空间==，==真正读写的过程是数据从内核空间到用户空间的相互拷贝==。
 
 ==问题四==：==什么是阻塞 IO 和非阻塞 IO？==
 
 ==我的回答==：
 
-1. 阻塞 IO：用户线程被阻塞在==等待数据==上或==拷贝数据==上。
-2. 非阻塞 IO：就是用户线程==不参与以上两个过程==，即数据已经拷贝到用户空间后，才去==通知用户线程==，一上来就可以==直接操作数据==了。
+> 1. 阻塞 IO：用户线程被阻塞在==等待数据==上或==拷贝数据==上。
+> 2. 非阻塞 IO：就是用户线程==不参与以上两个过程==，即数据已经拷贝到用户空间后，才去==通知用户线程==，一上来就可以==直接操作数据==了。
+>
 
 ==参考答案==：
 
-- 阻塞IO 是指程序在发出 IO 请求时，如果==数据没有准备好被操作或无法立即进行读取或写入==，程序将会被阻塞，也就是暂停执行，直到操作完成或者有数据可用，才能进行下一步操作。
-- 非阻塞 IO 则是相反的概念。非阻塞 IO 是指程序发出 IO 请求时，如果数据没有准备好或无法立即进行读取或写入，==程序不会被阻塞，而是立即返回==，并==允许程序去执行其他任务（其它任务需要不依赖 IO 的数据）==。程序可以==定期轮询== IO 操作的状态，来确定何时数据已经准备好，或者可以使用==回调函数==或==事件通知==等机制来接收通知。
+> - 阻塞IO 是指程序在发出 IO 请求时，如果==数据没有准备好被操作或无法立即进行读取或写入==，程序将会被阻塞，也就是暂停执行，直到操作完成或者有数据可用，才能进行下一步操作。
+> - 非阻塞 IO 则是相反的概念。非阻塞 IO 是指程序发出 IO 请求时，如果数据没有准备好或无法立即进行读取或写入，==程序不会被阻塞，而是立即返回==，并==允许程序去执行其他任务（其它任务需要不依赖 IO 的数据）==。程序可以==定期轮询== IO 操作的状态，来确定何时数据已经准备好，或者可以使用==回调函数==或==事件通知==等机制来接收通知。
+>
 
 ==问题五==：==什么是 同步 IO 和同步阻塞 IO？==
 
 ==我的回答==：
 
-1. 同步 IO 其实就是同步阻塞 IO，因为同步和阻塞==都需要依赖 IO 的数据才能进行后续的操作==。
+> 1. 同步 IO 其实就是同步阻塞 IO，因为同步和阻塞==都需要依赖 IO 的数据才能进行后续的操作==。
+>
 
 ==参考答案==：
 
-- 同步IO 就是同步阻塞 IO，都属于阻塞IO，表示程序发起 IO 请求后，必须拿到 IO 的数据后才能继续执行，并且在等待数据或者拷贝数据的期间，程序都是阻塞状态。
+> - 同步IO 就是同步阻塞 IO，都属于阻塞IO，表示程序发起 IO 请求后，必须拿到 IO 的数据后才能继续执行，并且在等待数据或者拷贝数据的期间，程序都是阻塞状态。
+>
 
 ==问题六==：==什么是异步 IO 和异步阻塞/非阻塞 IO？==
 
 ==我的回答==：
 
-1. ==异步 IO 无需进行 IO 操作中的等待数据==的部分，即可继续执行。
-2. 而异步的阻塞和非阻塞 IO，则由==是否会在拷贝数据时阻塞区分==。异步阻塞 IO 会在拷贝数据时阻塞，而非阻塞 IO 则不会被拷贝数据阻塞。
+> 1. ==异步 IO 无需进行 IO 操作中的等待数据==的部分，即可继续执行。
+> 2. 而异步的阻塞和非阻塞 IO，则由==是否会在拷贝数据时阻塞区分==。异步阻塞 IO 会在拷贝数据时阻塞，而非阻塞 IO 则不会被拷贝数据阻塞。
+>
 
 ==参考答案==：
 
-- 异步IO 就是程序发起 IO 请求后，==不用拿到数据就可以继续执行，也就是在等待数据的过程中，程序是可以继续执行的==。但根据==拷贝数据时程序是否阻塞==，又可以分为异步阻塞/非阻塞IO。
-- 也就是说，==等待数据过程中，程序继续执行==，但==拷贝数据时程序阻塞，是异步阻塞IO==。等待过程中，程序继续执行，拷贝数据时程序也继续执行，是异步非阻塞IO。
+> - 异步IO 就是程序发起 IO 请求后，==不用拿到数据就可以继续执行，也就是在等待数据的过程中，程序是可以继续执行的==。但根据==拷贝数据时程序是否阻塞==，又可以分为异步阻塞/非阻塞IO。
+> - 也就是说，==等待数据过程中，程序继续执行==，但==拷贝数据时程序阻塞，是异步阻塞IO==。等待过程中，程序继续执行，拷贝数据时程序也继续执行，是异步非阻塞IO。
+>
 
 ---
 
@@ -2378,43 +2397,49 @@
 
 ==我的回答==：
 
-1. 首先一个线程不断接受客户端连接，并==把 socket 文件描述符放到一个 list== 里。
-2. 然后，另一个线程不再自己遍历，而是==调用 select，将这批文件描述符 list 交给操作系统的内核态去遍历（如果自己遍历的话，每一个都需要从用户态切换到内核态，这样只需一次转换）==。
-3. 不过，当 select 函数返回后，用户依然需要遍历刚刚提交给操作系统的 list。只不过，==操作系统会将准备就绪的文件描述符做上标识==，用户层就无需等待文件。
-4. 它的优点很明显，使用==单线程就可以监听多个 IO 事件==，==避免了线程切换的开销==。同时==利用了操作系统提供的系统调用，效率很高==。但它==不能充分利用多核处理器==，并且使用不同的系统调用，优缺点也不同。
+> 1. 首先一个线程不断接受客户端连接，并==把 socket 文件描述符放到一个 list== 里。
+> 2. 然后，另一个线程不再自己遍历，而是==调用 select，将这批文件描述符 list 交给操作系统的内核态去遍历（如果自己遍历的话，每一个都需要从用户态切换到内核态，这样只需一次转换）==。
+> 3. 不过，当 select 函数返回后，用户依然需要遍历刚刚提交给操作系统的 list。只不过，==操作系统会将准备就绪的文件描述符做上标识==，用户层就无需等待文件。
+> 4. 它的优点很明显，使用==单线程就可以监听多个 IO 事件==，==避免了线程切换的开销==。同时==利用了操作系统提供的系统调用，效率很高==。但它==不能充分利用多核处理器==，并且使用不同的系统调用，优缺点也不同。
+>
 
 ==参考答案==：
 
-- I/O 多路复用是指，==用一个线程同时监听多个文件描述符==。它的==主要思想是将多个 I/O 事件注册到一个统一的事件循环中==，然后通过调用系统调用，常见的有 select，poll，epoll，等待其中任意一个事件发生。一旦有事件发生，系统调用就会返回并告诉应用程序哪些事件已经就绪，应用程序可以根据返回的结果进行相应的处理。
-- 它的优点很明显，使用==单线程就可以监听多个 IO 事件，避免了线程切换的开销==。同时==利用了操作系统提供的系统调用，效率很高==。但它==不能充分利用多核处理器==，并且使用不同的系统调用，优缺点也不同。
+> - I/O 多路复用是指，==用一个线程同时监听多个文件描述符==。它的==主要思想是将多个 I/O 事件注册到一个统一的事件循环中==，然后通过调用系统调用，常见的有 select，poll，epoll，等待其中任意一个事件发生。一旦有事件发生，系统调用就会返回并告诉应用程序哪些事件已经就绪，应用程序可以根据返回的结果进行相应的处理。
+> - 它的优点很明显，使用==单线程就可以监听多个 IO 事件，避免了线程切换的开销==。同时==利用了操作系统提供的系统调用，效率很高==。但它==不能充分利用多核处理器==，并且使用不同的系统调用，优缺点也不同。
+>
 
 ==问题二==：==介绍一下 select，poll 和 epoll，他们区别知道嘛？讲一下，它们算同步还是异步 IO？==
 
 ==我的回答==：
 
-1. select ==将 socker 文件描述符数组传给操作系统的内核态==，由内核态遍历调用非阻塞 read，然后将==筛选出可以进行读写的文件描述符并做个标记==，然后将其「个数」通过函数返回值告知用户层，用户层此时再遍历这个文件描述符数组，找出做过标记的文件描述符即可。
-2. poll 相较于 select，主要是==取消了 select 只能监听 1024 个文件描述符的限制==，也就是无限制。
-3. epoll 针对 select，poll 的缺点做了相对应的改进。比如 ==epoll 会在内核态中保存文件描述符的集合，避免每次调用时都拷贝==；并且 epoll ==只会将发生 IO 事件的文件描述符返回给用户==，省去了用户层的遍历操作；除此之外，epoll 将原先对文件描述符集合的==轮询优化为了基于 IO 事件的回调==，整体效率不会随着文件描述符的增多而降低，效率远高于 select 和 poll。不过 ==epoll 只能在 linux 下使用==。
+> 1. select ==将 socker 文件描述符数组传给操作系统的内核态==，由内核态遍历调用非阻塞 read，然后将==筛选出可以进行读写的文件描述符并做个标记==，然后将其「个数」通过函数返回值告知用户层，用户层此时再遍历这个文件描述符数组，找出做过标记的文件描述符即可。
+> 2. poll 相较于 select，主要是==取消了 select 只能监听 1024 个文件描述符的限制==，也就是无限制。
+> 3. epoll 针对 select，poll 的缺点做了相对应的改进。比如 ==epoll 会在内核态中保存文件描述符的集合，避免每次调用时都拷贝==；并且 epoll ==只会将发生 IO 事件的文件描述符返回给用户==，省去了用户层的遍历操作；除此之外，epoll 将原先对文件描述符集合的==轮询优化为了基于 IO 事件的回调==，整体效率不会随着文件描述符的增多而降低，效率远高于 select 和 poll。不过 ==epoll 只能在 linux 下使用==。
+>
 
 ==参考答案==：
 
-- select 就是将在用户态对==文件描述符数组==的遍历操作，==交给操作系统在内核态去进行==。操作系统会==筛选==出可以进行读写的文件描述符并做个==标记==，然后将其「个数」通过函数返回值告知用户层，用户层此时再遍历这个文件描述符数组，找出做过标记的文件描述符即可。
-- select 最早实现了==一个线程处理多个文件描述符==的功能，减少了系统调用的开销。但是整个过程会发生==文件描述符数组从用户态到内核态的来回拷贝，高并发场景下资源消耗多==。并且 select 最多只能监听 1024 个文件描述符。
-- poll 相较于 select，主要是==取消了 select 只能监听 1024 个文件描述符的限制==，也就是无限制。
-- epoll 针对 select，poll 的缺点做了相对应的改进。比如 ==epoll 会在内核态中保存文件描述符的集合，避免每次调用时都拷贝==；并且 epoll ==只会将发生 IO 事件的文件描述符返回给用户==，省去了用户层的遍历操作；除此之外，epoll 将原先对文件描述符集合的==轮询优化为了基于 IO 事件的回调==，整体效率不会随着文件描述符的增多而降低，效率远高于 select 和 poll。不过 ==epoll 只能在 linux 下使用==。
-- 它们==都算是同步 IO==，因为程序在执行这三种系统调用函数时，==都需要阻塞等待直到 I/O 操作完成==。
+> - select 就是将在用户态对==文件描述符数组==的遍历操作，==交给操作系统在内核态去进行==。操作系统会==筛选==出可以进行读写的文件描述符并做个==标记==，然后将其「个数」通过函数返回值告知用户层，用户层此时再遍历这个文件描述符数组，找出做过标记的文件描述符即可。
+> - select 最早实现了==一个线程处理多个文件描述符==的功能，减少了系统调用的开销。但是整个过程会发生==文件描述符数组从用户态到内核态的来回拷贝，高并发场景下资源消耗多==。并且 select 最多只能监听 1024 个文件描述符。
+> - poll 相较于 select，主要是==取消了 select 只能监听 1024 个文件描述符的限制==，也就是无限制。
+> - epoll 针对 select，poll 的缺点做了相对应的改进。比如 ==epoll 会在内核态中保存文件描述符的集合，避免每次调用时都拷贝==；并且 epoll ==只会将发生 IO 事件的文件描述符返回给用户==，省去了用户层的遍历操作；除此之外，epoll 将原先对文件描述符集合的==轮询优化为了基于 IO 事件的回调==，整体效率不会随着文件描述符的增多而降低，效率远高于 select 和 poll。不过 ==epoll 只能在 linux 下使用==。
+> - 它们==都算是同步 IO==，因为程序在执行这三种系统调用函数时，==都需要阻塞等待直到 I/O 操作完成==。
+>
 
 ==问题三==：==关于 select, epoll 的应用，你了解哪些？（就是哪些工具用了这些机制）==
 
 ==我的回答==：
 
-1. 比如 Redis 是单线程却还那么快，原因就是 ==Redis 借用了 Linux 的 IO 多路复用机制==。该机制中的==内核（内核态）会有多个监听套接字和已连接套接字==，同时内核会一直监听这些套接字的连接请求或数据请求，==一旦有请求到达，就会将其交给 Redis 线程（标记并返回给用户态）处理==。
-2. 其它的比如 ==Nginx，Netty 这种高性能网络应用框架==，底层都会用到 IO 多路复用来提高性能。
+> 1. 比如 Redis 是单线程却还那么快，原因就是 ==Redis 借用了 Linux 的 IO 多路复用机制==。该机制中的==内核（内核态）会有多个监听套接字和已连接套接字==，同时内核会一直监听这些套接字的连接请求或数据请求，==一旦有请求到达，就会将其交给 Redis 线程（标记并返回给用户态）处理==。
+> 2. 其它的比如 ==Nginx，Netty 这种高性能网络应用框架==，底层都会用到 IO 多路复用来提高性能。
+>
 
 ==参考答案==：
 
-- 比如 Redis 是单线程却还那么快，原因就是 ==Redis 借用了 Linux 的 IO 多路复用机制==。该机制中的==内核（内核态）会有多个监听套接字和已连接套接字==，同时内核会一直监听这些套接字的连接请求或数据请求，==一旦有请求到达，就会将其交给 Redis 线程（标记并返回给用户态）处理==。
-- 其它的比如 ==Nginx，Netty 这种高性能网络应用框架==，底层都会用到 IO 多路复用来提高性能。
+> - 比如 Redis 是单线程却还那么快，原因就是 ==Redis 借用了 Linux 的 IO 多路复用机制==。该机制中的==内核（内核态）会有多个监听套接字和已连接套接字==，同时内核会一直监听这些套接字的连接请求或数据请求，==一旦有请求到达，就会将其交给 Redis 线程（标记并返回给用户态）处理==。
+> - 其它的比如 ==Nginx，Netty 这种高性能网络应用框架==，底层都会用到 IO 多路复用来提高性能。
+>
 
 #### 3.【Java8新特性】Java8新特性相关面试题
 
@@ -2422,23 +2447,26 @@
 
 ==我的回答==：
 
-1. ==Lambda 表达式==，它可以直接==作为参数传递给方法==或存储在变量中，可以在任何需要==函数式接口==的地方使用。并且以前使用==匿名内部类的地方现在都可以用 Lambda 表达式来化简==。
-2. ==Stream API==，不同于集合关注的是对数据的存储，它关注的是对数据的运算处理，比如可以==对集合进行过滤，映射，排序==等等，使用起来也十分简洁。
-3. ==Optional 类==，它主要是为了==解决 Java 中的空指针==而生的。它可以==包装一个对象，该对象可能为空，通过一系列的方法操作该对象==，而无需显示地进行 null 检查。
-4. ==方法引用==，通过一对冒号 ‘ :: ‘ 操作符来表示。对于静态方法引用，可以用 ‘==类名::静态方法名==’ 表示，对于示例方法引用，可以用 ‘==类名::方法名==’ 表示等等，==和 Lambda 表达式一样用于函数式接口==。
+> 1. ==Lambda 表达式==，它可以直接==作为参数传递给方法==或存储在变量中，可以在任何需要==函数式接口==的地方使用。并且以前使用==匿名内部类的地方现在都可以用 Lambda 表达式来化简==。
+> 2. ==Stream API==，不同于集合关注的是对数据的存储，它关注的是对数据的运算处理，比如可以==对集合进行过滤，映射，排序==等等，使用起来也十分简洁。
+> 3. ==Optional 类==，它主要是为了==解决 Java 中的空指针==而生的。它可以==包装一个对象，该对象可能为空，通过一系列的方法操作该对象==，而无需显示地进行 null 检查。
+> 4. ==方法引用==，通过一对冒号 ‘ :: ‘ 操作符来表示。对于静态方法引用，可以用 ‘==类名::静态方法名==’ 表示，对于示例方法引用，可以用 ‘==类名::方法名==’ 表示等等，==和 Lambda 表达式一样用于函数式接口==。
+>
 
 ==参考答案==：
 
-- ==Lambda 表达式==，它可以直接==作为参数传递给方法==或存储在变量中，可以在任何需要==函数式接口==的地方使用。并且以前使用==匿名内部类的地方现在都可以用 Lambda 表达式来化简==。
-- ==Stream API==，不同于集合关注的是对数据的存储，它关注的是对数据的运算处理，比如可以==对集合进行过滤，映射，排序==等等，使用起来也十分简洁。
-- ==Optional 类==，它主要是为了==解决 Java 中的空指针==而生的。它可以==包装一个对象，该对象可能为空，通过一系列的方法操作该对象==，而无需显示地进行 null 检查。
-- ==方法引用==，通过一对冒号 ‘ :: ‘ 操作符来表示。对于静态方法引用，可以用 ‘==类名::静态方法名==’ 表示，对于示例方法引用，可以用 ‘==类名::方法名==’ 表示等等，==和 Lambda 表达式一样用于函数式接口==。
+> - ==Lambda 表达式==，它可以直接==作为参数传递给方法==或存储在变量中，可以在任何需要==函数式接口==的地方使用。并且以前使用==匿名内部类的地方现在都可以用 Lambda 表达式来化简==。
+> - ==Stream API==，不同于集合关注的是对数据的存储，它关注的是对数据的运算处理，比如可以==对集合进行过滤，映射，排序==等等，使用起来也十分简洁。
+> - ==Optional 类==，它主要是为了==解决 Java 中的空指针==而生的。它可以==包装一个对象，该对象可能为空，通过一系列的方法操作该对象==，而无需显示地进行 null 检查。
+> - ==方法引用==，通过一对冒号 ‘ :: ‘ 操作符来表示。对于静态方法引用，可以用 ‘==类名::静态方法名==’ 表示，对于示例方法引用，可以用 ‘==类名::方法名==’ 表示等等，==和 Lambda 表达式一样用于函数式接口==。
+>
 
 ==问题二==：==Lambda 表达式解决了什么问题？Lambda 真正的好处是什么？==
 
 ==我的回答==：
 
-1. Lambda 主要解决的是==代码的冗余问题==。Java 8 之前，为了传递功能到方法中，必须使用==匿名内部类（都可使用 Lambda 表示是化简，IDEA 也建议你这样做，当然，最好直接化简为方法引用）==，导致代码非常冗余且难以阅读，使用 lambda 表达式可以以一种非常简洁的方式替代它，同时也==为 Java 引入了函数式编程的能力==。
+> 1. Lambda 主要解决的是==代码的冗余问题==。Java 8 之前，为了传递功能到方法中，必须使用==匿名内部类（都可使用 Lambda 表示是化简，IDEA 也建议你这样做，当然，最好直接化简为方法引用）==，导致代码非常冗余且难以阅读，使用 lambda 表达式可以以一种非常简洁的方式替代它，同时也==为 Java 引入了函数式编程的能力==。
+>
 
 ---
 
@@ -2673,23 +2701,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																																																														
+	> 																																																															
 	> 	    private String message;
-	> 																																																														
+	> 																																																															
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																																																														
+	> 																																																															
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																																																														
+	> 																																																															
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																																																														
+	> 																																																															
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -2697,14 +2725,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																																																														
+	> 																																																															
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																																																														
+	> 																																																															
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																																																														
+	> 																																																															
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -3265,9 +3293,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																																																												
+	> 																																																													
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																																																												
+	> 																																																													
 	> 	op.process();
 	> 	```
 	>
@@ -4537,12 +4565,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 																																				
+	> 																																					
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 																																				
+	> 																																					
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -5155,7 +5183,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 																																	
+	> 																																		
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now

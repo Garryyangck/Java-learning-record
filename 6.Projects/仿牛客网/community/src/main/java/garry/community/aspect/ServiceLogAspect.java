@@ -38,7 +38,7 @@ public class ServiceLogAspect {
         String hostPath = null;
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            HttpServletRequest request = attributes.getRequest();
+            HttpServletRequest request = attributes.getRequest(); // 故意没有考虑attributes为空，这样会产生异常，被捕获到从而打印日志
             hostPath = request.getRemoteHost();
         } catch (Exception e) {
             log.warn("【检测到Controller层以外的方法，尝试调用Service层的方法】");
