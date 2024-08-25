@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>garry</groupId>
-    <artifactId>train_12306</artifactId>
+    <artifactId>train</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>train_12306</name>
-    <description>train_12306</description>
+    <name>train</name>
+    <description>train</description>
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>3.0.0</spring-boot.version>
-        <spring-cloud.version>2022.0.0</spring-cloud.version>
+        <spring-cloud.version>2022.0.0-RC2</spring-cloud.version>
     </properties>
     <dependencies>
         <dependency>
@@ -77,7 +77,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>garry.train_12306.Train12306Application</mainClass>
+                    <mainClass>garry.train.TrainApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>

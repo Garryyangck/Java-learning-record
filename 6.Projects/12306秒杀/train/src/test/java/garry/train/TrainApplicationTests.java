@@ -1,10 +1,10 @@
-package garry.train_12306;
+package garry.train;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Train12306ApplicationTests {
+class TrainApplicationTests {
 
     @Test
     void contextLoads() {

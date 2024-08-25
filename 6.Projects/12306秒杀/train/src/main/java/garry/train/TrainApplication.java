@@ -1,13 +1,13 @@
-package garry.train_12306;
+package garry.train;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Train12306Application {
+public class TrainApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Train12306Application.class, args);
+        SpringApplication.run(TrainApplication.class, args);
     }
 
 }
