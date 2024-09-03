@@ -1,0 +1,216 @@
+2024-09-03 21:05:42.669 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Starting MemberApplication using Java 17.0.12 with PID 28532 (D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\member\target\classes started by 杨宸楷 in D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train) 
+2024-09-03 21:05:42.672 [restartedMain] INFO  [org.springframework.boot.SpringApplication        ] [                  ] >>> No active profile set, falling back to 1 default profile: "default" 
+2024-09-03 21:05:42.709 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable 
+2024-09-03 21:05:42.710 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' 
+2024-09-03 21:05:43.117 [restartedMain] INFO  [g.springframework.cloud.context.scope.GenericScope] [                  ] >>> BeanFactory id=3929d7a4-1d09-3739-b7ed-037e12369fa0 
+2024-09-03 21:05:43.451 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat initialized with port(s): 8081 (http) 
+2024-09-03 21:05:43.458 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:05:43.458 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting service [Tomcat] 
+2024-09-03 21:05:43.458 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting Servlet engine: [Apache Tomcat/10.1.1] 
+2024-09-03 21:05:43.501 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring embedded WebApplicationContext 
+2024-09-03 21:05:43.502 [restartedMain] INFO  [servlet.context.ServletWebServerApplicationContext] [                  ] >>> Root WebApplicationContext: initialization completed in 792 ms 
+2024-09-03 21:05:43.634 [restartedMain] INFO  [utoconfigure.web.servlet.WelcomePageHandlerMapping] [                  ] >>> Adding welcome page: class path resource [static/index.html] 
+2024-09-03 21:05:43.725 [restartedMain] INFO  [ot.devtools.autoconfigure.OptionalLiveReloadServer] [                  ] >>> LiveReload server is running on port 35729 
+2024-09-03 21:05:44.052 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:05:44.068 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat started on port(s): 8081 (http) with context path '/member' 
+2024-09-03 21:05:44.350 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Started MemberApplication in 2.405 seconds (process running for 2.976) 
+2024-09-03 21:05:44.352 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 启动成功！ 
+2024-09-03 21:05:44.352 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 地址	http://127.0.0.1:8081 
+2024-09-03 21:06:57.533 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Starting MemberApplication using Java 17.0.12 with PID 28268 (D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\member\target\classes started by 杨宸楷 in D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train) 
+2024-09-03 21:06:57.537 [restartedMain] INFO  [org.springframework.boot.SpringApplication        ] [                  ] >>> No active profile set, falling back to 1 default profile: "default" 
+2024-09-03 21:06:57.576 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable 
+2024-09-03 21:06:57.576 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' 
+2024-09-03 21:06:57.999 [restartedMain] INFO  [g.springframework.cloud.context.scope.GenericScope] [                  ] >>> BeanFactory id=3929d7a4-1d09-3739-b7ed-037e12369fa0 
+2024-09-03 21:06:58.329 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat initialized with port(s): 8081 (http) 
+2024-09-03 21:06:58.336 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:06:58.336 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting service [Tomcat] 
+2024-09-03 21:06:58.337 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting Servlet engine: [Apache Tomcat/10.1.1] 
+2024-09-03 21:06:58.378 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring embedded WebApplicationContext 
+2024-09-03 21:06:58.378 [restartedMain] INFO  [servlet.context.ServletWebServerApplicationContext] [                  ] >>> Root WebApplicationContext: initialization completed in 801 ms 
+2024-09-03 21:06:58.502 [restartedMain] INFO  [utoconfigure.web.servlet.WelcomePageHandlerMapping] [                  ] >>> Adding welcome page: class path resource [static/index.html] 
+2024-09-03 21:06:58.598 [restartedMain] INFO  [ot.devtools.autoconfigure.OptionalLiveReloadServer] [                  ] >>> LiveReload server is running on port 35729 
+2024-09-03 21:06:59.015 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:06:59.041 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat started on port(s): 8081 (http) with context path '/member' 
+2024-09-03 21:06:59.391 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Started MemberApplication in 2.578 seconds (process running for 3.138) 
+2024-09-03 21:06:59.393 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 启动成功！ 
+2024-09-03 21:06:59.395 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 地址	http://127.0.0.1:8081 
+2024-09-03 21:09:18.438 [restartedMain] ERROR [org.springframework.boot.SpringApplication        ] [                  ] >>> Application run failed 
+java.lang.IllegalStateException: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@756e23c4 - There is no conversion class registered for composite conversion word [coloredLevel]
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@756e23c4 - Failed to create converter for [%coloredLevel] keyword
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:347)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:298)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:246)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:223)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:136)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:81)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:64)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:352)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at garry.train.member.config.MemberApplication.main(MemberApplication.java:16)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@756e23c4 - There is no conversion class registered for composite conversion word [coloredLevel]
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@756e23c4 - Failed to create converter for [%coloredLevel] keyword
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:251)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:80)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:60)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:186)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:332)
+	... 22 common frames omitted
+2024-09-03 21:09:31.654 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Starting MemberApplication using Java 17.0.12 with PID 28428 (D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\member\target\classes started by 杨宸楷 in D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train) 
+2024-09-03 21:09:31.658 [restartedMain] INFO  [org.springframework.boot.SpringApplication        ] [                  ] >>> No active profile set, falling back to 1 default profile: "default" 
+2024-09-03 21:09:31.698 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable 
+2024-09-03 21:09:31.698 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' 
+2024-09-03 21:09:32.120 [restartedMain] INFO  [g.springframework.cloud.context.scope.GenericScope] [                  ] >>> BeanFactory id=3929d7a4-1d09-3739-b7ed-037e12369fa0 
+2024-09-03 21:09:32.458 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat initialized with port(s): 8081 (http) 
+2024-09-03 21:09:32.465 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:09:32.465 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting service [Tomcat] 
+2024-09-03 21:09:32.466 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting Servlet engine: [Apache Tomcat/10.1.1] 
+2024-09-03 21:09:32.508 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring embedded WebApplicationContext 
+2024-09-03 21:09:32.509 [restartedMain] INFO  [servlet.context.ServletWebServerApplicationContext] [                  ] >>> Root WebApplicationContext: initialization completed in 810 ms 
+2024-09-03 21:09:32.641 [restartedMain] INFO  [utoconfigure.web.servlet.WelcomePageHandlerMapping] [                  ] >>> Adding welcome page: class path resource [static/index.html] 
+2024-09-03 21:09:32.731 [restartedMain] INFO  [ot.devtools.autoconfigure.OptionalLiveReloadServer] [                  ] >>> LiveReload server is running on port 35729 
+2024-09-03 21:09:33.043 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:09:33.057 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat started on port(s): 8081 (http) with context path '/member' 
+2024-09-03 21:09:33.345 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Started MemberApplication in 2.394 seconds (process running for 2.936) 
+2024-09-03 21:09:33.347 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 启动成功！ 
+2024-09-03 21:09:33.348 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 地址	http://127.0.0.1:8081 
+2024-09-03 21:09:48.487 [restartedMain] ERROR [org.springframework.boot.SpringApplication        ] [                  ] >>> Application run failed 
+java.lang.IllegalStateException: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@786a7187 - There is no conversion class registered for composite conversion word [orange]
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@786a7187 - Failed to create converter for [%orange] keyword
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:347)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:298)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:246)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:223)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:136)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:81)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:64)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:352)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at garry.train.member.config.MemberApplication.main(MemberApplication.java:16)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@786a7187 - There is no conversion class registered for composite conversion word [orange]
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@786a7187 - Failed to create converter for [%orange] keyword
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:251)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:80)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:60)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:186)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:332)
+	... 22 common frames omitted
+2024-09-03 21:13:18.872 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Starting MemberApplication using Java 17.0.12 with PID 18204 (D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\member\target\classes started by 杨宸楷 in D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train) 
+2024-09-03 21:13:18.875 [restartedMain] INFO  [org.springframework.boot.SpringApplication        ] [                  ] >>> No active profile set, falling back to 1 default profile: "default" 
+2024-09-03 21:13:18.914 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable 
+2024-09-03 21:13:18.915 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' 
+2024-09-03 21:13:19.356 [restartedMain] INFO  [g.springframework.cloud.context.scope.GenericScope] [                  ] >>> BeanFactory id=3929d7a4-1d09-3739-b7ed-037e12369fa0 
+2024-09-03 21:13:19.709 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat initialized with port(s): 8081 (http) 
+2024-09-03 21:13:19.715 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:13:19.716 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting service [Tomcat] 
+2024-09-03 21:13:19.716 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting Servlet engine: [Apache Tomcat/10.1.1] 
+2024-09-03 21:13:19.759 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring embedded WebApplicationContext 
+2024-09-03 21:13:19.760 [restartedMain] INFO  [servlet.context.ServletWebServerApplicationContext] [                  ] >>> Root WebApplicationContext: initialization completed in 844 ms 
+2024-09-03 21:13:19.910 [restartedMain] INFO  [utoconfigure.web.servlet.WelcomePageHandlerMapping] [                  ] >>> Adding welcome page: class path resource [static/index.html] 
+2024-09-03 21:13:20.017 [restartedMain] INFO  [ot.devtools.autoconfigure.OptionalLiveReloadServer] [                  ] >>> LiveReload server is running on port 35729 
+2024-09-03 21:13:20.349 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:13:20.367 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat started on port(s): 8081 (http) with context path '/member' 
+2024-09-03 21:13:20.662 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Started MemberApplication in 2.519 seconds (process running for 3.089) 
+2024-09-03 21:13:20.664 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 启动成功！ 
+2024-09-03 21:13:20.664 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 地址	http://127.0.0.1:8081 
+2024-09-03 21:13:31.163 [restartedMain] ERROR [org.springframework.boot.SpringApplication        ] [                  ] >>> Application run failed 
+java.lang.IllegalStateException: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@bbc333a - There is no conversion class registered for composite conversion word [greenBright]
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@bbc333a - Failed to create converter for [%greenBright] keyword
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:347)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:298)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:246)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:223)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:136)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:81)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:64)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:352)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at garry.train.member.config.MemberApplication.main(MemberApplication.java:16)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@bbc333a - There is no conversion class registered for composite conversion word [greenBright]
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@bbc333a - Failed to create converter for [%greenBright] keyword
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:251)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:80)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:60)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:186)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:332)
+	... 22 common frames omitted
+2024-09-03 21:13:50.615 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Starting MemberApplication using Java 17.0.12 with PID 25636 (D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\member\target\classes started by 杨宸楷 in D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train) 
+2024-09-03 21:13:50.617 [restartedMain] INFO  [org.springframework.boot.SpringApplication        ] [                  ] >>> No active profile set, falling back to 1 default profile: "default" 
+2024-09-03 21:13:50.658 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable 
+2024-09-03 21:13:50.658 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' 
+2024-09-03 21:13:51.101 [restartedMain] INFO  [g.springframework.cloud.context.scope.GenericScope] [                  ] >>> BeanFactory id=3929d7a4-1d09-3739-b7ed-037e12369fa0 
+2024-09-03 21:13:51.472 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat initialized with port(s): 8081 (http) 
+2024-09-03 21:13:51.479 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:13:51.480 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting service [Tomcat] 
+2024-09-03 21:13:51.480 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting Servlet engine: [Apache Tomcat/10.1.1] 
+2024-09-03 21:13:51.529 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring embedded WebApplicationContext 
+2024-09-03 21:13:51.529 [restartedMain] INFO  [servlet.context.ServletWebServerApplicationContext] [                  ] >>> Root WebApplicationContext: initialization completed in 870 ms 
+2024-09-03 21:13:51.677 [restartedMain] INFO  [utoconfigure.web.servlet.WelcomePageHandlerMapping] [                  ] >>> Adding welcome page: class path resource [static/index.html] 
+2024-09-03 21:13:51.774 [restartedMain] INFO  [ot.devtools.autoconfigure.OptionalLiveReloadServer] [                  ] >>> LiveReload server is running on port 35729 
+2024-09-03 21:13:52.091 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:13:52.112 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat started on port(s): 8081 (http) with context path '/member' 
+2024-09-03 21:13:52.394 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Started MemberApplication in 2.499 seconds (process running for 3.075) 
+2024-09-03 21:13:52.396 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 启动成功！ 
+2024-09-03 21:13:52.396 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 地址	http://127.0.0.1:8081 
+2024-09-03 21:15:24.871 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Starting MemberApplication using Java 17.0.12 with PID 12524 (D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\member\target\classes started by 杨宸楷 in D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train) 
+2024-09-03 21:15:24.875 [restartedMain] INFO  [org.springframework.boot.SpringApplication        ] [                  ] >>> No active profile set, falling back to 1 default profile: "default" 
+2024-09-03 21:15:24.912 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable 
+2024-09-03 21:15:24.912 [restartedMain] INFO  [org.springframework.boot.logging.DeferredLog      ] [                  ] >>> For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' 
+2024-09-03 21:15:25.328 [restartedMain] INFO  [g.springframework.cloud.context.scope.GenericScope] [                  ] >>> BeanFactory id=3929d7a4-1d09-3739-b7ed-037e12369fa0 
+2024-09-03 21:15:25.661 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat initialized with port(s): 8081 (http) 
+2024-09-03 21:15:25.668 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:15:25.669 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting service [Tomcat] 
+2024-09-03 21:15:25.669 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting Servlet engine: [Apache Tomcat/10.1.1] 
+2024-09-03 21:15:25.715 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring embedded WebApplicationContext 
+2024-09-03 21:15:25.715 [restartedMain] INFO  [servlet.context.ServletWebServerApplicationContext] [                  ] >>> Root WebApplicationContext: initialization completed in 802 ms 
+2024-09-03 21:15:25.854 [restartedMain] INFO  [utoconfigure.web.servlet.WelcomePageHandlerMapping] [                  ] >>> Adding welcome page: class path resource [static/index.html] 
+2024-09-03 21:15:25.951 [restartedMain] INFO  [ot.devtools.autoconfigure.OptionalLiveReloadServer] [                  ] >>> LiveReload server is running on port 35729 
+2024-09-03 21:15:26.297 [restartedMain] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting ProtocolHandler ["http-nio-8081"] 
+2024-09-03 21:15:26.314 [restartedMain] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat started on port(s): 8081 (http) with context path '/member' 
+2024-09-03 21:15:26.611 [restartedMain] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Started MemberApplication in 2.467 seconds (process running for 3.024) 
+2024-09-03 21:15:26.615 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 启动成功！ 
+2024-09-03 21:15:26.615 [restartedMain] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 地址	http://127.0.0.1:8081 

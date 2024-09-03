@@ -1,2 +1,5 @@
 server:
   port: 8081
+  servlet:
+    # 项目的前缀
+    context-path: /member
