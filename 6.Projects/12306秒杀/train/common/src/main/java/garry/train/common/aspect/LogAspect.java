@@ -1,8 +1,8 @@
-package garry.train.member.aspect;
+package garry.train.common.aspect;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
-import garry.train.member.util.CommonUtil;
+import garry.train.common.util.CommonUtil;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;

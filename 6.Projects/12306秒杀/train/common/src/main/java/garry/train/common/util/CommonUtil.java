@@ -1,4 +1,4 @@
-package garry.train.member.util;
+package garry.train.common.util;
 
 import java.util.UUID;
 

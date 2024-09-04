@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>member</module>
+        <module>common</module>
     </modules>
 
     <!--配置信息-->
@@ -26,18 +27,11 @@
 
     <!--父pom不运行，因此dependencies可以不用-->
 
-    <!--父pom需要管理子pom，因此management必须要有-->
+    <!--父pom需要管理子pom，因此dependencyManagement必须要有-->
     <dependencyManagement>
+        <!--所有在子pom中引入的依赖，都必须在父pom中注册，把版本写在父pom中，以便管理版本-->
         <dependencies>
-            <!--spring-cloud-->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!--spring-boot-dependencies-->
+            <!--spring-boot下的所有dependencies，如spring-cloud-starter-web, spring-cloud-starter-aop-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -45,11 +39,26 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--spring-cloud下的所有dependencies，如spring-cloud-starter-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--lombok-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <optional>true</optional>
+                <version>1.18.24</version>
+            </dependency>
             <!--gson-->
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
-                <version>2.8.6</version>
+                <version>2.9.1</version>
             </dependency>
             <!--fastjson-->
             <dependency>
@@ -62,6 +71,12 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>5.6.3</version>
+            </dependency>
+            <!--引入的common-->
+            <dependency>
+                <groupId>garry</groupId>
+                <artifactId>common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
