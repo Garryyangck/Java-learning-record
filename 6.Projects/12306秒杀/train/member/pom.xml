@@ -24,10 +24,18 @@
             <groupId>garry</groupId>
             <artifactId>common</artifactId>
         </dependency>
-        <!--lombok，否则使用Slf4j注解会报错-->
+        <!--spring-boot-starter-test-->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--spring-boot-devtools-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
