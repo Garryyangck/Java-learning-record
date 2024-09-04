@@ -148,3 +148,29 @@
 2024-09-04 16:01:24.394 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [e7534fa0b1ff4f75b6] >>> 请求参数: [] 
 2024-09-04 16:01:24.395 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [e7534fa0b1ff4f75b6] >>> 返回结果: "hello member module!" 
 2024-09-04 16:01:24.395 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [e7534fa0b1ff4f75b6] >>> ------------- 结束 耗时：30 ms ------------- 
+2024-09-04 16:06:21.667 [main] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Starting MemberApplication using Java 17.0.12 with PID 7756 (D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\member\target\classes started by 杨宸楷 in D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train) 
+2024-09-04 16:06:21.669 [main] INFO  [org.springframework.boot.SpringApplication        ] [                  ] >>> No active profile set, falling back to 1 default profile: "default" 
+2024-09-04 16:06:22.126 [main] INFO  [g.springframework.cloud.context.scope.GenericScope] [                  ] >>> BeanFactory id=7215dd0f-9a89-30bb-9349-d5135e1234ae 
+2024-09-04 16:06:22.462 [main] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat initialized with port(s): 8081 (http) 
+2024-09-04 16:06:22.469 [main] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing ProtocolHandler ["http-nio-8081"] 
+2024-09-04 16:06:22.471 [main] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting service [Tomcat] 
+2024-09-04 16:06:22.471 [main] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting Servlet engine: [Apache Tomcat/10.1.1] 
+2024-09-04 16:06:22.542 [main] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring embedded WebApplicationContext 
+2024-09-04 16:06:22.543 [main] INFO  [servlet.context.ServletWebServerApplicationContext] [                  ] >>> Root WebApplicationContext: initialization completed in 834 ms 
+2024-09-04 16:06:22.597 [main] INFO  [garry.train.common.aspect.LogAspect               ] [                  ] >>> Common LogAspect 
+2024-09-04 16:06:22.751 [main] INFO  [utoconfigure.web.servlet.WelcomePageHandlerMapping] [                  ] >>> Adding welcome page: class path resource [static/index.html] 
+2024-09-04 16:06:23.212 [main] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Starting ProtocolHandler ["http-nio-8081"] 
+2024-09-04 16:06:23.229 [main] INFO  [framework.boot.web.embedded.tomcat.TomcatWebServer] [                  ] >>> Tomcat started on port(s): 8081 (http) with context path '/member' 
+2024-09-04 16:06:23.530 [main] INFO  [org.springframework.boot.StartupInfoLogger        ] [                  ] >>> Started MemberApplication in 2.618 seconds (process running for 3.159) 
+2024-09-04 16:06:23.533 [main] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 启动成功！ 
+2024-09-04 16:06:23.533 [main] INFO  [garry.train.member.config.MemberApplication       ] [                  ] >>> 地址	http://127.0.0.1:8081/member/hello 
+2024-09-04 16:06:25.541 [http-nio-8081-exec-1] INFO  [org.apache.juli.logging.DirectJDKLog              ] [                  ] >>> Initializing Spring DispatcherServlet 'dispatcherServlet' 
+2024-09-04 16:06:25.541 [http-nio-8081-exec-1] INFO  [org.springframework.web.servlet.FrameworkServlet  ] [                  ] >>> Initializing Servlet 'dispatcherServlet' 
+2024-09-04 16:06:25.543 [http-nio-8081-exec-1] INFO  [org.springframework.web.servlet.FrameworkServlet  ] [                  ] >>> Completed initialization in 1 ms 
+2024-09-04 16:06:25.573 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [fb88ff77f3d64f909b] >>> ------------- 开始 ------------- 
+2024-09-04 16:06:25.573 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [fb88ff77f3d64f909b] >>> 请求地址: http://127.0.0.1:8081/member/hello GET 
+2024-09-04 16:06:25.573 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [fb88ff77f3d64f909b] >>> 类名方法: garry.train.member.controller.TestController.hello 
+2024-09-04 16:06:25.574 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [fb88ff77f3d64f909b] >>> 远程地址: 127.0.0.1 
+2024-09-04 16:06:25.606 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [fb88ff77f3d64f909b] >>> 请求参数: [] 
+2024-09-04 16:06:25.607 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [fb88ff77f3d64f909b] >>> 返回结果: "hello member module!" 
+2024-09-04 16:06:25.607 [http-nio-8081-exec-1] INFO  [garry.train.common.aspect.LogAspect               ] [fb88ff77f3d64f909b] >>> ------------- 结束 耗时：37 ms ------------- 
