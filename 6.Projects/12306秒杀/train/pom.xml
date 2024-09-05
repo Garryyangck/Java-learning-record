@@ -84,6 +84,18 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-gateway</artifactId>
             </dependency>
+            <!--mybatis依赖，必须要3.0.0才能支持Springboot3-->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+            <!--mysql驱动，5.1开头的版本支持mysql5.7-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.46</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

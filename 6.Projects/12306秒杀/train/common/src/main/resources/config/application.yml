@@ -1,0 +1,3 @@
+# common模块由于被其它模块所依赖，因此 common/resources/config/application.yml的优先级最高！
+
+
