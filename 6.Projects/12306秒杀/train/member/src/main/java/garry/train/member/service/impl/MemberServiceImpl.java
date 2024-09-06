@@ -3,6 +3,7 @@ package garry.train.member.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
+import garry.train.common.util.CommonUtil;
 import garry.train.member.form.MemberRegisterForm;
 import garry.train.member.mapper.MemberMapper;
 import garry.train.member.pojo.Member;
@@ -40,9 +41,8 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Member member = new Member();
-        member.setId(System.currentTimeMillis());
+        member.setId(CommonUtil.getSnowflakeNextId()); // 使用雪花算法获取自增不重复的Id
         member.setMobile(form.getMobile());
-
         memberMapper.insert(member);
         return member.getId();
     }

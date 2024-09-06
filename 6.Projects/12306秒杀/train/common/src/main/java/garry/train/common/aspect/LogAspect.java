@@ -2,6 +2,7 @@ package garry.train.common.aspect;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
+import garry.train.common.consts.CommonConst;
 import garry.train.common.util.CommonUtil;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -49,7 +50,7 @@ public class LogAspect {
     public void doBefore(JoinPoint joinPoint) {
 
         // MDC 是 Slf4j 自带的，用于存放我们自定义的键值对，比如在logback-spring.xml中的LOG_ID
-        MDC.put("LOG_ID", CommonUtil.generateUUID(18));
+        MDC.put("LOG_ID", CommonUtil.generateUUID(CommonConst.LOG_ID_LENGTH));
 
         // 开始打印请求日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
