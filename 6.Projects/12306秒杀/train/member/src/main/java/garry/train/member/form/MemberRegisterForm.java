@@ -1,5 +1,6 @@
 package garry.train.member.form;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -8,5 +9,6 @@ import lombok.Data;
  */
 @Data
 public class MemberRegisterForm {
+    @NotBlank(message = "【手机号】不能为空")
     public String mobile;
 }

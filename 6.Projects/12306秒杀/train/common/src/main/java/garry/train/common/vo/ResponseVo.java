@@ -48,4 +48,8 @@ public class ResponseVo<T> {
     public static ResponseVo error(String errorMsg) {
         return new ResponseVo(ResponseEnum.ERROR.getCode(), errorMsg, false);
     }
+
+    public static ResponseVo error(ResponseEnum responseEnum, String errorMsg) {
+        return new ResponseVo(responseEnum.getCode(), errorMsg, false);
+    }
 }

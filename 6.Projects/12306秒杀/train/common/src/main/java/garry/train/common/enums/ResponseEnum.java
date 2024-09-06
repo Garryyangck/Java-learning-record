@@ -12,6 +12,8 @@ public enum ResponseEnum {
 
     SUCCESS(0, "操作成功"),
 
+    PARAMETER_INPUT_ERROR(1, "参数输入异常"),
+
     MEMBER_REGISTER_EXIST(1, "手机号已注册")
     ;
 

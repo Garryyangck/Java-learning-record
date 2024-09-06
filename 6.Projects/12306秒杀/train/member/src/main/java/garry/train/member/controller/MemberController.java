@@ -4,6 +4,7 @@ import garry.train.common.vo.ResponseVo;
 import garry.train.member.form.MemberRegisterForm;
 import garry.train.member.service.MemberService;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class MemberController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseVo register(MemberRegisterForm form) {
+    public ResponseVo register(@Valid MemberRegisterForm form) {
         long registerId = memberService.register(form);
         return ResponseVo.success(registerId);
     }
