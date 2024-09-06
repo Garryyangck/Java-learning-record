@@ -10,9 +10,9 @@ import lombok.Getter;
 public enum ResponseEnum {
     ERROR(-1, "服务器异常"),
 
-    SUCCESS(0, "操作成功")
+    SUCCESS(0, "操作成功"),
 
-
+    MEMBER_REGISTER_EXIST(1, "手机号已注册")
     ;
 
     private final Integer code;

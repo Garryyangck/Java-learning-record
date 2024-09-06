@@ -1,6 +1,8 @@
 package garry.train.member.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
 import garry.train.member.form.MemberRegisterForm;
 import garry.train.member.mapper.MemberMapper;
 import garry.train.member.pojo.Member;
@@ -34,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = memberMapper.selectByExample(memberExample);
 
         if (CollUtil.isNotEmpty(members)) {
-            throw new RuntimeException("手机号已注册");
+            throw new BusinessException(ResponseEnum.MEMBER_REGISTER_EXIST);
         }
 
         Member member = new Member();
