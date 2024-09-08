@@ -1,9 +1,5 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <router-view/> <!--不同的路由，在router-view这里呈现的东西就不一样，当然，其它地方一样，即App.vue可以放所有页面公有的部分-->
 </template>
 
 <style>
