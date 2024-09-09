@@ -24,7 +24,8 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({Exception.class})
     @ResponseBody // 这里必须要加ResponseBody，否则返回的不是JSON字符串！
     public ResponseVo exceptionHandler(Exception e) {
-        log.error("系统异常: " + e);
+        log.error("系统异常: " + e.getMessage());
+        e.printStackTrace();
         return ResponseVo.error(ResponseEnum.ERROR);
     }
 

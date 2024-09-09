@@ -8,3 +8,9 @@ Content-Type: application/x-www-form-urlencoded
 
 mobile = 12345678910
 ###
+
+POST http://localhost:8080/member/member/send-code
+Content-Type: application/x-www-form-urlencoded
+
+mobile = 17380672612
+###

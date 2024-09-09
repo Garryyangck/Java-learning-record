@@ -80,11 +80,6 @@
                 <artifactId>common</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
-            <!--spring-cloud-starter-gateway-->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-gateway</artifactId>
-            </dependency>
             <!--mybatis依赖，必须要3.0.0才能支持Springboot3-->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
@@ -96,6 +91,12 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.46</version>
+            </dependency>
+            <!-- Spring集成Redis组件 -->
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <artifactId>spring-integration-redis</artifactId>
+                <version>6.3.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

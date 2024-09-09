@@ -17,7 +17,7 @@
             name="mobile"
             :rules="[{ required: true, message: '请输入手机号！' }]"
         >
-          <a-input v-model:value="loginForm.mobile"/>
+          <a-input v-model:value="loginForm.mobile" placeholder="请输入手机号"/>
         </a-form-item> <!--label是输入框前面的说明文字，这里不需要-->
 
         <a-form-item
@@ -25,7 +25,7 @@
             name="code"
             :rules="[{ required: true, message: '请输入验证码！' }]"
         >
-          <a-input v-model:value="loginForm.code">
+          <a-input v-model:value="loginForm.code" placeholder="请输入验证码">
             <template #addonAfter>
               <a @click="sendCode">获取验证码</a>
             </template>
@@ -58,16 +58,18 @@ const login = {}
 </script>
 
 <style>
-.login-main h1 {
+.login-main h1 { /*定义的是login-main下的h1标签，而不是所有的login-main和h1标签*/
   font-size: 25px;
   font-weight: bold;
 }
 
 .login-main {
-  margin-top: 100px;
+  margin-top: 200px;
   padding: 30px 30px 20px;
   border: 2px solid grey;
   border-radius: 10px;
   background-color: #fcfcfc;
+  transform: scale(1.2); /* 等比例放大 */
+  transform-origin: center; /* 确保放大的基点是中心 */
 }
 </style>

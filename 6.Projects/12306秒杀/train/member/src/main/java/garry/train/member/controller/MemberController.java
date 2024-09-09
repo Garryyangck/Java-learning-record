@@ -2,6 +2,7 @@ package garry.train.member.controller;
 
 import garry.train.common.vo.ResponseVo;
 import garry.train.member.form.MemberRegisterForm;
+import garry.train.member.form.MemberSendCodeForm;
 import garry.train.member.service.MemberService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -25,5 +26,11 @@ public class MemberController {
     public ResponseVo register(@Valid MemberRegisterForm form) {
         long registerId = memberService.register(form);
         return ResponseVo.success(registerId);
+    }
+
+    @RequestMapping(value = "/send-code", method = RequestMethod.POST)
+    public ResponseVo sendCode(@Valid MemberSendCodeForm form) {
+        memberService.sendCode(form);
+        return ResponseVo.success();
     }
 }

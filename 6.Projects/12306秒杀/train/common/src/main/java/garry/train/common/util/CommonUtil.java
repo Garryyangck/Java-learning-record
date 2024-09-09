@@ -11,6 +11,6 @@ public class CommonUtil {
     }
 
     public static long getSnowflakeNextId() {
-        return IdUtil.getSnowflake(CommonConst.workerId, CommonConst.datacenterId).nextId();
+        return IdUtil.getSnowflake(CommonConst.WORKER_ID, CommonConst.DATACENTER_ID).nextId();
     }
 }
