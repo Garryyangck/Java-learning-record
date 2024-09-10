@@ -1,11 +1,15 @@
 package garry.train.member.controller;
 
 import garry.train.common.vo.ResponseVo;
+import garry.train.member.form.MemberLoginForm;
 import garry.train.member.form.MemberRegisterForm;
 import garry.train.member.form.MemberSendCodeForm;
 import garry.train.member.service.MemberService;
+import garry.train.member.vo.MemberLoginVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,15 +26,22 @@ public class MemberController {
         return ResponseVo.success(count);
     }
 
+    @Deprecated
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseVo register(@Valid MemberRegisterForm form) {
+    public ResponseVo register(@Valid @RequestBody/*必须使用@RequestBody，才能接收(application/json)格式的请求*/ MemberRegisterForm form) {
         long registerId = memberService.register(form);
         return ResponseVo.success(registerId);
     }
 
     @RequestMapping(value = "/send-code", method = RequestMethod.POST)
-    public ResponseVo sendCode(@Valid MemberSendCodeForm form) {
+    public ResponseVo sendCode(@Valid @RequestBody MemberSendCodeForm form) {
         memberService.sendCode(form);
         return ResponseVo.success();
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseVo login(@Valid @RequestBody MemberLoginForm form) {
+        MemberLoginVo vo = memberService.login(form);
+        return ResponseVo.success(vo);
     }
 }

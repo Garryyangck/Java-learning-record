@@ -4,13 +4,26 @@ Accept: application/json
 ###
 
 POST http://localhost:8080/member/member/register
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 
-mobile = 12345678910
+{
+  "mobile": "17380672612"
+}
 ###
 
 POST http://localhost:8080/member/member/send-code
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 
-mobile = 17380672612
+{
+  "mobile": "17380672612"
+}
+###
+
+POST http://localhost:8080/member/member/login
+Content-Type: application/json
+
+{
+  "mobile": "17380672612",
+  "code": "u2vl"
+}
 ###
