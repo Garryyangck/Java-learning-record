@@ -40,7 +40,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({BindException.class})
     @ResponseBody
     public ResponseVo bindExceptionHandler(BindException e) {
-        log.error("校验异常: {}", e.toString());
+        log.error("校验异常: {}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage() + ": " + e.getMessage());
         return ResponseVo.error(ResponseEnum.PARAMETER_INPUT_ERROR, e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
     }
 }
