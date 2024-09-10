@@ -2,6 +2,7 @@ package garry.train.member.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
+import com.alibaba.fastjson.JSONObject;
 import garry.train.common.consts.CommonConst;
 import garry.train.common.consts.RedisConst;
 import garry.train.common.enums.ResponseEnum;
@@ -14,11 +15,13 @@ import garry.train.member.mapper.MemberMapper;
 import garry.train.member.pojo.Member;
 import garry.train.member.pojo.MemberExample;
 import garry.train.member.service.MemberService;
+import garry.train.member.service.SmsService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +37,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private SmsService smsService;
 
     @Override
     public int count() {
@@ -79,12 +85,13 @@ public class MemberServiceImpl implements MemberService {
         String code = RandomUtil.randomString(CommonConst.CODE_LENGTH);
         log.info("手机号 {} 的验证码为: {}", form.getMobile(), code);
 
-        log.info("将手机号 {} 的验证码 {} 存储到Redis中", form.getMobile(), code);
+        log.info("将手机号 {} 的验证码 {} 存储到 Redis 中", form.getMobile(), code);
         String redisKey = RedisUtil.getRedisKey4Code(form.getMobile());
         redisTemplate.opsForValue().set(redisKey, code, RedisConst.CODE_EXPIRE_SECOND, TimeUnit.SECONDS);
 
-        // TODO 调用阿里云运营商的接口，发短信给手机
         log.info("调用阿里云运营商的接口，发短信给手机 {}", form.getMobile());
-
+        HashMap<String, String> templateCode = new HashMap<>(); // templateCode 必须是 JSON 字符串
+        templateCode.put("code", code);
+        smsService.sendSms(form.getMobile(), JSONObject.toJSONString(templateCode));
     }
 }

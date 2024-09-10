@@ -24,3 +24,11 @@ logging:
         member:
           # garry.train.member.mapper下的日志等级设置为 trace，可以打印出 sql
           mapper: trace
+
+# 短信发送服务的配置参数
+aliyun:
+  sms:
+    accessKeyId: LTAI5t7NeYCn6aSXPeVcU4Sz
+    accessKeySecret: dTOwgV9xKoXnjJwM4EFRMCrry1rGnd
+    signName: Garry售票系统
+    templateCode: SMS_472695133

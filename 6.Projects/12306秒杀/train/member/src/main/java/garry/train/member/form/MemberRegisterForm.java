@@ -9,6 +9,6 @@ import lombok.Data;
  */
 @Data
 public class MemberRegisterForm {
-    @NotBlank(message = "【手机号】不能为空")
+    @NotBlank(message = "手机号不能为空")
     private String mobile;
 }

@@ -9,8 +9,6 @@
           :model="loginForm"
           name="basic"
           autocomplete="off"
-          @finish="onFinish"
-          @finishFailed="onFinishFailed"
       >
         <a-form-item
             label=""
@@ -42,18 +40,26 @@
 
 <script setup>
 import {reactive} from 'vue';
+import {post} from 'axios';
+import {notification} from 'ant-design-vue';
 
 const loginForm = reactive({
   mobile: '',
   code: '',
 });
-const onFinish = values => {
-  console.log('Success:', values);
-};
-const onFinishFailed = errorInfo => {
-  console.log('Failed:', errorInfo);
-};
-const sendCode = {}
+const sendCode = {
+  axios: post("/member/member/count", {
+    // mobile: loginForm.mobile
+  }).then(response => {
+    let data = response.data; // data 类型统一为 ResponseVo
+    if (data.success) {
+      notification.success({message: '发送验证码成功！' + data.data});
+      // loginForm.value.code = "8888";
+    } else {
+      notification.error({message: data.msg});
+    }
+  })
+}
 const login = {}
 </script>
 

@@ -14,7 +14,9 @@ public enum ResponseEnum {
 
     PARAMETER_INPUT_ERROR(1, "参数输入异常"),
 
-    MEMBER_REGISTER_EXIST(1, "手机号已注册")
+    MEMBER_REGISTER_EXIST(2, "手机号已注册"),
+
+    MESSAGE_CODE_SEND_FAILED(3, "验证码短信发送失败"),
     ;
 
     private final Integer code;

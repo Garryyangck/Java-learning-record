@@ -37,6 +37,17 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <!--阿里云短信服务提供商的API，核心包-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+        </dependency>
+        <!--阿里云短信服务提供商的API，dysmsapi包-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
