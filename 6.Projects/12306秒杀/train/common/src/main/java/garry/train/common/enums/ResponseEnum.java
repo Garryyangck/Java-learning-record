@@ -16,9 +16,9 @@ public enum ResponseEnum {
 
     MOBILE_REGISTER_EXIST(2, "手机号已注册"),
 
-    MESSAGE_CODE_SEND_FAILED(3, "验证码短信发送失败"),
+    MESSAGE_CODE_SEND_FAILED(3, "短信验证码发送失败"),
 
-    MOBILE_NOT_EXIST(4, "手机号不存在"),
+    MOBILE_NOT_EXIST(4, "手机号输入有误"),
 
     CODE_NOT_EXIST(5, "验证码不存在或已过期"),
 

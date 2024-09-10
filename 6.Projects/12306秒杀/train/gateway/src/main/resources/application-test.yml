@@ -1,0 +1,12 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[**]':
+            allow-credentials: true
+            allowed-origin-patterns:
+              - "*"
+

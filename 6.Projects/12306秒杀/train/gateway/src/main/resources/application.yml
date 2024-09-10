@@ -4,10 +4,19 @@ server:
 spring:
   cloud:
     gateway:
-      # 网关配置
-      routes:
+      routes: # 网关配置
         - id: member
           uri: http://127.0.0.1:8081
-          # 将所有以 member为前缀的请求(e.g. http://localhost:8080/member/hello)都转发到 http://127.0.0.1:8081
           predicates:
-            - Path=/member/**
+            - Path=/member/** # 将所有以 member为前缀的请求(e.g. http://localhost:8080/member/hello)都转发到 http://127.0.0.1:8081
+      globalcors: # 允许跨域
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: # 允许所有来源
+              - "*"
+            allowed-headers: # 允许携带的头信息
+              - "*"
+            allowed-methods: # 允许的请求方式
+              - "*"
+            allow-credentials: true  # 是否允许携带 cookie
+            max-age: 3600  # 跨域检测的有效期，前端会发起一个 OPTION请求看接口是否可用，可用才会真正发起你的 POST | GET 请求

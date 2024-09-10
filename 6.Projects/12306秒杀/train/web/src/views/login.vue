@@ -3,7 +3,7 @@
     <a-col :span="8" :offset="8" class="login-main"> <!--登录框长度为8，offset即前面有8个格子-->
       <h1 style="text-align: center">
         <rocket-two-tone/>
-        登录
+        Garry售票系统
       </h1>
       <a-form
           :model="loginForm"
@@ -40,27 +40,42 @@
 
 <script setup>
 import {reactive} from 'vue';
-import {post} from 'axios';
+import axios from 'axios';
 import {notification} from 'ant-design-vue';
 
 const loginForm = reactive({
   mobile: '',
   code: '',
 });
-const sendCode = {
-  axios: post("/member/member/count", {
-    // mobile: loginForm.mobile
-  }).then(response => {
-    let data = response.data; // data 类型统一为 ResponseVo
-    if (data.success) {
-      notification.success({message: '发送验证码成功！' + data.data});
-      // loginForm.value.code = "8888";
+
+const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表达式的写法，而不能是 = {}，后者不是函数！
+  axios.post("http://localhost:8080/member/member/send-code", {
+    mobile: loginForm.mobile
+  }).then(response => { // 这里也是 lambda 表达式，response 作参数
+    let responseVo = response.data;
+    if (responseVo.success) {
+      notification.success({description: '验证码发送成功，请在5分钟内完成登录'});
     } else {
-      notification.error({message: data.msg});
+      notification.error({description: responseVo.msg});
+    }
+  });
+}
+
+const login = () => {
+  axios.post("http://localhost:8080/member/member/login", {
+    mobile: loginForm.mobile,
+    code: loginForm.code
+  }).then(response =>{
+    let responseVo = response.data;
+    if (responseVo.success) {
+      notification.success({description: '登录成功'});
+      // 跳转到用户主页
+
+    } else {
+      notification.error({description: responseVo.msg});
     }
   })
 }
-const login = {}
 </script>
 
 <style>
