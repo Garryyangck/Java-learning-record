@@ -54,8 +54,9 @@ const loginForm = reactive({
   code: '',
 });
 
-const setupTimer = () => {
+const setupTimer = (countdownSecond) => {
   // 设置倒计时参数
+  countdown.value = countdownSecond;
   sendCodeLabel.value = `${countdown.value}秒`;
   counting.value = true;
 
@@ -89,16 +90,15 @@ const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表�
     if (responseVo.success) {
       notification.success({description: '验证码发送成功，请在5分钟内完成登录'});
       countdown.value = 60;
-      setupTimer(); // 短信发送成功，启动60秒计时器
+      setupTimer(60); // 短信发送成功，启动60秒计时器
     } else {
       notification.error({description: responseVo.msg});
       // 服务器异常开启60秒倒计时，防止在服务器不正常的时候接收大量请求
       if (responseVo.code === 3) {
-        countdown.value = 60;
+        setupTimer(60);
       } else { // 参数输入异常，3秒倒计时
-        countdown.value = 3;
+        setupTimer(3);
       }
-      setupTimer();
     }
   });
 }
