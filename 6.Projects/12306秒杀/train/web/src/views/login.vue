@@ -2,7 +2,7 @@
   <a-row class="login">
     <a-col :span="8" :offset="8" class="login-main"> <!--登录框长度为8，offset即前面有8个格子-->
       <h1 style="text-align: center">
-        <rocket-two-tone/>
+        <rocket-two-tone />
         Garry售票系统
       </h1>
       <a-form
