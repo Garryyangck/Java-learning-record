@@ -38,91 +38,103 @@
   </a-row>
 </template>
 
-<script setup>
-import {reactive, ref, onMounted} from 'vue';
+<script>
+import {defineComponent, reactive, ref} from 'vue';
 import axios from 'axios';
 import {notification} from 'ant-design-vue';
-import {useRouter, useRoute} from "vue-router";
+import {useRouter} from "vue-router";
 
+export default defineComponent({
+  name: 'login-view',
+  setup() {
+    const countdown = ref(0); // 倒计时时间
+    const sendCodeLabel = ref('获取验证码'); // 按钮显示的文本
+    const counting = ref(false); // 是否正在倒计时
+    const sendCodeRef = ref(null); // 发送验证码的样式
+    const router = useRouter(); // 路由转发
 
-const countdown = ref(0); // 倒计时时间
-const sendCodeLabel = ref('获取验证码'); // 按钮显示的文本
-const counting = ref(false); // 是否正在倒计时
-const sendCodeRef = ref(null); // 发送验证码的样式
-const router = useRouter();
+    const loginForm = reactive({
+      mobile: '',
+      code: '',
+    });
 
-const loginForm = reactive({
-  mobile: '',
-  code: '',
-});
+    const setupTimer = (countdownSecond) => {
+      // 设置倒计时参数
+      countdown.value = countdownSecond;
+      sendCodeLabel.value = `${countdown.value}秒`;
+      counting.value = true;
 
-const setupTimer = (countdownSecond) => {
-  // 设置倒计时参数
-  countdown.value = countdownSecond;
-  sendCodeLabel.value = `${countdown.value}秒`;
-  counting.value = true;
+      // 修改字体颜色
+      sendCodeRef.value.style.color = '#808080';
 
-  // 修改字体颜色
-  sendCodeRef.value.style.color = '#808080';
+      // 倒计时函数
+      const intervalId = setInterval(() => {
+        countdown.value--;
+        sendCodeLabel.value = `${countdown.value}秒`;
 
-  // 倒计时函数
-  const intervalId = setInterval(() => {
-    countdown.value--;
-    sendCodeLabel.value = `${countdown.value}秒`;
+        if (countdown.value === 0) {
+          clearInterval(intervalId); // 清除定时器
+          sendCodeLabel.value = '获取验证码'; // 重置按钮文本
+          counting.value = false; // 标记倒计时结束
+          sendCodeRef.value.style.color = '#1890ff'; // 字体恢复颜色
+        }
+      }, 1000);
+    };
 
-    if (countdown.value === 0) {
-      clearInterval(intervalId); // 清除定时器
-      sendCodeLabel.value = '获取验证码'; // 重置按钮文本
-      counting.value = false; // 标记倒计时结束
-      sendCodeRef.value.style.color = '#1890ff'; // 字体恢复颜色
-    }
-  }, 1000);
-};
-
-const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表达式的写法，而不能是 = {}，后者不是函数！
-  if (counting.value) { // 倒计时中直接return
-    notification.error({description: '请勿频繁获取验证码'});
-    return;
-  }
-
-  axios.post('/member/member/send-code', {
-    mobile: loginForm.mobile
-  }).then(response => { // 这里也是 lambda 表达式，response 作参数
-    let responseVo = response.data;
-    if (responseVo.success) {
-      notification.success({description: '验证码发送成功，请在5分钟内完成登录'});
-      countdown.value = 60;
-      setupTimer(60); // 短信发送成功，启动60秒计时器
-    } else {
-      notification.error({description: responseVo.msg});
-      // 服务器异常，验证码发送失败，60秒倒计时，防止在服务器不正常的时候接收大量请求
-      if (responseVo.code === 3) {
-        setupTimer(60);
-      } else { // 参数输入异常，3秒倒计时
-        setupTimer(3);
+    const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表达式的写法，而不能是 = {}，后者不是函数！
+      if (counting.value) { // 倒计时中直接return
+        notification.error({description: '请勿频繁获取验证码'});
+        return;
       }
-    }
-  });
-}
 
-const login = () => {
-  axios.post('/member/member/login', {
-    mobile: loginForm.mobile,
-    code: loginForm.code
-  }).then(response => {
-    let responseVo = response.data;
-    if (responseVo.success) {
-      notification.success({description: '登录成功'});
-      // 跳转到控台主页
-      router.push('/');
-    } else {
-      notification.error({description: responseVo.msg});
+      axios.post('/member/member/send-code', {
+        mobile: loginForm.mobile
+      }).then(response => { // 这里也是 lambda 表达式，response 作参数
+        let responseVo = response.data;
+        if (responseVo.success) {
+          notification.success({description: '验证码发送成功，请在5分钟内完成登录'});
+          countdown.value = 60;
+          setupTimer(60); // 短信发送成功，启动60秒计时器
+        } else {
+          notification.error({description: responseVo.msg});
+          // 服务器异常，验证码发送失败，60秒倒计时，防止在服务器不正常的时候接收大量请求
+          if (responseVo.code === 3) {
+            setupTimer(60);
+          } else { // 参数输入异常，3秒倒计时
+            setupTimer(3);
+          }
+        }
+      });
     }
-  })
-}
+
+    const login = () => {
+      axios.post('/member/member/login', {
+        mobile: loginForm.mobile,
+        code: loginForm.code
+      }).then(response => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          notification.success({description: '登录成功'});
+          // 跳转到控台主页
+          router.push('/');
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    }
+
+    return { // 开放给template的组件
+      loginForm,
+      sendCodeLabel,
+      sendCodeRef,
+      sendCode,
+      login,
+    };
+  },
+});
 </script>
 
-<style>
+<style scoped>
 .login-main h1 { /*定义的是login-main下的h1标签，而不是所有的login-main和h1标签*/
   font-size: 25px;
   font-weight: bold;
