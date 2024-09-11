@@ -2,7 +2,7 @@
   <a-row class="login">
     <a-col :span="8" :offset="8" class="login-main"> <!--登录框长度为8，offset即前面有8个格子-->
       <h1 style="text-align: center">
-        <rocket-two-tone />
+        <rocket-two-tone/>
         Garry售票系统
       </h1>
       <a-form
@@ -42,12 +42,14 @@
 import {reactive, ref, onMounted} from 'vue';
 import axios from 'axios';
 import {notification} from 'ant-design-vue';
+import {useRouter, useRoute} from "vue-router";
 
 
 const countdown = ref(0); // 倒计时时间
 const sendCodeLabel = ref('获取验证码'); // 按钮显示的文本
 const counting = ref(false); // 是否正在倒计时
-const sendCodeRef = ref(null);
+const sendCodeRef = ref(null); // 发送验证码的样式
+const router = useRouter();
 
 const loginForm = reactive({
   mobile: '',
@@ -83,7 +85,7 @@ const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表�
     return;
   }
 
-  axios.post("/member/member/send-code", {
+  axios.post('/member/member/send-code', {
     mobile: loginForm.mobile
   }).then(response => { // 这里也是 lambda 表达式，response 作参数
     let responseVo = response.data;
@@ -104,15 +106,15 @@ const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表�
 }
 
 const login = () => {
-  axios.post("/member/member/login", {
+  axios.post('/member/member/login', {
     mobile: loginForm.mobile,
     code: loginForm.code
   }).then(response => {
     let responseVo = response.data;
     if (responseVo.success) {
       notification.success({description: '登录成功'});
-      // 跳转到用户主页
-
+      // 跳转到控台主页
+      router.push('/');
     } else {
       notification.error({description: responseVo.msg});
     }
