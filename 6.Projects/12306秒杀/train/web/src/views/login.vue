@@ -83,7 +83,7 @@ const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表�
     return;
   }
 
-  axios.post("http://localhost:8080/member/member/send-code", {
+  axios.post("/member/member/send-code", {
     mobile: loginForm.mobile
   }).then(response => { // 这里也是 lambda 表达式，response 作参数
     let responseVo = response.data;
@@ -104,7 +104,7 @@ const sendCode = () => { // 注意，此处必须是 = () => {} 的 lambda 表�
 }
 
 const login = () => {
-  axios.post("http://localhost:8080/member/member/login", {
+  axios.post("/member/member/login", {
     mobile: loginForm.mobile,
     code: loginForm.code
   }).then(response => {
