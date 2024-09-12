@@ -43,6 +43,7 @@ import {defineComponent, reactive, ref} from 'vue';
 import axios from 'axios';
 import {notification} from 'ant-design-vue';
 import {useRouter} from "vue-router";
+import store from "@/store";
 
 export default defineComponent({
   name: 'login-view',
@@ -117,6 +118,8 @@ export default defineComponent({
           notification.success({description: '登录成功'});
           // 跳转到控台主页
           router.push('/');
+          // 将token存储到前端
+          store.commit("setMember", responseVo.data);
         } else {
           notification.error({description: responseVo.msg});
         }
