@@ -1,8 +1,10 @@
 import { createStore } from 'vuex'
 
+const MEMBER = 'MEMBER';
+
 export default createStore({
   state: { // 定义全局变量
-    member: {}
+    member: window.SessionStorage.get(MEMBER) || {}
   },
   getters: { // 定义全局变量的get方法
 
@@ -10,6 +12,7 @@ export default createStore({
   mutations: { // 定义全局变量的set方法
     setMember (state, member) {
       state.member = member;
+      window.SessionStorage.set(MEMBER, member);
     }
   },
   actions: { // 定义异步方法
