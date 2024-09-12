@@ -2,7 +2,7 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import Antd from 'ant-design-vue' // 全局引入 ant-design-vue 的所有组件
+import Antd, {notification} from 'ant-design-vue' // 全局引入 ant-design-vue 的所有组件
 import 'ant-design-vue/dist/antd.css' // 全局引入 ant-design-vue 的 css
 import * as Icons from '@ant-design/icons-vue'; // 全局引入 ant-design-vue 的所有图标
 import axios from "axios";
@@ -23,7 +23,13 @@ app.mount('#app');
  * axios 拦截器
  */
 axios.interceptors.request.use(function (config) {
+    // 给所有的请求加上token
     console.log('请求参数: ', config);
+    const token = store.state.member.token;
+    if (token) {
+        config.headers.token = token; /*必须写死token，因为网关就写死从headers里面获取"token"*/
+        console.log('请求headers增加token: ' + token);
+    }
     return config;
 }, error => {
     return Promise.reject(error);
@@ -33,6 +39,15 @@ axios.interceptors.response.use(function (response) {
     console.log('返回结果: ', response);
     return response;
 }, error => {
+    const response = error.response;
+    const status = response.status;
+    if (status === 401) {
+        // 特殊处理 401，权限不足，跳转到 /login
+        console.log('未登录或登录超时，跳转到登录页面');
+        store.commit('setMember', {});
+        notification.error({description: '未登录或登录超时'});
+        router.push('/login');
+    }
     console.log('返回错误: ', error);
     return Promise.reject(error);
 });

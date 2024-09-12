@@ -105,7 +105,7 @@ export default defineComponent({
             setupTimer(3);
           }
         }
-      });
+      })
     }
 
     const login = () => {

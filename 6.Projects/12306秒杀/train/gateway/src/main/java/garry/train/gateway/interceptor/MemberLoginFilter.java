@@ -15,6 +15,10 @@ import reactor.core.publisher.Mono;
  * @author Garry
  * 2024-09-12 20:58
  */
+
+/**
+ * 登录校验拦截器
+ */
 @SuppressWarnings("LoggingSimilarMessage")
 @Slf4j
 @Component
@@ -22,7 +26,7 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        log.info("------------- 开始 -------------");
+        log.info("------------- 开始 {} -------------", path);
 
         // 排除不需要过滤的接口
         if (path.contains("/admin")
@@ -33,17 +37,17 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
         } else {
             String token = exchange.getRequest().getHeaders().getFirst("token");
             log.info("会员登录验证开始，token = {}", token);
-            if(StrUtil.isBlank(token) || JWTUtil.validate(token)) {
+            if (StrUtil.isBlank(token) || !JWTUtil.validate(token)) {
                 log.info("token为空、无效或已过期");
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                log.info("------------- 结束 -------------\n");
+                log.info("------------- 结束 {} -------------\n", path);
                 return exchange.getResponse().setComplete();
             }
         }
 
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             // 在请求处理之后执行的逻辑
-            log.info("------------- 结束 -------------\n");
+            log.info("------------- 结束 {} -------------\n", path);
         }));
     }
 
