@@ -11,4 +11,9 @@ public class MemberLoginVo {
     private Long id;
 
     private String mobile;
+
+    /**
+     * JWT token
+     */
+    private String token;
 }

@@ -10,10 +10,10 @@
 
 ==Spring家族的来龙去脉==
 
-1. Spring 最初利用 IOC和AOP 解耦
-2. 按照这种模式搞了MVC 框架
+1. Spring 最初利用 IOC 和 AOP 解耦
+2. 按照这种模式搞了 MVC 框架
 3. ==写很多样板代码很麻烦，就有了Spring Boot==
-4. Spring Cloud是在Spring Boot基础上诞生的
+4. Spring Cloud 是在 Spring Boot基础上诞生的
 
 ==Spring Boot优点：大大简化配置==，避免编写大量重复配置信息
 

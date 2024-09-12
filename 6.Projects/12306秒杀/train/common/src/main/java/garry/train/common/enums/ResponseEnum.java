@@ -23,6 +23,8 @@ public enum ResponseEnum {
     CODE_NOT_EXIST(5, "验证码不存在或已过期"),
 
     WRONG_CODE(6, "验证码不正确"),
+
+    WRONG_TOKEN(7, "JWT不存在或已过期"),
     ;
 
     private final Integer code;

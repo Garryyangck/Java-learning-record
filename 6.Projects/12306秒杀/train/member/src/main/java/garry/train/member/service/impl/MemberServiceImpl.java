@@ -10,6 +10,7 @@ import garry.train.common.consts.RedisConst;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
+import garry.train.common.util.JWTUtil;
 import garry.train.common.util.RedisUtil;
 import garry.train.member.form.MemberLoginForm;
 import garry.train.member.form.MemberRegisterForm;
@@ -22,7 +23,6 @@ import garry.train.member.service.SmsService;
 import garry.train.member.vo.MemberLoginVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -118,9 +118,10 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessException(ResponseEnum.WRONG_CODE);
         }
 
-        log.info("手机号 {} 的用户身份验证成功", mobile);
+        log.info("手机号 {} 的用户身份验证成功，使用JWT设置token", mobile);
         Member member = members.get(0);
         MemberLoginVo vo = BeanUtil.copyProperties(member, MemberLoginVo.class);
+        vo.setToken(JWTUtil.createToken(member.getId(), member.getMobile()));
         return vo;
     }
 

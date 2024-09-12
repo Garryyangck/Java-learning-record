@@ -28,4 +28,9 @@ public class CommonConst {
      * 短信验证码的长度
      */
     public static final Integer CODE_LENGTH = 4;
+
+    /**
+     * JWT 的有效小时数
+     */
+    public static final Integer JWT_EXPIRE_HOUR = 24;
 }
