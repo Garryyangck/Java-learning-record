@@ -28,7 +28,7 @@ axios.interceptors.request.use(function (config) {
     const token = store.state.member.token;
     if (token) {
         config.headers.token = token; /*必须写死token，因为网关就写死从headers里面获取"token"*/
-        console.log('请求headers增加token: ' + token);
+        console.log('在' + config.url + '的 headers 增加 token: ' + token);
     }
     return config;
 }, error => {
@@ -44,7 +44,6 @@ axios.interceptors.response.use(function (response) {
     if (status === 401) {
         // 特殊处理 401，权限不足，跳转到 /login
         console.log('未登录或登录超时，跳转到登录页面');
-        store.commit('setMember', {});
         notification.error({description: '未登录或登录超时'});
         router.push('/login');
     }

@@ -59,6 +59,9 @@ export default defineComponent({
       code: '',
     });
 
+    // 进入登录页面时，自动清空session中的member
+    store.commit('setMember', {});
+
     const setupTimer = (countdownSecond) => {
       // 设置倒计时参数
       countdown.value = countdownSecond;
