@@ -1,11 +1,10 @@
-package garry.train.common.util;
+package garry.train.gateway.util;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
-import garry.train.common.consts.CommonConst;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -28,7 +27,7 @@ public class JWTUtil {
         payload.put("mobile", mobile);
 
         DateTime now = DateTime.now();
-        DateTime expireTime = now.offsetNew(DateField.HOUR, CommonConst.JWT_EXPIRE_HOUR);
+        DateTime expireTime = now.offsetNew(DateField.HOUR, 24);
         payload.put(JWTPayload.ISSUED_AT, now); // 签发时间
         payload.put(JWTPayload.EXPIRES_AT, expireTime); // 过期时间
         payload.put(JWTPayload.NOT_BEFORE, now); // 生效时间
