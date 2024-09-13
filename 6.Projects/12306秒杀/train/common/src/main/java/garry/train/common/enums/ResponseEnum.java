@@ -25,6 +25,8 @@ public enum ResponseEnum {
     WRONG_CODE(6, "验证码不正确"),
 
     WRONG_TOKEN(7, "JWT不存在或已过期"),
+
+    THREAD_LOCAL_ERROR(8, "ThreadLocal获取会员Id失败"),
     ;
 
     private final Integer code;
