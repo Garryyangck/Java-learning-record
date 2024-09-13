@@ -38,7 +38,7 @@ public class JWTUtil {
     }
 
     /**
-     * 校验 token 是否有效，无效则抛出业务异常，供统一异常处理
+     * 校验 token 是否有效
      */
     public static boolean validate(String token) {
         try {

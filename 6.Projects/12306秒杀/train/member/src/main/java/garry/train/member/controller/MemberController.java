@@ -8,7 +8,6 @@ import garry.train.member.service.MemberService;
 import garry.train.member.vo.MemberLoginVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +27,7 @@ public class MemberController {
 
     @Deprecated
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseVo register(@Valid @RequestBody/*必须使用@RequestBody，才能接收(application/json)格式的请求*/ MemberRegisterForm form) {
+    public ResponseVo<Long> register(@Valid @RequestBody/*必须使用@RequestBody，才能接收(application/json)格式的请求*/ MemberRegisterForm form) {
         long registerId = memberService.register(form);
         return ResponseVo.success(registerId);
     }
@@ -40,7 +39,7 @@ public class MemberController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseVo login(@Valid @RequestBody MemberLoginForm form) {
+    public ResponseVo<MemberLoginVo> login(@Valid @RequestBody MemberLoginForm form) {
         MemberLoginVo vo = memberService.login(form);
         return ResponseVo.success(vo);
     }
