@@ -10,7 +10,6 @@ import java.util.Date;
 public class PassengerSaveForm {
     private Long id;
 
-    @NotNull(message = "【会员ID】不能为空")
     private Long memberId;
 
     @NotBlank(message = "【姓名】不能为空")
