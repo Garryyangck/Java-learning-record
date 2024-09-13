@@ -31,8 +31,9 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
         // 排除不需要过滤的接口
         if (path.contains("/admin")
                 || path.contains("/hello")
-                || path.contains("/member/member/login")
-                || path.contains("/member/member/send-code")) {
+                || path.contains("/member/member/register")
+                || path.contains("/member/member/send-code")
+                || path.contains("/member/member/login")) {
             log.info("{} 不需要登录", path);
         } else {
             String token = exchange.getRequest().getHeaders().getFirst("token");
@@ -42,6 +43,8 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 log.info("------------- 结束 {} -------------\n", path);
                 return exchange.getResponse().setComplete();
+            } else {
+                log.info("登录校验通过");
             }
         }
 

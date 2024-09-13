@@ -1,5 +1,6 @@
 GET http://localhost:8080/member/member/count
 Accept: application/json
+token: {{token}}
 
 ###
 
@@ -9,6 +10,7 @@ Content-Type: application/json
 {
   "mobile": "17380672612"
 }
+
 ###
 
 POST http://localhost:8080/member/member/send-code
@@ -17,6 +19,7 @@ Content-Type: application/json
 {
   "mobile": "17380672612"
 }
+
 ###
 
 POST http://localhost:8080/member/member/login
@@ -24,6 +27,13 @@ Content-Type: application/json
 
 {
   "mobile": "17380672612",
-  "code": "l38t"
+  "code": "gary"
 }
+
+> {%
+ client.log(JSON.stringify(response.body));
+ client.log(JSON.stringify(response.body.data.token));
+ client.global.set("token", response.body.data.token);
+%}
+
 ###

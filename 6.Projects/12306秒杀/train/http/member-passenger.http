@@ -1,5 +1,6 @@
-POST http://localhost:8081/member/passenger/save
+POST http://localhost:8080/member/passenger/save
 Content-Type: application/json
+token: {{token}}
 
 {
   "memberId": 1833041335083470848,
@@ -7,4 +8,5 @@ Content-Type: application/json
   "idCard": "000000200401270000",
   "type": "3"
 }
+
 ###
