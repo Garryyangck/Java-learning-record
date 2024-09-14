@@ -1,6 +1,6 @@
 <template>
   <a-layout-header class="header">
-    <div class="logo"/>
+    <div class="logo">GARRY</div>
     <div style="float: right; color: white;">
       您好：{{member.mobile}} &nbsp;&nbsp;
       <router-link to="/login" style="color: white;">
@@ -62,5 +62,9 @@ export default defineComponent({
   height: 32px;
   margin: 16px 24px 16px -2%;
   background: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  color: white; /* 设置文字颜色为白色 */
+  font-weight: bold; /* 设置文字加粗 */
+  line-height: 32px; /* 使文字垂直居中 */
 }
 </style>
