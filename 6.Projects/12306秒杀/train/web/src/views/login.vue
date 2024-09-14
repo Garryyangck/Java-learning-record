@@ -119,8 +119,8 @@ export default defineComponent({
         let responseVo = response.data;
         if (responseVo.success) {
           notification.success({description: '登录成功'});
-          // 跳转到控台主页
-          router.push('/');
+          // 跳转到欢迎页
+          router.push('/welcome');
           // 将token存储到前端
           store.commit("setMember", responseVo.data);
         } else {

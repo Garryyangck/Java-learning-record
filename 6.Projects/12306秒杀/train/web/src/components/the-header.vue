@@ -8,31 +8,47 @@
       </router-link>
     </div>
     <a-menu
-        v-model:selectedKeys="selectedKeys1"
+        v-model:selectedKeys="selectedKeys"
         theme="dark"
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
     >
-      <a-menu-item key="1">nav 1</a-menu-item>
-      <a-menu-item key="2">nav 2</a-menu-item>
-      <a-menu-item key="3">nav 3</a-menu-item>
+      <a-menu-item key="/welcome">
+        <router-link to="/welcome">
+          <coffee-outlined/> &nbsp; 欢迎
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="/passenger">
+        <router-link to="/passenger">
+          <user-outlined/> &nbsp; 乘车
+        </router-link>
+      </a-menu-item>
     </a-menu>
   </a-layout-header>
 </template>
 
 <script>
-import {defineComponent, ref} from 'vue';
+import {defineComponent, ref, watch} from 'vue';
 import store from "@/store";
+import router from "@/router";
 
 export default defineComponent({
   name: 'the-header-view',
   setup() {
     let member = store.state.member;
 
-    const selectedKeys1 = ref(['2']);
+    const selectedKeys = ref(['/welcome']);
+
+    /**
+     * 动态监视 router.currentRoute.value.path 的变化，变化时触发后面的函数
+     */
+    watch(() => router.currentRoute.value.path, (newValue) => {
+      selectedKeys.value = [];
+      selectedKeys.value.push(newValue);
+    }, {immediate: true});
 
     return {
-      selectedKeys1,
+      selectedKeys,
       member,
     };
   },
@@ -42,9 +58,9 @@ export default defineComponent({
 <style scoped> /*scoped修饰的css只在本页面生效*/
 .logo {
   float: left;
-  width: 120px;
-  height: 31px;
-  margin: 16px 24px 16px 0;
+  width: 5%;
+  height: 32px;
+  margin: 16px 24px 16px -2%;
   background: rgba(255, 255, 255, 0.3);
 }
 </style>

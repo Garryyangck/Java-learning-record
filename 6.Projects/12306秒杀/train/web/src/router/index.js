@@ -5,16 +5,28 @@ import store from "@/store";
 const routes = [
     {
         path: '/login',
-        name: 'login',
-        component: () => import('../views/login.vue')
+        component: () => import('../views/login.vue'),
     },
     {
         path: '/',
-        name: 'main',
         component: () => import('../views/main.vue'),
         meta: {
             loginRequire: true // 自定义的meta和loginRequired
-        }
+        },
+        children: [
+            {
+                path: 'welcome',
+                component: () => import('../views/main/welcome.vue'),
+            },
+            {
+                path: 'passenger',
+                component: () => import('../views/main/passenger.vue'),
+            },
+        ]
+    },
+    {
+        path: '',
+        redirect: '/welcome',
     },
 ]
 
@@ -34,7 +46,7 @@ router.beforeEach((to, from, next) => {
         console.log("member = ", member);
         if (!member || !member.token) {
             console.log("未登录或登录超时，跳转到登录页面");
-            notification.error({ description: "未登录或登录超时" });
+            notification.error({description: "未登录或登录超时"});
             next('/login');
         } else {
             next();
