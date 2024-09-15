@@ -51,6 +51,7 @@ public class PassengerServiceImpl implements PassengerService {
     public PageVo<PassengerQueryVo> queryList(PassengerQueryForm form) {
         Long memberId = form.getMemberId();
         PassengerExample passengerExample = new PassengerExample();
+        passengerExample.setOrderByClause("update_time desc"); // 最新操作的乘客最上面，必须是数据库原始的字段名
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
 
         // 只有用户，才只能查自己 memberId 下的乘客

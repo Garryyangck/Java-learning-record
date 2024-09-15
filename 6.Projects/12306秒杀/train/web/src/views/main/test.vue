@@ -1,65 +1,78 @@
 <template>
-  <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
-    <a-form-item label="Activity name" v-bind="validateInfos.name">
-      <a-input
-          v-model:value="modelRef.name"
-          @blur="validate('name', { trigger: 'blur' }).catch(() => {})"
-      />
-    </a-form-item>
-    <a-form-item label="Activity zone" v-bind="validateInfos.region">
-      <a-select v-model:value="modelRef.region" placeholder="please select your zone">
-        <a-select-option value="shanghai">Zone one</a-select-option>
-        <a-select-option value="beijing">Zone two</a-select-option>
-      </a-select>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click.prevent="onSubmit">Create</a-button>
-      <a-button style="margin-left: 10px" @click="resetFields">Reset</a-button>
-    </a-form-item>
-  </a-form>
+  <a-table
+      :columns="columns"
+      :row-key="record => record.login.uuid"
+      :data-source="dataSource"
+      :pagination="pagination"
+      :loading="loading"
+      @change="handleTableChange"
+  >
+    <template #bodyCell="{ column, text }">
+      <template v-if="column.dataIndex === 'name'">{{ text.first }} {{ text.last }}</template>
+    </template>
+  </a-table>
 </template>
 <script setup>
-import { reactive, toRaw } from 'vue';
-import { Form } from 'ant-design-vue';
-const useForm = Form.useForm;
-const labelCol = {
-  span: 4,
+import { computed } from 'vue';
+import { usePagination } from 'vue-request';
+import axios from 'axios';
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    sorter: true,
+    width: '20%',
+  },
+  {
+    title: 'Gender',
+    dataIndex: 'gender',
+    filters: [
+      {
+        text: 'Male',
+        value: 'male',
+      },
+      {
+        text: 'Female',
+        value: 'female',
+      },
+    ],
+    width: '20%',
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+  },
+];
+const queryData = params => {
+  return axios.get('https://randomuser.me/api?noinfo', {
+    params,
+  });
 };
-const wrapperCol = {
-  span: 14,
-};
-const modelRef = reactive({
-  name: '',
-  region: undefined,
+const {
+  data: dataSource,
+  run,
+  loading,
+  current,
+  pageSize,
+} = usePagination(queryData, {
+  formatResult: res => res.data.results,
+  pagination: {
+    currentKey: 'page',
+    pageSizeKey: 'results',
+  },
 });
-const rulesRef = reactive({
-  name: [
-    {
-      required: true,
-      message: 'Please input Activity name',
-    },
-    {
-      min: 3,
-      max: 5,
-      message: 'Length should be 3 to 5',
-      trigger: 'blur',
-    },
-  ],
-  region: [
-    {
-      required: true,
-      message: 'Please select region',
-    },
-  ],
-});
-const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
-const onSubmit = () => {
-  validate()
-      .then(() => {
-        console.log(toRaw(modelRef));
-      })
-      .catch(err => {
-        console.log('error', err);
-      });
+const pagination = computed(() => ({
+  total: 200,
+  current: current.value,
+  pageSize: pageSize.value,
+}));
+const handleTableChange = (pag, filters, sorter) => {
+  run({
+    results: pag.pageSize,
+    page: pag?.current,
+    sortField: sorter.field,
+    sortOrder: sorter.order,
+    ...filters,
+  });
 };
 </script>

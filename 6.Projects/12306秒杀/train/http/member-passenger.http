@@ -3,9 +3,9 @@ Content-Type: application/json
 token: {{token}}
 
 {
-  "name": "Garry",
-  "idCard": "000000200401270000",
-  "type": "3"
+  "name": "占位",
+  "idCard": "xxxxxxxxxxxxxxxxxx",
+  "type": "1"
 }
 
 ###
