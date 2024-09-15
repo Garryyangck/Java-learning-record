@@ -10,12 +10,8 @@ token: {{token}}
 
 ###
 
-GET http://localhost:8080/member/passenger/query-list
-Content-Type: application/json
+GET http://localhost:8080/member/passenger/query-list?pageNum=2&pageSize=12
+Accept: application/json
 token: {{token}}
-
-{
-  "memberId": null
-}
 
 ###

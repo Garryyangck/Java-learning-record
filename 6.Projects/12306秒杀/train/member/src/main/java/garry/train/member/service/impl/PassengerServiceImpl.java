@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.util.HostHolder;
+import garry.train.common.vo.PageVo;
 import garry.train.member.form.PassengerQueryForm;
 import garry.train.member.form.PassengerSaveForm;
 import garry.train.member.mapper.PassengerMapper;
@@ -47,7 +48,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public PageInfo<PassengerQueryVo> queryList(PassengerQueryForm form) {
+    public PageVo<PassengerQueryVo> queryList(PassengerQueryForm form) {
         Long memberId = form.getMemberId();
         PassengerExample passengerExample = new PassengerExample();
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
@@ -58,14 +59,20 @@ public class PassengerServiceImpl implements PassengerService {
         }
 
         // 启动分页
-        PageHelper.startPage(1, 2);
+        PageHelper.startPage(form.getPageNum(), form.getPageSize());
 
-        // 获取 passengers，通过 stream 转为 voList
+        // 获取 passengers
         List<Passenger> passengers = passengerMapper.selectByExample(passengerExample);
-        List<PassengerQueryVo> voList = BeanUtil.copyToList(passengers, PassengerQueryVo.class);
 
-        // 调用接口，将 list 封装为 pageInfo 对象
-        PageInfo<PassengerQueryVo> pageInfo = new PageInfo<>(voList);
-        return pageInfo;
+        // 获得 pageInfo 对象，并将其 List 的模板类型改为 PassengerQueryVo
+        // 注意这里必须先获取 pageInfo，再尝试获取 List<PassengerQueryVo>，否则无法正确获取 pageNum，pages 等重要属性
+        PageInfo<Passenger> pageInfo = new PageInfo<>(passengers);
+        List<PassengerQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), PassengerQueryVo.class);
+
+        // 获取 PageVo 对象
+        PageVo<PassengerQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+        vo.setList(voList);
+        vo.setMsg("queryList success");
+        return vo;
     }
 }

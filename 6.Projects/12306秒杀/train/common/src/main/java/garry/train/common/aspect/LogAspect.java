@@ -24,17 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class LogAspect {
     private final String[] excludeProperties = {};
 
-    public LogAspect() {
-        log.info("Common LogAspect");
-    }
-
     /**
      * 定义一个切点
      * *: 所有的返回值
      * garry: garry下的所有子包
      * ..*Controller: 结尾为Controller的所有类
      * .*: 这些类下的任何方法
-     * (..): 任何返回值
+     * (..): 任何数量和类型的参数
      */
     @Pointcut("execution(public * garry..*Controller.*(..))")
     public void controllerPointcut() {
