@@ -3,6 +3,8 @@ package garry.train.member.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.util.HostHolder;
 import garry.train.member.form.PassengerQueryForm;
@@ -45,20 +47,25 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public List<PassengerQueryVo> queryList(PassengerQueryForm form) {
-        List<Passenger> passengers = selectByMemberId(form.getMemberId());
-        return BeanUtil.copyToList(passengers, PassengerQueryVo.class);
-    }
-
-    /**
-     * memberId 为空，则返回全部
-     */
-    private List<Passenger> selectByMemberId(Long memberId) {
+    public PageInfo<PassengerQueryVo> queryList(PassengerQueryForm form) {
+        Long memberId = form.getMemberId();
         PassengerExample passengerExample = new PassengerExample();
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
-        if (ObjectUtil.isNotNull(memberId)) { // 用户
+
+        // 只有用户，才只能查自己 memberId 下的乘客
+        if (ObjectUtil.isNotNull(memberId)) {
             criteria.andMemberIdEqualTo(memberId);
         }
-        return passengerMapper.selectByExample(passengerExample);
+
+        // 启动分页
+        PageHelper.startPage(1, 2);
+
+        // 获取 passengers，通过 stream 转为 voList
+        List<Passenger> passengers = passengerMapper.selectByExample(passengerExample);
+        List<PassengerQueryVo> voList = BeanUtil.copyToList(passengers, PassengerQueryVo.class);
+
+        // 调用接口，将 list 封装为 pageInfo 对象
+        PageInfo<PassengerQueryVo> pageInfo = new PageInfo<>(voList);
+        return pageInfo;
     }
 }
