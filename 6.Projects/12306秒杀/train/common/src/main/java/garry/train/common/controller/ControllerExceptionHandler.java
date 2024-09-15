@@ -5,7 +5,6 @@ import garry.train.common.exception.BusinessException;
 import garry.train.common.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,8 +24,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({Exception.class})
     @ResponseBody // 这里必须要加ResponseBody，否则返回的不是JSON字符串！
     public ResponseVo exceptionHandler(Exception e) {
-        log.error("系统异常: {}", e.getMessage());
-        e.printStackTrace();
+        log.error("系统异常: ", e);
         return ResponseVo.error(ResponseEnum.ERROR);
     }
 

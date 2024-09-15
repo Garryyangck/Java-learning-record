@@ -9,3 +9,13 @@ token: {{token}}
 }
 
 ###
+
+GET http://localhost:8080/member/passenger/query-list
+Content-Type: application/json
+token: {{token}}
+
+{
+  "memberId": null
+}
+
+###
