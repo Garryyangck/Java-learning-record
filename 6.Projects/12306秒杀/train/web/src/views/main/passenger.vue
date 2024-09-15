@@ -64,7 +64,7 @@ export default defineComponent({
     const passengers = ref([]);
     const loading = ref(false);
 
-    const pagination = ref({
+    const pagination = ref({ // 框架规定的属性名，不能改属性名！
       total: 0, /*所有的总数，list.total*/
       current: 1, /*list.pageNum*/
       pageSize: 10,
