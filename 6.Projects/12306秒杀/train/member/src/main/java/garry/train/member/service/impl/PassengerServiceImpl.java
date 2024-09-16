@@ -80,4 +80,9 @@ public class PassengerServiceImpl implements PassengerService {
         vo.setMsg("queryList success");
         return vo;
     }
+
+    @Override
+    public void delete(Long id) {
+        passengerMapper.deleteByPrimaryKey(id);
+    }
 }

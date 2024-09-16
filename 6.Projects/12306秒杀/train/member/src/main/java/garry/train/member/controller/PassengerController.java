@@ -9,10 +9,7 @@ import garry.train.member.service.PassengerService;
 import garry.train.member.vo.PassengerQueryVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/passenger")
@@ -38,5 +35,11 @@ public class PassengerController {
         form.setMemberId(hostHolder.getMemberId()); // service 层是管理员和用户通用的接口，只有用户才需要取 memberId，因此取 memberId 的操作在 Controller 层实现。
         PageVo<PassengerQueryVo> vo = passengerService.queryList(form);
         return ResponseVo.success(vo);
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public ResponseVo delete(@PathVariable Long id) {
+        passengerService.delete(id);
+        return ResponseVo.success();
     }
 }

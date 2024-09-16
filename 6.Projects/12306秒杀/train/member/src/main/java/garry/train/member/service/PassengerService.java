@@ -20,4 +20,9 @@ public interface PassengerService {
      * 如果是管理员查询，则 form.memberId = null
      */
     PageVo<PassengerQueryVo> queryList(PassengerQueryForm form);
+
+    /**
+     * 根据 id 删除乘客
+     */
+    void delete(Long id);
 }

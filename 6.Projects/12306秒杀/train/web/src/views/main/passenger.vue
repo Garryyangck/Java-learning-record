@@ -118,19 +118,32 @@ export default defineComponent({
      * 编辑乘客
      */
     const onEdit = (record) => {
+      console.log('record = ', record);
       passenger.id = record.id;
       passenger.name = record.name;
       passenger.idCard = record.idCard;
       passenger.type = record.type;
       visible.value = true;
-    }
+    };
 
     /**
      * 删除乘客
      */
     const onDelete = (record) => {
-
-    }
+      axios.delete('member/passenger/delete/' + record.id).then(response => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          handleQuery({
+            pageNum: 1,
+            pageSize: pagination.value.pageSize,
+          });
+          notification.success({description: '删除成功'});
+          visible.value = false;
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
 
     /**
      * 处理插入请求
