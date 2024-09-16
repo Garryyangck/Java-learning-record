@@ -5,9 +5,12 @@ import garry.train.common.exception.BusinessException;
 import garry.train.common.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @author Garry
@@ -38,7 +41,14 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({BindException.class})
     @ResponseBody
     public ResponseVo bindExceptionHandler(BindException e) {
-        log.error("校验异常: {}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage() + ": " + e.getMessage());
-        return ResponseVo.error(ResponseEnum.PARAMETER_INPUT_ERROR, e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
+        StringBuffer msg = new StringBuffer();
+        for (int i = 0; i < allErrors.size(); i++) {
+            msg.append(allErrors.get(i).getDefaultMessage());
+            if (i != allErrors.size() - 1)
+                msg.append("\n");
+        }
+        log.error("校验异常: {}", msg);
+        return ResponseVo.error(ResponseEnum.PARAMETER_INPUT_ERROR, msg.toString());
     }
 }

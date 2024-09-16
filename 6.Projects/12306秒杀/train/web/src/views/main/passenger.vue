@@ -16,8 +16,7 @@
             <a-popconfirm
                 title="删除后不可恢复，确认删除?"
                 @confirm="onDelete(record)"
-                ok-text="确认" cancel-text="取消"
-            >
+                ok-text="确认" cancel-text="取消">
               <a style="color: red">删除</a>
             </a-popconfirm>
             <a @click="onEdit(record)">编辑</a>
@@ -43,9 +42,7 @@
         </a-form-item>
         <a-form-item label="乘客类型">
           <a-select v-model:value="passenger.type">
-            <a-select-option value="1">成人</a-select-option>
-            <a-select-option value="2">儿童</a-select-option>
-            <a-select-option value="3">学生</a-select-option>
+            <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.desc"/>
           </a-select>
         </a-form-item>
       </a-form>
@@ -102,6 +99,21 @@ export default defineComponent({
       createTime: undefined,
       updateTime: undefined,
     });
+
+    const PASSENGER_TYPE_ARRAY = ref([
+      {
+        code: '1',
+        desc: '成人',
+      },
+      {
+        code: '2',
+        desc: '儿童',
+      },
+      {
+        code: '3',
+        desc: '学生',
+      },
+    ]);
 
     /**
      * 新增乘客
@@ -162,7 +174,10 @@ export default defineComponent({
             notification.success({description: '修改成功'});
           visible.value = false;
         } else {
-          notification.error({description: responseVo.msg});
+          let msgs = responseVo.msg.split('\n');
+          for (const msg of msgs) {
+            notification.error({description: msg});
+          }
         }
       })
     };
@@ -196,7 +211,10 @@ export default defineComponent({
           if (byRefresh)
             notification.success({description: '刷新成功'});
         } else {
-          notification.error({description: responseVo.msg});
+          let msgs = responseVo.msg.split('\n');
+          for (const msg of msgs) {
+            notification.error({description: msg});
+          }
         }
       })
     };
@@ -230,6 +248,7 @@ export default defineComponent({
       passengers,
       pagination,
       columns,
+      PASSENGER_TYPE_ARRAY,
       onAdd,
       onEdit,
       onDelete,

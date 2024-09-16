@@ -101,7 +101,10 @@ export default defineComponent({
           countdown.value = 60;
           setupTimer(60); // 短信发送成功，启动60秒计时器
         } else {
-          notification.error({description: responseVo.msg});
+          let msgs = responseVo.msg.split('\n');
+          for (const msg of msgs) {
+            notification.error({description: msg});
+          }
           // 服务器异常，验证码发送失败，60秒倒计时，防止在服务器不正常的时候接收大量请求
           if (responseVo.code === 3) {
             setupTimer(60);
@@ -125,7 +128,10 @@ export default defineComponent({
           // 将token存储到前端
           store.commit("setMember", responseVo.data);
         } else {
-          notification.error({description: responseVo.msg});
+          let msgs = responseVo.msg.split('\n');
+          for (const msg of msgs) {
+            notification.error({description: msg});
+          }
         }
       })
     }
