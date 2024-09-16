@@ -61,6 +61,7 @@ export default defineComponent({
     const visible = ref(false);
     const passengers = ref([]);
     const loading = ref(false);
+    const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
 
     const pagination = ref({ // 框架规定的属性名，不能改属性名！
       total: 0, /*所有的总数，list.total*/
@@ -99,21 +100,6 @@ export default defineComponent({
       createTime: undefined,
       updateTime: undefined,
     });
-
-    const PASSENGER_TYPE_ARRAY = ref([
-      {
-        code: '1',
-        desc: '成人',
-      },
-      {
-        code: '2',
-        desc: '儿童',
-      },
-      {
-        code: '3',
-        desc: '学生',
-      },
-    ]);
 
     /**
      * 新增乘客
