@@ -15,10 +15,6 @@ const routes = [
         },
         children: [
             {
-                path: 'test',
-                component: () => import('../views/main/test.vue'),
-            },
-            {
                 path: 'welcome',
                 component: () => import('../views/main/welcome.vue'),
             },

@@ -1,16 +1,15 @@
 package garry.train.member.form;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
 public class PassengerSaveForm {
-    private Long id;
+    private Long id; // 新增不需要赋值，修改需要
 
-    private Long memberId;
+    private Long memberId; // 通过 Controller 赋值
 
     @NotBlank(message = "【姓名】不能为空")
     private String name;
@@ -24,7 +23,7 @@ public class PassengerSaveForm {
     @NotBlank(message = "【乘客类型】不能为空")
     private String type;
 
-    private Date createTime;
+    private Date createTime; // 新增需要赋值，修改不需要
 
-    private Date updateTime;
+    private Date updateTime; // 新增和修改均要赋值
 }

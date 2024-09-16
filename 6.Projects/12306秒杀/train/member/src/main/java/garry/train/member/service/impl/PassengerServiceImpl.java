@@ -6,7 +6,6 @@ import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.common.util.CommonUtil;
-import garry.train.common.util.HostHolder;
 import garry.train.common.vo.PageVo;
 import garry.train.member.form.PassengerQueryForm;
 import garry.train.member.form.PassengerSaveForm;
@@ -32,19 +31,24 @@ public class PassengerServiceImpl implements PassengerService {
     @Resource
     private PassengerMapper passengerMapper;
 
-    @Resource
-    private HostHolder hostHolder;
-
     @Override
     public void save(PassengerSaveForm form) {
         Passenger passenger = BeanUtil.copyProperties(form, Passenger.class);
-        // 对Id、memberId、createTime、updateTime 重新赋值
-        passenger.setId(CommonUtil.getSnowflakeNextId());
-        passenger.setMemberId(hostHolder.getMemberId());
         DateTime now = DateTime.now();
-        passenger.setCreateTime(now);
-        passenger.setUpdateTime(now);
-        passengerMapper.insert(passenger);
+
+        if (ObjectUtil.isNull(passenger.getId())) { // 新增
+            // 对Id、memberId、createTime、updateTime 重新赋值
+            passenger.setId(CommonUtil.getSnowflakeNextId());
+            passenger.setMemberId(form.getMemberId()); // 用户直接hostHolder获取memberId，管理员则是输入用户memberId
+            passenger.setCreateTime(now);
+            passenger.setUpdateTime(now);
+            passengerMapper.insert(passenger);
+            log.info("新增乘客：{}", passenger);
+        } else { // 更新
+            passenger.setUpdateTime(now);
+            passengerMapper.updateByPrimaryKeySelective(passenger);
+            log.info("修改乘客：{}", passenger);
+        }
     }
 
     @Override

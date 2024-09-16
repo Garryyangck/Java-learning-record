@@ -23,8 +23,12 @@ public class PassengerController {
     @Resource
     private HostHolder hostHolder;
 
+    /**
+     * 接收新增和修改乘车人的请求，如果 form.id = null，则为新增；反之位修改
+     */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseVo save(@Valid @RequestBody PassengerSaveForm form) {
+        form.setMemberId(hostHolder.getMemberId());
         passengerService.save(form);
         return ResponseVo.success();
     }

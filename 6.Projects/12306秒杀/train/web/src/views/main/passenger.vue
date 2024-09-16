@@ -10,26 +10,27 @@
              :pagination="pagination"
              @change="handleTableChange"
              :loading="loading">
-<!--      <template #bodyCell="{ column, record }">-->
-<!--        <template v-if="column.dataIndex === 'operation'">-->
-<!--          <a-space>-->
-<!--            <a-popconfirm-->
-<!--                title="删除后不可恢复，确认删除?"-->
-<!--                @confirm="onDelete(record)"-->
-<!--                ok-text="确认" cancel-text="取消">-->
-<!--              <a style="color: red">删除</a>-->
-<!--            </a-popconfirm>-->
-<!--            <a @click="onEdit(record)">编辑</a>-->
-<!--          </a-space>-->
-<!--        </template>-->
-<!--        <template v-else-if="column.dataIndex === 'type'">-->
-<!--        <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code">-->
-<!--          <span v-if="item.code === record.type">-->
-<!--            {{ item.desc }}-->
-<!--          </span>-->
-<!--        </span>-->
-<!--        </template>-->
-<!--      </template>-->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'operation'">
+          <a-space>
+            <a-popconfirm
+                title="删除后不可恢复，确认删除?"
+                @confirm="onDelete(record)"
+                ok-text="确认" cancel-text="取消"
+            >
+              <a style="color: red">删除</a>
+            </a-popconfirm>
+            <a @click="onEdit(record)">编辑</a>
+          </a-space>
+        </template>
+        <template v-else-if="column.dataIndex === 'type'">
+        <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code">
+          <span v-if="item.code === record.type">
+            {{ item.desc }}
+          </span>
+        </span>
+        </template>
+      </template>
     </a-table>
     <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
              ok-text="确认" cancel-text="取消">
@@ -103,11 +104,33 @@ export default defineComponent({
     });
 
     /**
-     * 点击“新增”
+     * 新增乘客
      */
     const onAdd = () => {
+      passenger.id = undefined; // 新增时必须手动设置 id = null，否则会被后端认为是修改请求
+      passenger.name = undefined; // 并且输入的三个值要清空，不然打开新增表单时，还有遗留的数据
+      passenger.idCard = undefined;
+      passenger.type = undefined;
       visible.value = true;
     };
+
+    /**
+     * 编辑乘客
+     */
+    const onEdit = (record) => {
+      passenger.id = record.id;
+      passenger.name = record.name;
+      passenger.idCard = record.idCard;
+      passenger.type = record.type;
+      visible.value = true;
+    }
+
+    /**
+     * 删除乘客
+     */
+    const onDelete = (record) => {
+
+    }
 
     /**
      * 处理插入请求
@@ -119,8 +142,11 @@ export default defineComponent({
           handleQuery({
             pageNum: 1,
             pageSize: pagination.value.pageSize,
-          })
-          notification.success({description: '保存成功'});
+          });
+          if (passenger.id === undefined)
+            notification.success({description: '新增成功'});
+          else
+            notification.success({description: '修改成功'});
           visible.value = false;
         } else {
           notification.error({description: responseVo.msg});
@@ -151,10 +177,9 @@ export default defineComponent({
         loading.value = false;
         let responseVo = response.data;
         if (responseVo.success) {
-          passengers.value = responseVo.data.list;
+          passengers.value = responseVo.data.list; // 直接将整个 PassengerQueryVo List 赋值给 passengers，因此元素含有 id 属性，可以用于 edit
           pagination.value.total = responseVo.data.total;
-          // 设置当前的页码，如果不设置的话，就只会设置第二页的内容，但是页码依然是第一页
-          pagination.value.current = responseVo.data.pageNum;
+          pagination.value.current = responseVo.data.pageNum; // 设置当前的页码，如果不设置的话，就只会设置第二页的内容，但是页码依然是第一页
           if (byRefresh)
             notification.success({description: '刷新成功'});
         } else {
@@ -193,6 +218,8 @@ export default defineComponent({
       pagination,
       columns,
       onAdd,
+      onEdit,
+      onDelete,
       handleOk,
       handleQuery,
       handleTableChange,
