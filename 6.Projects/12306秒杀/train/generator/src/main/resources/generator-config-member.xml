@@ -41,7 +41,7 @@
                              targetPackage="garry.train.member.mapper"
                              type="XMLMAPPER"/>
 
-<!--        <table tableName="member" domainObjectName="Member"/>-->
+        <table tableName="member" domainObjectName="Member"/>
 <!--        <table tableName="passenger" domainObjectName="Passenger"/>-->
 <!--        <table tableName="ticket" domainObjectName="Ticket"/>-->
     </context>
