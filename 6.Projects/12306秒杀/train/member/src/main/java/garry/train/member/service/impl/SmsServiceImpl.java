@@ -1,5 +1,6 @@
 package garry.train.member.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -64,7 +65,7 @@ public class SmsServiceImpl implements SmsService {
                 log.error("[短信服务] 发送短信失败，手机号码：{}，原因：{}，response = {}", phoneNumber, response.getMessage(), JSONObject.toJSON(response));
                 throw new BusinessException(ResponseEnum.MESSAGE_CODE_SEND_FAILED);
             } else {
-                log.info("[短信服务] 发送短信成功，response = {}", JSONObject.toJSON(response));
+                log.info("[短信服务] 发送短信成功，response = {}", JSONUtil.toJsonPrettyStr(response));
             }
 
         } catch (ClientException e) {

@@ -1,6 +1,8 @@
 package garry.train.generator.gen;
 
 import freemarker.template.TemplateException;
+import garry.train.generator.util.DBUtil;
+import garry.train.generator.util.Field;
 import garry.train.generator.util.FreemarkerUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 
 public class ServerGenerator {
 
@@ -36,6 +39,18 @@ public class ServerGenerator {
         Node domainObjectName = table.selectSingleNode("@domainObjectName");
         System.out.println("表名: " + tableName.getText() + " / " + "对象名: " + domainObjectName.getText());
 
+        // 获取数据库连接的参数
+        Node jdbcConnection = document.selectSingleNode("//jdbcConnection");
+        Node connectionURL = jdbcConnection.selectSingleNode("@connectionURL");
+        System.out.println("connectionURL = " + connectionURL.getText());
+        Node userId = jdbcConnection.selectSingleNode("@userId");
+        System.out.println("userId = " + userId.getText());
+        Node password = jdbcConnection.selectSingleNode("@password");
+        System.out.println("password = " + password.getText());
+        DBUtil.url = connectionURL.getText();
+        DBUtil.user = userId.getText();
+        DBUtil.password = password.getText();
+
         // 示例：表名 garry_test
         // GarryTest，类名
         String Domain = domainObjectName.getText();
@@ -43,6 +58,9 @@ public class ServerGenerator {
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
         // garry-test，url 名
         String do_main = tableName.getText().replace("_", "-");
+        // 表中文名
+        String tableNameCn = DBUtil.getTableComment(tableName.getText());
+        List<Field> fieldList = DBUtil.getColumnByTableName(tableName.getText());
 
         // 组装参数
         HashMap<String, Object> param = new HashMap<>();
@@ -53,8 +71,8 @@ public class ServerGenerator {
         System.out.println("组装参数: " + param);
 
         // 生成代码
-//        generate(Domain, param, "service");
-//        generate(Domain, param, "service-impl");
+        generate(Domain, param, "service");
+        generate(Domain, param, "service-impl");
         generate(Domain, param, "controller");
     }
 

@@ -1,6 +1,6 @@
 package garry.train.common.aspect;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -27,7 +27,7 @@ public class ExceptionHandlerAspect {
     @Around("exceptionHandlerPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object result = proceedingJoinPoint.proceed();
-        log.info("返回结果: {}", JSONObject.toJSONString(result));
+        log.info("返回结果: {}", JSONUtil.toJsonPrettyStr(result));
         log.info("------------- 产生异常结束 -------------\n");
         return result;
     }
