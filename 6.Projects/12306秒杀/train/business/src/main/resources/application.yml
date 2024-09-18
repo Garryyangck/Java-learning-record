@@ -6,8 +6,8 @@ server:
 spring:
   datasource: # Mybatis 数据库连接配置
     driver-class-name: com.mysql.jdbc.Driver  # driver-class-name：5.7版本为 com.mysql.jdbc.Driver；8.0版本为 com.mysql.cj.jdbc.Driver
-    username: root
-    password: 1234
+    username: garry_train_business
+    password: garry_train_business
     url: jdbc:mysql://localhost:3306/train_business?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
 
 mybatis:
