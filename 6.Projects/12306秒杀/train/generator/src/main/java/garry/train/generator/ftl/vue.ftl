@@ -89,14 +89,13 @@ export default defineComponent({
       </#list>
     });
     const ${domain}s = ref([]);
-    // 分页的三个属性名是固定的
     const pagination = ref({
       total: 0,
       current: 1,
       pageSize: 10,
     });
     let loading = ref(false);
-    const columns = [
+    const columns = ref([
     <#list fieldList as field>
       <#if field.name!="id" && field.nameHump!="createTime" && field.nameHump!="updateTime">
     {
@@ -112,7 +111,7 @@ export default defineComponent({
       dataIndex: 'operation'
     }
     </#if>
-    ];
+    ]);
 
     <#if !readOnly>
     const onAdd = () => {
@@ -130,7 +129,7 @@ export default defineComponent({
     };
 
     const onDelete = (record) => {
-      axios.delete("/${module}/admin/${do_main}/delete/" + record.id).then((response) => {
+      axios.delete("/${module}/${do_main}/delete/" + record.id).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
           handleQuery({
@@ -145,7 +144,7 @@ export default defineComponent({
     };
 
     const handleOk = () => {
-      axios.post("/${module}/admin/${do_main}/save", ${domain}).then((response) => {
+      axios.post("/${module}/${do_main}/save", ${domain}).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
           handleQuery({
@@ -177,7 +176,7 @@ export default defineComponent({
         byRefresh = true;
       }
       loading.value = true;
-      axios.get("/${module}/admin/${do_main}/query-list", {
+      axios.get("/${module}/${do_main}/query-list", {
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
@@ -200,7 +199,7 @@ export default defineComponent({
       })
     };
 
-    const handleTableChange = (page) => {
+    const handleTableChange = (pagination) => {
       // handleTableChange 自带一个 pagination 参数，含有 total，current，pageSize 三个属性
       handleQuery({
         pageNum: pagination.current,
@@ -212,29 +211,30 @@ export default defineComponent({
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
-      });
-      return {
-        <#list fieldList as field>
-        <#if field.enums>
-        ${field.enumsConst}_ARRAY,
-        </#if>
-        </#list>
-        visible,
-        ${domain},
-        ${domain}s,
-        pagination,
-        columns,
-        loading,
-        <#if !readOnly>
-        onAdd,
-        onEdit,
-        onDelete,
-        handleOk
-        </#if>
-        handleQuery,
-        handleTableChange,
-      };
+      })
     });
+
+    return {
+      <#list fieldList as field>
+      <#if field.enums>
+      ${field.enumsConst}_ARRAY,
+      </#if>
+      </#list>
+      visible,
+      ${domain},
+      ${domain}s,
+      pagination,
+      columns,
+      loading,
+      <#if !readOnly>
+      onAdd,
+      onEdit,
+      onDelete,
+      handleOk,
+      </#if>
+      handleQuery,
+      handleTableChange,
+    };
   },
 });
 </script>

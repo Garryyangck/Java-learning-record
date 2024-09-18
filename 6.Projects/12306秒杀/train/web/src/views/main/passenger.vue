@@ -1,8 +1,9 @@
-<!--suppress JSCheckFunctionSignatures -->
 <template>
   <p>
-    <a-button type="primary" @click="handleQuery()">刷新</a-button> &nbsp;
-    <a-button type="primary" @click="onAdd">新增</a-button>
+    <a-space>
+      <a-button type="primary" @click="handleQuery()">刷新</a-button>
+      <a-button type="primary" @click="onAdd">新增</a-button>
+    </a-space>
   </p>
   <a-table :dataSource="passengers"
            :columns="columns"
@@ -24,7 +25,7 @@
       <template v-else-if="column.dataIndex === 'type'">
         <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code">
           <span v-if="item.code === record.type">
-            {{ item.desc }}
+            {{item.desc}}
           </span>
         </span>
       </template>
@@ -32,16 +33,18 @@
   </a-table>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
-    <a-form :label-col="{span: 4}" :wrapper-col="{span: 18}">
+    <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{span: 18}">
       <a-form-item label="姓名">
-        <a-input v-model:value="passenger.name"/>
+        <a-input v-model:value="passenger.name" />
       </a-form-item>
-      <a-form-item label="身份证号">
-        <a-input v-model:value="passenger.idCard"/>
+      <a-form-item label="身份证">
+        <a-input v-model:value="passenger.idCard" />
       </a-form-item>
-      <a-form-item label="乘客类型">
+      <a-form-item label="旅客类型">
         <a-select v-model:value="passenger.type">
-          <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">{{item.desc}}</a-select-option>
+          <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">
+            {{item.desc}}
+          </a-select-option>
         </a-select>
       </a-form-item>
     </a-form>
@@ -54,7 +57,7 @@ import axios from "axios";
 import {notification} from "ant-design-vue";
 
 export default defineComponent({
-  name: 'passenger-view',
+  name: "passenger-view",
   setup() {
     const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
     const visible = ref(false);
@@ -68,62 +71,58 @@ export default defineComponent({
       updateTime: undefined,
     });
     const passengers = ref([]);
-    const pagination = ref({ // 框架规定的属性名，不能改属性名！
+    const pagination = ref({
       total: 0,
       current: 1,
       pageSize: 10,
     });
-    const loading = ref(false);
+    let loading = ref(false);
     const columns = ref([
-      {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '身份证号',
-        dataIndex: 'idCard',
-        key: 'idCard',
-      },
-      {
-        title: '乘客类型',
-        dataIndex: 'type',
-        key: 'type',
-      },
-      {
-        title: '操作',
-        dataIndex: 'operation',
-      }
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '身份证',
+      dataIndex: 'idCard',
+      key: 'idCard',
+    },
+    {
+      title: '旅客类型',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: '操作',
+      dataIndex: 'operation'
+    }
     ]);
 
-    /**
-     * 新增乘客
-     */
     const onAdd = () => {
-      passenger.id = undefined; // 新增时必须手动设置 id = null，否则会被后端认为是修改请求
-      passenger.name = undefined; // 并且输入的三个值要清空，不然打开新增表单时，还有遗留的数据
+      passenger.id = undefined;
+      passenger.memberId = undefined;
+      passenger.name = undefined;
       passenger.idCard = undefined;
       passenger.type = undefined;
+      passenger.createTime = undefined;
+      passenger.updateTime = undefined;
       visible.value = true;
     };
 
-    /**
-     * 编辑乘客
-     */
     const onEdit = (record) => {
-      console.log('record = ', record);
       passenger.id = record.id;
+      passenger.memberId = record.memberId;
       passenger.name = record.name;
       passenger.idCard = record.idCard;
       passenger.type = record.type;
+      passenger.createTime = record.createTime;
+      passenger.updateTime = record.updateTime;
       visible.value = true;
     };
 
-    /**
-     * 删除乘客
-     */
     const onDelete = (record) => {
-      axios.delete('/member/passenger/delete/' + record.id).then(response => {
+      axios.delete("/member/passenger/delete/" + record.id).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
           handleQuery({
@@ -137,11 +136,8 @@ export default defineComponent({
       })
     };
 
-    /**
-     * 处理插入请求
-     */
     const handleOk = () => {
-      axios.post('member/passenger/save', passenger).then(response => {
+      axios.post("/member/passenger/save", passenger).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
           handleQuery({
@@ -162,10 +158,6 @@ export default defineComponent({
       })
     };
 
-    /**
-     * 处理查询请求
-     * @param param {pageNum, pageSize}
-     */
     const handleQuery = (param) => {
       let byRefresh = false;
       if (!param) {
@@ -176,18 +168,18 @@ export default defineComponent({
         byRefresh = true;
       }
       loading.value = true;
-      axios.get('member/passenger/query-list', {
+      axios.get("/member/passenger/query-list", {
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
         }
-      }).then(response => {
+      }).then((response) => {
         loading.value = false;
         let responseVo = response.data;
         if (responseVo.success) {
-          passengers.value = responseVo.data.list; // 直接将整个 PassengerQueryVo List 赋值给 passengers，因此元素含有 id 属性，可以用于 edit
+          passengers.value = responseVo.data.list;
           pagination.value.total = responseVo.data.total;
-          pagination.value.current = responseVo.data.pageNum; // 设置当前的页码，如果不设置的话，就只会设置第二页的内容，但是页码依然是第一页
+          pagination.value.current = responseVo.data.pageNum;
           if (byRefresh)
             notification.success({description: '刷新成功'});
         } else {
@@ -199,10 +191,6 @@ export default defineComponent({
       })
     };
 
-    /**
-     * 表格发生改变的回调函数，点击页码也算改变
-     * @param pagination
-     */
     const handleTableChange = (pagination) => {
       // handleTableChange 自带一个 pagination 参数，含有 total，current，pageSize 三个属性
       handleQuery({
@@ -211,9 +199,6 @@ export default defineComponent({
       });
     };
 
-    /**
-     * 页面初始化的触发函数
-     */
     onMounted(() => {
       handleQuery({
         pageNum: 1,

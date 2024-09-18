@@ -82,8 +82,7 @@ public class ServerGenerator {
             param.put("typeSet", typeSet);
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
-            // 生成后端代码
-//            generateBackend(Domain, param);
+            generateVue(do_main, param, false);
         }
     }
 
