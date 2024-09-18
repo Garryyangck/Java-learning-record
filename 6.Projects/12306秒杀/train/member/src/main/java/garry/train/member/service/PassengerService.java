@@ -7,7 +7,7 @@ import garry.train.member.vo.PassengerQueryVo;
 
 /**
  * @author Garry
- * 2024-09-18 11:35
+ * 2024-09-18 11:51
  */
 public interface PassengerService {
     /**

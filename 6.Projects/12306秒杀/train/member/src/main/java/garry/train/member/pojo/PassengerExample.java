@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed", "unused", "SizeReplaceableByIsEmpty", "UnnecessaryLocalVariable", "FieldMayBeFinal", "DuplicatedCode"})
 public class PassengerExample {
     protected String orderByClause;
 

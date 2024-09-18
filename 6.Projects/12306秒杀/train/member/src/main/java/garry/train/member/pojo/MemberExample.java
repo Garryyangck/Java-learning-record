@@ -1,11 +1,8 @@
 package garry.train.member.pojo;
 
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed", "unused", "SizeReplaceableByIsEmpty", "UnnecessaryLocalVariable", "FieldMayBeFinal", "DuplicatedCode"})
 public class MemberExample {
     protected String orderByClause;
 

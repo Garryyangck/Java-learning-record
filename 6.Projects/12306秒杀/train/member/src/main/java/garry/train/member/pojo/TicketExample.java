@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-@SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed", "unused", "SizeReplaceableByIsEmpty", "UnnecessaryLocalVariable", "FieldMayBeFinal", "DuplicatedCode", "SameParameterValue", "WhileLoopReplaceableByForEach"})
 public class TicketExample {
     protected String orderByClause;
 
