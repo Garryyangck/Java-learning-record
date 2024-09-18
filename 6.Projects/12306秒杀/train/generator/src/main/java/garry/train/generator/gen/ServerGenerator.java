@@ -41,7 +41,7 @@ public class ServerGenerator {
         // 获取 tableName 和 domainObjectName
         Document document = new SAXReader().read("generator/" + generatorPath);
         Node table = document.selectSingleNode("//table");
-        System.out.println("table = " + table.getText());
+        System.out.println("table = " + table);
         Node tableName = table.selectSingleNode("@tableName");
         Node domainObjectName = table.selectSingleNode("@domainObjectName");
         System.out.println("tableName: " + tableName.getText() + " / " + "domainObjectName: " + domainObjectName.getText());
