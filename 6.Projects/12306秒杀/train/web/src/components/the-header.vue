@@ -20,7 +20,7 @@
       </a-menu-item>
       <a-menu-item key="/passenger">
         <router-link to="/passenger">
-          <user-outlined/> &nbsp; 乘车
+          <user-outlined/> &nbsp; 乘车人管理
         </router-link>
       </a-menu-item>
     </a-menu>
