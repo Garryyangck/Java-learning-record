@@ -23,6 +23,14 @@ public enum PassengerTypeEnum {
         this.desc = desc;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
     public static List<HashMap<String, String>> getEnumList() {
         List<HashMap<String, String>> list = new ArrayList<>();
         for (PassengerTypeEnum anEnum : EnumSet.allOf(PassengerTypeEnum.class)) {

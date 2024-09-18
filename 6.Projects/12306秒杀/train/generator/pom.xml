@@ -19,6 +19,11 @@
     </properties>
 
     <dependencies>
+        <!--引入common的所有依赖，主要为了拿到枚举类-->
+        <dependency>
+            <groupId>garry</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
         <!--模板引擎 freemarker-->
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -48,6 +53,12 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>garry</groupId>
+            <artifactId>member</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
