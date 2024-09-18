@@ -25,9 +25,9 @@ public class ServerGenerator {
 
     private static String serverPath = "[module]/src/main/java/garry/train/[module]/";
 
-    private static String module = "";
+    private static String vuePath = "web/src/views/main/";
 
-    private static boolean readOnly = false;
+    private static String module = "";
 
     public static void main(String[] args) throws Exception {
         // 获取 mybatis-generator 配置文件的路径
@@ -82,14 +82,8 @@ public class ServerGenerator {
             param.put("typeSet", typeSet);
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
-            // 生成代码
-            generate(Domain, param, "pojo/", "pojo");
-//            generate(Domain, param, "form/", "save-form");
-//            generate(Domain, param, "form/", "query-form");
-//            generate(Domain, param, "vo/", "query-vo");
-//            generate(Domain, param, "service/", "service");
-//            generate(Domain, param, "service/impl/", "service-impl");
-//            generate(Domain, param, "controller/", "controller");
+            // 生成后端代码
+//            generateBackend(Domain, param);
         }
     }
 
@@ -118,6 +112,33 @@ public class ServerGenerator {
         System.out.println("fullPath = " + fullPath);
         FreemarkerUtil.generator(fullPath, param);
         System.out.println("------------- generate 结束 -------------\n");
+    }
+
+    /**
+     * 生成后端代码
+     */
+    private static void generateBackend(String Domain, HashMap<String, Object> param) throws IOException, TemplateException {
+        generate(Domain, param, "pojo/", "pojo");
+        generate(Domain, param, "form/", "save-form");
+        generate(Domain, param, "form/", "query-form");
+        generate(Domain, param, "vo/", "query-vo");
+        generate(Domain, param, "service/", "service");
+        generate(Domain, param, "service/impl/", "service-impl");
+        generate(Domain, param, "controller/", "controller");
+    }
+
+    /**
+     * 专门生成前端 vue 页面的生成器
+     */
+    private static void generateVue(String do_main, HashMap<String, Object> param, Boolean readOnly) throws IOException, TemplateException {
+        System.out.println("\n------------- generateVue 开始 -------------");
+        param.put("readOnly", readOnly);
+        FreemarkerUtil.initConfig("vue.ftl");
+        new File(vuePath).mkdirs();
+        String fullPath = vuePath + do_main + ".vue";
+        System.out.println("fullPath = " + fullPath);
+        FreemarkerUtil.generator(fullPath, param);
+        System.out.println("------------- generateVue 结束 -------------\n");
     }
 
     /**

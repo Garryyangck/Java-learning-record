@@ -1,53 +1,51 @@
 <!--suppress JSCheckFunctionSignatures -->
 <template>
-  <div>
-    <p>
-      <a-button type="primary" @click="handleQuery()">刷新</a-button> &nbsp;
-      <a-button type="primary" @click="onAdd">新增</a-button>
-    </p>
-    <a-table :dataSource="passengers"
-             :columns="columns"
-             :pagination="pagination"
-             @change="handleTableChange"
-             :loading="loading">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'operation'">
-          <a-space>
-            <a-popconfirm
-                title="删除后不可恢复，确认删除?"
-                @confirm="onDelete(record)"
-                ok-text="确认" cancel-text="取消">
-              <a style="color: red">删除</a>
-            </a-popconfirm>
-            <a @click="onEdit(record)">编辑</a>
-          </a-space>
-        </template>
-        <template v-else-if="column.dataIndex === 'type'">
+  <p>
+    <a-button type="primary" @click="handleQuery()">刷新</a-button> &nbsp;
+    <a-button type="primary" @click="onAdd">新增</a-button>
+  </p>
+  <a-table :dataSource="passengers"
+           :columns="columns"
+           :pagination="pagination"
+           @change="handleTableChange"
+           :loading="loading">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.dataIndex === 'operation'">
+        <a-space>
+          <a-popconfirm
+              title="删除后不可恢复，确认删除?"
+              @confirm="onDelete(record)"
+              ok-text="确认" cancel-text="取消">
+            <a style="color: red">删除</a>
+          </a-popconfirm>
+          <a @click="onEdit(record)">编辑</a>
+        </a-space>
+      </template>
+      <template v-else-if="column.dataIndex === 'type'">
         <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code">
           <span v-if="item.code === record.type">
             {{ item.desc }}
           </span>
         </span>
-        </template>
       </template>
-    </a-table>
-    <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
-             ok-text="确认" cancel-text="取消">
-      <a-form :label-col="{span: 4}" :wrapper-col="{span: 14}">
-        <a-form-item label="姓名">
-          <a-input v-model:value="passenger.name"/>
-        </a-form-item>
-        <a-form-item label="身份证号">
-          <a-input v-model:value="passenger.idCard"/>
-        </a-form-item>
-        <a-form-item label="乘客类型">
-          <a-select v-model:value="passenger.type">
-            <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">{{item.desc}}</a-select-option>
-          </a-select>
-        </a-form-item>
-      </a-form>
-    </a-modal>
-  </div>
+    </template>
+  </a-table>
+  <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
+           ok-text="确认" cancel-text="取消">
+    <a-form :label-col="{span: 4}" :wrapper-col="{span: 18}">
+      <a-form-item label="姓名">
+        <a-input v-model:value="passenger.name"/>
+      </a-form-item>
+      <a-form-item label="身份证号">
+        <a-input v-model:value="passenger.idCard"/>
+      </a-form-item>
+      <a-form-item label="乘客类型">
+        <a-select v-model:value="passenger.type">
+          <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">{{item.desc}}</a-select-option>
+        </a-select>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script>
@@ -58,17 +56,24 @@ import {notification} from "ant-design-vue";
 export default defineComponent({
   name: 'passenger-view',
   setup() {
-    const visible = ref(false);
-    const passengers = ref([]);
-    const loading = ref(false);
     const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
-
+    const visible = ref(false);
+    const passenger = reactive({
+      id: undefined,
+      memberId: undefined,
+      name: undefined,
+      idCard: undefined,
+      type: undefined,
+      createTime: undefined,
+      updateTime: undefined,
+    });
+    const passengers = ref([]);
     const pagination = ref({ // 框架规定的属性名，不能改属性名！
-      total: 0, /*所有的总数，list.total*/
-      current: 1, /*list.pageNum*/
+      total: 0,
+      current: 1,
       pageSize: 10,
     });
-
+    const loading = ref(false);
     const columns = ref([
       {
         title: '姓名',
@@ -90,16 +95,6 @@ export default defineComponent({
         dataIndex: 'operation',
       }
     ]);
-
-    const passenger = reactive({
-      id: undefined,
-      memberId: undefined,
-      name: undefined,
-      idCard: undefined,
-      type: undefined,
-      createTime: undefined,
-      updateTime: undefined,
-    });
 
     /**
      * 新增乘客
@@ -128,7 +123,7 @@ export default defineComponent({
      * 删除乘客
      */
     const onDelete = (record) => {
-      axios.delete('member/passenger/delete/' + record.id).then(response => {
+      axios.delete('/member/passenger/delete/' + record.id).then(response => {
         let responseVo = response.data;
         if (responseVo.success) {
           handleQuery({
@@ -136,7 +131,6 @@ export default defineComponent({
             pageSize: pagination.value.pageSize,
           });
           notification.success({description: '删除成功'});
-          visible.value = false;
         } else {
           notification.error({description: responseVo.msg});
         }
@@ -228,13 +222,13 @@ export default defineComponent({
     });
 
     return {
+      PASSENGER_TYPE_ARRAY,
       visible,
-      loading,
       passenger,
       passengers,
       pagination,
       columns,
-      PASSENGER_TYPE_ARRAY,
+      loading,
       onAdd,
       onEdit,
       onDelete,
