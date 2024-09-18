@@ -167,4 +167,23 @@ public class DBUtil {
             return "String";
         }
     }
+
+    public static void main(String[] args) throws Exception {
+        DBUtil.url = "jdbc:mysql://localhost:3306/train_business?characterEncoding=UTF-8&amp;autoReconnect=true&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai";
+        DBUtil.user = "root";
+        DBUtil.password = "1234";
+        Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("show tables");
+        if (rs != null) {
+            while (rs.next()) {
+                String tableName = rs.getString("Tables_in_train_business");
+                String str = "<table tableName=\"%s\" domainObjectName=\"%s\"/>".formatted(tableName, DBUtil.lineToBigHump(tableName));
+                System.out.println(str);
+            }
+        }
+        rs.close();
+        stmt.close();
+        conn.close();
+    }
 }
