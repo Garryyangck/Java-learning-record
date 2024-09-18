@@ -84,12 +84,12 @@ public class ServerGenerator {
 
             // 生成代码
             generate(Domain, param, "pojo/", "pojo");
-            generate(Domain, param, "form/", "save-form");
-            generate(Domain, param, "form/", "query-form");
-            generate(Domain, param, "vo/", "query-vo");
-            generate(Domain, param, "service/", "service");
-            generate(Domain, param, "service/impl/", "service-impl");
-            generate(Domain, param, "controller/", "controller");
+//            generate(Domain, param, "form/", "save-form");
+//            generate(Domain, param, "form/", "query-form");
+//            generate(Domain, param, "vo/", "query-vo");
+//            generate(Domain, param, "service/", "service");
+//            generate(Domain, param, "service/impl/", "service-impl");
+//            generate(Domain, param, "controller/", "controller");
         }
     }
 

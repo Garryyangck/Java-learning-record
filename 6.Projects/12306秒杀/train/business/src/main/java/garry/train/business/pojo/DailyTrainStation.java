@@ -5,9 +5,9 @@ import java.util.Date;
 import java.math.BigDecimal;
 
 /**
-* @author Garry
-* 2024-09-18 15:52
-*/
+ * @author Garry
+ * 2024-09-18 16:29
+ */
 @Data
 public class DailyTrainStation {
 

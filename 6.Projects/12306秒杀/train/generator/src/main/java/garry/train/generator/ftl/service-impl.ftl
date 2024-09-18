@@ -24,7 +24,6 @@ import java.util.List;
  * @author Garry
  * ${DateTime}
  */
-
 @Slf4j
 @Service
 public class ${Domain}ServiceImpl implements ${Domain}Service {
