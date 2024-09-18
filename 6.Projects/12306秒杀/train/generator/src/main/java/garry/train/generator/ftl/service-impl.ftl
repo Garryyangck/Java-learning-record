@@ -36,9 +36,9 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
         DateTime now = DateTime.now();
 
         if (ObjectUtil.isNull(${domain}.getId())) { // 插入
-            // 对Id、memberId、createTime、updateTime 重新赋值
+            // 对Id、createTime、updateTime 重新赋值
+            // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             ${domain}.setId(CommonUtil.getSnowflakeNextId());
-            ${domain}.setMemberId(form.getMemberId()); // 用户在 Controller 直接 hostHolder 获取 memberId；管理员则是输入用户 memberId
             ${domain}.setCreateTime(now);
             ${domain}.setUpdateTime(now);
             ${domain}Mapper.insert(${domain});
@@ -52,15 +52,14 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
 
     @Override
     public PageVo<${Domain}QueryVo> queryList(${Domain}QueryForm form) {
-        Long memberId = form.getMemberId();
         ${Domain}Example ${domain}Example = new ${Domain}Example();
         ${domain}Example.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
         ${Domain}Example.Criteria criteria = ${domain}Example.createCriteria();
-
-        // 用户只能查自己 memberId 下的${tableNameCn}
-        if (ObjectUtil.isNotNull(memberId)) {
-            criteria.andMemberIdEqualTo(memberId);
-        }
+        // 这里自定义一些过滤的条件，比如:
+//        // 用户只能查自己 memberId 下的${tableNameCn}
+//        if (ObjectUtil.isNotNull()) {
+//            criteria.andMemberIdEqualTo(memberId);
+//        }
 
         // 启动分页
         PageHelper.startPage(form.getPageNum(), form.getPageSize());
