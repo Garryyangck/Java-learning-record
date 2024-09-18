@@ -1,5 +1,6 @@
 package garry.train.member.form;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -23,7 +24,9 @@ public class PassengerSaveForm {
     @NotBlank(message = "【乘客类型】不能为空")
     private String type;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime; // 新增需要赋值，修改不需要
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime; // 新增和修改均要赋值
 }

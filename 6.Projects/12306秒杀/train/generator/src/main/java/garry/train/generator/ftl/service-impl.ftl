@@ -1,4 +1,4 @@
-package garry.train.member.service.impl;
+package garry.train.${module}.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
@@ -7,13 +7,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
-import garry.train.member.form.${Domain}QueryForm;
-import garry.train.member.form.${Domain}SaveForm;
-import garry.train.member.mapper.${Domain}Mapper;
-import garry.train.member.pojo.${Domain};
-import garry.train.member.pojo.${Domain}Example;
-import garry.train.member.service.${Domain}Service;
-import garry.train.member.vo.${Domain}QueryVo;
+import garry.train.${module}.form.${Domain}QueryForm;
+import garry.train.${module}.form.${Domain}SaveForm;
+import garry.train.${module}.mapper.${Domain}Mapper;
+import garry.train.${module}.pojo.${Domain};
+import garry.train.${module}.pojo.${Domain}Example;
+import garry.train.${module}.service.${Domain}Service;
+import garry.train.${module}.vo.${Domain}QueryVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,18 +36,18 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
         ${Domain} ${domain} = BeanUtil.copyProperties(form, ${Domain}.class);
         DateTime now = DateTime.now();
 
-        if (ObjectUtil.isNull(${domain}.getId())) { // 新增
+        if (ObjectUtil.isNull(${domain}.getId())) { // 插入
             // 对Id、memberId、createTime、updateTime 重新赋值
             ${domain}.setId(CommonUtil.getSnowflakeNextId());
-            ${domain}.setMemberId(form.getMemberId()); // 用户直接hostHolder获取memberId，管理员则是输入用户memberId
+            ${domain}.setMemberId(form.getMemberId()); // 用户在 Controller 直接 hostHolder 获取 memberId；管理员则是输入用户 memberId
             ${domain}.setCreateTime(now);
             ${domain}.setUpdateTime(now);
             ${domain}Mapper.insert(${domain});
-            log.info("新增乘客：{}", ${domain});
-        } else { // 更新
+            log.info("插入${tableNameCn}：{}", ${domain});
+        } else { // 修改
             ${domain}.setUpdateTime(now);
             ${domain}Mapper.updateByPrimaryKeySelective(${domain});
-            log.info("修改乘客：{}", ${domain});
+            log.info("修改${tableNameCn}：{}", ${domain});
         }
     }
 
@@ -55,10 +55,10 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
     public PageVo<${Domain}QueryVo> queryList(${Domain}QueryForm form) {
         Long memberId = form.getMemberId();
         ${Domain}Example ${domain}Example = new ${Domain}Example();
-        ${domain}Example.setOrderByClause("update_time desc"); // 最新操作的乘客最上面，必须是数据库原始的字段名
+        ${domain}Example.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
         ${Domain}Example.Criteria criteria = ${domain}Example.createCriteria();
 
-        // 只有用户，才只能查自己 memberId 下的乘客
+        // 用户只能查自己 memberId 下的${tableNameCn}
         if (ObjectUtil.isNotNull(memberId)) {
             criteria.andMemberIdEqualTo(memberId);
         }
@@ -77,7 +77,7 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
         // 获取 PageVo 对象
         PageVo<${Domain}QueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
         vo.setList(voList);
-        vo.setMsg("queryList success");
+        vo.setMsg("查询${tableNameCn}列表成功");
         return vo;
     }
 

@@ -1,9 +1,9 @@
-package garry.train.member.service;
+package garry.train.${module}.service;
 
 import garry.train.common.vo.PageVo;
-import garry.train.member.form.${Domain}QueryForm;
-import garry.train.member.form.${Domain}SaveForm;
-import garry.train.member.vo.${Domain}QueryVo;
+import garry.train.${module}.form.${Domain}QueryForm;
+import garry.train.${module}.form.${Domain}SaveForm;
+import garry.train.${module}.vo.${Domain}QueryVo;
 
 /**
  * @author Garry
@@ -11,18 +11,20 @@ import garry.train.member.vo.${Domain}QueryVo;
  */
 public interface ${Domain}Service {
     /**
-     * 存储新乘客
+     * 插入新${tableNameCn}，或修改已有的${tableNameCn}
+     * 如果 form.id = null，则为插入；
+     * 如果 form.id != null，则为修改
      */
     void save(${Domain}SaveForm form);
 
     /**
-     * 根据 memberId 查询所有的乘客
-     * 如果是管理员查询，则 form.memberId = null
+     * 根据 memberId 查询所有的${tableNameCn}
+     * 如果 form.memberId = null，则为管理员查询
      */
     PageVo<${Domain}QueryVo> queryList(${Domain}QueryForm form);
 
     /**
-     * 根据 id 删除乘客
+     * 根据 id(主键) 删除${tableNameCn}
      */
     void delete(Long id);
 }

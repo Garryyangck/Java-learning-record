@@ -1,5 +1,6 @@
 package garry.train.generator.gen;
 
+import cn.hutool.json.JSONUtil;
 import freemarker.template.TemplateException;
 import garry.train.generator.util.DBUtil;
 import garry.train.generator.util.Field;
@@ -14,7 +15,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ServerGenerator {
 
@@ -22,12 +25,16 @@ public class ServerGenerator {
 
     private static String serverPath = "[module]/src/main/java/garry/train/[module]/";
 
+    private static String module = "";
+
+    private static boolean readOnly = false;
+
     public static void main(String[] args) throws Exception {
         // 获取 mybatis-generator 配置文件的路径
         String generatorPath = getGeneratorPath();
 
         // 获取 module，替换 serverPath 中的 [module]
-        String module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
+        module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
         System.out.println("module = " + module);
         serverPath = serverPath.replace("[module]", module);
 
@@ -61,43 +68,50 @@ public class ServerGenerator {
         // 表中文名
         String tableNameCn = DBUtil.getTableComment(tableName.getText());
         List<Field> fieldList = DBUtil.getColumnByTableName(tableName.getText());
+        Set<String> typeSet = getJavaTypes(fieldList);
 
         // 组装参数
         HashMap<String, Object> param = new HashMap<>();
+        param.put("module", module);
         param.put("Domain", Domain);
         param.put("domain", domain);
         param.put("do_main", do_main);
         param.put("DateTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        System.out.println("组装参数: " + param);
+        param.put("tableNameCn", tableNameCn);
+        param.put("fieldList", fieldList);
+        param.put("typeSet", typeSet);
+        System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
         // 生成代码
-        generate(Domain, param, "service");
-        generate(Domain, param, "service-impl");
-        generate(Domain, param, "controller");
+        generate(Domain, param, "form/", "save-form");
+        generate(Domain, param, "form/", "query-form");
+        generate(Domain, param, "vo/", "query-vo");
+        generate(Domain, param, "service/", "service");
+        generate(Domain, param, "service/impl/", "service-impl");
+        generate(Domain, param, "controller/", "controller");
     }
 
     /**
      * 执行代码生成
      *
-     * @param Domain pojo 类名，e.g Passenger
-     * @param param  参数哈希表
-     * @param target ftl模板名，e.g service-impl 或 service
+     * @param Domain      pojo 类名，Passenger
+     * @param param       额外携带的参数
+     * @param packageName 包名，service/impl/，vo/，form/
+     * @param target      freemarker 模板名，service-impl，save-vo，save-form
      */
-    private static void generate(String Domain, HashMap<String, Object> param, String target) throws IOException, TemplateException {
-        FreemarkerUtil.initConfig(target + ".ftl");
-        String[] strings = target.split("-");
-        StringBuilder suffixClass = new StringBuilder(); // 类名的后缀，如 Service, ServiceImpl
-        StringBuilder suffixPath = new StringBuilder(); // 路径的后缀，如 service/, service/impl/
+    private static void generate(String Domain, HashMap<String, Object> param, String packageName, String target) throws IOException, TemplateException {
+        FreemarkerUtil.initConfig(target + ".ftl"); // service-impl.ftl
+        String[] strings = target.split("-"); // ["service", "impl"]
+        StringBuilder suffixClass = new StringBuilder(); // 类名的后缀，ServiceImpl
         for (String str : strings) {
-            suffixPath.append(str).append("/");
             suffixClass.append(str.substring(0, 1).toUpperCase()).append(str.substring(1));
         }
-        String toPath = serverPath + suffixPath;
+        String toPath = serverPath + packageName; // [module]/src/main/java/garry/train/[module]/service/impl/
         System.out.println("toPath = " + toPath);
         new File(toPath).mkdirs(); // 生成 toPath 路径，避免生成时还没有这个路径
-        String fullClassName = Domain + suffixClass + ".java";
+        String fullClassName = Domain + suffixClass + ".java"; // PassengerServiceImpl.java
         System.out.println("fullClassName = " + fullClassName);
-        String fullPath = toPath + fullClassName;
+        String fullPath = toPath + fullClassName; // [module]/src/main/java/garry/train/[module]/service/impl/PassengerServiceImpl.java
         System.out.println("fullPath = " + fullPath);
         FreemarkerUtil.generator(fullPath, param);
     }
@@ -123,5 +137,17 @@ public class ServerGenerator {
         Node node = document.selectSingleNode("//pom:configurationFile");
         System.out.println("generatorPath = " + node.getText());
         return node.getText();
+    }
+
+    /**
+     * 获取所有的Java类型，使用Set去重
+     */
+    private static Set<String> getJavaTypes(List<Field> fieldList) {
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < fieldList.size(); i++) {
+            Field field = fieldList.get(i);
+            set.add(field.getJavaType());
+        }
+        return set;
     }
 }
