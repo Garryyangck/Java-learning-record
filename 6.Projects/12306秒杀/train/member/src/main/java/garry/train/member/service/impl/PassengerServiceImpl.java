@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * @author Garry
- * 2024-09-13 19:14
+ * 2024-09-18 11:35
  */
 
 @Slf4j
@@ -36,18 +36,18 @@ public class PassengerServiceImpl implements PassengerService {
         Passenger passenger = BeanUtil.copyProperties(form, Passenger.class);
         DateTime now = DateTime.now();
 
-        if (ObjectUtil.isNull(passenger.getId())) { // 新增
+        if (ObjectUtil.isNull(passenger.getId())) { // 插入
             // 对Id、memberId、createTime、updateTime 重新赋值
             passenger.setId(CommonUtil.getSnowflakeNextId());
-            passenger.setMemberId(form.getMemberId()); // 用户直接hostHolder获取memberId，管理员则是输入用户memberId
+            passenger.setMemberId(form.getMemberId()); // 用户在 Controller 直接 hostHolder 获取 memberId；管理员则是输入用户 memberId
             passenger.setCreateTime(now);
             passenger.setUpdateTime(now);
             passengerMapper.insert(passenger);
-            log.info("新增乘客：{}", passenger);
-        } else { // 更新
+            log.info("插入乘车人：{}", passenger);
+        } else { // 修改
             passenger.setUpdateTime(now);
             passengerMapper.updateByPrimaryKeySelective(passenger);
-            log.info("修改乘客：{}", passenger);
+            log.info("修改乘车人：{}", passenger);
         }
     }
 
@@ -55,10 +55,10 @@ public class PassengerServiceImpl implements PassengerService {
     public PageVo<PassengerQueryVo> queryList(PassengerQueryForm form) {
         Long memberId = form.getMemberId();
         PassengerExample passengerExample = new PassengerExample();
-        passengerExample.setOrderByClause("update_time desc"); // 最新操作的乘客最上面，必须是数据库原始的字段名
+        passengerExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
 
-        // 只有用户，才只能查自己 memberId 下的乘客
+        // 用户只能查自己 memberId 下的乘车人
         if (ObjectUtil.isNotNull(memberId)) {
             criteria.andMemberIdEqualTo(memberId);
         }
@@ -77,7 +77,7 @@ public class PassengerServiceImpl implements PassengerService {
         // 获取 PageVo 对象
         PageVo<PassengerQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
         vo.setList(voList);
-        vo.setMsg("queryList success");
+        vo.setMsg("查询乘车人列表成功");
         return vo;
     }
 

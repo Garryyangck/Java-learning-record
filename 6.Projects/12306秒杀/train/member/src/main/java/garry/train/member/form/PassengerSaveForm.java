@@ -6,27 +6,51 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+* @author Garry
+* 2024-09-18 11:35
+*/
 @Data
 public class PassengerSaveForm {
-    private Long id; // 新增不需要赋值，修改需要
 
-    private Long memberId; // 通过 Controller 赋值
+    /**
+     * id
+     */
+    private Long id;
 
+    /**
+     * 会员id
+     */
+    private Long memberId;
+
+    /**
+     * 姓名
+     */
     @NotBlank(message = "【姓名】不能为空")
     private String name;
 
-    @NotBlank(message = "【身份证号】不能为空")
+    /**
+     * 身份证
+     */
+    @NotBlank(message = "【身份证】不能为空")
     private String idCard;
 
     /**
-     * 乘客的类型，和 PassengerTypeEnum 相关联
+     * 旅客类型|枚举[PassengerTypeEnum]
      */
-    @NotBlank(message = "【乘客类型】不能为空")
+    @NotBlank(message = "【旅客类型】不能为空")
     private String type;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createTime; // 新增需要赋值，修改不需要
+    /**
+     * 新增时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date createTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date updateTime; // 新增和修改均要赋值
+    /**
+     * 修改时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date updateTime;
+
 }

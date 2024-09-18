@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
 * @author Garry
-* 2024-09-17 20:44
+* 2024-09-18 11:35
 */
 @RestController
 @RequestMapping(value = "/passenger")
@@ -25,7 +25,7 @@ public class PassengerController {
     private HostHolder hostHolder;
 
     /**
-     * 接收新增和修改乘车人的请求，如果 form.id = null，则为新增；反之位修改
+     * 接收新增和修改乘车人的请求，如果 form.id = null，则为新增；反之为修改
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseVo save(@Valid @RequestBody PassengerSaveForm form) {
@@ -36,7 +36,7 @@ public class PassengerController {
 
     @RequestMapping(value = "/query-list", method = RequestMethod.GET)
     public ResponseVo<PageVo<PassengerQueryVo>> queryList(@Valid PassengerQueryForm form) {
-        form.setMemberId(hostHolder.getMemberId()); // service 层是管理员和用户通用的接口，只有用户才需要取 memberId，因此取 memberId 的操作在 Controller 层实现。
+        form.setMemberId(hostHolder.getMemberId()); // service 层是管理员和用户通用的接口，只有用户才需要取 memberId，因此取 memberId 的操作在 Controller 层实现
         PageVo<PassengerQueryVo> vo = passengerService.queryList(form);
         return ResponseVo.success(vo);
     }

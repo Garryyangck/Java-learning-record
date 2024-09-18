@@ -41,10 +41,10 @@ public class ServerGenerator {
         // 获取 tableName 和 domainObjectName
         Document document = new SAXReader().read("generator/" + generatorPath);
         Node table = document.selectSingleNode("//table");
-        System.out.println("table = " + table);
+        System.out.println("table = " + table.getText());
         Node tableName = table.selectSingleNode("@tableName");
         Node domainObjectName = table.selectSingleNode("@domainObjectName");
-        System.out.println("表名: " + tableName.getText() + " / " + "对象名: " + domainObjectName.getText());
+        System.out.println("tableName: " + tableName.getText() + " / " + "domainObjectName: " + domainObjectName.getText());
 
         // 获取数据库连接的参数
         Node jdbcConnection = document.selectSingleNode("//jdbcConnection");
@@ -100,6 +100,7 @@ public class ServerGenerator {
      * @param target      freemarker 模板名，service-impl，save-vo，save-form
      */
     private static void generate(String Domain, HashMap<String, Object> param, String packageName, String target) throws IOException, TemplateException {
+        System.out.println("\n------------- generate 开始 -------------");
         FreemarkerUtil.initConfig(target + ".ftl"); // service-impl.ftl
         String[] strings = target.split("-"); // ["service", "impl"]
         StringBuilder suffixClass = new StringBuilder(); // 类名的后缀，ServiceImpl
@@ -114,6 +115,7 @@ public class ServerGenerator {
         String fullPath = toPath + fullClassName; // [module]/src/main/java/garry/train/[module]/service/impl/PassengerServiceImpl.java
         System.out.println("fullPath = " + fullPath);
         FreemarkerUtil.generator(fullPath, param);
+        System.out.println("------------- generate 结束 -------------\n");
     }
 
     /**

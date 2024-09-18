@@ -5,11 +5,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author Garry
- * 2024-09-14 21:47
- */
+* @author Garry
+* 2024-09-18 11:35
+*/
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PassengerQueryForm extends PageForm {
+    /**
+     * 会员id
+     */
     private Long memberId;
 }
