@@ -38,14 +38,7 @@ public class ServerGenerator {
         System.out.println("module = " + module);
         serverPath = serverPath.replace("[module]", module);
 
-        // 获取 tableName 和 domainObjectName
         Document document = new SAXReader().read("generator/" + generatorPath);
-        Node table = document.selectSingleNode("//table");
-        System.out.println("table = " + table);
-        Node tableName = table.selectSingleNode("@tableName");
-        Node domainObjectName = table.selectSingleNode("@domainObjectName");
-        System.out.println("tableName: " + tableName.getText() + " / " + "domainObjectName: " + domainObjectName.getText());
-
         // 获取数据库连接的参数
         Node jdbcConnection = document.selectSingleNode("//jdbcConnection");
         Node connectionURL = jdbcConnection.selectSingleNode("@connectionURL");
@@ -58,37 +51,46 @@ public class ServerGenerator {
         DBUtil.user = userId.getText();
         DBUtil.password = password.getText();
 
-        // 示例：表名 garry_test
-        // GarryTest，类名
-        String Domain = domainObjectName.getText();
-        // garryTest，属性变量名
-        String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
-        // garry-test，url 名
-        String do_main = tableName.getText().replace("_", "-");
-        // 表中文名
-        String tableNameCn = DBUtil.getTableComment(tableName.getText());
-        List<Field> fieldList = DBUtil.getColumnByTableName(tableName.getText());
-        Set<String> typeSet = getJavaTypes(fieldList);
+        // 遍历每一个 table
+        List<Node> tables = document.selectNodes("//table");
+        for (Node table : tables) {
+            Node tableName = table.selectSingleNode("@tableName");
+            Node domainObjectName = table.selectSingleNode("@domainObjectName");
+            System.out.println("tableName: " + tableName.getText() + " / " + "domainObjectName: " + domainObjectName.getText());
 
-        // 组装参数
-        HashMap<String, Object> param = new HashMap<>();
-        param.put("module", module);
-        param.put("Domain", Domain);
-        param.put("domain", domain);
-        param.put("do_main", do_main);
-        param.put("DateTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        param.put("tableNameCn", tableNameCn);
-        param.put("fieldList", fieldList);
-        param.put("typeSet", typeSet);
-        System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
+            // 示例：表名 garry_test
+            // GarryTest，类名
+            String Domain = domainObjectName.getText();
+            // garryTest，属性变量名
+            String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
+            // garry-test，url 名
+            String do_main = tableName.getText().replace("_", "-");
+            // 表中文名
+            String tableNameCn = DBUtil.getTableComment(tableName.getText());
+            List<Field> fieldList = DBUtil.getColumnByTableName(tableName.getText());
+            Set<String> typeSet = getJavaTypes(fieldList);
 
-        // 生成代码
-        generate(Domain, param, "form/", "save-form");
-        generate(Domain, param, "form/", "query-form");
-        generate(Domain, param, "vo/", "query-vo");
-        generate(Domain, param, "service/", "service");
-        generate(Domain, param, "service/impl/", "service-impl");
-        generate(Domain, param, "controller/", "controller");
+            // 组装参数
+            HashMap<String, Object> param = new HashMap<>();
+            param.put("module", module);
+            param.put("Domain", Domain);
+            param.put("domain", domain);
+            param.put("do_main", do_main);
+            param.put("DateTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            param.put("tableNameCn", tableNameCn);
+            param.put("fieldList", fieldList);
+            param.put("typeSet", typeSet);
+            System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
+
+            // 生成代码
+            generate(Domain, param, "pojo/", "pojo");
+            generate(Domain, param, "form/", "save-form");
+            generate(Domain, param, "form/", "query-form");
+            generate(Domain, param, "vo/", "query-vo");
+            generate(Domain, param, "service/", "service");
+            generate(Domain, param, "service/impl/", "service-impl");
+            generate(Domain, param, "controller/", "controller");
+        }
     }
 
     /**
@@ -110,7 +112,7 @@ public class ServerGenerator {
         String toPath = serverPath + packageName; // [module]/src/main/java/garry/train/[module]/service/impl/
         System.out.println("toPath = " + toPath);
         new File(toPath).mkdirs(); // 生成 toPath 路径，避免生成时还没有这个路径
-        String fullClassName = Domain + suffixClass + ".java"; // PassengerServiceImpl.java
+        String fullClassName = (Domain + suffixClass + ".java").replace("Pojo", ""); // PassengerServiceImpl.java
         System.out.println("fullClassName = " + fullClassName);
         String fullPath = toPath + fullClassName; // [module]/src/main/java/garry/train/[module]/service/impl/PassengerServiceImpl.java
         System.out.println("fullPath = " + fullPath);
