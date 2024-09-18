@@ -3,9 +3,9 @@ package garry.train.member.pojo;
 import lombok.Data;
 
 /**
-* @author Garry
-* 2024-09-18 15:50
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @Data
 public class Member {
 

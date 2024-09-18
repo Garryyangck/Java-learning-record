@@ -7,9 +7,9 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
-* @author Garry
-* 2024-09-18 12:00
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @Data
 public class TicketQueryVo {
 

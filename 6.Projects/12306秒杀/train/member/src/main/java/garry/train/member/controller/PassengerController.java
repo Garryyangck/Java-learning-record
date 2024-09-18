@@ -12,9 +12,9 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* @author Garry
-* 2024-09-18 11:51
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @RestController
 @RequestMapping(value = "/passenger")
 public class PassengerController {

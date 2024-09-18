@@ -4,9 +4,9 @@ import lombok.Data;
 import java.util.Date;
 
 /**
-* @author Garry
-* 2024-09-18 15:50
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @Data
 public class Passenger {
 

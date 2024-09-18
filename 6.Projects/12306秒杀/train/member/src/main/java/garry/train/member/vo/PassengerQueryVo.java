@@ -1,16 +1,15 @@
 package garry.train.member.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
-* @author Garry
-* 2024-09-18 11:51
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @Data
 public class PassengerQueryVo {
 

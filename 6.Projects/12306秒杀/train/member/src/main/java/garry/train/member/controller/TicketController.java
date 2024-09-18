@@ -12,9 +12,9 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* @author Garry
-* 2024-09-18 12:00
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @RestController
 @RequestMapping(value = "/ticket")
 public class TicketController {

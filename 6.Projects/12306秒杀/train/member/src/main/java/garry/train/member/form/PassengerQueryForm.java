@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
-* @author Garry
-* 2024-09-18 11:51
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PassengerQueryForm extends PageForm {

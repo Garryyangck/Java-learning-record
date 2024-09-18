@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 </#list>
 
 /**
-* @author Garry
-* ${DateTime}
-*/
+ * @author Garry
+ * ${DateTime}
+ */
 @Data
 public class ${Domain}QueryVo {
 

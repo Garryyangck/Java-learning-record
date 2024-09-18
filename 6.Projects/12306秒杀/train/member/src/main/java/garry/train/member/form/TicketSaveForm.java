@@ -1,16 +1,15 @@
 package garry.train.member.form;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
-* @author Garry
-* 2024-09-18 12:00
-*/
+ * @author Garry
+ * 2024-09-18 16:17
+ */
 @Data
 public class TicketSaveForm {
 
@@ -20,8 +19,9 @@ public class TicketSaveForm {
     private Long id;
 
     /**
-     * 会员id，不要求非空，因为会在 Controller 中调用 hostHolder 获取
+     * 会员id
      */
+    @NotNull(message = "【会员id】不能为空")
     private Long memberId;
 
     /**
