@@ -1,4 +1,4 @@
-package garry.train.business.controller;
+package garry.train.business.controller.admin;
 
 import garry.train.common.util.HostHolder;
 import garry.train.common.vo.PageVo;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Garry
- * 2024-09-19 20:52
+ * 2024-09-19 21:56
  */
 @RestController
 @RequestMapping(value = "/admin/station")
-public class StationController {
+public class StationAdminController {
     @Resource
     private StationService stationService;
 

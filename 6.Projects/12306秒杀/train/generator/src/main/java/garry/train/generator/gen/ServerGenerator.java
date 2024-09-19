@@ -25,7 +25,7 @@ public class ServerGenerator {
 
     private static String serverPath = "[module]/src/main/java/garry/train/[module]/";
 
-    private static String vuePath = "admin/src/views/main/";
+    private static String vuePath = "[isAdmin]/src/views/main/";
 
     private static String module = "";
 
@@ -82,9 +82,13 @@ public class ServerGenerator {
             param.put("typeSet", typeSet);
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
-//            generateBackend(Domain, param);
-//            generateVue(do_main, param, false);
+            generateAll(Domain, do_main, param, true);
         }
+    }
+
+    private static void generateAll(String Domain, String do_main, HashMap<String, Object> param, Boolean isAdmin) throws IOException, TemplateException {
+        generateBackend(Domain, param, isAdmin);
+        generateVue(do_main, param, false, isAdmin);
     }
 
     /**
@@ -117,25 +121,37 @@ public class ServerGenerator {
     /**
      * 生成后端代码
      */
-    private static void generateBackend(String Domain, HashMap<String, Object> param) throws IOException, TemplateException {
+    private static void generateBackend(String Domain, HashMap<String, Object> param, Boolean isAdmin) throws IOException, TemplateException {
         generate(Domain, param, "pojo/", "pojo");
         generate(Domain, param, "form/", "save-form");
         generate(Domain, param, "form/", "query-form");
         generate(Domain, param, "vo/", "query-vo");
         generate(Domain, param, "service/", "service");
         generate(Domain, param, "service/impl/", "service-impl");
-        generate(Domain, param, "controller/", "controller");
+        if (!isAdmin)
+            generate(Domain, param, "controller/", "controller");
+        else
+            generate(Domain, param, "controller/admin/", "admin-controller");
     }
 
     /**
      * 专门生成前端 vue 页面的生成器
      */
-    private static void generateVue(String do_main, HashMap<String, Object> param, Boolean readOnly) throws IOException, TemplateException {
+    private static void generateVue(String do_main, HashMap<String, Object> param, Boolean readOnly, Boolean isAdmin) throws IOException, TemplateException {
         System.out.println("\n------------- generateVue 开始 -------------");
         param.put("readOnly", readOnly);
-        FreemarkerUtil.initConfig("vue.ftl");
-        new File(vuePath).mkdirs();
-        String fullPath = vuePath + do_main + ".vue";
+        String fullPath = "";
+        if (!isAdmin) {
+            FreemarkerUtil.initConfig("vue.ftl");
+            vuePath = vuePath.replace("[isAdmin]", "web");
+            new File(vuePath).mkdirs();
+            fullPath = vuePath + do_main + ".vue";
+        } else {
+            FreemarkerUtil.initConfig("admin-vue.ftl");
+            vuePath = vuePath.replace("[isAdmin]", "admin");
+            new File(vuePath).mkdirs();
+            fullPath = vuePath + do_main + ".vue";
+        }
         System.out.println("fullPath = " + fullPath);
         FreemarkerUtil.generator(fullPath, param);
         System.out.println("------------- generateVue 结束 -------------\n");
