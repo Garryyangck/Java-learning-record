@@ -33,8 +33,7 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
                 || path.contains("/hello")
                 || path.contains("/member/member/register")
                 || path.contains("/member/member/send-code")
-                || path.contains("/member/member/login")
-                || path.contains("/business")) {
+                || path.contains("/member/member/login")) {
             log.info("{} 不需要登录", path);
         } else {
             String token = exchange.getRequest().getHeaders().getFirst("token");

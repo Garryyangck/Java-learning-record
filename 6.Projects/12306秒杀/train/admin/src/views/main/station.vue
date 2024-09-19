@@ -107,7 +107,7 @@ export default defineComponent({
     };
 
     const onDelete = (record) => {
-      axios.delete("/business/station/delete/" + record.id).then((response) => {
+      axios.delete("/business/admin/station/delete/" + record.id).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
           handleQuery({
@@ -122,7 +122,7 @@ export default defineComponent({
     };
 
     const handleOk = () => {
-      axios.post("/business/station/save", station).then((response) => {
+      axios.post("/business/admin/station/save", station).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
           handleQuery({
@@ -153,7 +153,7 @@ export default defineComponent({
         byRefresh = true;
       }
       loading.value = true;
-      axios.get("/business/station/query-list", {
+      axios.get("/business/admin/station/query-list", {
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,

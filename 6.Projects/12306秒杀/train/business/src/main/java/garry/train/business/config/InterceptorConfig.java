@@ -30,7 +30,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(memberInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/**"
+                        "/admin/**"
                 );
     }
 }
