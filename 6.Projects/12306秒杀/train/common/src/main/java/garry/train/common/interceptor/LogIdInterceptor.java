@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Slf4j
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class LogIdInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // MDC 是 Slf4j 自带的，用于存放我们自定义的键值对，比如在logback-spring.xml中的LOG_ID

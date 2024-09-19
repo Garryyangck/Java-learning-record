@@ -25,7 +25,7 @@ public class ServerGenerator {
 
     private static String serverPath = "[module]/src/main/java/garry/train/[module]/";
 
-    private static String vuePath = "web/src/views/main/";
+    private static String vuePath = "admin/src/views/main/";
 
     private static String module = "";
 
@@ -82,7 +82,8 @@ public class ServerGenerator {
             param.put("typeSet", typeSet);
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
-            generateVue(do_main, param, false);
+//            generateBackend(Domain, param);
+//            generateVue(do_main, param, false);
         }
     }
 

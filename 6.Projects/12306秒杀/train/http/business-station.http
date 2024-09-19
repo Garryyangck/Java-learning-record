@@ -1,0 +1,27 @@
+POST http://localhost:8080/business/station/save
+Content-Type: application/json
+
+{
+  "name": "占位",
+  "idCard": "xxxxxxxxxxxxxxxxxx",
+  "type": "1"
+}
+
+###
+
+GET http://localhost:8080/business/station/query-list?pageNum=2&pageSize=12
+Accept: application/json
+
+###
+
+POST http://localhost:8080/business/station/save
+Content-Type: application/json
+
+{
+  "id": 1835310145152880640,
+  "name": "Garry",
+  "idCard": "123456789987654231",
+  "type": "3"
+}
+
+###

@@ -1,7 +1,7 @@
 package garry.train.generator.gen;
 
 import cn.hutool.core.util.StrUtil;
-import garry.train.member.enums.PassengerTypeEnum;
+import garry.train.generator.enums.member.PassengerTypeEnum;
 
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;

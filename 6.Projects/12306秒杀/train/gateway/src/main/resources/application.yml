@@ -9,6 +9,10 @@ spring:
           uri: http://127.0.0.1:8081
           predicates:
             - Path=/member/** # 将所有以 member为前缀的请求(e.g. http://localhost:8080/member/hello)都转发到 http://127.0.0.1:8081
+        - id: business
+          uri: http://127.0.0.1:8082
+          predicates:
+            - Path=/business/**
       globalcors: # 允许跨域
         cors-configurations:
           '[/**]':

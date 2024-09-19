@@ -16,6 +16,11 @@
           <user-outlined/> &nbsp; 关于
         </router-link>
       </a-menu-item>
+      <a-menu-item key="/station">
+        <router-link to="/station">
+          <ClockCircle-outlined/> &nbsp; 车站
+        </router-link>
+      </a-menu-item>
     </a-menu>
   </a-layout-sider>
 </template>

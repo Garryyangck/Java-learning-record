@@ -1,4 +1,4 @@
-package garry.train.member.config;
+package garry.train.business.config;
 
 import garry.train.common.interceptor.LogIdInterceptor;
 import garry.train.common.interceptor.MemberInterceptor;
@@ -30,9 +30,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(memberInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/hello",
-                        "/member/send-code",
-                        "/member/login"
+                        "/**"
                 );
     }
 }
