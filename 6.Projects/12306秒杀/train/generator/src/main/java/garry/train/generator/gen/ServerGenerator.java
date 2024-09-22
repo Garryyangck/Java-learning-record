@@ -86,11 +86,6 @@ public class ServerGenerator {
         }
     }
 
-    private static void generateAll(String Domain, String do_main, HashMap<String, Object> param, Boolean isAdmin) throws IOException, TemplateException {
-        generateBackend(Domain, param, isAdmin);
-        generateVue(do_main, param, false, isAdmin);
-    }
-
     /**
      * 执行代码生成
      *
@@ -116,6 +111,11 @@ public class ServerGenerator {
         System.out.println("fullPath = " + fullPath);
         FreemarkerUtil.generator(fullPath, param);
         System.out.println("------------- generate 结束 -------------\n");
+    }
+
+    private static void generateAll(String Domain, String do_main, HashMap<String, Object> param, Boolean isAdmin) throws IOException, TemplateException {
+        generateBackend(Domain, param, isAdmin);
+        generateVue(do_main, param, false, isAdmin);
     }
 
     /**

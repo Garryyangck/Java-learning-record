@@ -18,7 +18,12 @@
       </a-menu-item>
       <a-menu-item key="/station">
         <router-link to="/station">
-          <ClockCircle-outlined/> &nbsp; 车站
+          <ClockCircle-outlined/> &nbsp; 车站管理
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="/train">
+        <router-link to="/train">
+          <Car-outlined/> &nbsp; 火车管理
         </router-link>
       </a-menu-item>
     </a-menu>

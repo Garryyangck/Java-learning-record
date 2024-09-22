@@ -1,6 +1,7 @@
 package garry.train.generator.gen;
 
 import cn.hutool.core.util.StrUtil;
+import garry.train.generator.enums.business.TrainTypeEnum;
 import garry.train.generator.enums.member.PassengerTypeEnum;
 
 import java.io.FileOutputStream;
@@ -17,7 +18,7 @@ import java.util.List;
  * 2024-09-18 21:22
  */
 public class EnumGenerator {
-    private static String path = "web/src/assets/js/enums.js";
+    private static String path = "admin/src/assets/js/enums.js";
 
     public static void main(String[] args) {
         StringBuffer bufferObject = new StringBuffer();
@@ -25,6 +26,7 @@ public class EnumGenerator {
         long begin = System.currentTimeMillis();
         try {
             toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
+            toJson(TrainTypeEnum.class, bufferObject, bufferArray);
 
             StringBuffer buffer = bufferObject.append("\r\n").append(bufferArray);
             writeJs(buffer);
