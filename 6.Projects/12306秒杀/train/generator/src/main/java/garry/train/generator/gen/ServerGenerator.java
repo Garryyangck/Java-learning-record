@@ -82,7 +82,8 @@ public class ServerGenerator {
             param.put("typeSet", typeSet);
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
-            generateAll(Domain, do_main, param, true);
+//            generateAll(Domain, do_main, param, true);
+            generate(Domain, param, "form/", "save-form");
         }
     }
 

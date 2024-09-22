@@ -33,7 +33,7 @@ public class ${Domain}SaveForm {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
         </#if>
     </#if>
-    <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt">
+    <#if field.name!="id" && field.nameHump!="createTime" && field.nameHump!="updateTime">
         <#if !field.nullAble>
             <#if field.javaType=='String'>
     @NotBlank(message = "【${field.nameCn}】不能为空")
