@@ -253,6 +253,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      document.title = '车次';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,

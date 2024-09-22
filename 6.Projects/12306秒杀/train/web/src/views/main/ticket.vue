@@ -25,14 +25,14 @@
       <template v-else-if="column.dataIndex === 'seatCol'">
         <span v-for="item in SEAT_COL_ARRAY" :key="item.code">
           <span v-if="item.code === record.seatCol">
-            {{item.desc}}
+            {{ item.desc }}
           </span>
         </span>
       </template>
       <template v-else-if="column.dataIndex === 'seatType'">
         <span v-for="item in SEAT_TYPE_ARRAY" :key="item.code">
           <span v-if="item.code === record.seatType">
-            {{item.desc}}
+            {{ item.desc }}
           </span>
         </span>
       </template>
@@ -42,49 +42,49 @@
            ok-text="确认" cancel-text="取消">
     <a-form :model="ticket" :label-col="{span: 4}" :wrapper-col="{span: 18}">
       <a-form-item label="会员id">
-        <a-input v-model:value="ticket.memberId" />
+        <a-input v-model:value="ticket.memberId"/>
       </a-form-item>
       <a-form-item label="乘客id">
-        <a-input v-model:value="ticket.passengerId" />
+        <a-input v-model:value="ticket.passengerId"/>
       </a-form-item>
       <a-form-item label="乘客姓名">
-        <a-input v-model:value="ticket.passengerName" />
+        <a-input v-model:value="ticket.passengerName"/>
       </a-form-item>
       <a-form-item label="日期">
-        <a-date-picker v-model:value="ticket.trainDate" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
+        <a-date-picker v-model:value="ticket.trainDate" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
       </a-form-item>
       <a-form-item label="车次编号">
-        <a-input v-model:value="ticket.trainCode" />
+        <a-input v-model:value="ticket.trainCode"/>
       </a-form-item>
       <a-form-item label="箱序">
-        <a-input v-model:value="ticket.carriageIndex" />
+        <a-input v-model:value="ticket.carriageIndex"/>
       </a-form-item>
       <a-form-item label="排号">
-        <a-input v-model:value="ticket.seatRow" />
+        <a-input v-model:value="ticket.seatRow"/>
       </a-form-item>
       <a-form-item label="列号">
         <a-select v-model:value="ticket.seatCol">
           <a-select-option v-for="item in SEAT_COL_ARRAY" :key="item.code" :value="item.code">
-            {{item.desc}}
+            {{ item.desc }}
           </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="出发站">
-        <a-input v-model:value="ticket.startStation" />
+        <a-input v-model:value="ticket.startStation"/>
       </a-form-item>
       <a-form-item label="出发时间">
-        <a-time-picker v-model:value="ticket.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="ticket.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
       </a-form-item>
       <a-form-item label="到达站">
-        <a-input v-model:value="ticket.endStation" />
+        <a-input v-model:value="ticket.endStation"/>
       </a-form-item>
       <a-form-item label="到站时间">
-        <a-time-picker v-model:value="ticket.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="ticket.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
       </a-form-item>
       <a-form-item label="座位类型">
         <a-select v-model:value="ticket.seatType">
           <a-select-option v-for="item in SEAT_TYPE_ARRAY" :key="item.code" :value="item.code">
-            {{item.desc}}
+            {{ item.desc }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -129,75 +129,75 @@ export default defineComponent({
     });
     let loading = ref(false);
     const columns = ref([
-    {
-      title: '会员id',
-      dataIndex: 'memberId',
-      key: 'memberId',
-    },
-    {
-      title: '乘客id',
-      dataIndex: 'passengerId',
-      key: 'passengerId',
-    },
-    {
-      title: '乘客姓名',
-      dataIndex: 'passengerName',
-      key: 'passengerName',
-    },
-    {
-      title: '日期',
-      dataIndex: 'trainDate',
-      key: 'trainDate',
-    },
-    {
-      title: '车次编号',
-      dataIndex: 'trainCode',
-      key: 'trainCode',
-    },
-    {
-      title: '箱序',
-      dataIndex: 'carriageIndex',
-      key: 'carriageIndex',
-    },
-    {
-      title: '排号',
-      dataIndex: 'seatRow',
-      key: 'seatRow',
-    },
-    {
-      title: '列号',
-      dataIndex: 'seatCol',
-      key: 'seatCol',
-    },
-    {
-      title: '出发站',
-      dataIndex: 'startStation',
-      key: 'startStation',
-    },
-    {
-      title: '出发时间',
-      dataIndex: 'startTime',
-      key: 'startTime',
-    },
-    {
-      title: '到达站',
-      dataIndex: 'endStation',
-      key: 'endStation',
-    },
-    {
-      title: '到站时间',
-      dataIndex: 'endTime',
-      key: 'endTime',
-    },
-    {
-      title: '座位类型',
-      dataIndex: 'seatType',
-      key: 'seatType',
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation'
-    }
+      {
+        title: '会员id',
+        dataIndex: 'memberId',
+        key: 'memberId',
+      },
+      {
+        title: '乘客id',
+        dataIndex: 'passengerId',
+        key: 'passengerId',
+      },
+      {
+        title: '乘客姓名',
+        dataIndex: 'passengerName',
+        key: 'passengerName',
+      },
+      {
+        title: '日期',
+        dataIndex: 'trainDate',
+        key: 'trainDate',
+      },
+      {
+        title: '车次编号',
+        dataIndex: 'trainCode',
+        key: 'trainCode',
+      },
+      {
+        title: '箱序',
+        dataIndex: 'carriageIndex',
+        key: 'carriageIndex',
+      },
+      {
+        title: '排号',
+        dataIndex: 'seatRow',
+        key: 'seatRow',
+      },
+      {
+        title: '列号',
+        dataIndex: 'seatCol',
+        key: 'seatCol',
+      },
+      {
+        title: '出发站',
+        dataIndex: 'startStation',
+        key: 'startStation',
+      },
+      {
+        title: '出发时间',
+        dataIndex: 'startTime',
+        key: 'startTime',
+      },
+      {
+        title: '到达站',
+        dataIndex: 'endStation',
+        key: 'endStation',
+      },
+      {
+        title: '到站时间',
+        dataIndex: 'endTime',
+        key: 'endTime',
+      },
+      {
+        title: '座位类型',
+        dataIndex: 'seatType',
+        key: 'seatType',
+      },
+      {
+        title: '操作',
+        dataIndex: 'operation'
+      }
     ]);
 
     const onAdd = () => {
@@ -319,6 +319,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      document.title = '车票';
+
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,

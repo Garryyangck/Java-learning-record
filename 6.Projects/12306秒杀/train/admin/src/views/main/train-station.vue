@@ -241,6 +241,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      document.title = '火车车站';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,

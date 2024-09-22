@@ -3,11 +3,15 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue';
+import {defineComponent, onMounted} from 'vue';
 
 export default defineComponent({
   name: 'about-view',
   setup() {
+    onMounted(() => {
+      document.title = '关于';
+    });
+
     return {
 
     };

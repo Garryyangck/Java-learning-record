@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive, ref} from 'vue';
+import {defineComponent, onMounted, reactive, ref} from 'vue';
 import axios from 'axios';
 import {notification} from 'ant-design-vue';
 import {useRouter} from "vue-router";
@@ -54,14 +54,10 @@ export default defineComponent({
     const counting = ref(false); // 是否正在倒计时
     const sendCodeRef = ref(null); // 发送验证码的样式
     const router = useRouter(); // 路由转发
-
     const loginForm = reactive({
       mobile: '',
       code: '',
     });
-
-    // 进入登录页面时，自动清空session中的member
-    store.commit('setMember', {});
 
     const setupTimer = (countdownSecond) => {
       // 设置倒计时参数
@@ -135,6 +131,13 @@ export default defineComponent({
         }
       })
     }
+
+    onMounted(() => {
+      document.title = '登录';
+
+      // 进入登录页面时，自动清空session中的member
+      store.commit('setMember', {});
+    });
 
     return { // 开放给template的组件
       loginForm,

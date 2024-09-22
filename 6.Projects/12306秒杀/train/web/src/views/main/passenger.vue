@@ -26,7 +26,7 @@
       <template v-else-if="column.dataIndex === 'type'">
         <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code">
           <span v-if="item.code === record.type">
-            {{item.desc}}
+            {{ item.desc }}
           </span>
         </span>
       </template>
@@ -36,15 +36,15 @@
            ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{span: 18}">
       <a-form-item label="姓名">
-        <a-input v-model:value="passenger.name" />
+        <a-input v-model:value="passenger.name"/>
       </a-form-item>
       <a-form-item label="身份证">
-        <a-input v-model:value="passenger.idCard" />
+        <a-input v-model:value="passenger.idCard"/>
       </a-form-item>
       <a-form-item label="旅客类型">
         <a-select v-model:value="passenger.type">
           <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">
-            {{item.desc}}
+            {{ item.desc }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -79,25 +79,25 @@ export default defineComponent({
     });
     let loading = ref(false);
     const columns = ref([
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '身份证',
-      dataIndex: 'idCard',
-      key: 'idCard',
-    },
-    {
-      title: '旅客类型',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation'
-    }
+      {
+        title: '姓名',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '身份证',
+        dataIndex: 'idCard',
+        key: 'idCard',
+      },
+      {
+        title: '旅客类型',
+        dataIndex: 'type',
+        key: 'type',
+      },
+      {
+        title: '操作',
+        dataIndex: 'operation'
+      }
     ]);
 
     const onAdd = () => {
@@ -201,6 +201,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      document.title = '乘客';
+
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,

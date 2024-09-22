@@ -209,6 +209,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      document.title = '${tableNameCn}';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
