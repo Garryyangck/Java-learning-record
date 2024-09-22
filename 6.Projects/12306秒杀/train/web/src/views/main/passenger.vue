@@ -1,3 +1,4 @@
+<!--suppress JSCheckFunctionSignatures -->
 <template>
   <p>
     <a-space>

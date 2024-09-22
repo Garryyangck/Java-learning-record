@@ -1,3 +1,4 @@
+<!--suppress JSCheckFunctionSignatures -->
 <template>
   <p>
     <a-space>
@@ -151,7 +152,7 @@ export default defineComponent({
             pageNum: 1,
             pageSize: pagination.value.pageSize,
           });
-          if (passenger.id === undefined)
+          if (${domain}.id === undefined)
             notification.success({description: '新增成功'});
           else
             notification.success({description: '修改成功'});
