@@ -5,6 +5,8 @@ import garry.train.business.form.TrainQueryForm;
 import garry.train.business.form.TrainSaveForm;
 import garry.train.business.vo.TrainQueryVo;
 
+import java.util.List;
+
 /**
  * @author Garry
  * 2024-09-22 13:19
@@ -27,4 +29,9 @@ public interface TrainService {
      * 根据 id(主键) 删除车次
      */
     void delete(Long id);
+
+    /**
+     * 返回所有车次编号，用于前端的 train_station 填入车次编号时做下拉框
+     */
+    List<TrainQueryVo> queryAllCode();
 }

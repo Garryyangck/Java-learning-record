@@ -11,6 +11,8 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author Garry
  * 2024-09-22 13:19
@@ -45,5 +47,11 @@ public class TrainAdminController {
     public ResponseVo delete(@PathVariable Long id) {
         trainService.delete(id);
         return ResponseVo.success();
+    }
+
+    @RequestMapping(value = "/query-all-code", method = RequestMethod.GET)
+    public ResponseVo<List<TrainQueryVo>> queryAllCode() {
+        List<TrainQueryVo> vo = trainService.queryAllCode();
+        return ResponseVo.success(vo);
     }
 }

@@ -92,7 +92,7 @@ export default defineComponent({
      * 只要输入的 name 变化，则调用 pinyin-pro 插件，生成拼音和简写拼音
      */
     watch(() => station.name, () => {
-      if (station.name !== null) {
+      if (station.name !== null && station.name !== undefined) { // 一定要判断 station.name !== undefined，否则 undefined 的 name 一调用 pinyin 函数就立马报错！
         station.namePinyin = pinyin(station.name, {toneType: 'none'}).replaceAll(" ", "");
         station.namePy = pinyin(station.name, {pattern: 'first', toneType: 'none'}).replaceAll(" ", "");
       } else {

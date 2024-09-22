@@ -18,6 +18,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -82,5 +83,21 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public void delete(Long id) {
         trainMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<TrainQueryVo> queryAllCode() {
+        TrainExample trainExample = new TrainExample();
+        trainExample.setOrderByClause("code");
+        List<Train> trains = trainMapper.selectByExample(trainExample);
+        List<HashMap<String, String>> codes = trains.stream()
+                .map(train -> {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("code", train.getCode());
+                    return map;
+                })
+                .toList();
+
+        return BeanUtil.copyToList(codes, TrainQueryVo.class);
     }
 }

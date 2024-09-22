@@ -146,7 +146,7 @@ export default defineComponent({
     ]);
 
     watch(() => train.start, () => {
-      if (train.start !== null) {
+      if (train.start !== null && train.start !== undefined) {
         train.startPinyin = pinyin(train.start, {toneType: 'none'}).replaceAll(" ", "");
       } else {
         train.startPinyin = undefined;
@@ -154,7 +154,7 @@ export default defineComponent({
     });
 
     watch(() => train.end, () => {
-      if (train.end !== null) {
+      if (train.end !== null && train.end !== undefined) {
         train.endPinyin = pinyin(train.end, {toneType: 'none'}).replaceAll(" ", "");
       } else {
         train.endPinyin = undefined;

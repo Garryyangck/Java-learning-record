@@ -27,14 +27,14 @@ app.mount('#app');
  */
 axios.interceptors.request.use(function (config) {
     // 给所有的请求加上token
-    console.log('请求参数: ', config);
+    console.log(config.url + ': 请求参数: ', config);
     return config;
 }, error => {
     return Promise.reject(error);
 });
 
 axios.interceptors.response.use(function (response) {
-    console.log('返回结果: ', response);
+    console.log(response.config.url + ': 返回结果: ', response);
     return response;
 }, error => {
     console.log('返回错误: ', error);
