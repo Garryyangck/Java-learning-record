@@ -49,7 +49,7 @@
         <a-input v-model:value="train.start" />
       </a-form-item>
       <a-form-item label="始发站拼音">
-        <a-input v-model:value="train.startPinyin" />
+        <a-input v-model:value="train.startPinyin" disabled />
       </a-form-item>
       <a-form-item label="出发时间">
         <a-time-picker v-model:value="train.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
@@ -58,7 +58,7 @@
         <a-input v-model:value="train.end" />
       </a-form-item>
       <a-form-item label="终点站拼音">
-        <a-input v-model:value="train.endPinyin" />
+        <a-input v-model:value="train.endPinyin" disabled />
       </a-form-item>
       <a-form-item label="到站时间">
         <a-time-picker v-model:value="train.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
@@ -68,9 +68,10 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref} from 'vue';
+import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
+import {pinyin} from "pinyin-pro";
 
 export default defineComponent({
   name: "train-view",
@@ -143,6 +144,22 @@ export default defineComponent({
       dataIndex: 'operation'
     }
     ]);
+
+    watch(() => train.start, () => {
+      if (train.start !== null) {
+        train.startPinyin = pinyin(train.start, {toneType: 'none'}).replaceAll(" ", "");
+      } else {
+        train.startPinyin = undefined;
+      }
+    });
+
+    watch(() => train.end, () => {
+      if (train.end !== null) {
+        train.endPinyin = pinyin(train.end, {toneType: 'none'}).replaceAll(" ", "");
+      } else {
+        train.endPinyin = undefined;
+      }
+    });
 
     const onAdd = () => {
       train.id = undefined;

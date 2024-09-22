@@ -27,24 +27,25 @@
   </a-table>
   <a-modal v-model:visible="visible" title="车站" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
-    <a-form :model="station" :label-col="{span: 6}" :wrapper-col="{span: 18}">
+    <a-form :model="station" :label-col="{span: 4}" :wrapper-col="{span: 18}">
       <a-form-item label="站名">
-        <a-input v-model:value="station.name" />
+        <a-input v-model:value="station.name"/>
       </a-form-item>
-      <a-form-item label="站名拼音">
-        <a-input v-model:value="station.namePinyin" />
+      <a-form-item label="拼音">
+        <a-input v-model:value="station.namePinyin" disabled/>
       </a-form-item>
-      <a-form-item label="站名拼音首字母">
-        <a-input v-model:value="station.namePy" />
+      <a-form-item label="拼音首字母">
+        <a-input v-model:value="station.namePy" disabled/>
       </a-form-item>
     </a-form>
   </a-modal>
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref} from 'vue';
+import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
+import {pinyin} from "pinyin-pro";
 
 export default defineComponent({
   name: "station-view",
@@ -66,26 +67,39 @@ export default defineComponent({
     });
     let loading = ref(false);
     const columns = ref([
-    {
-      title: '站名',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '站名拼音',
-      dataIndex: 'namePinyin',
-      key: 'namePinyin',
-    },
-    {
-      title: '站名拼音首字母',
-      dataIndex: 'namePy',
-      key: 'namePy',
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation'
-    }
+      {
+        title: '站名',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '站名拼音',
+        dataIndex: 'namePinyin',
+        key: 'namePinyin',
+      },
+      {
+        title: '站名拼音首字母',
+        dataIndex: 'namePy',
+        key: 'namePy',
+      },
+      {
+        title: '操作',
+        dataIndex: 'operation'
+      }
     ]);
+
+    /**
+     * 只要输入的 name 变化，则调用 pinyin-pro 插件，生成拼音和简写拼音
+     */
+    watch(() => station.name, () => {
+      if (station.name !== null) {
+        station.namePinyin = pinyin(station.name, {toneType: 'none'}).replaceAll(" ", "");
+        station.namePy = pinyin(station.name, {pattern: 'first', toneType: 'none'}).replaceAll(" ", "");
+      } else {
+        station.namePinyin = undefined;
+        station.namePy = undefined;
+      }
+    });
 
     const onAdd = () => {
       station.id = undefined;
