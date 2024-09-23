@@ -5,6 +5,8 @@ import garry.train.business.form.StationQueryForm;
 import garry.train.business.form.StationSaveForm;
 import garry.train.business.vo.StationQueryVo;
 
+import java.util.List;
+
 /**
  * @author Garry
  * 2024-09-19 20:52
@@ -27,4 +29,9 @@ public interface StationService {
      * 根据 id(主键) 删除车站
      */
     void delete(Long id);
+
+    /**
+     * 返回所有车站的名称，用于 train 插入时选择
+     */
+    List<StationQueryVo> queryAll();
 }

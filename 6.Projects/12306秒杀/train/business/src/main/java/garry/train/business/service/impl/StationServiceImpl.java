@@ -83,4 +83,13 @@ public class StationServiceImpl implements StationService {
     public void delete(Long id) {
         stationMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public List<StationQueryVo> queryAll() {
+        StationExample stationExample = new StationExample();
+        stationExample.setOrderByClause("name_pinyin"); // 根据拼音排序
+        StationExample.Criteria criteria = stationExample.createCriteria();
+        List<Station> stations = stationMapper.selectByExample(stationExample);
+        return BeanUtil.copyToList(stations, StationQueryVo.class);
+    }
 }
