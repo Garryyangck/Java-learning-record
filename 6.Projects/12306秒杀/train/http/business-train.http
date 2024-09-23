@@ -1,4 +1,4 @@
-GET http://localhost:8080/business/admin/train/query-all-code
+GET http://localhost:8080/business/admin/train/query-all
 Accept: application/json
 
 ###

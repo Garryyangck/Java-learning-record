@@ -1,5 +1,6 @@
 package garry.train.business.controller.admin;
 
+import garry.train.business.vo.TrainQueryAllVo;
 import garry.train.common.util.HostHolder;
 import garry.train.common.vo.PageVo;
 import garry.train.common.vo.ResponseVo;
@@ -49,9 +50,9 @@ public class TrainAdminController {
         return ResponseVo.success();
     }
 
-    @RequestMapping(value = "/query-all-code", method = RequestMethod.GET)
-    public ResponseVo<List<TrainQueryVo>> queryAllCode() {
-        List<TrainQueryVo> vo = trainService.queryAllCode();
+    @RequestMapping(value = "/query-all", method = RequestMethod.GET)
+    public ResponseVo<List<TrainQueryAllVo>> queryAllCode() {
+        List<TrainQueryAllVo> vo = trainService.queryAll();
         return ResponseVo.success(vo);
     }
 }

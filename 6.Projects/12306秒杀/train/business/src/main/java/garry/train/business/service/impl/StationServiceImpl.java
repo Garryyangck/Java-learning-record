@@ -53,7 +53,7 @@ public class StationServiceImpl implements StationService {
     @Override
     public PageVo<StationQueryVo> queryList(StationQueryForm form) {
         StationExample stationExample = new StationExample();
-        stationExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
+        stationExample.setOrderByClause("name_pinyin"); // 根据拼音排序
         StationExample.Criteria criteria = stationExample.createCriteria();
         // 这里自定义一些过滤的条件，比如:
 //        // 用户只能查自己 memberId 下的车站

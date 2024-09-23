@@ -5,15 +5,17 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
+import garry.train.business.enums.TrainTypeEnum;
 import garry.train.business.form.TrainQueryForm;
 import garry.train.business.form.TrainSaveForm;
 import garry.train.business.mapper.TrainMapper;
 import garry.train.business.pojo.Train;
 import garry.train.business.pojo.TrainExample;
 import garry.train.business.service.TrainService;
+import garry.train.business.vo.TrainQueryAllVo;
 import garry.train.business.vo.TrainQueryVo;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -86,18 +88,17 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List<TrainQueryVo> queryAllCode() {
+    public List<TrainQueryAllVo> queryAll() {
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("code");
-        List<Train> trains = trainMapper.selectByExample(trainExample);
-        List<HashMap<String, String>> codes = trains.stream()
-                .map(train -> {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("code", train.getCode());
-                    return map;
-                })
-                .toList();
-
-        return BeanUtil.copyToList(codes, TrainQueryVo.class);
+        List<Train> trains = trainMapper.selectByExample(trainExample).stream()
+                // 将 type 由 "G" 换为 "高铁"
+                .peek(train -> {
+                    List<HashMap<String, String>> enumList = TrainTypeEnum.getEnumList();
+                    for (HashMap<String, String> anEnum : enumList)
+                        if (anEnum.get("code").equals(train.getType()))
+                            train.setType(anEnum.get("desc"));
+                }).toList();
+        return BeanUtil.copyToList(trains, TrainQueryAllVo.class);
     }
 }
