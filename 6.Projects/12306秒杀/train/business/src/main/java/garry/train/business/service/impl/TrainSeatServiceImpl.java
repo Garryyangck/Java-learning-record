@@ -53,7 +53,7 @@ public class TrainSeatServiceImpl implements TrainSeatService {
     @Override
     public PageVo<TrainSeatQueryVo> queryList(TrainSeatQueryForm form) {
         TrainSeatExample trainSeatExample = new TrainSeatExample();
-        trainSeatExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
+        trainSeatExample.setOrderByClause("train_code asc, carriage_index asc, row asc"); // 最新更新的数据，最先被查出来
         TrainSeatExample.Criteria criteria = trainSeatExample.createCriteria();
         // 这里自定义一些过滤的条件，比如:
 //        // 用户只能查自己 memberId 下的座位

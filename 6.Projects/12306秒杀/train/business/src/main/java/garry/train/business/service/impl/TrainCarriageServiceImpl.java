@@ -53,7 +53,7 @@ public class TrainCarriageServiceImpl implements TrainCarriageService {
     @Override
     public PageVo<TrainCarriageQueryVo> queryList(TrainCarriageQueryForm form) {
         TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
-        trainCarriageExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
+        trainCarriageExample.setOrderByClause("train_code asc, `index` asc");
         TrainCarriageExample.Criteria criteria = trainCarriageExample.createCriteria();
         // 这里自定义一些过滤的条件，比如:
 //        // 用户只能查自己 memberId 下的火车车厢

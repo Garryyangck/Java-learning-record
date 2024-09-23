@@ -17,5 +17,5 @@ logging:
   level:
     garry:
       train:
-        member:
-          mapper: trace # garry.train.member.mapper下的日志等级设置为 trace，可以打印出 sql
+        business:
+          mapper: trace # garry.train.business.mapper下的日志等级设置为 trace，可以打印出 sql

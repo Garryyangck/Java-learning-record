@@ -53,7 +53,7 @@ public class TrainStationServiceImpl implements TrainStationService {
     @Override
     public PageVo<TrainStationQueryVo> queryList(TrainStationQueryForm form) {
         TrainStationExample trainStationExample = new TrainStationExample();
-        trainStationExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
+        trainStationExample.setOrderByClause("train_code asc, `index` asc");
         TrainStationExample.Criteria criteria = trainStationExample.createCriteria();
         // 这里自定义一些过滤的条件，比如:
 //        // 用户只能查自己 memberId 下的火车车站
