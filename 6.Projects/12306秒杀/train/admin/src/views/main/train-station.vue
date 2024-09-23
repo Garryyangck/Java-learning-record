@@ -35,14 +35,7 @@
         <a-input v-model:value="trainStation.index"/>
       </a-form-item>
       <a-form-item label="站名">
-        <a-select
-            v-model:value="trainStation.name"
-            show-search
-            :filter-option="filterTrainCodeOption">
-          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name + item.namePinyin + item.namePy">
-            {{ item.name }}
-          </a-select-option>
-        </a-select>
+        <station-select-view v-model:value="trainStation.name"/>
       </a-form-item>
       <a-form-item label="站名拼音">
         <a-input v-model:value="trainStation.namePinyin" disabled/>
@@ -69,10 +62,11 @@ import axios from "axios";
 import {notification} from "ant-design-vue";
 import {pinyin} from "pinyin-pro";
 import TrainSelectView from "@/components/train-select.vue";
+import StationSelectView from "@/components/station-select.vue";
 
 export default defineComponent({
   name: "train-station-view",
-  components: {TrainSelectView},
+  components: {StationSelectView, TrainSelectView},
   setup() {
     const visible = ref(false);
     const trainStation = reactive({
@@ -258,40 +252,12 @@ export default defineComponent({
       });
     };
 
-    //--------------------------------station 下拉框 start--------------------------------
-    const stations = ref([]);
-
-    const queryStation = () => {
-      axios.get("/business/admin/station/query-all").then((response) => {
-        let responseVo = response.data;
-        if (responseVo.success) {
-          stations.value = responseVo.data;
-        } else {
-          notification.error({description: responseVo.msg});
-        }
-      })
-    };
-
-    /**
-     * 车次编号下拉框筛选
-     * input 和 option 位内置参数
-     * option 中的 label 为我们自定义的 :label="item.code + item.start + item.end + item.type"
-     *
-     * option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0 意为:
-     * input 为我们输入要查找的文字，如果 option.label 中有这个字符串，则保留；否则被过滤掉
-     */
-    const filterTrainCodeOption = (input, option) => {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    }
-    //--------------------------------station 下拉框 end--------------------------------
-
     onMounted(() => {
       document.title = '火车车站';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
       });
-      queryStation();
     });
 
     return {
@@ -301,14 +267,12 @@ export default defineComponent({
       pagination,
       columns,
       loading,
-      stations,
       onAdd,
       onEdit,
       onDelete,
       handleOk,
       handleQuery,
       handleTableChange,
-      filterTrainCodeOption,
     };
   },
 });

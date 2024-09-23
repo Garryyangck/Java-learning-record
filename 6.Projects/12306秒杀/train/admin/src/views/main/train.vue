@@ -43,14 +43,7 @@
         </a-select>
       </a-form-item>
       <a-form-item label="始发站">
-        <a-select
-            v-model:value="train.start"
-            show-search
-            :filter-option="filterStationOption">
-          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name + item.namePinyin + item.namePy">
-            {{ item.name }}
-          </a-select-option>
-        </a-select>
+        <station-select-view v-model:value="train.start"/>
       </a-form-item>
       <a-form-item label="始发站拼音">
         <a-input v-model:value="train.startPinyin" disabled />
@@ -59,14 +52,7 @@
         <a-time-picker v-model:value="train.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
       </a-form-item>
       <a-form-item label="终点站">
-        <a-select
-            v-model:value="train.end"
-            show-search
-            :filter-option="filterStationOption">
-          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name + item.namePinyin + item.namePy">
-            {{ item.name }}
-          </a-select-option>
-        </a-select>
+        <station-select-view v-model:value="train.end"/>
       </a-form-item>
       <a-form-item label="终点站拼音">
         <a-input v-model:value="train.endPinyin" disabled />
@@ -83,9 +69,11 @@ import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 import {pinyin} from "pinyin-pro";
+import StationSelectView from "@/components/station-select.vue";
 
 export default defineComponent({
   name: "train-view",
+  components: {StationSelectView},
   setup() {
     const TRAIN_TYPE_ARRAY = window.TRAIN_TYPE_ARRAY;
     const visible = ref(false);
@@ -280,39 +268,12 @@ export default defineComponent({
       });
     };
 
-    //--------------------------------stations 下拉框 start--------------------------------
-    const stations = ref([]);
-
-    const queryStation = () => {
-      axios.get("/business/admin/station/query-all").then((response) => {
-        let responseVo = response.data;
-        if (responseVo.success) {
-          stations.value = responseVo.data;
-        } else {
-          notification.error({description: responseVo.msg});
-        }
-      })
-    };
-
-    /**
-     * 车次编号下拉框筛选
-     * input 和 option 位内置参数
-     *
-     * option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0 意为:
-     * input 为我们输入要查找的文字，如果 option.label 中有这个字符串，则保留；否则被过滤掉
-     */
-    const filterStationOption = (input, option) => {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    }
-    //--------------------------------stations 编号下拉框 end--------------------------------
-
     onMounted(() => {
       document.title = '车次';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
       });
-      queryStation();
     });
 
     return {
@@ -323,14 +284,12 @@ export default defineComponent({
       pagination,
       columns,
       loading,
-      stations,
       onAdd,
       onEdit,
       onDelete,
       handleOk,
       handleQuery,
       handleTableChange,
-      filterStationOption,
     };
   },
 });
