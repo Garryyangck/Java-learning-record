@@ -40,10 +40,16 @@ public class TrainServiceImpl implements TrainService {
 
         if (ObjectUtil.isNull(train.getId())) { // 插入
             // 对Id、createTime、updateTime 重新赋值
-            // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             train.setId(CommonUtil.getSnowflakeNextId());
             train.setCreateTime(now);
             train.setUpdateTime(now);
+            // 为 code 赋值，格式为“type.code+该类型数据库中的数目+三位随机数”
+            StringBuilder code = new StringBuilder();
+            code.append(train.getType());
+            code.append(trainMapper.countByExample(new TrainExample()));
+            String snowflake = String.valueOf(CommonUtil.getSnowflakeNextId());
+            code.append(snowflake.substring(snowflake.length() - 3));
+            train.setCode(code.toString());
             trainMapper.insert(train);
             log.info("插入车次：{}", train);
         } else { // 修改
@@ -56,7 +62,7 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public PageVo<TrainQueryVo> queryList(TrainQueryForm form) {
         TrainExample trainExample = new TrainExample();
-        trainExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
+        trainExample.setOrderByClause("code");
         TrainExample.Criteria criteria = trainExample.createCriteria();
         // 这里自定义一些过滤的条件，比如:
 //        // 用户只能查自己 memberId 下的车次

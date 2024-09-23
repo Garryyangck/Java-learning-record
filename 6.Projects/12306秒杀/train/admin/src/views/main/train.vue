@@ -35,9 +35,6 @@
   <a-modal v-model:visible="visible" title="车次" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
     <a-form :model="train" :label-col="{span: 4}" :wrapper-col="{span: 18}">
-      <a-form-item label="车次编号">
-        <a-input v-model:value="train.code" />
-      </a-form-item>
       <a-form-item label="车次类型">
         <a-select v-model:value="train.type">
           <a-select-option v-for="item in TRAIN_TYPE_ARRAY" :key="item.code" :value="item.code">

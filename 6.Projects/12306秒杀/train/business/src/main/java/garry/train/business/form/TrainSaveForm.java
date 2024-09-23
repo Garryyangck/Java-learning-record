@@ -1,10 +1,11 @@
 package garry.train.business.form;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
@@ -19,9 +20,8 @@ public class TrainSaveForm {
     private Long id;
 
     /**
-     * 车次编号
+     * 车次编号|可以为空，在service层中生成车次编号，格式为“type.code+该类型数据库中的数目+三位UUID”
      */
-    @NotBlank(message = "【车次编号】不能为空")
     private String code;
 
     /**
