@@ -43,7 +43,14 @@
            ok-text="确认" cancel-text="取消">
     <a-form :model="trainSeat" :label-col="{span: 4}" :wrapper-col="{span: 18}">
       <a-form-item label="车次编号">
-        <a-input v-model:value="trainSeat.trainCode" />
+        <a-select
+            v-model:value="trainSeat.trainCode"
+            show-search
+            :filter-option="filterTrainCodeOption">
+          <a-select-option v-for="item in trains" :key="item.code" :value="item.code" :label="item.code + item.start + item.end + item.type">
+            {{ item.code }} | {{ item.start }} ~ {{ item.end }} | {{ item.type }}
+          </a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="厢序">
         <a-input v-model:value="trainSeat.carriageIndex" />
@@ -242,12 +249,43 @@ export default defineComponent({
       });
     };
 
+    //--------------------------------车次编号下拉框 start--------------------------------
+    const trains = ref([]);
+
+    /**
+     * 获取车次编号下拉框筛选所需参数
+     */
+    const queryTrainCode = () => {
+      axios.get("/business/admin/train/query-all").then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          trains.value = responseVo.data;
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
+    /**
+     * 车次编号下拉框筛选
+     * input 和 option 位内置参数
+     * option 中的 label 为我们自定义的 :label="item.code + item.start + item.end + item.type"
+     *
+     * option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0 意为:
+     * input 为我们输入要查找的文字，如果 option.label 中有这个字符串，则保留；否则被过滤掉
+     */
+    const filterTrainCodeOption = (input, option) => {
+      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    }
+    //--------------------------------车次编号下拉框 end--------------------------------
+
     onMounted(() => {
       document.title = '座位';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
-      })
+      });
+      queryTrainCode();
     });
 
     return {
@@ -259,12 +297,14 @@ export default defineComponent({
       pagination,
       columns,
       loading,
+      trains,
       onAdd,
       onEdit,
       onDelete,
       handleOk,
       handleQuery,
       handleTableChange,
+      filterTrainCodeOption,
     };
   },
 });
