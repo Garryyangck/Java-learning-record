@@ -47,7 +47,7 @@
             v-model:value="train.start"
             show-search
             :filter-option="filterStationOption">
-          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name">
+          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name + item.namePinyin + item.namePy">
             {{ item.name }}
           </a-select-option>
         </a-select>
@@ -63,7 +63,7 @@
             v-model:value="train.end"
             show-search
             :filter-option="filterStationOption">
-          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name">
+          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name + item.namePinyin + item.namePy">
             {{ item.name }}
           </a-select-option>
         </a-select>

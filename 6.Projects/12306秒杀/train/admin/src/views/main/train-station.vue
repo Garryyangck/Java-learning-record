@@ -33,7 +33,8 @@
             v-model:value="trainStation.trainCode"
             show-search
             :filter-option="filterTrainCodeOption">
-          <a-select-option v-for="item in trains" :key="item.code" :value="item.code" :label="item.code + item.start + item.end + item.type">
+          <a-select-option v-for="item in trains" :key="item.code" :value="item.code"
+                           :label="item.code + item.start + item.end + item.type">
             {{ item.code }} | {{ item.start }} ~ {{ item.end }} | {{ item.type }}
           </a-select-option>
         </a-select>
@@ -42,7 +43,14 @@
         <a-input v-model:value="trainStation.index"/>
       </a-form-item>
       <a-form-item label="站名">
-        <a-input v-model:value="trainStation.name"/>
+        <a-select
+            v-model:value="trainStation.name"
+            show-search
+            :filter-option="filterTrainCodeOption">
+          <a-select-option v-for="item in stations" :key="item.name" :value="item.name" :label="item.name + item.namePinyin + item.namePy">
+            {{ item.name }}
+          </a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="站名拼音">
         <a-input v-model:value="trainStation.namePinyin" disabled/>
@@ -256,7 +264,7 @@ export default defineComponent({
       });
     };
 
-    //--------------------------------车次编号下拉框 start--------------------------------
+    //--------------------------------车次编号、station 下拉框 start--------------------------------
     const trains = ref([]);
 
     /**
@@ -267,6 +275,19 @@ export default defineComponent({
         let responseVo = response.data;
         if (responseVo.success) {
           trains.value = responseVo.data;
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
+    const stations = ref([]);
+
+    const queryStation = () => {
+      axios.get("/business/admin/station/query-all").then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          stations.value = responseVo.data;
         } else {
           notification.error({description: responseVo.msg});
         }
@@ -284,7 +305,7 @@ export default defineComponent({
     const filterTrainCodeOption = (input, option) => {
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     }
-    //--------------------------------车次编号下拉框 end--------------------------------
+    //--------------------------------车次编号、station 下拉框 end--------------------------------
 
     onMounted(() => {
       document.title = '火车车站';
@@ -293,6 +314,7 @@ export default defineComponent({
         pageSize: pagination.value.pageSize,
       });
       queryTrainCode();
+      queryStation();
     });
 
     return {
@@ -303,6 +325,7 @@ export default defineComponent({
       columns,
       loading,
       trains,
+      stations,
       onAdd,
       onEdit,
       onDelete,
