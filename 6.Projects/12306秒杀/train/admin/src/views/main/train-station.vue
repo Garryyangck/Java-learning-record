@@ -29,15 +29,7 @@
            ok-text="确认" cancel-text="取消">
     <a-form :model="trainStation" :label-col="{span: 4}" :wrapper-col="{span: 18}">
       <a-form-item label="车次编号">
-        <a-select
-            v-model:value="trainStation.trainCode"
-            show-search
-            :filter-option="filterTrainCodeOption">
-          <a-select-option v-for="item in trains" :key="item.code" :value="item.code"
-                           :label="item.code + item.start + item.end + item.type">
-            {{ item.code }} | {{ item.start }} ~ {{ item.end }} | {{ item.type }}
-          </a-select-option>
-        </a-select>
+        <train-select-view v-model:value="trainStation.trainCode"/>
       </a-form-item>
       <a-form-item label="站序">
         <a-input v-model:value="trainStation.index"/>
@@ -76,9 +68,11 @@ import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 import {pinyin} from "pinyin-pro";
+import TrainSelectView from "@/components/train-select.vue";
 
 export default defineComponent({
   name: "train-station-view",
+  components: {TrainSelectView},
   setup() {
     const visible = ref(false);
     const trainStation = reactive({
@@ -264,23 +258,7 @@ export default defineComponent({
       });
     };
 
-    //--------------------------------车次编号、station 下拉框 start--------------------------------
-    const trains = ref([]);
-
-    /**
-     * 获取车次编号下拉框筛选所需参数
-     */
-    const queryTrainCode = () => {
-      axios.get("/business/admin/train/query-all").then((response) => {
-        let responseVo = response.data;
-        if (responseVo.success) {
-          trains.value = responseVo.data;
-        } else {
-          notification.error({description: responseVo.msg});
-        }
-      })
-    };
-
+    //--------------------------------station 下拉框 start--------------------------------
     const stations = ref([]);
 
     const queryStation = () => {
@@ -305,7 +283,7 @@ export default defineComponent({
     const filterTrainCodeOption = (input, option) => {
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     }
-    //--------------------------------车次编号、station 下拉框 end--------------------------------
+    //--------------------------------station 下拉框 end--------------------------------
 
     onMounted(() => {
       document.title = '火车车站';
@@ -313,7 +291,6 @@ export default defineComponent({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
       });
-      queryTrainCode();
       queryStation();
     });
 
@@ -324,7 +301,6 @@ export default defineComponent({
       pagination,
       columns,
       loading,
-      trains,
       stations,
       onAdd,
       onEdit,
