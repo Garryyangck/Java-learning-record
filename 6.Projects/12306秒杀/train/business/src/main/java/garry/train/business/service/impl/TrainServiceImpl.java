@@ -46,7 +46,14 @@ public class TrainServiceImpl implements TrainService {
             // 为 code 赋值，格式为“type.code+该类型数据库中的数目+三位随机数”
             StringBuilder code = new StringBuilder();
             code.append(train.getType());
-            code.append(trainMapper.countByExample(new TrainExample()));
+            long count = trainMapper.countByExample(new TrainExample());
+            StringBuilder cnt = new StringBuilder();
+            if(count < 10)
+                cnt.append("00");
+            else if(count < 100)
+                cnt.append("0");
+            cnt.append(count);
+            code.append(cnt);
             String snowflake = String.valueOf(CommonUtil.getSnowflakeNextId());
             code.append(snowflake.substring(snowflake.length() - 3));
             train.setCode(code.toString());
