@@ -10,8 +10,12 @@ import garry.train.business.form.TrainQueryForm;
 import garry.train.business.form.TrainSaveForm;
 import garry.train.business.mapper.TrainMapper;
 import garry.train.business.pojo.Train;
+import garry.train.business.pojo.TrainCarriage;
 import garry.train.business.pojo.TrainExample;
+import garry.train.business.pojo.TrainStation;
+import garry.train.business.service.TrainCarriageService;
 import garry.train.business.service.TrainService;
+import garry.train.business.service.TrainStationService;
 import garry.train.business.vo.TrainQueryAllVo;
 import garry.train.business.vo.TrainQueryVo;
 import garry.train.common.util.CommonUtil;
@@ -30,6 +34,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class TrainServiceImpl implements TrainService {
+    @Resource
+    private TrainStationService trainStationService;
+
+    @Resource
+    private TrainCarriageService trainCarriageService;
+
     @Resource
     private TrainMapper trainMapper;
 
@@ -100,6 +110,21 @@ public class TrainServiceImpl implements TrainService {
 
     @Override
     public void delete(Long id) {
+        // 查出该 Train
+        Train train = trainMapper.selectByPrimaryKey(id);
+
+        // 查出 trainCode 下的 trainStation 和 trainCarriage
+        List<TrainStation> trainStations = trainStationService.queryByTrainCode(train.getCode());
+        List<TrainCarriage> trainCarriages = trainCarriageService.queryByTrainCode(train.getCode());
+
+        // 删除它们
+        for (TrainStation trainStation : trainStations) {
+            trainStationService.delete(trainStation.getId());
+        }
+        for (TrainCarriage trainCarriage : trainCarriages) {
+            trainCarriageService.delete(trainCarriage.getId());
+        }
+
         trainMapper.deleteByPrimaryKey(id);
     }
 
@@ -122,6 +147,20 @@ public class TrainServiceImpl implements TrainService {
     public List<Train> queryByCode(String code) {
         TrainExample trainExample = new TrainExample();
         trainExample.createCriteria().andCodeEqualTo(code);
+        return trainMapper.selectByExample(trainExample);
+    }
+
+    @Override
+    public List<Train> queryByStart(String start) {
+        TrainExample trainExample = new TrainExample();
+        trainExample.createCriteria().andStartEqualTo(start);
+        return trainMapper.selectByExample(trainExample);
+    }
+
+    @Override
+    public List<Train> queryByEnd(String end) {
+        TrainExample trainExample = new TrainExample();
+        trainExample.createCriteria().andEndEqualTo(end);
         return trainMapper.selectByExample(trainExample);
     }
 }

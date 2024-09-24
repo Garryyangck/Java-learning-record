@@ -5,6 +5,8 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import garry.train.business.pojo.Train;
+import garry.train.business.service.TrainService;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
@@ -20,6 +22,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +32,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class StationServiceImpl implements StationService {
+    @Resource
+    private TrainService trainService;
+
     @Resource
     private StationMapper stationMapper;
 
@@ -88,6 +94,19 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public void delete(Long id) {
+        // 先得到需要被删除的 Station
+        Station station = stationMapper.selectByPrimaryKey(id);
+
+        // 查询作为始发站和终点站的对应 train
+        List<Train> trains = new ArrayList<>();
+        trains.addAll(trainService.queryByStart(station.getName()));
+        trains.addAll(trainService.queryByEnd(station.getName()));
+
+        // 删除这些 train
+        for (Train train : trains) {
+            trainService.delete(train.getId());
+        }
+
         stationMapper.deleteByPrimaryKey(id);
     }
 

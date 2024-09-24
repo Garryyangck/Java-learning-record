@@ -42,4 +42,10 @@ public interface TrainStationService {
      * 可用于对唯一键 train_code_name_unique 的校验
      */
     List<TrainStation> queryByTrainCodeAndName(String trainCode, String name);
+
+    /**
+     * 通过 trainCode 查询
+     * 用于 TrainService.delete 中同时删除所有隶属于该车次的 TrainStation
+     */
+    List<TrainStation> queryByTrainCode(String trainCode);
 }

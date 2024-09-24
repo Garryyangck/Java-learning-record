@@ -28,13 +28,15 @@ public interface TrainCarriageService {
 
     /**
      * 根据 id(主键) 删除火车车厢
+     * 删除该车次、该车厢下的所有座位
      */
     void delete(Long id);
 
     /**
      * 根据 trainCode 查 TrainCarriage，主要被 service 层调用
+     * 用于 TrainService.delete 中同时删除所有隶属于该车次的 TrainCarriage
      */
-    List<TrainCarriage> selectByTrainCode(String trainCode);
+    List<TrainCarriage> queryByTrainCode(String trainCode);
 
     /**
      * 通过 trainCode 和 index 查询

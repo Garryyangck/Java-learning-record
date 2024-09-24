@@ -110,4 +110,11 @@ public class TrainStationServiceImpl implements TrainStationService {
                 .andNameEqualTo(name);
         return trainStationMapper.selectByExample(trainStationExample);
     }
+
+    @Override
+    public List<TrainStation> queryByTrainCode(String trainCode) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        return trainStationMapper.selectByExample(trainStationExample);
+    }
 }

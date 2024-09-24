@@ -10,7 +10,9 @@ import garry.train.business.form.TrainCarriageSaveForm;
 import garry.train.business.mapper.TrainCarriageMapper;
 import garry.train.business.pojo.TrainCarriage;
 import garry.train.business.pojo.TrainCarriageExample;
+import garry.train.business.pojo.TrainSeat;
 import garry.train.business.service.TrainCarriageService;
+import garry.train.business.service.TrainSeatService;
 import garry.train.business.vo.TrainCarriageQueryVo;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
@@ -29,6 +31,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class TrainCarriageServiceImpl implements TrainCarriageService {
+    @Resource
+    private TrainSeatService trainSeatService;
+
     @Resource
     private TrainCarriageMapper trainCarriageMapper;
 
@@ -87,11 +92,22 @@ public class TrainCarriageServiceImpl implements TrainCarriageService {
 
     @Override
     public void delete(Long id) {
+        // 获取该车厢
+        TrainCarriage trainCarriage = trainCarriageMapper.selectByPrimaryKey(id);
+
+        // 获取所有座位
+        List<TrainSeat> trainSeats = trainSeatService.queryByTrainCodeAndCarriageIndex(trainCarriage.getTrainCode(), trainCarriage.getIndex());
+
+        // 删除这些座位
+        for (TrainSeat trainSeat : trainSeats) {
+            trainSeatService.delete(trainSeat.getId());
+        }
+
         trainCarriageMapper.deleteByPrimaryKey(id);
     }
 
     @Override
-    public List<TrainCarriage> selectByTrainCode(String trainCode) {
+    public List<TrainCarriage> queryByTrainCode(String trainCode) {
         TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
         trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode);
         return trainCarriageMapper.selectByExample(trainCarriageExample);

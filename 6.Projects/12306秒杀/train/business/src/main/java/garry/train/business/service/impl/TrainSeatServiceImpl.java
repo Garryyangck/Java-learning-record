@@ -97,10 +97,19 @@ public class TrainSeatServiceImpl implements TrainSeatService {
     }
 
     @Override
-    public int deleteByTrainCode(String trainCode) {
+    public void deleteByTrainCode(String trainCode) {
         TrainSeatExample trainSeatExample = new TrainSeatExample();
         trainSeatExample.createCriteria().andTrainCodeEqualTo(trainCode);
-        return trainSeatMapper.deleteByExample(trainSeatExample);
+        trainSeatMapper.deleteByExample(trainSeatExample);
+    }
+
+    @Override
+    public List<TrainSeat> queryByTrainCodeAndCarriageIndex(String trainCode, Integer carriageIndex) {
+        TrainSeatExample trainSeatExample = new TrainSeatExample();
+        trainSeatExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andCarriageIndexEqualTo(carriageIndex);
+        return trainSeatMapper.selectByExample(trainSeatExample);
     }
 
     @Override
@@ -115,7 +124,7 @@ public class TrainSeatServiceImpl implements TrainSeatService {
         deleteByTrainCode(trainCode);
 
         // 获取 trainCode 下的所有车厢
-        List<TrainCarriage> carriages = trainCarriageService.selectByTrainCode(trainCode);
+        List<TrainCarriage> carriages = trainCarriageService.queryByTrainCode(trainCode);
 
         // 遍历生成每一个车厢的座位
         for (TrainCarriage carriage : carriages) {

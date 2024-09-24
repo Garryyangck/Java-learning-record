@@ -4,6 +4,10 @@ server:
     context-path: /business # 项目的前缀
 
 spring:
+  main:
+    # 允许循环依赖，为了可以在删除 Train 时，删除 Train 下所有的 Station, Carriage, Seat
+    # WARNING: 允许循环依赖可能会使应用的行为变得不可预测，因此应该将其作为最后的手段
+    allow-circular-references: true
   datasource: # Mybatis 数据库连接配置
     driver-class-name: com.mysql.jdbc.Driver  # driver-class-name：5.7版本为 com.mysql.jdbc.Driver；8.0版本为 com.mysql.cj.jdbc.Driver
     username: garry_train_business

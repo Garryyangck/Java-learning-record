@@ -28,6 +28,7 @@ public interface StationService {
 
     /**
      * 根据 id(主键) 删除车站
+     * 同时删除作为始发站和终点站的对应 Train
      */
     void delete(Long id);
 

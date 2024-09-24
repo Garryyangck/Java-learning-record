@@ -29,6 +29,7 @@ public interface TrainService {
 
     /**
      * 根据 id(主键) 删除车次
+     * 同时删除所有隶属于该车次的 TrainStation 和 TrainCarriage
      */
     void delete(Long id);
 
@@ -42,4 +43,16 @@ public interface TrainService {
      * 还可用于唯一键 code 的校验
      */
     List<Train> queryByCode(String code);
+
+    /**
+     * 根据 start 查 train
+     * 用于 Station 删除时，同时删除作为始发站和终点站的对应 Train
+     */
+    List<Train> queryByStart(String start);
+
+    /**
+     * 根据 end 查 train
+     * 用于 Station 删除时，同时删除作为始发站和终点站的对应 Train
+     */
+    List<Train> queryByEnd(String end);
 }
