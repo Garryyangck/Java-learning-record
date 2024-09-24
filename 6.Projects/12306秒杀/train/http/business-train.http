@@ -2,3 +2,8 @@ GET http://localhost:8080/business/admin/train/query-all
 Accept: application/json
 
 ###
+
+POST http://localhost:8080/business/admin/train/gen-train-seat/D001296
+Content-Type: application/json
+
+###

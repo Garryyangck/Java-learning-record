@@ -3,17 +3,23 @@ package garry.train.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
+import garry.train.business.enums.SeatColEnum;
 import garry.train.business.form.TrainSeatQueryForm;
 import garry.train.business.form.TrainSeatSaveForm;
+import garry.train.business.mapper.TrainCarriageMapper;
+import garry.train.business.mapper.TrainMapper;
 import garry.train.business.mapper.TrainSeatMapper;
-import garry.train.business.pojo.TrainSeat;
-import garry.train.business.pojo.TrainSeatExample;
+import garry.train.business.pojo.*;
 import garry.train.business.service.TrainSeatService;
 import garry.train.business.vo.TrainSeatQueryVo;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +33,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class TrainSeatServiceImpl implements TrainSeatService {
+    @Resource
+    private TrainMapper trainMapper;
+
+    @Resource
+    private TrainCarriageMapper trainCarriageMapper;
+
     @Resource
     private TrainSeatMapper trainSeatMapper;
 
@@ -81,5 +93,55 @@ public class TrainSeatServiceImpl implements TrainSeatService {
     @Override
     public void delete(Long id) {
         trainSeatMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void genTrainSeat(String trainCode) {
+        // 检查参数
+        if (StrUtil.isBlank(trainCode)) {
+            throw new BusinessException(ResponseEnum.WRONG_TRAIN_CODE);
+        }
+        TrainExample trainExample = new TrainExample();
+        trainExample.createCriteria().andCodeEqualTo(trainCode);
+        if (trainMapper.selectByExample(trainExample).isEmpty()) {
+            throw new BusinessException(ResponseEnum.WRONG_TRAIN_CODE);
+        }
+
+        // 清空 trainCode 的所有已有座位
+        TrainSeatExample trainSeatExample = new TrainSeatExample();
+        trainSeatExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        trainSeatMapper.deleteByExample(trainSeatExample);
+
+        // 获取 trainCode 下的所有车厢
+        TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
+        trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        List<TrainCarriage> carriages = trainCarriageMapper.selectByExample(trainCarriageExample);
+
+        // 遍历生成每一个车厢的座位
+        for (TrainCarriage carriage : carriages) {
+            Integer carriageIndex = carriage.getIndex();
+            String seatType = carriage.getSeatType();
+            for (int row = 1; row <= carriage.getRowCount(); row++) {
+                List<SeatColEnum> colEnums = SeatColEnum.getColsByType(seatType);
+                log.info("colEnums = {}", JSONUtil.toJsonPrettyStr(colEnums));
+                for (SeatColEnum colEnum : colEnums) {
+                    String col = colEnum.getCode();
+                    log.info("col = {}", col);
+                    TrainSeatSaveForm form = genTrainSeatSaveForm(trainCode, colEnum, carriageIndex, row, col, seatType, colEnums);
+                    save(form);
+                }
+            }
+        }
+    }
+
+    private static TrainSeatSaveForm genTrainSeatSaveForm(String trainCode, SeatColEnum colEnum, Integer carriageIndex, int row, String col, String seatType, List<SeatColEnum> colEnums) {
+        TrainSeatSaveForm form = new TrainSeatSaveForm();
+        form.setTrainCode(trainCode);
+        form.setCarriageIndex(carriageIndex);
+        form.setRow(row < 10 ? "0" + row : String.valueOf(row));
+        form.setCol(col);
+        form.setSeatType(seatType);
+        form.setCarriageSeatIndex((row - 1) * colEnums.size() + colEnums.indexOf(colEnum) + 1);
+        return form;
     }
 }

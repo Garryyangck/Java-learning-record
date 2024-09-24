@@ -27,6 +27,8 @@ public enum ResponseEnum {
     WRONG_TOKEN(7, "JWT不存在或已过期"),
 
     THREAD_LOCAL_ERROR(8, "ThreadLocal获取会员Id失败"),
+
+    WRONG_TRAIN_CODE(9, "车次编号错误或不存在"),
     ;
 
     private final Integer code;
