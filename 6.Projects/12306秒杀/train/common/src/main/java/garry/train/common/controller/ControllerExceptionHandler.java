@@ -4,6 +4,7 @@ import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -50,5 +51,13 @@ public class ControllerExceptionHandler {
         }
         log.error("校验异常: {}", msg);
         return ResponseVo.error(ResponseEnum.PARAMETER_INPUT_ERROR, msg.toString());
+    }
+
+    @ExceptionHandler({DuplicateKeyException.class})
+    @ResponseBody
+    public ResponseVo duplicateKeyExceptionHandler(DuplicateKeyException e) {
+        String msg = e.getCause().getLocalizedMessage();
+        log.error("数据库唯一键异常: {}", msg);
+        return ResponseVo.error(ResponseEnum.DUPLICATE_KEY, "输入的数据已存在，新增失败");
     }
 }

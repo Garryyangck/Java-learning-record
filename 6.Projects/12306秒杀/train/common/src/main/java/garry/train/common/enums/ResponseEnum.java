@@ -29,6 +29,8 @@ public enum ResponseEnum {
     THREAD_LOCAL_ERROR(8, "ThreadLocal获取会员Id失败"),
 
     WRONG_TRAIN_CODE(9, "车次编号错误或不存在"),
+
+    DUPLICATE_KEY(10, "数据库唯一键异常"),
     ;
 
     private final Integer code;
