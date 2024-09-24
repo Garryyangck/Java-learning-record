@@ -5,6 +5,8 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.StationQueryForm;
@@ -36,6 +38,11 @@ public class StationServiceImpl implements StationService {
         DateTime now = DateTime.now();
 
         if (ObjectUtil.isNull(station.getId())) { // 插入
+            // 校验唯一键 name_unique
+            if (!queryByName(station.getName()).isEmpty()) {
+                throw new BusinessException(ResponseEnum.BUSINESS_DUPLICATE_STATION_NAME);
+            }
+
             // 对Id、createTime、updateTime 重新赋值
             // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             station.setId(CommonUtil.getSnowflakeNextId());
@@ -91,5 +98,12 @@ public class StationServiceImpl implements StationService {
         StationExample.Criteria criteria = stationExample.createCriteria();
         List<Station> stations = stationMapper.selectByExample(stationExample);
         return BeanUtil.copyToList(stations, StationQueryVo.class);
+    }
+
+    @Override
+    public List<Station> queryByName(String name) {
+        StationExample stationExample = new StationExample();
+        stationExample.createCriteria().andNameEqualTo(name);
+        return stationMapper.selectByExample(stationExample);
     }
 }

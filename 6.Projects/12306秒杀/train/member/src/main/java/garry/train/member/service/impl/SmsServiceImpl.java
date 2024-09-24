@@ -63,17 +63,17 @@ public class SmsServiceImpl implements SmsService {
             SendSmsResponse response = client.getAcsResponse(request);
             if (!StringUtils.equals("OK", response.getCode())){
                 log.error("[短信服务] 发送短信失败，手机号码：{}，原因：{}，response = {}", phoneNumber, response.getMessage(), JSONObject.toJSON(response));
-                throw new BusinessException(ResponseEnum.MESSAGE_CODE_SEND_FAILED);
+                throw new BusinessException(ResponseEnum.MEMBER_MESSAGE_CODE_SEND_FAILED);
             } else {
                 log.info("[短信服务] 发送短信成功，response = {}", JSONUtil.toJsonPrettyStr(response));
             }
 
         } catch (ClientException e) {
             log.error("[短信服务] 发送短信异常，手机号码：{}，错误码：{}，错误信息：{}", phoneNumber, e.getErrCode(), e.getErrMsg());
-            throw new BusinessException(ResponseEnum.MESSAGE_CODE_SEND_FAILED);
+            throw new BusinessException(ResponseEnum.MEMBER_MESSAGE_CODE_SEND_FAILED);
         } catch (Exception e) {
             log.error("[短信服务] 发送短信异常，手机号码：{}", phoneNumber, e);
-            throw new BusinessException(ResponseEnum.MESSAGE_CODE_SEND_FAILED);
+            throw new BusinessException(ResponseEnum.MEMBER_MESSAGE_CODE_SEND_FAILED);
         }
     }
 }

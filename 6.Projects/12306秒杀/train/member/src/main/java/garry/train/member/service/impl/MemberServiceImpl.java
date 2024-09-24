@@ -59,7 +59,7 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = selectMembersByMobile(mobile);
 
         if (CollUtil.isNotEmpty(members)) {
-            throw new BusinessException(ResponseEnum.MOBILE_REGISTER_EXIST);
+            throw new BusinessException(ResponseEnum.MEMBER_MOBILE_REGISTER_EXIST);
         }
 
         Member member = new Member();
@@ -104,18 +104,18 @@ public class MemberServiceImpl implements MemberService {
 
         if (CollUtil.isEmpty(members)) {
             log.info("手机号 {} 不存在", mobile);
-            throw new BusinessException(ResponseEnum.MOBILE_NOT_EXIST);
+            throw new BusinessException(ResponseEnum.MEMBER_MOBILE_NOT_EXIST);
         }
 
         String rightCode = (String) redisTemplate.opsForValue().get(RedisUtil.getRedisKey4Code(mobile));
         if (StrUtil.isBlank(rightCode)) {
             log.info("手机号 {} 未获取验证码或验证码已过期", mobile);
-            throw new BusinessException(ResponseEnum.CODE_NOT_EXIST);
+            throw new BusinessException(ResponseEnum.MEMBER_CODE_NOT_EXIST);
         }
 
         if (!rightCode.equals(code)) {
             log.info("手机号 {} 的验证码 {} 与正确验证码 {} 不匹配", mobile, code, rightCode);
-            throw new BusinessException(ResponseEnum.WRONG_CODE);
+            throw new BusinessException(ResponseEnum.MEMBER_WRONG_CODE);
         }
 
         log.info("手机号 {} 的用户身份验证成功，使用JWT设置token", mobile);

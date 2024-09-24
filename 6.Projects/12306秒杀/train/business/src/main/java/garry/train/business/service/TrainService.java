@@ -39,6 +39,7 @@ public interface TrainService {
 
     /**
      * 根据 code 查 train，主要被 service 层调用
+     * 还可用于唯一键 code 的校验
      */
-    List<Train> selectByCode(String code);
+    List<Train> queryByCode(String code);
 }

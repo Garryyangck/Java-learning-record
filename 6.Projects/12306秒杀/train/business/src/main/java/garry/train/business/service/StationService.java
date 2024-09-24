@@ -1,5 +1,6 @@
 package garry.train.business.service;
 
+import garry.train.business.pojo.Station;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.StationQueryForm;
 import garry.train.business.form.StationSaveForm;
@@ -34,4 +35,10 @@ public interface StationService {
      * 返回所有车站的名称，用于 train 插入时选择
      */
     List<StationQueryVo> queryAll();
+
+    /**
+     * 根据 Name 查询 Station
+     * 主要用于校验唯一键约束
+     */
+    List<Station> queryByName(String name);
 }

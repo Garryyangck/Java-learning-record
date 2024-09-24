@@ -36,6 +36,8 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
         DateTime now = DateTime.now();
 
         if (ObjectUtil.isNull(${domain}.getId())) { // 插入
+            // 插入时要看数据库有没有唯一键约束，在此校验唯一键约束，防止出现 DuplicationKeyException
+
             // 对Id、createTime、updateTime 重新赋值
             // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             ${domain}.setId(CommonUtil.getSnowflakeNextId());

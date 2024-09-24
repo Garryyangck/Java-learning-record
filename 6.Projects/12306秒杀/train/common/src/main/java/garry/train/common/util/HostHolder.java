@@ -37,8 +37,8 @@ public class HostHolder {
         try {
             return members.get().getId();
         } catch (Exception e) {
-            log.error(ResponseEnum.THREAD_LOCAL_ERROR.getMsg());
-            throw new BusinessException(ResponseEnum.THREAD_LOCAL_ERROR);
+            log.error(ResponseEnum.MEMBER_THREAD_LOCAL_ERROR.getMsg());
+            throw new BusinessException(ResponseEnum.MEMBER_THREAD_LOCAL_ERROR);
         }
     }
 }

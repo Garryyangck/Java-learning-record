@@ -5,8 +5,6 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.TrainCarriageQueryForm;
 import garry.train.business.form.TrainCarriageSaveForm;
 import garry.train.business.mapper.TrainCarriageMapper;
@@ -14,6 +12,10 @@ import garry.train.business.pojo.TrainCarriage;
 import garry.train.business.pojo.TrainCarriageExample;
 import garry.train.business.service.TrainCarriageService;
 import garry.train.business.vo.TrainCarriageQueryVo;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,11 @@ public class TrainCarriageServiceImpl implements TrainCarriageService {
         DateTime now = DateTime.now();
 
         if (ObjectUtil.isNull(trainCarriage.getId())) { // 插入
+            // 唯一键 train_code_index_unique 校验
+            if(!queryByTrainCodeAndIndex(trainCarriage.getTrainCode(), trainCarriage.getIndex()).isEmpty()) {
+                throw new BusinessException(ResponseEnum.BUSINESS_DUPLICATE_TRAIN_CARRIAGE_INDEX);
+            }
+
             // 对Id、createTime、updateTime 重新赋值
             // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             trainCarriage.setId(CommonUtil.getSnowflakeNextId());
@@ -87,6 +94,15 @@ public class TrainCarriageServiceImpl implements TrainCarriageService {
     public List<TrainCarriage> selectByTrainCode(String trainCode) {
         TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
         trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        return trainCarriageMapper.selectByExample(trainCarriageExample);
+    }
+
+    @Override
+    public List<TrainCarriage> queryByTrainCodeAndIndex(String trainCode, Integer index) {
+        TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
+        trainCarriageExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andIndexEqualTo(index);
         return trainCarriageMapper.selectByExample(trainCarriageExample);
     }
 }

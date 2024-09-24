@@ -107,8 +107,8 @@ public class TrainSeatServiceImpl implements TrainSeatService {
     public void genTrainSeat(String trainCode) {
         // 检查参数
         if (StrUtil.isBlank(trainCode)
-                || trainService.selectByCode(trainCode).isEmpty()) {
-            throw new BusinessException(ResponseEnum.WRONG_TRAIN_CODE);
+                || trainService.queryByCode(trainCode).isEmpty()) {
+            throw new BusinessException(ResponseEnum.BUSINESS_WRONG_TRAIN_CODE);
         }
 
         // 清空 trainCode 的所有已有座位

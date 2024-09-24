@@ -35,4 +35,10 @@ public interface TrainCarriageService {
      * 根据 trainCode 查 TrainCarriage，主要被 service 层调用
      */
     List<TrainCarriage> selectByTrainCode(String trainCode);
+
+    /**
+     * 通过 trainCode 和 index 查询
+     * 可用于对唯一键 train_code_index_unique 的校验
+     */
+    List<TrainCarriage> queryByTrainCodeAndIndex(String trainCode, Integer index);
 }

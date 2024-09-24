@@ -5,6 +5,8 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.TrainStationQueryForm;
@@ -36,6 +38,14 @@ public class TrainStationServiceImpl implements TrainStationService {
         DateTime now = DateTime.now();
 
         if (ObjectUtil.isNull(trainStation.getId())) { // 插入
+            // 进行唯一键 train_code_index_unique, train_code_name_unique 校验
+            if (!queryByTrainCodeAndIndex(trainStation.getTrainCode(), trainStation.getIndex()).isEmpty()) {
+                throw new BusinessException(ResponseEnum.BUSINESS_DUPLICATE_TRAIN_STATION_INDEX);
+            }
+            if (!queryByTrainCodeAndName(trainStation.getTrainCode(), trainStation.getName()).isEmpty()) {
+                throw new BusinessException(ResponseEnum.BUSINESS_DUPLICATE_TRAIN_STATION_NAME);
+            }
+
             // 对Id、createTime、updateTime 重新赋值
             // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             trainStation.setId(CommonUtil.getSnowflakeNextId());
@@ -81,5 +91,23 @@ public class TrainStationServiceImpl implements TrainStationService {
     @Override
     public void delete(Long id) {
         trainStationMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<TrainStation> queryByTrainCodeAndIndex(String trainCode, Integer index) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andIndexEqualTo(index);
+        return trainStationMapper.selectByExample(trainStationExample);
+    }
+
+    @Override
+    public List<TrainStation> queryByTrainCodeAndName(String trainCode, String name) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andNameEqualTo(name);
+        return trainStationMapper.selectByExample(trainStationExample);
     }
 }

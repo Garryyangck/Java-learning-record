@@ -43,19 +43,23 @@ public class TrainServiceImpl implements TrainService {
             train.setId(CommonUtil.getSnowflakeNextId());
             train.setCreateTime(now);
             train.setUpdateTime(now);
-            // 为 code 赋值，格式为“type.code+该类型数据库中的数目+三位随机数”
+
+            // 为 code 赋值，格式为“type.code+数据库中的数目+三位随机数”
             StringBuilder code = new StringBuilder();
-            code.append(train.getType());
-            long count = trainMapper.countByExample(new TrainExample());
-            StringBuilder cnt = new StringBuilder();
-            if(count < 10)
-                cnt.append("00");
-            else if(count < 100)
-                cnt.append("0");
-            cnt.append(count);
-            code.append(cnt);
-            String snowflake = String.valueOf(CommonUtil.getSnowflakeNextId());
-            code.append(snowflake.substring(snowflake.length() - 3));
+            do {
+                code.append(train.getType());
+                long count = trainMapper.countByExample(new TrainExample());
+                StringBuilder cnt = new StringBuilder();
+                if(count < 10)
+                    cnt.append("00");
+                else if(count < 100)
+                    cnt.append("0");
+                cnt.append(count);
+                code.append(cnt);
+                String snowflake = String.valueOf(CommonUtil.getSnowflakeNextId());
+                code.append(snowflake.substring(snowflake.length() - 3));
+            } while (!queryByCode(code.toString()).isEmpty()); // 校验 code 是否唯一
+
             train.setCode(code.toString());
             trainMapper.insert(train);
             log.info("插入车次：{}", train);
@@ -115,7 +119,7 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List<Train> selectByCode(String code) {
+    public List<Train> queryByCode(String code) {
         TrainExample trainExample = new TrainExample();
         trainExample.createCriteria().andCodeEqualTo(code);
         return trainMapper.selectByExample(trainExample);
