@@ -83,7 +83,7 @@ public class ServerGenerator {
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
 //            generateAll(Domain, do_main, param, true);
-            generateVue(do_main, param, false, true);
+            generateVue(do_main, param, true, true);
         }
     }
 
