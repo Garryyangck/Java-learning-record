@@ -151,6 +151,8 @@ export default defineComponent({
       if (Tool.isNotEmpty(trainCarriage.rowCount)
           && Tool.isNotEmpty(trainCarriage.colCount)) {
         trainCarriage.seatCount = trainCarriage.rowCount * trainCarriage.colCount;
+      } else {
+        trainCarriage.seatCount = 0;
       }
     });
 
