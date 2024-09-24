@@ -55,11 +55,10 @@ public class TrainSeatServiceImpl implements TrainSeatService {
         TrainSeatExample trainSeatExample = new TrainSeatExample();
         trainSeatExample.setOrderByClause("train_code asc, carriage_index asc, row asc"); // 最新更新的数据，最先被查出来
         TrainSeatExample.Criteria criteria = trainSeatExample.createCriteria();
-        // 这里自定义一些过滤的条件，比如:
-//        // 用户只能查自己 memberId 下的座位
-//        if (ObjectUtil.isNotNull()) {
-//            criteria.andMemberIdEqualTo(memberId);
-//        }
+        // 注意用 isNotEmpty 而不是 isNotNUll，按照车次编号过滤
+        if (ObjectUtil.isNotEmpty(form.getTrainCode())) {
+            criteria.andTrainCodeEqualTo(form.getTrainCode());
+        }
 
         // 启动分页
         PageHelper.startPage(form.getPageNum(), form.getPageSize());

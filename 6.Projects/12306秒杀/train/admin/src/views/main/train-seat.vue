@@ -2,6 +2,7 @@
 <template>
   <p>
     <a-space>
+      <train-select-view v-model:value="params.trainCode" style="width: 300px"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
       <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
@@ -73,7 +74,7 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref} from 'vue';
+import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 import TrainSelectView from "@/components/train-select.vue";
@@ -103,6 +104,9 @@ export default defineComponent({
       pageSize: 10,
     });
     let loading = ref(false);
+    let params = ref({
+      trainCode: null,
+    });
     const columns = ref([
     {
       title: '车次编号',
@@ -139,6 +143,13 @@ export default defineComponent({
       dataIndex: 'operation'
     }
     ]);
+
+    watch(() => params.value.trainCode, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
 
     const onAdd = () => {
       trainSeat.id = undefined;
@@ -210,6 +221,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: pagination.value.pageSize,
         };
+        params.value.trainCode = null;
         byRefresh = true;
       }
       loading.value = true;
@@ -217,6 +229,7 @@ export default defineComponent({
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
+          trainCode: params.value.trainCode,
         }
       }).then((response) => {
         loading.value = false;
@@ -261,6 +274,7 @@ export default defineComponent({
       pagination,
       columns,
       loading,
+      params,
       onAdd,
       onEdit,
       onDelete,

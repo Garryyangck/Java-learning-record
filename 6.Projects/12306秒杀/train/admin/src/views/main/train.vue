@@ -101,7 +101,7 @@ export default defineComponent({
     let loading = ref(false);
     let params = ref({
       code: null,
-    })
+    });
     const columns = ref([
     {
       title: '车次编号',
@@ -246,6 +246,7 @@ export default defineComponent({
           pageNum: 1,
           pageSize: pagination.value.pageSize,
         };
+        params.value.code = null;
         byRefresh = true;
       }
       loading.value = true;

@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class TrainStationQueryForm extends PageForm {
     /**
-     * 已经继承 pageNum、pageSize，在这下面自定义用于过滤查询结果的字段
+     * 车次编号
      */
+    private String trainCode;
 }
