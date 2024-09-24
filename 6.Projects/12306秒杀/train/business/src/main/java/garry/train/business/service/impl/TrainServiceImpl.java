@@ -71,11 +71,10 @@ public class TrainServiceImpl implements TrainService {
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("code");
         TrainExample.Criteria criteria = trainExample.createCriteria();
-        // 这里自定义一些过滤的条件，比如:
-//        // 用户只能查自己 memberId 下的车次
-//        if (ObjectUtil.isNotNull()) {
-//            criteria.andMemberIdEqualTo(memberId);
-//        }
+        // 注意用 isNotEmpty 而不是 isNotNUll，按照车次编号过滤
+        if (ObjectUtil.isNotEmpty(form.getCode())) {
+            criteria.andCodeEqualTo(form.getCode());
+        }
 
         // 启动分页
         PageHelper.startPage(form.getPageNum(), form.getPageSize());

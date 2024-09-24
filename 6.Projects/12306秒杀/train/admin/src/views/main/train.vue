@@ -2,6 +2,7 @@
 <template>
   <p>
     <a-space>
+      <train-select-view v-model:value="params.code" style="width: 300px"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
       <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
@@ -70,10 +71,11 @@ import axios from "axios";
 import {notification} from "ant-design-vue";
 import {pinyin} from "pinyin-pro";
 import StationSelectView from "@/components/station-select.vue";
+import TrainSelectView from "@/components/train-select.vue";
 
 export default defineComponent({
   name: "train-view",
-  components: {StationSelectView},
+  components: {TrainSelectView, StationSelectView},
   setup() {
     const TRAIN_TYPE_ARRAY = window.TRAIN_TYPE_ARRAY;
     const visible = ref(false);
@@ -97,6 +99,9 @@ export default defineComponent({
       pageSize: 10,
     });
     let loading = ref(false);
+    let params = ref({
+      code: null,
+    })
     const columns = ref([
     {
       title: '车次编号',
@@ -145,7 +150,7 @@ export default defineComponent({
     ]);
 
     watch(() => train.start, () => {
-      if (train.start !== null && train.start !== undefined) {
+      if (Tool.isNotEmpty(train.start)) {
         train.startPinyin = pinyin(train.start, {toneType: 'none'}).replaceAll(" ", "");
       } else {
         train.startPinyin = undefined;
@@ -153,11 +158,18 @@ export default defineComponent({
     });
 
     watch(() => train.end, () => {
-      if (train.end !== null && train.end !== undefined) {
+      if (Tool.isNotEmpty(train.end)) {
         train.endPinyin = pinyin(train.end, {toneType: 'none'}).replaceAll(" ", "");
       } else {
         train.endPinyin = undefined;
       }
+    });
+
+    watch(() => params.value.code, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
     });
 
     const onAdd = () => {
@@ -241,6 +253,7 @@ export default defineComponent({
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
+          code: params.value.code,
         }
       }).then((response) => {
         loading.value = false;
@@ -284,6 +297,7 @@ export default defineComponent({
       pagination,
       columns,
       loading,
+      params,
       onAdd,
       onEdit,
       onDelete,

@@ -137,7 +137,7 @@ export default defineComponent({
     ]);
 
     watch(() => trainStation.name, () => {
-      if (trainStation.name !== null && trainStation.name !== undefined) {
+      if (Tool.isNotEmpty(trainStation.name)) {
         trainStation.namePinyin = pinyin(trainStation.name, {toneType: 'none'}).replaceAll(" ", "");
       } else {
         trainStation.namePinyin = undefined;
