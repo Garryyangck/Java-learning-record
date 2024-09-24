@@ -113,4 +113,11 @@ public class TrainServiceImpl implements TrainService {
                 }).toList();
         return BeanUtil.copyToList(trains, TrainQueryAllVo.class);
     }
+
+    @Override
+    public List<Train> selectByCode(String code) {
+        TrainExample trainExample = new TrainExample();
+        trainExample.createCriteria().andCodeEqualTo(code);
+        return trainMapper.selectByExample(trainExample);
+    }
 }

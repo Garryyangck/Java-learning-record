@@ -1,9 +1,12 @@
 package garry.train.business.service;
 
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.TrainCarriageQueryForm;
 import garry.train.business.form.TrainCarriageSaveForm;
+import garry.train.business.pojo.TrainCarriage;
 import garry.train.business.vo.TrainCarriageQueryVo;
+import garry.train.common.vo.PageVo;
+
+import java.util.List;
 
 /**
  * @author Garry
@@ -27,4 +30,9 @@ public interface TrainCarriageService {
      * 根据 id(主键) 删除火车车厢
      */
     void delete(Long id);
+
+    /**
+     * 根据 trainCode 查 TrainCarriage，主要被 service 层调用
+     */
+    List<TrainCarriage> selectByTrainCode(String trainCode);
 }

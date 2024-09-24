@@ -32,4 +32,9 @@ public interface TrainSeatService {
      * 根据 trainCode 的车厢的 seatType 生成座位
      */
     void genTrainSeat(String trainCode);
+
+    /**
+     * 根据 trainCode 删除座位，主要被 service 层调用
+     */
+    int deleteByTrainCode(String trainCode);
 }
