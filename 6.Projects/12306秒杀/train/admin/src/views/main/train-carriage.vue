@@ -50,13 +50,13 @@
         </a-select>
       </a-form-item>
       <a-form-item label="座位数">
-        <a-input v-model:value="trainCarriage.seatCount" />
+        <a-input v-model:value="trainCarriage.seatCount" disabled />
       </a-form-item>
       <a-form-item label="排数">
         <a-input v-model:value="trainCarriage.rowCount" />
       </a-form-item>
       <a-form-item label="列数">
-        <a-input v-model:value="trainCarriage.colCount" />
+        <a-input v-model:value="trainCarriage.colCount" disabled />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -73,6 +73,7 @@ export default defineComponent({
   components: {TrainSelectView},
   setup() {
     const SEAT_TYPE_ARRAY = window.SEAT_TYPE_ARRAY;
+    const SEAT_COL_ARRAY = window.SEAT_COL_ARRAY;
     const visible = ref(false);
     const trainCarriage = reactive({
       id: undefined,
@@ -137,6 +138,20 @@ export default defineComponent({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
       });
+    });
+
+    watch(() => trainCarriage.seatType, () => {
+      if (Tool.isNotEmpty(trainCarriage.seatType)) {
+        const list = SEAT_COL_ARRAY.filter(seat => seat.type === trainCarriage.seatType);
+        trainCarriage.colCount = list.length;
+      }
+    });
+
+    watch(() => trainCarriage.rowCount, () => {
+      if (Tool.isNotEmpty(trainCarriage.rowCount)
+          && Tool.isNotEmpty(trainCarriage.colCount)) {
+        trainCarriage.seatCount = trainCarriage.rowCount * trainCarriage.colCount;
+      }
     });
 
     const onAdd = () => {
