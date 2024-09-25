@@ -1,7 +1,6 @@
 package garry.train.batch.config;
 
 import garry.train.common.interceptor.LogIdInterceptor;
-import garry.train.common.interceptor.MemberInterceptor;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,8 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
-    @Resource
-    private MemberInterceptor memberInterceptor;
 
     @Resource
     private LogIdInterceptor logIdInterceptor;
@@ -24,13 +21,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(logIdInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                );
-
-        // 路径不要包含context-path(即 application.yml 中配置的，最前面的：/member)
-        registry.addInterceptor(memberInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/**"
                 );
     }
 }

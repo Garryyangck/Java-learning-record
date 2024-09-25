@@ -8,6 +8,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ResponseEnum {
+
     ERROR(-1, "服务器异常"),
 
     SUCCESS(0, "操作成功"),
@@ -39,6 +40,22 @@ public enum ResponseEnum {
     BUSINESS_DUPLICATE_TRAIN_STATION_NAME(13, "站名已存在"),
 
     BUSINESS_DUPLICATE_TRAIN_CARRIAGE_INDEX(14, "厢号已存在"),
+
+    BATCH_SCHEDULER_ADD_FAILED_DISPATCH_ERROR(15, "创建定时任务失败: 调度异常"),
+
+    BATCH_SCHEDULER_ADD_FAILED_JOB_NOT_FOUND(16, "创建定时任务失败: 任务类不存在"),
+
+    BATCH_SCHEDULER_PAUSE_FAILED_DISPATCH_ERROR(17, "暂停定时任务失败: 调度异常"),
+
+    BATCH_SCHEDULER_RESUME_FAILED_DISPATCH_ERROR(18, "重启定时任务失败: 调度异常"),
+
+    BATCH_SCHEDULER_RESCHEDULE_FAILED_DISPATCH_ERROR(19, "更新定时任务失败: 调度异常"),
+
+    BATCH_SCHEDULER_DELETE_FAILED_DISPATCH_ERROR(20, "删除定时任务失败: 调度异常"),
+
+    BATCH_SCHEDULER_QUERY_FAILED_DISPATCH_ERROR(21, "查看定时任务失败: 调度异常"),
+
+    BATCH_SCHEDULER_RUN_FAILED_DISPATCH_ERROR(22, "手动执行任务失败: 调度异常"),
     ;
 
     private final Integer code;
