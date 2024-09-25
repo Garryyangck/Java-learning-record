@@ -24,6 +24,11 @@
             <groupId>garry</groupId>
             <artifactId>common</artifactId>
         </dependency>
+        <!--quartz的springboot依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
         <!--spring-boot-starter-test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
