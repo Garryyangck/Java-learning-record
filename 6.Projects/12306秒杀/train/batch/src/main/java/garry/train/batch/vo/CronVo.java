@@ -13,7 +13,7 @@ import java.util.Date;
 public class CronVo {
 
     /**
-     * 任务类名 (用到了反射，必须和类名相同)
+     * 任务全类名 (用到了反射，必须和全类名相同)
      */
     private String name;
 

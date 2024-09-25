@@ -24,31 +24,6 @@
           <user-outlined/> &nbsp; 关于
         </router-link>
       </a-menu-item>
-      <a-menu-item key="/station">
-        <router-link to="/station">
-          <ClockCircle-outlined/> &nbsp; 车站管理
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="/train">
-        <router-link to="/train">
-          <Car-outlined/> &nbsp; 火车管理
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="/train-station">
-        <router-link to="/train-station">
-          <Car-outlined/> &nbsp; 火车车站
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="/train-carriage">
-        <router-link to="/train-carriage">
-          <Car-outlined/> &nbsp; 火车车厢
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="/train-seat">
-        <router-link to="/train-seat">
-          <Car-outlined/> &nbsp; 火车座位
-        </router-link>
-      </a-menu-item>
     </a-menu>
   </a-layout-header>
 </template>
