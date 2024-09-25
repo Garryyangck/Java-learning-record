@@ -1,4 +1,4 @@
-package garry.train.member.controller;
+package garry.train.batch.controller;
 
 import garry.train.common.vo.ResponseVo;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public ResponseVo<String> hello() {
-        return ResponseVo.success("hello member");
+        return ResponseVo.success("hello batch");
     }
 }

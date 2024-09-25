@@ -66,7 +66,7 @@ public class TrainSeatServiceImpl implements TrainSeatService {
     @Override
     public PageVo<TrainSeatQueryVo> queryList(TrainSeatQueryForm form) {
         TrainSeatExample trainSeatExample = new TrainSeatExample();
-        trainSeatExample.setOrderByClause("train_code asc, carriage_index asc, row asc"); // 最新更新的数据，最先被查出来
+        trainSeatExample.setOrderByClause("train_code asc, carriage_index asc, row asc, carriage_seat_index asc");
         TrainSeatExample.Criteria criteria = trainSeatExample.createCriteria();
         // 注意用 isNotEmpty 而不是 isNotNUll，按照车次编号过滤
         if (ObjectUtil.isNotEmpty(form.getTrainCode())) {

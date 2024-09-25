@@ -17,6 +17,7 @@
         <module>gateway</module>
         <module>generator</module>
         <module>business</module>
+        <module>batch</module>
     </modules>
 
     <!--配置信息-->

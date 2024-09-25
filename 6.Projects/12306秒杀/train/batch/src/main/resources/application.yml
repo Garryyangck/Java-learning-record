@@ -1,0 +1,21 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /batch # 项目的前缀
+
+spring:
+  datasource: # Mybatis 数据库连接配置
+    driver-class-name: com.mysql.jdbc.Driver  # driver-class-name：5.7版本为 com.mysql.jdbc.Driver；8.0版本为 com.mysql.cj.jdbc.Driver
+    username: garry_train_batch
+    password: garry_train_batch
+    url: jdbc:mysql://localhost:3306/train_batch?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
+
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml  # 指定对应的 xml文件的位置为：target/classes/mapper下的所有文件夹的所有.xml文件
+
+logging:
+  level:
+    garry:
+      train:
+        batch:
+          mapper: trace # garry.train.business.mapper下的日志等级设置为 trace，可以打印出 sql
