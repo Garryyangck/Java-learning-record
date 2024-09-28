@@ -36,7 +36,6 @@ public class DailyTrainAdminController {
 
     @RequestMapping(value = "/query-list", method = RequestMethod.GET)
     public ResponseVo<PageVo<DailyTrainQueryVo>> queryList(@Valid DailyTrainQueryForm form) {
-//        form.setMemberId(hostHolder.getMemberId()); // service 层是管理员和用户通用的接口，只有用户才需要取 memberId，因此取 memberId 的操作在 Controller 层实现
         PageVo<DailyTrainQueryVo> vo = dailyTrainService.queryList(form);
         return ResponseVo.success(vo);
     }
