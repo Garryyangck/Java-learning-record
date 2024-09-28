@@ -42,23 +42,23 @@ const routes = [
                 path: 'business/',
                 children: [
                     {
-                        path: 'train',
+                        path: 'daily-train',
                         component: () => import('../views/main/business/daily-train.vue'),
                     },
+                    {
+                        path: 'daily-train-station',
+                        component: () => import('../views/main/business/daily-train-station.vue'),
+                    },
                     // {
-                    //     path: 'train-station',
-                    //     component: () => import('../views/main/business/daily-train-station.vue'),
-                    // },
-                    // {
-                    //     path: 'train-carriage',
+                    //     path: 'daily-train-carriage',
                     //     component: () => import('../views/main/business/daily-train-carriage.vue'),
                     // },
                     // {
-                    //     path: 'train-seat',
+                    //     path: 'daily-train-seat',
                     //     component: () => import('../views/main/business/daily-train-seat.vue'),
                     // },
                     // {
-                    //     path: 'train-ticket',
+                    //     path: 'daily-train-ticket',
                     //     component: () => import('../views/main/business/daily-train-ticket.vue'),
                     // },
                 ]

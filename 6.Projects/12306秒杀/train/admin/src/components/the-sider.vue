@@ -35,7 +35,7 @@
         </a-menu-item>
         <a-menu-item key="/base/train-station">
           <router-link to="/base/train-station">
-            <Car-outlined/> &nbsp; 途经车站
+            <Car-outlined/> &nbsp; 车次车站
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-carriage">
@@ -56,29 +56,29 @@
             业务管理
           </span>
         </template>
-        <a-menu-item key="/business/train">
-          <router-link to="/business/train">
+        <a-menu-item key="/business/daily-train">
+          <router-link to="/business/daily-train">
             <Car-outlined/> &nbsp; 每日火车
           </router-link>
         </a-menu-item>
-        <a-menu-item key="/business/train-station">
-          <router-link to="/business/train-station">
-            <Car-outlined/> &nbsp; 途经车站
+        <a-menu-item key="/business/daily-train-station">
+          <router-link to="/business/daily-train-station">
+            <Car-outlined/> &nbsp; 每日车站
           </router-link>
         </a-menu-item>
-        <a-menu-item key="/business/train-carriage">
-          <router-link to="/business/train-carriage">
-            <Car-outlined/> &nbsp; 火车车厢
+        <a-menu-item key="/business/daily-train-carriage">
+          <router-link to="/business/daily-train-carriage">
+            <Car-outlined/> &nbsp; 每日车厢
           </router-link>
         </a-menu-item>
-        <a-menu-item key="/business/train-seat">
-          <router-link to="/business/train-seat">
-            <Car-outlined/> &nbsp; 火车座位
+        <a-menu-item key="/business/daily-train-seat">
+          <router-link to="/business/daily-train-seat">
+            <Car-outlined/> &nbsp; 每日座位
           </router-link>
         </a-menu-item>
-        <a-menu-item key="/business/train-ticket">
-          <router-link to="/business/train-ticket">
-            <Car-outlined/> &nbsp; 火车车票
+        <a-menu-item key="/business/daily-train-ticket">
+          <router-link to="/business/daily-train-ticket">
+            <Car-outlined/> &nbsp; 每日车票
           </router-link>
         </a-menu-item>
       </a-sub-menu>

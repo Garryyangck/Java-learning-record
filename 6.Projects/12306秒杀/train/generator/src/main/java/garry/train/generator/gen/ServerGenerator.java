@@ -82,7 +82,7 @@ public class ServerGenerator {
             param.put("typeSet", typeSet);
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
-            generateAll(Domain, do_main, param, true);
+            generateAll(Domain, do_main, param, true, false);
         }
     }
 
@@ -113,9 +113,9 @@ public class ServerGenerator {
         System.out.println("------------- generate 结束 -------------\n");
     }
 
-    private static void generateAll(String Domain, String do_main, HashMap<String, Object> param, Boolean isAdmin) throws IOException, TemplateException {
+    private static void generateAll(String Domain, String do_main, HashMap<String, Object> param, Boolean isAdmin, Boolean readOnly) throws IOException, TemplateException {
         generateBackend(Domain, param, isAdmin);
-        generateVue(do_main, param, false, isAdmin);
+        generateVue(do_main, param, readOnly, isAdmin);
     }
 
     /**
