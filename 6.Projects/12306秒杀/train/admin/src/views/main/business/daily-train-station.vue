@@ -184,7 +184,7 @@ export default defineComponent({
       if (stopTime > 0)
         dailyTrainStation.stopTime = formatMillisecondsToTime(Math.abs(stopTime));
       else {
-        notification.error({description: '出站时间不能小于入站时间'});
+        notification.error({description: '出站时间不能小于进站时间'});
         dailyTrainStation.stopTime = undefined;
       }
     }

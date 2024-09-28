@@ -48,7 +48,7 @@
         <a-time-picker v-model:value="trainStation.outTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
       </a-form-item>
       <a-form-item label="停站时长">
-        <a-time-picker v-model:value="trainStation.stopTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
+        <a-time-picker v-model:value="trainStation.stopTime" valueFormat="HH:mm:ss" placeholder="请选择时间" disabled/>
       </a-form-item>
       <a-form-item label="里程（公里）">
         <a-input v-model:value="trainStation.km"/>
@@ -139,6 +139,44 @@ export default defineComponent({
         dataIndex: 'operation'
       }
     ]);
+
+    function timeToMilliseconds(timeStr) {
+      const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+      return hours * 3600000 + minutes * 60000 + seconds * 1000;
+    }
+
+    function formatMillisecondsToTime(ms) {
+      const hours = Math.floor(ms / 3600000);
+      const minutes = Math.floor((ms % 3600000) / 60000);
+      const seconds = Math.floor((ms % 60000) / 1000);
+      return [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        seconds.toString().padStart(2, '0')
+      ].join(':');
+    }
+
+    function handleStopTime() {
+      let stopTime = timeToMilliseconds(trainStation.outTime) - timeToMilliseconds(trainStation.inTime);
+      if (stopTime > 0)
+        trainStation.stopTime = formatMillisecondsToTime(Math.abs(stopTime));
+      else {
+        notification.error({description: '出站时间不能小于进站时间'});
+        trainStation.stopTime = undefined;
+      }
+    }
+
+    watch(() => trainStation.inTime, () => {
+      if (Tool.isNotEmpty(trainStation.inTime) && Tool.isNotEmpty(trainStation.outTime)) {
+        handleStopTime();
+      }
+    });
+
+    watch(() => trainStation.outTime, () => {
+      if (Tool.isNotEmpty(trainStation.inTime) && Tool.isNotEmpty(trainStation.outTime)) {
+        handleStopTime();
+      }
+    });
 
     watch(() => trainStation.name, () => {
       if (Tool.isNotEmpty(trainStation.name)) {

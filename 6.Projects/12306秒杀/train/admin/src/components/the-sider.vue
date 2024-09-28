@@ -35,7 +35,7 @@
         </a-menu-item>
         <a-menu-item key="/base/train-station">
           <router-link to="/base/train-station">
-            <Car-outlined/> &nbsp; 车次车站
+            <Car-outlined/> &nbsp; 火车车站
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-carriage">
