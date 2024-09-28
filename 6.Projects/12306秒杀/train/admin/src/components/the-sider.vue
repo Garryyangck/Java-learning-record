@@ -30,12 +30,12 @@
         </a-menu-item>
         <a-menu-item key="/base/train">
           <router-link to="/base/train">
-            <Car-outlined/> &nbsp; 火车管理
+            <Car-outlined/> &nbsp; 车次管理
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-station">
           <router-link to="/base/train-station">
-            <Car-outlined/> &nbsp; 火车车站
+            <Car-outlined/> &nbsp; 途经车站
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-carriage">
@@ -46,6 +46,39 @@
         <a-menu-item key="/base/train-seat">
           <router-link to="/base/train-seat">
             <Car-outlined/> &nbsp; 火车座位
+          </router-link>
+        </a-menu-item>
+      </a-sub-menu>
+      <a-sub-menu key="business">
+        <template #title>
+          <span>
+            <UnorderedListOutlined />
+            业务管理
+          </span>
+        </template>
+        <a-menu-item key="/business/train">
+          <router-link to="/business/train">
+            <Car-outlined/> &nbsp; 每日火车
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/train-station">
+          <router-link to="/business/train-station">
+            <Car-outlined/> &nbsp; 途经车站
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/train-carriage">
+          <router-link to="/business/train-carriage">
+            <Car-outlined/> &nbsp; 火车车厢
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/train-seat">
+          <router-link to="/business/train-seat">
+            <Car-outlined/> &nbsp; 火车座位
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="/business/train-ticket">
+          <router-link to="/business/train-ticket">
+            <Car-outlined/> &nbsp; 火车车票
           </router-link>
         </a-menu-item>
       </a-sub-menu>
@@ -74,6 +107,7 @@ export default defineComponent({
   name: 'the-sider-view',
   setup() {
     const selectedKeys = ref(['/welcome']);
+    const openKeys = ref(['base', 'business', 'batch']);
 
     /**
      * 动态监视 router.currentRoute.value.path 的变化，变化时触发后面的函数
@@ -85,6 +119,7 @@ export default defineComponent({
 
     return {
       selectedKeys,
+      openKeys,
     };
   },
 });

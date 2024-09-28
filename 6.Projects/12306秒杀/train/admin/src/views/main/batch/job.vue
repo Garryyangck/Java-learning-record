@@ -25,26 +25,30 @@
                 手动执行
               </a-button>
             </a-popconfirm>
-            <a-popconfirm
-                title="确定重启？"
-                ok-text="是"
-                cancel-text="否"
-                @confirm="handleResume(record)"
-            >
-              <a-button v-show="record.state === 'PAUSED' || record.state === 'ERROR'" type="primary" size="small">
-                重启
-              </a-button>
-            </a-popconfirm>
-            <a-popconfirm
-                title="确定暂停？"
-                ok-text="是"
-                cancel-text="否"
-                @confirm="handlePause(record)"
-            >
-              <a-button v-show="record.state === 'NORMAL' || record.state === 'BLOCKED'" type="primary" size="small">
-                暂停
-              </a-button>
-            </a-popconfirm>
+            <template v-if="record.state === 'PAUSED' || record.state === 'ERROR'">
+              <a-popconfirm
+                  title="确定重启？"
+                  ok-text="是"
+                  cancel-text="否"
+                  @confirm="handleResume(record)"
+              >
+                <a-button type="primary" size="small">
+                  重启
+                </a-button>
+              </a-popconfirm>
+            </template>
+            <template v-else-if="record.state === 'NORMAL' || record.state === 'BLOCKED'">
+              <a-popconfirm
+                  title="确定暂停？"
+                  ok-text="是"
+                  cancel-text="否"
+                  @confirm="handlePause(record)"
+              >
+                <a-button type="primary" size="small">
+                  暂停
+                </a-button>
+              </a-popconfirm>
+            </template>
             <a-button type="primary" @click="handleEdit(record)" size="small">
               编辑
             </a-button>
