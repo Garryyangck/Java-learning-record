@@ -39,29 +39,33 @@
         <a-date-picker v-model:value="dailyTrain.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
       </a-form-item>
       <a-form-item label="车次编号">
-        <a-input v-model:value="dailyTrain.code" />
+        <train-select-view
+            v-model:value="dailyTrain.code"
+            @change="handleTrainSelectChange"
+            :disabled="dailyTrain.id !== undefined"
+        />
       </a-form-item>
       <a-form-item label="车次类型">
-        <a-select v-model:value="dailyTrain.type">
+        <a-select v-model:value="dailyTrain.type" disabled>
           <a-select-option v-for="item in TRAIN_TYPE_ARRAY" :key="item.code" :value="item.code">
             {{item.desc}}
           </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="始发站">
-        <a-input v-model:value="dailyTrain.start" />
+        <a-input v-model:value="dailyTrain.start" disabled />
       </a-form-item>
       <a-form-item label="始发站拼音">
-        <a-input v-model:value="dailyTrain.startPinyin" />
+        <a-input v-model:value="dailyTrain.startPinyin" disabled />
       </a-form-item>
       <a-form-item label="出发时间">
         <a-time-picker v-model:value="dailyTrain.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
       </a-form-item>
       <a-form-item label="终点站">
-        <a-input v-model:value="dailyTrain.end" />
+        <a-input v-model:value="dailyTrain.end" disabled />
       </a-form-item>
       <a-form-item label="终点站拼音">
-        <a-input v-model:value="dailyTrain.endPinyin" />
+        <a-input v-model:value="dailyTrain.endPinyin" disabled />
       </a-form-item>
       <a-form-item label="到站时间">
         <a-time-picker v-model:value="dailyTrain.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
@@ -74,9 +78,11 @@
 import {defineComponent, onMounted, reactive, ref} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
+import TrainSelectView from "@/components/train-select.vue";
 
 export default defineComponent({
   name: "daily-train-view",
+  components: {TrainSelectView},
   setup() {
     const TRAIN_TYPE_ARRAY = window.TRAIN_TYPE_ARRAY;
     const visible = ref(false);
@@ -263,6 +269,16 @@ export default defineComponent({
       });
     };
 
+    const handleTrainSelectChange = (train) => {
+      dailyTrain.type = train.type;
+      dailyTrain.start = train.start;
+      dailyTrain.startPinyin = train.startPinyin;
+      dailyTrain.startTime = train.startTime;
+      dailyTrain.end = train.end;
+      dailyTrain.endPinyin = train.endPinyin;
+      dailyTrain.endTime = train.endTime;
+    };
+
     onMounted(() => {
       document.title = '每日车次';
       handleQuery({
@@ -285,6 +301,7 @@ export default defineComponent({
       handleOk,
       handleQuery,
       handleTableChange,
+      handleTrainSelectChange,
     };
   },
 });

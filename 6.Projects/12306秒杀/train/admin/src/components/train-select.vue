@@ -6,6 +6,7 @@
             :filterOption="filterTrainCodeOption"
             @change="onChange"
             placeholder="请选择车次"
+            :disabled="idDisabled"
             :style="'width: ' + localWidth">
     <a-select-option v-for="item in trains" :key="item.code" :value="item.code"
                      :label="item.code + item.start + item.end + item.type">
@@ -23,12 +24,13 @@ import store from "@/store";
 
 export default defineComponent({
   name: "train-select-view",
-  props: ["modelValue", "width"], // modelValue 是自带的参数，用于传递父组件的 v-model:value
+  props: ["modelValue", "width", "disabled"], // modelValue 是自带的参数，用于传递父组件的 v-model:value
   emits: ['update:modelValue', 'change'], // update:modelValue 是自带的事件，触发条件是 modelValue 变化
   setup(props, {emit}) {
     const trainCode = ref();
     const trains = ref([]);
     const localWidth = ref(props.width);
+    const idDisabled = ref(false);
     if (Tool.isNotEmpty(props.width)) {
       localWidth.value = "100%";
     }
@@ -43,6 +45,16 @@ export default defineComponent({
     }, {immediate: true});
 
     /**
+     * isDisabled 不能在 onMounted 函数中赋值，否则只会赋值一次，
+     * 比如我先打开 add，就只会将 isDisabled 赋值为 true，而之后再打开 edit，依然为 true
+     * 解决方法就是像 props.modelValue 一样用 watch，这样只要父组件的 disabled 发生变化，这里的 isDisabled 就能马上修改
+     */
+    watch(() => props.disabled, () => {
+      console.log("props.disabled", props.disabled);
+      idDisabled.value = props.disabled;
+    }, {immediate: true});
+
+    /**
      * 将当前组件的值响应给父组件
      */
     const onChange = (value) => {
@@ -53,9 +65,16 @@ export default defineComponent({
       if (Tool.isEmpty(train)) {
         train = {};
       }
-      // 自定义事件 change，可以把整个获取的 trains 列表传给父组件
-      // 父组件的使用方法: @change(train)，可以看到，@ 后面跟的，就是我们主动暴露出去的事件，ant-design-vue 的组件中也有很多类似的事件
-      emit('change', train);
+      // 自定义事件 change，可以把父组件选取的 train 传给父组件
+      // 父组件的使用方法: @change=function(train)，可以看到，@ 后面跟的，就是我们主动暴露出去的事件，ant-design-vue 的组件中也有很多类似的事件
+      // 将 train 的 “高铁” 转回 "G"
+      let _train = Tool.copy(train); // 防止浅拷贝，导致修改了 trains 里面的元素 train
+      window.TRAIN_TYPE_ARRAY.forEach((trainType) => {
+        if (trainType.desc === _train.type) {
+          _train.type = trainType.code;
+        }
+      });
+      emit('change', _train);
     };
 
     /**
@@ -96,9 +115,10 @@ export default defineComponent({
     return {
       trainCode,
       trains,
+      localWidth,
+      idDisabled,
       filterTrainCodeOption,
       onChange,
-      localWidth
     };
   },
 });

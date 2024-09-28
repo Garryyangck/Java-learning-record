@@ -1,6 +1,9 @@
 package garry.train.business.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author Garry
@@ -25,8 +28,30 @@ public class TrainQueryAllVo {
     private String start;
 
     /**
+     * 始发站拼音
+     */
+    private String startPinyin;
+
+    /**
+     * 出发时间
+     */
+    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    private Date startTime;
+
+    /**
      * 终点站
      */
     private String end;
+
+    /**
+     * 终点站拼音
+     */
+    private String endPinyin;
+
+    /**
+     * 到站时间
+     */
+    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    private Date endTime;
 
 }
