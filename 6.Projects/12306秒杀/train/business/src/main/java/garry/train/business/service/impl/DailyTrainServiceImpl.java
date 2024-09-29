@@ -3,6 +3,7 @@ package garry.train.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -146,7 +147,7 @@ public class DailyTrainServiceImpl implements DailyTrainService {
         // 生成 dailyTrainSeat
         dailyTrainSeatService.genDaily(date, train);
 
-        log.info("已生成 {} 车次 {} 的所有每日数据", date, train);
+        log.info("已生成 【{}】 车次 【{}】 的所有每日数据", DateUtil.format(date, "yyyy-MM-dd"), train.getCode());
     }
 
     @Override

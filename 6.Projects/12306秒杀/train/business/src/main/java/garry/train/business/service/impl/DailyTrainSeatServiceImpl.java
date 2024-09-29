@@ -2,6 +2,7 @@ package garry.train.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
@@ -122,5 +123,6 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
             dailyTrainSeat.setUpdateTime(null);
             save(BeanUtil.copyProperties(dailyTrainSeat, DailyTrainSeatSaveForm.class));
         }
+        log.info("已生成 【{}】 车次 【{}】 的所有每日座位", DateUtil.format(date, "yyyy-MM-dd"), train.getCode());
     }
 }

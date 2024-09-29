@@ -46,6 +46,7 @@ public class TrainCarriageServiceImpl implements TrainCarriageService {
                 trainCarriageExample.createCriteria()
                         .andTrainCodeEqualTo(trainCarriage.getTrainCode())
                         .andIndexGreaterThanOrEqualTo(trainCarriage.getIndex());
+                trainCarriageExample.setOrderByClause("train_code asc, `index` asc");
                 List<TrainCarriage> trainCarriages = trainCarriageMapper.selectByExample(trainCarriageExample);
                 for (int i = trainCarriages.size() - 1; i >= 0; i--) {
                     TrainCarriage _trainCarriage = trainCarriages.get(i); // 要倒着来改，不然比如 3->4，结果库里还有 4，就插不进去

@@ -54,6 +54,7 @@ public class TrainStationServiceImpl implements TrainStationService {
                 trainStationExample.createCriteria()
                         .andTrainCodeEqualTo(trainStation.getTrainCode())
                         .andIndexGreaterThanOrEqualTo(trainStation.getIndex());
+                trainStationExample.setOrderByClause("train_code asc, `index` asc");
                 List<TrainStation> trainStations = trainStationMapper.selectByExample(trainStationExample);
                 for (int i = trainStations.size() - 1; i >= 0; i--) {
                     TrainStation _trainStation = trainStations.get(i); // 要倒着来改，不然比如 3->4，结果库里还有 4，就插不进去
