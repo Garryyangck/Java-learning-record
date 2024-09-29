@@ -16,12 +16,12 @@
     >
       <a-menu-item key="/welcome">
         <router-link to="/welcome">
-          <coffee-outlined/> &nbsp; 欢迎
+          <HomeOutlined /> &nbsp; 欢迎
         </router-link>
       </a-menu-item>
       <a-menu-item key="/about">
         <router-link to="/about">
-          <user-outlined/> &nbsp; 关于
+          <coffeeOutlined /> &nbsp; 关于
         </router-link>
       </a-menu-item>
     </a-menu>

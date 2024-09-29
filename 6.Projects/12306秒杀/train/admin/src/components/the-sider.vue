@@ -8,12 +8,12 @@
     >
       <a-menu-item key="/welcome">
         <router-link to="/welcome">
-          <coffee-outlined/> &nbsp; 欢迎
+          <HomeOutlined /> &nbsp; 欢迎
         </router-link>
       </a-menu-item>
       <a-menu-item key="/about">
         <router-link to="/about">
-          <user-outlined/> &nbsp; 关于
+          <coffeeOutlined/> &nbsp; 关于
         </router-link>
       </a-menu-item>
       <a-sub-menu key="base">
@@ -25,27 +25,27 @@
         </template>
         <a-menu-item key="/base/station">
           <router-link to="/base/station">
-            <ClockCircle-outlined/> &nbsp; 车站管理
+            <FormOutlined /> &nbsp; 车站管理
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train">
           <router-link to="/base/train">
-            <Car-outlined/> &nbsp; 车次管理
+            <FormOutlined /> &nbsp; 车次管理
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-station">
           <router-link to="/base/train-station">
-            <Car-outlined/> &nbsp; 火车车站
+            <FormOutlined /> &nbsp; 火车车站
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-carriage">
           <router-link to="/base/train-carriage">
-            <Car-outlined/> &nbsp; 火车车厢
+            <FormOutlined /> &nbsp; 火车车厢
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-seat">
           <router-link to="/base/train-seat">
-            <Car-outlined/> &nbsp; 火车座位
+            <FormOutlined /> &nbsp; 火车座位
           </router-link>
         </a-menu-item>
       </a-sub-menu>
@@ -58,27 +58,27 @@
         </template>
         <a-menu-item key="/business/daily-train">
           <router-link to="/business/daily-train">
-            <Car-outlined/> &nbsp; 每日火车
+            <FormOutlined /> &nbsp; 每日火车
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-station">
           <router-link to="/business/daily-train-station">
-            <Car-outlined/> &nbsp; 每日车站
+            <FormOutlined /> &nbsp; 每日车站
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-carriage">
           <router-link to="/business/daily-train-carriage">
-            <Car-outlined/> &nbsp; 每日车厢
+            <FormOutlined /> &nbsp; 每日车厢
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-seat">
           <router-link to="/business/daily-train-seat">
-            <Car-outlined/> &nbsp; 每日座位
+            <FormOutlined /> &nbsp; 每日座位
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-ticket">
           <router-link to="/business/daily-train-ticket">
-            <Car-outlined/> &nbsp; 每日车票
+            <FormOutlined /> &nbsp; 每日车票
           </router-link>
         </a-menu-item>
       </a-sub-menu>

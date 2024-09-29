@@ -9,7 +9,8 @@ import lombok.Data;
  */
 @Data
 public class ResponseVo<T> {
-    private boolean success = true;
+
+    private boolean success;
 
     private Integer code;
 
@@ -17,10 +18,26 @@ public class ResponseVo<T> {
 
     private T data;
 
-    private ResponseVo(Integer code, String msg, T data) {
+    /**
+     * 反序列化 ResponseVo:
+     * Constructor<ResponseVo> constructor = ResponseVo.class.getDeclaredConstructor(boolean.class, Integer.class, String.class, String.class);
+     */
+    private ResponseVo(boolean success, Integer code, String msg, String data) {
+        this.success = success;
+        this.code = code;
+        this.msg = msg;
+        this.data = (T) data;
+    }
+
+    private ResponseVo(boolean success, Integer code, String msg, T data) {
+        this.success = success;
         this.code = code;
         this.msg = msg;
         this.data = data;
+    }
+
+    private ResponseVo(Integer code, String msg, T data) {
+        this(true, code, msg, data);
     }
 
     private ResponseVo(Integer code, String msg) {
@@ -28,9 +45,7 @@ public class ResponseVo<T> {
     }
 
     private ResponseVo(Integer code, String msg, boolean success) {
-        this.code = code;
-        this.msg = msg;
-        this.success = success;
+        this(success, code, msg, (T) null);
     }
 
     public static ResponseVo success() {

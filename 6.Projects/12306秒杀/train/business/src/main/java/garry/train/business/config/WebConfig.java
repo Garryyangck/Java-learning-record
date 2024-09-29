@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 2024-09-13 21:26
  */
 @Configuration
-public class InterceptorConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
     @Resource
     private MemberInterceptor memberInterceptor;
 
@@ -30,6 +30,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(memberInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
+                        "/hello",
                         "/admin/**"
                 );
     }
