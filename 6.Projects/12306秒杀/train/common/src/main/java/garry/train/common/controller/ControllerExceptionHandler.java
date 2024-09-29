@@ -10,6 +10,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 
@@ -60,4 +61,13 @@ public class ControllerExceptionHandler {
         log.error("数据库唯一键异常: {}", msg);
         return ResponseVo.error(ResponseEnum.DUPLICATE_KEY, "输入的数据已存在，新增失败");
     }
+
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class})
+    @ResponseBody
+    public ResponseVo methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException e) {
+        String msg = e.getCause().getLocalizedMessage();
+        log.error("接口参数不匹配异常: {}", msg);
+        return ResponseVo.error(ResponseEnum.API_ARGUMENT_MISMATCH);
+    }
+
 }

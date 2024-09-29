@@ -2,10 +2,11 @@
 <template>
   <p>
     <a-space>
-      <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
+      <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
       <train-select-view v-model:value="params.code" style="width: 300px"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
       <a-button type="primary" @click="onAdd">新增</a-button>
+      <a-button type="danger" @click="genDaily()">重新生成所选日期的每日数据</a-button>
     </a-space>
   </p>
   <a-table :dataSource="dailyTrains"
@@ -28,7 +29,7 @@
       <template v-else-if="column.dataIndex === 'type'">
         <span v-for="item in TRAIN_TYPE_ARRAY" :key="item.code">
           <span v-if="item.code === record.type">
-            {{item.desc}}
+            {{ item.desc }}
           </span>
         </span>
       </template>
@@ -38,7 +39,7 @@
            ok-text="确认" cancel-text="取消">
     <a-form :model="dailyTrain" :label-col="{span: 4}" :wrapper-col="{span: 18}">
       <a-form-item label="日期">
-        <a-date-picker v-model:value="dailyTrain.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
+        <a-date-picker v-model:value="dailyTrain.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
       </a-form-item>
       <a-form-item label="车次编号">
         <train-select-view
@@ -50,27 +51,27 @@
       <a-form-item label="车次类型">
         <a-select v-model:value="dailyTrain.type" disabled>
           <a-select-option v-for="item in TRAIN_TYPE_ARRAY" :key="item.code" :value="item.code">
-            {{item.desc}}
+            {{ item.desc }}
           </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="始发站">
-        <a-input v-model:value="dailyTrain.start" disabled />
+        <a-input v-model:value="dailyTrain.start" disabled/>
       </a-form-item>
       <a-form-item label="始发站拼音">
-        <a-input v-model:value="dailyTrain.startPinyin" disabled />
+        <a-input v-model:value="dailyTrain.startPinyin" disabled/>
       </a-form-item>
       <a-form-item label="出发时间">
-        <a-time-picker v-model:value="dailyTrain.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="dailyTrain.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
       </a-form-item>
       <a-form-item label="终点站">
-        <a-input v-model:value="dailyTrain.end" disabled />
+        <a-input v-model:value="dailyTrain.end" disabled/>
       </a-form-item>
       <a-form-item label="终点站拼音">
-        <a-input v-model:value="dailyTrain.endPinyin" disabled />
+        <a-input v-model:value="dailyTrain.endPinyin" disabled/>
       </a-form-item>
       <a-form-item label="到站时间">
-        <a-time-picker v-model:value="dailyTrain.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="dailyTrain.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -114,55 +115,55 @@ export default defineComponent({
       date: null,
     });
     const columns = ref([
-    {
-      title: '日期',
-      dataIndex: 'date',
-      key: 'date',
-    },
-    {
-      title: '车次编号',
-      dataIndex: 'code',
-      key: 'code',
-    },
-    {
-      title: '车次类型',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
-      title: '始发站',
-      dataIndex: 'start',
-      key: 'start',
-    },
-    {
-      title: '始发站拼音',
-      dataIndex: 'startPinyin',
-      key: 'startPinyin',
-    },
-    {
-      title: '出发时间',
-      dataIndex: 'startTime',
-      key: 'startTime',
-    },
-    {
-      title: '终点站',
-      dataIndex: 'end',
-      key: 'end',
-    },
-    {
-      title: '终点站拼音',
-      dataIndex: 'endPinyin',
-      key: 'endPinyin',
-    },
-    {
-      title: '到站时间',
-      dataIndex: 'endTime',
-      key: 'endTime',
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation'
-    }
+      {
+        title: '日期',
+        dataIndex: 'date',
+        key: 'date',
+      },
+      {
+        title: '车次编号',
+        dataIndex: 'code',
+        key: 'code',
+      },
+      {
+        title: '车次类型',
+        dataIndex: 'type',
+        key: 'type',
+      },
+      {
+        title: '始发站',
+        dataIndex: 'start',
+        key: 'start',
+      },
+      {
+        title: '始发站拼音',
+        dataIndex: 'startPinyin',
+        key: 'startPinyin',
+      },
+      {
+        title: '出发时间',
+        dataIndex: 'startTime',
+        key: 'startTime',
+      },
+      {
+        title: '终点站',
+        dataIndex: 'end',
+        key: 'end',
+      },
+      {
+        title: '终点站拼音',
+        dataIndex: 'endPinyin',
+        key: 'endPinyin',
+      },
+      {
+        title: '到站时间',
+        dataIndex: 'endTime',
+        key: 'endTime',
+      },
+      {
+        title: '操作',
+        dataIndex: 'operation'
+      }
     ]);
 
     watch(() => params.value.code, () => {
@@ -303,6 +304,24 @@ export default defineComponent({
       dailyTrain.endTime = train.endTime;
     };
 
+    const genDaily = () => {
+      axios.get("/business/admin/daily-train/gen-daily/" + params.value.date).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          handleQuery({
+            pageNum: 1,
+            pageSize: pagination.value.pageSize,
+          });
+          notification.success({description: '重新生成成功成功'});
+        } else {
+          if (responseVo.code === 28) // API_ARGUMENT_MISMATCH(28, "接口参数不匹配")
+            notification.error({description: '请先选择日期'});
+          else
+            notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
     onMounted(() => {
       document.title = '每日车次';
       handleQuery({
@@ -327,6 +346,7 @@ export default defineComponent({
       handleQuery,
       handleTableChange,
       handleTrainSelectChange,
+      genDaily,
     };
   },
 });
