@@ -8,14 +8,10 @@ import com.github.pagehelper.PageInfo;
 import garry.train.business.form.TrainCarriageQueryForm;
 import garry.train.business.form.TrainCarriageSaveForm;
 import garry.train.business.mapper.TrainCarriageMapper;
-import garry.train.business.pojo.TrainCarriage;
-import garry.train.business.pojo.TrainCarriageExample;
-import garry.train.business.pojo.TrainSeat;
+import garry.train.business.pojo.*;
 import garry.train.business.service.TrainCarriageService;
 import garry.train.business.service.TrainSeatService;
 import garry.train.business.vo.TrainCarriageQueryVo;
-import garry.train.common.enums.ResponseEnum;
-import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
@@ -45,7 +41,18 @@ public class TrainCarriageServiceImpl implements TrainCarriageService {
         if (ObjectUtil.isNull(trainCarriage.getId())) { // 插入
             // 唯一键 train_code_index_unique 校验
             if(!queryByTrainCodeAndIndex(trainCarriage.getTrainCode(), trainCarriage.getIndex()).isEmpty()) {
-                throw new BusinessException(ResponseEnum.BUSINESS_DUPLICATE_TRAIN_CARRIAGE_INDEX);
+                // 假如插入 index = 2 重复，则把原 index = 2 及后面所有的 index 往后移一位
+                TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
+                trainCarriageExample.createCriteria()
+                        .andTrainCodeEqualTo(trainCarriage.getTrainCode())
+                        .andIndexGreaterThanOrEqualTo(trainCarriage.getIndex());
+                List<TrainCarriage> trainCarriages = trainCarriageMapper.selectByExample(trainCarriageExample);
+                for (int i = trainCarriages.size() - 1; i >= 0; i--) {
+                    TrainCarriage _trainCarriage = trainCarriages.get(i); // 要倒着来改，不然比如 3->4，结果库里还有 4，就插不进去
+                    _trainCarriage.setIndex(_trainCarriage.getIndex() + 1);
+                    _trainCarriage.setUpdateTime(now);
+                    trainCarriageMapper.updateByPrimaryKeySelective(_trainCarriage);
+                }
             }
 
             // 对Id、createTime、updateTime 重新赋值

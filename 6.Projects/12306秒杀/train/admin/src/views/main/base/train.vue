@@ -23,6 +23,12 @@
           </a-popconfirm>
           <a @click="onEdit(record)">编辑</a>
           <a-popconfirm
+              title="生成车站将删除已有的车站，确认生成?"
+              @confirm="genTrainStation(record)"
+              ok-text="确认" cancel-text="取消">
+            <a>生成车站</a>
+          </a-popconfirm>
+          <a-popconfirm
               title="生成座位将删除已有的座位，确认生成?"
               @confirm="genTrainSeat(record)"
               ok-text="确认" cancel-text="取消">
@@ -234,6 +240,17 @@ export default defineComponent({
       })
     };
 
+    const genTrainStation = (record) => {
+      axios.post("/business/admin/train/gen-train-station/" + record.code).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          notification.success({description: '生成车站成功'});
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
     const handleOk = () => {
       axios.post("/business/admin/train/save", train).then((response) => {
         let responseVo = response.data;
@@ -320,6 +337,7 @@ export default defineComponent({
       onEdit,
       onDelete,
       genTrainSeat,
+      genTrainStation,
       handleOk,
       handleQuery,
       handleTableChange,

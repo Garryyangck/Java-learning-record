@@ -7,3 +7,8 @@ POST http://localhost:8080/business/admin/train/gen-train-seat/D001296
 Content-Type: application/json
 
 ###
+
+POST http://localhost:8080/business/admin/train/gen-train-station/D001296
+Content-Type: application/json
+
+###

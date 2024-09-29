@@ -1,6 +1,7 @@
 package garry.train.business.controller.admin;
 
 import garry.train.business.service.TrainSeatService;
+import garry.train.business.service.TrainStationService;
 import garry.train.business.vo.TrainQueryAllVo;
 import garry.train.common.util.HostHolder;
 import garry.train.common.vo.PageVo;
@@ -24,6 +25,9 @@ import java.util.List;
 public class TrainAdminController {
     @Resource
     private TrainService trainService;
+
+    @Resource
+    private TrainStationService trainStationService;
 
     @Resource
     private TrainSeatService trainSeatService;
@@ -63,6 +67,12 @@ public class TrainAdminController {
     @RequestMapping(value = "/gen-train-seat/{trainCode}", method = RequestMethod.POST)
     public ResponseVo genTrainSeat(@PathVariable String trainCode) {
         trainSeatService.genTrainSeat(trainCode);
+        return ResponseVo.success();
+    }
+
+    @RequestMapping(value = "/gen-train-station/{trainCode}", method = RequestMethod.POST)
+    public ResponseVo genTrainStation(@PathVariable String trainCode) {
+        trainStationService.genTrainStation(trainCode);
         return ResponseVo.success();
     }
 }

@@ -158,7 +158,7 @@ export default defineComponent({
 
     function handleStopTime() {
       let stopTime = timeToMilliseconds(trainStation.outTime) - timeToMilliseconds(trainStation.inTime);
-      if (stopTime > 0)
+      if (stopTime >= 0)
         trainStation.stopTime = formatMillisecondsToTime(Math.abs(stopTime));
       else {
         notification.error({description: '出站时间不能小于进站时间'});

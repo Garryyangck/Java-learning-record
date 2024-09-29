@@ -151,6 +151,7 @@ export default defineComponent({
           dailyTrainSeats.value = responseVo.data.list;
           pagination.value.total = responseVo.data.total;
           pagination.value.current = responseVo.data.pageNum;
+          pagination.value.pageSize = responseVo.data.pageSize; // 让修改页面可行，否则即使修改为 50，查出来 50 条，还是只能显示 10 条
           if (byRefresh)
             notification.success({description: '刷新成功'});
         } else {

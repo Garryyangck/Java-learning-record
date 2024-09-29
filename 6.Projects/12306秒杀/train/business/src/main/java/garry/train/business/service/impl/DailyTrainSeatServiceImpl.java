@@ -115,7 +115,8 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
             DailyTrainSeat dailyTrainSeat = BeanUtil.copyProperties(trainSeat, DailyTrainSeat.class);
             dailyTrainSeat.setDate(date);
             // sell 字段不能为空，赋值为一连串 0，个数等于 count(TrainStation + 1)
-            dailyTrainSeat.setSell(StrUtil.fillBefore("", '0', trainSeatService.queryByTrainCode(train.getCode()).size() - 1));
+            int len = trainStationService.queryByTrainCode(train.getCode()).size() - 1;
+            dailyTrainSeat.setSell(StrUtil.fillBefore("", '0', len));
             dailyTrainSeat.setId(null); // 防止跑到修改去了
             dailyTrainSeat.setCreateTime(null);
             dailyTrainSeat.setUpdateTime(null);

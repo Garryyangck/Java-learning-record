@@ -48,4 +48,14 @@ public interface TrainStationService {
      * 用于 TrainService.delete 中同时删除所有隶属于该车次的 TrainStation
      */
     List<TrainStation> queryByTrainCode(String trainCode);
+
+    /**
+     * 生成 trainCode 下的起点和终点站，并删除其它已有的站
+     */
+    void genTrainStation(String trainCode);
+
+    /**
+     * 根据 trainCode 删除
+     */
+    void deleteByTrainCode(String trainCode);
 }

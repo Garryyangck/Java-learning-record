@@ -64,6 +64,8 @@ public enum ResponseEnum {
     BUSINESS_DUPLICATE_DAILY_TRAIN_STATION_DATE_TRAIN_CODE_NAME(25, "该日车次的站名已存在"),
 
     BUSINESS_DUPLICATE_DAILY_TRAIN_CARRIAGE_DATE_TRAIN_CODE_INDEX(26, "该日车次的车厢号已存在"),
+
+    BUSINESS_TRAIN_NOT_FOUND(27, "该车次不存在"),
     ;
 
     private final Integer code;
