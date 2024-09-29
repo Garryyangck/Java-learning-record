@@ -1,15 +1,18 @@
 package garry.train.business.controller.admin;
 
-import garry.train.common.util.HostHolder;
-import garry.train.common.vo.PageVo;
-import garry.train.common.vo.ResponseVo;
 import garry.train.business.form.DailyTrainQueryForm;
 import garry.train.business.form.DailyTrainSaveForm;
 import garry.train.business.service.DailyTrainService;
 import garry.train.business.vo.DailyTrainQueryVo;
+import garry.train.common.util.HostHolder;
+import garry.train.common.vo.PageVo;
+import garry.train.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 /**
  * @author Garry
@@ -43,6 +46,12 @@ public class DailyTrainAdminController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseVo delete(@PathVariable Long id) {
         dailyTrainService.delete(id);
+        return ResponseVo.success();
+    }
+
+    @RequestMapping(value = "/gen-daily/{date}", method = RequestMethod.GET)
+    public ResponseVo genDaily(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        dailyTrainService.genDaily(date);
         return ResponseVo.success();
     }
 }

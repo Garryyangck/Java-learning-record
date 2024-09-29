@@ -33,4 +33,9 @@ public class CommonConst {
      * JWT 的有效小时数
      */
     public static final Integer JWT_EXPIRE_HOUR = 24;
+
+    /**
+     * DailyTrainJob 中生成 DAILY_TRAIN_OFFSET_DAYS 天后的车次数据
+     */
+    public static final Integer DAILY_TRAIN_OFFSET_DAYS = 15;
 }

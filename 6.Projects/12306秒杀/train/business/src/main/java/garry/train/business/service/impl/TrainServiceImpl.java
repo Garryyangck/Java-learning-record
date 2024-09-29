@@ -144,6 +144,13 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
+    public List<Train> selectAll() {
+        TrainExample trainExample = new TrainExample();
+        trainExample.setOrderByClause("code");
+        return trainMapper.selectByExample(trainExample);
+    }
+
+    @Override
     public List<Train> queryByCode(String code) {
         TrainExample trainExample = new TrainExample();
         trainExample.createCriteria().andCodeEqualTo(code);

@@ -66,3 +66,12 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:8080/batch/admin/job/run
+Content-Type: application/json
+
+{
+  "name": "garry.train.batch.job.DailyTrainJob",
+  "group": "train"
+}
+
+###

@@ -1,0 +1,4 @@
+GET http://localhost:8080/business/admin/daily-train/gen-daily/2024-09-20
+Accept: application/json
+
+###

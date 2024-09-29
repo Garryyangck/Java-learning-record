@@ -1,9 +1,14 @@
 package garry.train.business.service;
 
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.DailyTrainQueryForm;
 import garry.train.business.form.DailyTrainSaveForm;
+import garry.train.business.pojo.DailyTrain;
+import garry.train.business.pojo.Train;
 import garry.train.business.vo.DailyTrainQueryVo;
+import garry.train.common.vo.PageVo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Garry
@@ -27,4 +32,19 @@ public interface DailyTrainService {
      * 根据 id(主键) 删除每日车次
      */
     void delete(Long id);
+
+    /**
+     * 生成某日所有的车次的所有信息，包括 train, train-station, train-carriage, train-seat
+     */
+    void genDaily(Date date);
+
+    /**
+     * 生成某一天的车次及其所有信息，括 train, train-station, train-carriage, train-seat
+     */
+    void genDailyTrain(Date date, Train train);
+
+    /**
+     * 校验唯一键 (date, code)
+     */
+    List<DailyTrain> queryByDateAndCode(Date date, String code);
 }

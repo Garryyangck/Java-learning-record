@@ -39,6 +39,11 @@ public interface TrainService {
     List<TrainQueryAllVo> queryAll();
 
     /**
+     * 用于 service 之间调用
+     */
+    List<Train> selectAll();
+
+    /**
      * 根据 code 查 train，主要被 service 层调用
      * 还可用于唯一键 code 的校验
      */

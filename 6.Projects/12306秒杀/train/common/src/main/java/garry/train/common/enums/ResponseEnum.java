@@ -56,6 +56,8 @@ public enum ResponseEnum {
     BATCH_SCHEDULER_QUERY_FAILED_DISPATCH_ERROR(21, "查看定时任务失败: 调度异常"),
 
     BATCH_SCHEDULER_RUN_FAILED_DISPATCH_ERROR(22, "手动执行任务失败: 调度异常"),
+
+    BUSINESS_DUPLICATE_DAILY_TRAIN_DATE_CODE(23, "该日的车次已存在"),
     ;
 
     private final Integer code;
