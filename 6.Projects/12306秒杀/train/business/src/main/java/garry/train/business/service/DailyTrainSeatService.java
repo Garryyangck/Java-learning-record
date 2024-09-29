@@ -1,9 +1,12 @@
 package garry.train.business.service;
 
+import garry.train.business.pojo.Train;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.DailyTrainSeatQueryForm;
 import garry.train.business.form.DailyTrainSeatSaveForm;
 import garry.train.business.vo.DailyTrainSeatQueryVo;
+
+import java.util.Date;
 
 /**
  * @author Garry
@@ -27,4 +30,9 @@ public interface DailyTrainSeatService {
      * 根据 id(主键) 删除每日座位
      */
     void delete(Long id);
+
+    /**
+     * 生成 date 日，train 下的所有 seat
+     */
+    void genDaily(Date date, Train train);
 }

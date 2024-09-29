@@ -1,10 +1,10 @@
 package garry.train.business.service;
 
-import garry.train.business.pojo.TrainSeat;
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.TrainSeatQueryForm;
 import garry.train.business.form.TrainSeatSaveForm;
+import garry.train.business.pojo.TrainSeat;
 import garry.train.business.vo.TrainSeatQueryVo;
+import garry.train.common.vo.PageVo;
 
 import java.util.List;
 
@@ -46,4 +46,9 @@ public interface TrainSeatService {
      * 主要用于 TrainCarriageService.delete 中删除该车次、该车厢下的所有座位
      */
     List<TrainSeat> queryByTrainCodeAndCarriageIndex(String trainCode, Integer carriageIndex);
+
+    /**
+     * service 间调用
+     */
+    List<TrainSeat> queryByTrainCode(String trainCode);
 }

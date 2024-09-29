@@ -12,8 +12,7 @@ import garry.train.business.mapper.DailyTrainMapper;
 import garry.train.business.pojo.DailyTrain;
 import garry.train.business.pojo.DailyTrainExample;
 import garry.train.business.pojo.Train;
-import garry.train.business.service.DailyTrainService;
-import garry.train.business.service.TrainService;
+import garry.train.business.service.*;
 import garry.train.business.vo.DailyTrainQueryVo;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
@@ -35,6 +34,15 @@ import java.util.List;
 public class DailyTrainServiceImpl implements DailyTrainService {
     @Resource
     private TrainService trainService;
+
+    @Resource
+    private DailyTrainStationService dailyTrainStationService;
+
+    @Resource
+    private DailyTrainCarriageService dailyTrainCarriageService;
+
+    @Resource
+    private DailyTrainSeatService dailyTrainSeatService;
 
     @Resource
     private DailyTrainMapper dailyTrainMapper;
@@ -130,11 +138,15 @@ public class DailyTrainServiceImpl implements DailyTrainService {
         save(BeanUtil.copyProperties(dailyTrain, DailyTrainSaveForm.class));
 
         // 生成 dailyTrainStation
+        dailyTrainStationService.genDaily(date, train);
 
         // 生成 dailyTrainCarriage
+        dailyTrainCarriageService.genDaily(date, train);
 
         // 生成 dailyTrainSeat
+        dailyTrainSeatService.genDaily(date, train);
 
+        log.info("已生成 {} 车次 {} 的所有每日数据", date, train);
     }
 
     @Override

@@ -5,19 +5,25 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.DailyTrainCarriageQueryForm;
 import garry.train.business.form.DailyTrainCarriageSaveForm;
 import garry.train.business.mapper.DailyTrainCarriageMapper;
 import garry.train.business.pojo.DailyTrainCarriage;
 import garry.train.business.pojo.DailyTrainCarriageExample;
+import garry.train.business.pojo.Train;
+import garry.train.business.pojo.TrainCarriage;
 import garry.train.business.service.DailyTrainCarriageService;
+import garry.train.business.service.TrainCarriageService;
 import garry.train.business.vo.DailyTrainCarriageQueryVo;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +34,9 @@ import java.util.List;
 @Service
 public class DailyTrainCarriageServiceImpl implements DailyTrainCarriageService {
     @Resource
+    private TrainCarriageService trainCarriageService;
+
+    @Resource
     private DailyTrainCarriageMapper dailyTrainCarriageMapper;
 
     @Override
@@ -37,7 +46,9 @@ public class DailyTrainCarriageServiceImpl implements DailyTrainCarriageService 
 
         if (ObjectUtil.isNull(dailyTrainCarriage.getId())) { // 插入
             // 插入时要看数据库有没有唯一键约束，在此校验唯一键约束，防止出现 DuplicationKeyException
-
+            if(!queryByDateAndTrainCodeAndIndex(dailyTrainCarriage.getDate(),dailyTrainCarriage.getTrainCode(),dailyTrainCarriage.getIndex()).isEmpty()){
+                throw new BusinessException(ResponseEnum.BUSINESS_DUPLICATE_DAILY_TRAIN_CARRIAGE_DATE_TRAIN_CODE_INDEX);
+            }
             // 对Id、createTime、updateTime 重新赋值
             // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             dailyTrainCarriage.setId(CommonUtil.getSnowflakeNextId());
@@ -86,5 +97,36 @@ public class DailyTrainCarriageServiceImpl implements DailyTrainCarriageService 
     @Override
     public void delete(Long id) {
         dailyTrainCarriageMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void genDaily(Date date, Train train) {
+        // 删除 date 下 train 的所有 daily-train-carriage
+        DailyTrainCarriageExample dailyTrainCarriageExample = new DailyTrainCarriageExample();
+        dailyTrainCarriageExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(train.getCode());
+        dailyTrainCarriageMapper.deleteByExample(dailyTrainCarriageExample);
+
+        // 查出 date 下 train 下所有的 train-carriage
+        List<TrainCarriage> trainCarriages = trainCarriageService.queryByTrainCode(train.getCode());
+        for (TrainCarriage trainCarriage : trainCarriages) {
+            DailyTrainCarriage dailyTrainCarriage = BeanUtil.copyProperties(trainCarriage, DailyTrainCarriage.class);
+            dailyTrainCarriage.setDate(date);
+            dailyTrainCarriage.setId(null); // 防止跑到修改去了
+            dailyTrainCarriage.setCreateTime(null);
+            dailyTrainCarriage.setUpdateTime(null);
+            save(BeanUtil.copyProperties(dailyTrainCarriage, DailyTrainCarriageSaveForm.class));
+        }
+    }
+
+    @Override
+    public List<DailyTrainCarriage> queryByDateAndTrainCodeAndIndex(Date date, String trainCode, Integer index) {
+        DailyTrainCarriageExample dailyTrainCarriageExample = new DailyTrainCarriageExample();
+        dailyTrainCarriageExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode)
+                .andIndexEqualTo(index);
+        return dailyTrainCarriageMapper.selectByExample(dailyTrainCarriageExample);
     }
 }

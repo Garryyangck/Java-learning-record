@@ -113,6 +113,14 @@ public class TrainSeatServiceImpl implements TrainSeatService {
     }
 
     @Override
+    public List<TrainSeat> queryByTrainCode(String trainCode) {
+        TrainSeatExample trainSeatExample = new TrainSeatExample();
+        trainSeatExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode);
+        return trainSeatMapper.selectByExample(trainSeatExample);
+    }
+
+    @Override
     public void genTrainSeat(String trainCode) {
         // 检查参数
         if (StrUtil.isBlank(trainCode)

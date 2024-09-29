@@ -1,9 +1,14 @@
 package garry.train.business.service;
 
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.DailyTrainCarriageQueryForm;
 import garry.train.business.form.DailyTrainCarriageSaveForm;
+import garry.train.business.pojo.DailyTrainCarriage;
+import garry.train.business.pojo.Train;
 import garry.train.business.vo.DailyTrainCarriageQueryVo;
+import garry.train.common.vo.PageVo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Garry
@@ -27,4 +32,14 @@ public interface DailyTrainCarriageService {
      * 根据 id(主键) 删除每日车厢
      */
     void delete(Long id);
+
+    /**
+     * 生成 date 日，train 下的所有 carriage
+     */
+    void genDaily(Date date, Train train);
+
+    /**
+     * 校验唯一键
+     */
+    List<DailyTrainCarriage> queryByDateAndTrainCodeAndIndex(Date date, String trainCode, Integer index);
 }

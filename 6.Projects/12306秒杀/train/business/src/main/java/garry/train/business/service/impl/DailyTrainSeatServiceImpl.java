@@ -3,21 +3,27 @@ package garry.train.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.DailyTrainSeatQueryForm;
 import garry.train.business.form.DailyTrainSeatSaveForm;
 import garry.train.business.mapper.DailyTrainSeatMapper;
 import garry.train.business.pojo.DailyTrainSeat;
 import garry.train.business.pojo.DailyTrainSeatExample;
+import garry.train.business.pojo.Train;
+import garry.train.business.pojo.TrainSeat;
 import garry.train.business.service.DailyTrainSeatService;
+import garry.train.business.service.TrainSeatService;
+import garry.train.business.service.TrainStationService;
 import garry.train.business.vo.DailyTrainSeatQueryVo;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +33,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
+    @Resource
+    private TrainSeatService trainSeatService;
+
+    @Resource
+    private TrainStationService trainStationService;
+
     @Resource
     private DailyTrainSeatMapper dailyTrainSeatMapper;
 
@@ -86,5 +98,28 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
     @Override
     public void delete(Long id) {
         dailyTrainSeatMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void genDaily(Date date, Train train) {
+        // 删除 date 下 train 的所有 daily-train-seat
+        DailyTrainSeatExample dailyTrainSeatExample = new DailyTrainSeatExample();
+        dailyTrainSeatExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(train.getCode());
+        dailyTrainSeatMapper.deleteByExample(dailyTrainSeatExample);
+
+        // 查出 date 下 train 下所有的 train-seat
+        List<TrainSeat> trainSeats = trainSeatService.queryByTrainCode(train.getCode());
+        for (TrainSeat trainSeat : trainSeats) {
+            DailyTrainSeat dailyTrainSeat = BeanUtil.copyProperties(trainSeat, DailyTrainSeat.class);
+            dailyTrainSeat.setDate(date);
+            // sell 字段不能为空，赋值为一连串 0，个数等于 count(TrainStation + 1)
+            dailyTrainSeat.setSell(StrUtil.fillBefore("", '0', trainSeatService.queryByTrainCode(train.getCode()).size() - 1));
+            dailyTrainSeat.setId(null); // 防止跑到修改去了
+            dailyTrainSeat.setCreateTime(null);
+            dailyTrainSeat.setUpdateTime(null);
+            save(BeanUtil.copyProperties(dailyTrainSeat, DailyTrainSeatSaveForm.class));
+        }
     }
 }
