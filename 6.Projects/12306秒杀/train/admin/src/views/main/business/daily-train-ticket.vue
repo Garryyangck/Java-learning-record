@@ -4,6 +4,8 @@
     <a-space>
       <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
       <train-select-view v-model:value="params.code" style="width: 300px"/>
+      <station-select-view v-model:value="params.start" placeholder="请选择出发站" style="width: 150px"/>
+      <station-select-view v-model:value="params.end" placeholder="请选择到达站" style="width: 150px"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
     </a-space>
   </p>
@@ -13,17 +15,58 @@
            @change="handleTableChange"
            :loading="loading">
     <template #bodyCell="{ column, record }">
-      <template v-if="(column.dataIndex === 'ydz' || column.dataIndex === 'ydzPrice') && record.ydz === -1">
-        <a-space>-</a-space>
+      <template v-if="column.dataIndex === 'station'">
+        {{record.start}}<br/>
+        {{record.end}}
       </template>
-      <template v-if="(column.dataIndex === 'edz' || column.dataIndex === 'edzPrice') && record.edz === -1">
-        <a-space>-</a-space>
+      <template v-else-if="column.dataIndex === 'time'">
+        {{record.startTime}}<br/>
+        {{record.endTime}}
       </template>
-      <template v-if="(column.dataIndex === 'rw' || column.dataIndex === 'rwPrice') && record.rw === -1">
-        <a-space>-</a-space>
+      <template v-else-if="column.dataIndex === 'duration'">
+        {{calDuration(record.startTime, record.endTime)}}<br/>
+        <div v-if="record.startTime.replaceAll(':', '') >= record.endTime.replaceAll(':', '')">
+          次日到达
+        </div>
+        <div v-else>
+          当日到达
+        </div>
       </template>
-      <template v-if="(column.dataIndex === 'yw' || column.dataIndex === 'ywPrice') && record.yw === -1">
-        <a-space>-</a-space>
+      <template v-else-if="column.dataIndex === 'ydz'">
+        <div v-if="record.ydz >= 0">
+          {{record.ydz}}<br/>
+          {{record.ydzPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
+      </template>
+      <template v-else-if="column.dataIndex === 'edz'">
+        <div v-if="record.edz >= 0">
+          {{record.edz}}<br/>
+          {{record.edzPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
+      </template>
+      <template v-else-if="column.dataIndex === 'rw'">
+        <div v-if="record.rw >= 0">
+          {{record.rw}}<br/>
+          {{record.rwPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
+      </template>
+      <template v-else-if="column.dataIndex === 'yw'">
+        <div v-if="record.yw >= 0">
+          {{record.yw}}<br/>
+          {{record.ywPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
       </template>
     </template>
   </a-table>
@@ -34,10 +77,12 @@ import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 import TrainSelectView from "@/components/train-select.vue";
+import StationSelectView from "@/components/station-select.vue";
+import dayjs from "dayjs";
 
 export default defineComponent({
   name: "daily-train-ticket-view",
-  components: {TrainSelectView},
+  components: {StationSelectView, TrainSelectView},
   setup() {
     const visible = ref(false);
     const dailyTrainTicket = reactive({
@@ -73,98 +118,112 @@ export default defineComponent({
     let params = ref({
       code: null,
       date: null,
+      start: null,
+      end: null,
     });
     const columns = ref([
-    {
-      title: '日期',
-      dataIndex: 'date',
-      key: 'date',
-    },
-    {
-      title: '车次编号',
-      dataIndex: 'trainCode',
-      key: 'trainCode',
-    },
-    {
-      title: '出发站',
-      dataIndex: 'start',
-      key: 'start',
-    },
-    {
-      title: '出发站拼音',
-      dataIndex: 'startPinyin',
-      key: 'startPinyin',
-    },
-    {
-      title: '出发时间',
-      dataIndex: 'startTime',
-      key: 'startTime',
-    },
-    {
-      title: '出发站序',
-      dataIndex: 'startIndex',
-      key: 'startIndex',
-    },
-    {
-      title: '到达站',
-      dataIndex: 'end',
-      key: 'end',
-    },
-    {
-      title: '到达站拼音',
-      dataIndex: 'endPinyin',
-      key: 'endPinyin',
-    },
-    {
-      title: '到站时间',
-      dataIndex: 'endTime',
-      key: 'endTime',
-    },
-    {
-      title: '到站站序',
-      dataIndex: 'endIndex',
-      key: 'endIndex',
-    },
-    {
-      title: '一等座余票',
-      dataIndex: 'ydz',
-      key: 'ydz',
-    },
-    {
-      title: '一等座票价',
-      dataIndex: 'ydzPrice',
-      key: 'ydzPrice',
-    },
-    {
-      title: '二等座余票',
-      dataIndex: 'edz',
-      key: 'edz',
-    },
-    {
-      title: '二等座票价',
-      dataIndex: 'edzPrice',
-      key: 'edzPrice',
-    },
-    {
-      title: '软卧余票',
-      dataIndex: 'rw',
-      key: 'rw',
-    },
-    {
-      title: '软卧票价',
-      dataIndex: 'rwPrice',
-      key: 'rwPrice',
-    },
-    {
-      title: '硬卧余票',
-      dataIndex: 'yw',
-      key: 'yw',
-    },
-    {
-      title: '硬卧票价',
-      dataIndex: 'ywPrice',
-      key: 'ywPrice',
-    },
+      {
+        title: '日期',
+        dataIndex: 'date',
+        key: 'date',
+      },
+      {
+        title: '车次编号',
+        dataIndex: 'trainCode',
+        key: 'trainCode',
+      },
+      {
+        title: '车站',
+        dataIndex: 'station',
+      },
+      {
+        title: '时间',
+        dataIndex: 'time',
+      },
+      {
+        title: '历时',
+        dataIndex: 'duration',
+      },
+      // {
+      //   title: '出发站',
+      //   dataIndex: 'start',
+      //   key: 'start',
+      // },
+      // {
+      //   title: '出发站拼音',
+      //   dataIndex: 'startPinyin',
+      //   key: 'startPinyin',
+      // },
+      // {
+      //   title: '出发时间',
+      //   dataIndex: 'startTime',
+      //   key: 'startTime',
+      // },
+      // {
+      //   title: '出发站序',
+      //   dataIndex: 'startIndex',
+      //   key: 'startIndex',
+      // },
+      // {
+      //   title: '到达站',
+      //   dataIndex: 'end',
+      //   key: 'end',
+      // },
+      // {
+      //   title: '到达站拼音',
+      //   dataIndex: 'endPinyin',
+      //   key: 'endPinyin',
+      // },
+      // {
+      //   title: '到站时间',
+      //   dataIndex: 'endTime',
+      //   key: 'endTime',
+      // },
+      // {
+      //   title: '到站站序',
+      //   dataIndex: 'endIndex',
+      //   key: 'endIndex',
+      // },
+      {
+        title: '一等座',
+        dataIndex: 'ydz',
+        key: 'ydz',
+      },
+      // {
+      //   title: '一等座票价',
+      //   dataIndex: 'ydzPrice',
+      //   key: 'ydzPrice',
+      // },
+      {
+        title: '二等座',
+        dataIndex: 'edz',
+        key: 'edz',
+      },
+      // {
+      //   title: '二等座票价',
+      //   dataIndex: 'edzPrice',
+      //   key: 'edzPrice',
+      // },
+      {
+        title: '软卧',
+        dataIndex: 'rw',
+        key: 'rw',
+      },
+      // {
+      //   title: '软卧票价',
+      //   dataIndex: 'rwPrice',
+      //   key: 'rwPrice',
+      // },
+      {
+        title: '硬卧',
+        dataIndex: 'yw',
+        key: 'yw',
+      },
+      // {
+      //   title: '硬卧票价',
+      //   dataIndex: 'ywPrice',
+      //   key: 'ywPrice',
+      // },
     ]);
 
     watch(() => params.value.code, () => {
@@ -181,6 +240,20 @@ export default defineComponent({
       });
     });
 
+    watch(() => params.value.start, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
+
+    watch(() => params.value.end, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
+
     const handleQuery = (param) => {
       let byRefresh = false;
       if (!param) {
@@ -190,6 +263,8 @@ export default defineComponent({
         };
         params.value.code = null;
         params.value.date = null;
+        params.value.start = null;
+        params.value.end = null;
         byRefresh = true;
       }
       loading.value = true;
@@ -199,6 +274,8 @@ export default defineComponent({
           pageSize: param.pageSize,
           code: params.value.code,
           date: params.value.date,
+          start: params.value.start,
+          end: params.value.end,
         }
       }).then((response) => {
         loading.value = false;
@@ -227,6 +304,14 @@ export default defineComponent({
       });
     };
 
+    /**
+     * 计算 endTime - startTime，如果 endTime < startTime，则会返回 24:00:00 - (startTime - endTime)
+     */
+    const calDuration = (startTime, endTime) => {
+      let diff = dayjs(endTime, 'HH:mm:ss').diff(dayjs(startTime, 'HH:mm:ss'), 'seconds');
+      return dayjs('00:00:00', 'HH:mm:ss').second(diff).format('HH:mm:ss');
+    };
+
     onMounted(() => {
       document.title = '余票信息';
       handleQuery({
@@ -245,6 +330,7 @@ export default defineComponent({
       params,
       handleQuery,
       handleTableChange,
+      calDuration,
     };
   },
 });

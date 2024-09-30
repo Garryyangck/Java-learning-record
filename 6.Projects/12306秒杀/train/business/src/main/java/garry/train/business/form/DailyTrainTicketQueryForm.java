@@ -27,4 +27,14 @@ public class DailyTrainTicketQueryForm extends PageForm {
     // GET 请求加: @DateTimeFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
+
+    /**
+     * 出发站
+     */
+    private String start;
+
+    /**
+     * 到达站
+     */
+    private String end;
 }

@@ -81,6 +81,12 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
         if (ObjectUtil.isNotEmpty(form.getDate())) {
             criteria.andDateEqualTo(form.getDate());
         }
+        if (ObjectUtil.isNotEmpty(form.getStart())) {
+            criteria.andStartEqualTo(form.getStart());
+        }
+        if (ObjectUtil.isNotEmpty(form.getEnd())) {
+            criteria.andEndEqualTo(form.getEnd());
+        }
 
         // 启动分页
         PageHelper.startPage(form.getPageNum(), form.getPageSize());
