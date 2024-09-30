@@ -149,7 +149,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      document.title = '座位';
+      document.title = '火车座位';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,

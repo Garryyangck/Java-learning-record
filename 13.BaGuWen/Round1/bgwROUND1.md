@@ -134,7 +134,7 @@
 > 	        field2.equals(that.field2) && // 引用类型则调用其各自的 equals 方法
 > 	        field3.equals(that.field3); // field1 为基本类型，2、3为引用类型
 > 	}
-> 		
+> 			
 > 	@Override
 > 	public int hashCode() { // 同时重写 hashCode 方法
 > 	    return Objects.hash(field1, field2, field3);
@@ -371,7 +371,7 @@
 > 	public static void main(String[] args) {
 > 	    System.out.println("the return value of f is " + f()); // 3
 > 	}
-> 	
+> 		
 > 	static int f() {
 > 	    int a = 1;
 > 	    try {
@@ -1491,13 +1491,13 @@
 > 	                // ClassNotFoundException thrown if class not found
 > 	                // from the non-null parent class loader
 > 	            }
-> 	
+> 		
 > 	            if (c == null) {
 > 	                // If still not found, then invoke findClass in order
 > 	                // to find the class.
 > 	                long t1 = System.nanoTime();
 > 	                c = findClass(name); // 调用自己的 findClass 方法
-> 	
+> 		
 > 	                // this is the defining class loader; record the stats
 > 	                sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);
 > 	                sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);
@@ -1510,7 +1510,7 @@
 > 	        return c;
 > 	    }
 > 	}
-> 	
+> 		
 > 	protected Class<?> findClass(String name) throws ClassNotFoundException {
 > 	    throw new ClassNotFoundException(name); // 不重写会直接抛异常，因此自定义时必须重写该方法，否则在父类加载器找不到调用 findClass 方法时一定会报错
 > 	}
@@ -1772,7 +1772,7 @@
 >
 > 4. ```java
 > 	public volatile int value;
-> 	
+> 		
 > 	public static void increment() {
 > 	    do {
 > 	        int expectedValue = this.value;
@@ -1783,7 +1783,7 @@
 > 	        // 需要重新进行 value++ 操作
 > 	        // 否则将 value 设置为 newValue
 > 	}
-> 	
+> 		
 > 	public boolean compareAndSwap(int expectedValue, int newValue) {
 > 	    if (this.value == expectedValue) { // compare 操作
 > 	        this.value = newValue; // swap 操作
@@ -2427,13 +2427,13 @@
 	> 	public class LambdaStreamExample {
 	> 	    public static void main(String[] args) {
 	> 	        List numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-	> 																				
+	> 																					
 	> 	        // 使用Lambda和Stream API过滤和映射集合
 	> 	        List result = numbers.stream()
 	> 	            .filter(n -> n % 2 != 0) // 过滤掉偶数
 	> 	            .map(n -> n * 2) // 将剩下的数字加倍
 	> 	            .toList();
-	> 																				
+	> 																					
 	> 	        // 输出结果
 	> 	        System.out.println(result); // 输出: [2, 6, 10, 14, 18]
 	> 	    }
@@ -2446,26 +2446,26 @@
 	>
 	> - ```java
 	> 	public static void main(String[] args) {
-	> 																				
+	> 																					
 	> 	    // 创建一个包含非空值的Optional对象
 	> 	    Optional<String> optional1 = Optional.of("Hello World");
-	> 																				
+	> 																					
 	> 	    // 创建一个为空的Optional对象
 	> 	    Optional<String> optional2 = Optional.empty();
-	> 																				
+	> 																					
 	> 	    // 输出Optional对象的值
 	> 	    System.out.println(optional1.get()); // Hello World
-	> 																				
+	> 																					
 	> 	    // 如果Optional对象为空，则抛出NoSuchElementException异常
 	> 	    System.out.println(optional2.get()); // 抛出NoSuchElementException异常
-	> 																				
+	> 																					
 	> 	    // 判断Optional对象是否有值
 	> 	    System.out.println(optional1.isPresent()); // true
 	> 	    System.out.println(optional2.isPresent()); // false
-	> 																				
+	> 																					
 	> 	    // 如果Optional对象为空，则返回指定的默认值
 	> 	    System.out.println(optional2.orElse("Default Value")); // Default Value
-	> 																				
+	> 																					
 	> 	    // 如果Optional对象为空，则执行指定的操作
 	> 	    optional2.ifPresent(value -> System.out.println("Value is present"));
 	> 	}
@@ -2544,16 +2544,16 @@
 	>
 	> 	```java
 	> 	public class MethodReferenceExample {
-	> 																				
+	> 																					
 	> 	    public static void main(String[] args) {
 	> 	        // 使用 Lambda 表达式
 	> 	        Supplier<Person> supplier1 = () -> new Person();
-	> 																				
+	> 																					
 	> 	        // 使用方法引用
 	> 	        Supplier<Person> supplier2 = Person::new;
 	> 	    }
 	> 	}
-	> 																				
+	> 																					
 	> 	class Person {
 	> 	    public Person() {
 	> 	    }
@@ -2983,23 +2983,23 @@
 	> 	// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数
 	> 	public class DemoEvent extends ApplicationEvent{
 	> 	    private static final long serialVersionUID = 1L;
-	> 																																																																
+	> 																																																																	
 	> 	    private String message;
-	> 																																																																
+	> 																																																																	
 	> 	    public DemoEvent(Object source,String message){
 	> 	        super(source);
 	> 	        this.message = message;
 	> 	    }
-	> 																																																																
+	> 																																																																	
 	> 	    public String getMessage() {
 	> 	        return message;
 	> 	    }
 	> 	}
-	> 																																																																
+	> 																																																																	
 	> 	// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；
 	> 	@Component
 	> 	public class DemoListener implements ApplicationListener<DemoEvent>{
-	> 																																																																
+	> 																																																																	
 	> 	    //使用onApplicationEvent接收消息
 	> 	    @Override
 	> 	    public void onApplicationEvent(DemoEvent event) {
@@ -3007,14 +3007,14 @@
 	> 	        System.out.println("接收到的信息是："+msg);
 	> 	    }
 	> 	}
-	> 																																																																
+	> 																																																																	
 	> 	// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。
 	> 	@Component
 	> 	public class DemoPublisher {
-	> 																																																																
+	> 																																																																	
 	> 	    @Autowired
 	> 	    ApplicationContext applicationContext;
-	> 																																																																
+	> 																																																																	
 	> 	    public void publish(String message){
 	> 	        //发布事件
 	> 	        applicationContext.publishEvent(new DemoEvent(this, message));
@@ -3575,9 +3575,9 @@
 	>
 	> - ```java
 	> 	XmlAppContext ctx = new XmlAppContext("c:\\bean.xml");
-	> 																																																														
+	> 																																																															
 	> 	OrderProcessor op = (OrderProcessor) ctx.getBean("order-processor");
-	> 																																																														
+	> 																																																															
 	> 	op.process();
 	> 	```
 	>
@@ -4847,12 +4847,12 @@ insert into user values(3,'lisi');
 	>
 	> 	- ```bash
 	> 		sudo vim /etc/default/sysstat
-	> 																																						
+	> 																																							
 	> 		#
 	> 		# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
 	> 		# and /etc/cron.daily/sysstat files
 	> 		#
-	> 																																						
+	> 																																							
 	> 		# Should sadc collect system activity informations? Valid values
 	> 		# are "true" and "false". Please do not put other values, they
 	> 		# will be overwritten by debconf!
@@ -5465,7 +5465,7 @@ insert into user values(3,'lisi');
 	> 	# 关机
 	> 	sudo systemctl poweroff 
 	> 	sudo shutdown -h now # -h 表示 halt，即停止所有 CPU 功能
-	> 																																			
+	> 																																				
 	> 	# 重启
 	> 	sudo systemctl reboot
 	> 	sudo shutdown -r now

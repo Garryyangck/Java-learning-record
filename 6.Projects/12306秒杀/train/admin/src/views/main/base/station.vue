@@ -200,7 +200,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      document.title = '车站';
+      document.title = '车站管理';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,

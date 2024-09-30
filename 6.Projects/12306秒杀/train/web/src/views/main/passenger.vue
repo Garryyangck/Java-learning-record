@@ -201,7 +201,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      document.title = '乘客';
+      document.title = '乘车人管理';
 
       handleQuery({
         pageNum: 1,

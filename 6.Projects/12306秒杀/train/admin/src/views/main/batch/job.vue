@@ -273,6 +273,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      document.title = '任务管理';
       handleQuery();
     });
 

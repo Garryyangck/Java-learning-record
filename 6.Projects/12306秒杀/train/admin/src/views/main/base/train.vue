@@ -317,7 +317,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      document.title = '车次';
+      document.title = '车次管理';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
