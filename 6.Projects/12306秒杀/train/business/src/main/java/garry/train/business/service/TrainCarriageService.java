@@ -35,6 +35,7 @@ public interface TrainCarriageService {
     /**
      * 根据 trainCode 查 TrainCarriage，主要被 service 层调用
      * 用于 TrainService.delete 中同时删除所有隶属于该车次的 TrainCarriage
+     * 需要按 index 升序排序
      */
     List<TrainCarriage> queryByTrainCode(String trainCode);
 

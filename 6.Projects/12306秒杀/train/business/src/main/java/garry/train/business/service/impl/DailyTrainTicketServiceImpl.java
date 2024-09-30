@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.SeatTypeEnum;
+import garry.train.business.enums.TrainTypeEnum;
 import garry.train.business.form.DailyTrainTicketQueryForm;
 import garry.train.business.form.DailyTrainTicketSaveForm;
 import garry.train.business.mapper.DailyTrainTicketMapper;
@@ -115,16 +116,20 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
                 .andTrainCodeEqualTo(trainCode);
         dailyTrainTicketMapper.deleteByExample(dailyTrainTicketExample);
 
-        // 查询所有余票
-        List<TrainCarriage> trainCarriages = trainCarriageService.queryByTrainCode(trainCode);
-        int[] seats4SeatTypes = new int[4];
-        for (TrainCarriage trainCarriage : trainCarriages) {
-            int index = Integer.valueOf(trainCarriage.getSeatType()) - 1;
-            seats4SeatTypes[index] += trainCarriage.getSeatCount();
-        }
+        // 查询所有座位类型的余票数量，int[4]
+        int[] seats4SeatTypes = getSeats4SeatTypes(trainCode);
 
         // 查询所有途经车站
         List<TrainStation> trainStations = trainStationService.queryByTrainCode(trainCode);
+
+        // 获取列车的类型及其价格系数
+        BigDecimal priceRate = BigDecimal.ZERO;
+        for (TrainTypeEnum trainTypeEnum : TrainTypeEnum.values()) {
+            if (trainTypeEnum.getCode().equals(train.getType())) {
+                priceRate = trainTypeEnum.getPriceRate();
+                break;
+            }
+        }
 
         for (int len = 2; len <= trainStations.size(); len++) {
             int startIndex = 0, endIndex = startIndex + len - 1;
@@ -156,20 +161,38 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
                 form.setRw(seats4SeatTypes[2]);
                 form.setYw(seats4SeatTypes[3]);
 
-                form.setYdzPrice(distance.multiply(SeatTypeEnum.YDZ.getPrice()));
-                form.setEdzPrice(distance.multiply(SeatTypeEnum.EDZ.getPrice()));
-                form.setRwPrice(distance.multiply(SeatTypeEnum.RW.getPrice()));
-                form.setYwPrice(distance.multiply(SeatTypeEnum.YW.getPrice()));
+                // 票价，和 车次类型，座位类型有关
+                form.setYdzPrice(distance.multiply(SeatTypeEnum.YDZ.getPrice()).multiply(priceRate));
+                form.setEdzPrice(distance.multiply(SeatTypeEnum.EDZ.getPrice()).multiply(priceRate));
+                form.setRwPrice(distance.multiply(SeatTypeEnum.RW.getPrice()).multiply(priceRate));
+                form.setYwPrice(distance.multiply(SeatTypeEnum.YW.getPrice()).multiply(priceRate));
 
                 save(form);
 
-                if(endIndex + 1 < trainStations.size()) {
+                if (endIndex + 1 < trainStations.size()) {
                     distance = distance.subtract(trainStations.get(startIndex + 1).getKm());
                     distance = distance.add(trainStations.get(endIndex + 1).getKm());
                 }
             }
         }
         log.info("已生成 【{}】 车次 【{}】 的所有每日余票", DateUtil.format(date, "yyyy-MM-dd"), train.getCode());
+    }
+
+    /**
+     * 查询所有座位类型的余票数量
+     * 没有的座位类型返回 -1，用于前端特殊展示为 “-”
+     */
+    private int[] getSeats4SeatTypes(String trainCode) {
+        List<TrainCarriage> trainCarriages = trainCarriageService.queryByTrainCode(trainCode);
+        int[] seats4SeatTypes = new int[4];
+        for (TrainCarriage trainCarriage : trainCarriages) {
+            int index = Integer.valueOf(trainCarriage.getSeatType()) - 1;
+            seats4SeatTypes[index] += trainCarriage.getSeatCount();
+        }
+        for (int i = 0; i < 4; i++) {
+            seats4SeatTypes[i] = seats4SeatTypes[i] <= 0 ? -1 : seats4SeatTypes[i];
+        }
+        return seats4SeatTypes;
     }
 
     @Override

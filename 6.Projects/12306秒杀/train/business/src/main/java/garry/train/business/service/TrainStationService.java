@@ -46,6 +46,7 @@ public interface TrainStationService {
     /**
      * 通过 trainCode 查询
      * 用于 TrainService.delete 中同时删除所有隶属于该车次的 TrainStation
+     * 需要按 index 升序排序
      */
     List<TrainStation> queryByTrainCode(String trainCode);
 

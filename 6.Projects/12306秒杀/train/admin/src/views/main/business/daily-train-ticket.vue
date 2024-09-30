@@ -13,7 +13,17 @@
            @change="handleTableChange"
            :loading="loading">
     <template #bodyCell="{ column, record }">
-      <template v-if="column.dataIndex === 'operation'">
+      <template v-if="(column.dataIndex === 'ydz' || column.dataIndex === 'ydzPrice') && record.ydz === -1">
+        <a-space>-</a-space>
+      </template>
+      <template v-if="(column.dataIndex === 'edz' || column.dataIndex === 'edzPrice') && record.edz === -1">
+        <a-space>-</a-space>
+      </template>
+      <template v-if="(column.dataIndex === 'rw' || column.dataIndex === 'rwPrice') && record.rw === -1">
+        <a-space>-</a-space>
+      </template>
+      <template v-if="(column.dataIndex === 'yw' || column.dataIndex === 'ywPrice') && record.yw === -1">
+        <a-space>-</a-space>
       </template>
     </template>
   </a-table>
