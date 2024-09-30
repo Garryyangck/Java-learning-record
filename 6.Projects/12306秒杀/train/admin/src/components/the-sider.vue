@@ -78,7 +78,7 @@
         </a-menu-item>
         <a-menu-item key="/business/daily-train-ticket">
           <router-link to="/business/daily-train-ticket">
-            <FormOutlined /> &nbsp; 每日车票
+            <FormOutlined /> &nbsp; 余票信息
           </router-link>
         </a-menu-item>
       </a-sub-menu>

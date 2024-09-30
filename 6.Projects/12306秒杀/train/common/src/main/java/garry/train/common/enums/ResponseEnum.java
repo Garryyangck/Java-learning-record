@@ -68,6 +68,8 @@ public enum ResponseEnum {
     BUSINESS_TRAIN_NOT_FOUND(27, "该车次不存在"),
 
     API_ARGUMENT_MISMATCH(28, "接口参数不匹配"),
+
+    BUSINESS_DUPLICATE_DAILY_TRAIN_TICKET_DATE_TRAIN_CODE_START_END(29, "该日该车次该起点终点站车票已存在"),
     ;
 
     private final Integer code;
