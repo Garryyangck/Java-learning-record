@@ -4,13 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.github.pagehelper.PageHelper;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.SeatTypeEnum;
 import garry.train.business.enums.TrainTypeEnum;
 import garry.train.business.form.DailyTrainTicketQueryForm;
 import garry.train.business.form.DailyTrainTicketSaveForm;
-import garry.train.business.mapper.DailyTrainTicketMapper;
 import garry.train.business.pojo.*;
 import garry.train.business.service.DailyTrainTicketService;
 import garry.train.business.service.TrainCarriageService;
@@ -19,23 +19,27 @@ import garry.train.business.vo.DailyTrainTicketQueryVo;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
+import garry.train.common.util.PageUtil;
+import garry.train.common.util.RedisUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Garry
- * 2024-09-30 14:51
+ * 2024-09-30 20:31
  */
 @Slf4j
 @Service
-public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
+@Primary
+public class DailyTrainTicketServiceRedisImpl implements DailyTrainTicketService {
     @Resource
     private TrainStationService trainStationService;
 
@@ -43,7 +47,7 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
     private TrainCarriageService trainCarriageService;
 
     @Resource
-    private DailyTrainTicketMapper dailyTrainTicketMapper;
+    private RedisTemplate redisTemplate;
 
     @Override
     public void save(DailyTrainTicketSaveForm form) {
@@ -60,11 +64,21 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
             dailyTrainTicket.setId(CommonUtil.getSnowflakeNextId());
             dailyTrainTicket.setCreateTime(now);
             dailyTrainTicket.setUpdateTime(now);
-            dailyTrainTicketMapper.insert(dailyTrainTicket);
+
+            // 将 dailyTrainTicket 序列化为 String，存储到 Redis 中
+            redisTemplate.opsForValue().set(RedisUtil.getRedisKey4DailyTicket(
+                    dailyTrainTicket.getDate(),
+                    dailyTrainTicket.getTrainCode(),
+                    dailyTrainTicket.getStart(),
+                    dailyTrainTicket.getEnd()), JSONObject.toJSONString(dailyTrainTicket));
             log.info("插入余票信息：{}", dailyTrainTicket);
         } else { // 修改
             dailyTrainTicket.setUpdateTime(now);
-            dailyTrainTicketMapper.updateByPrimaryKeySelective(dailyTrainTicket);
+            redisTemplate.opsForValue().set(RedisUtil.getRedisKey4DailyTicket(
+                    dailyTrainTicket.getDate(),
+                    dailyTrainTicket.getTrainCode(),
+                    dailyTrainTicket.getStart(),
+                    dailyTrainTicket.getEnd()), JSONObject.toJSONString(dailyTrainTicket));
             log.info("修改余票信息：{}", dailyTrainTicket);
         }
     }
@@ -73,30 +87,30 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
     public PageVo<DailyTrainTicketQueryVo> queryList(DailyTrainTicketQueryForm form) {
         DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
         dailyTrainTicketExample.setOrderByClause("date desc, train_code, start_index, end_index");
-        DailyTrainTicketExample.Criteria criteria = dailyTrainTicketExample.createCriteria();
-        // 注意用 isNotEmpty 而不是 isNotNUll，按照车次编号过滤
-        if (ObjectUtil.isNotEmpty(form.getCode())) {
-            criteria.andTrainCodeEqualTo(form.getCode());
-        }
-        if (ObjectUtil.isNotEmpty(form.getDate())) {
-            criteria.andDateEqualTo(form.getDate());
-        }
-        if (ObjectUtil.isNotEmpty(form.getStart())) {
-            criteria.andStartEqualTo(form.getStart());
-        }
-        if (ObjectUtil.isNotEmpty(form.getEnd())) {
-            criteria.andEndEqualTo(form.getEnd());
-        }
 
-        // 启动分页
-        PageHelper.startPage(form.getPageNum(), form.getPageSize());
+        // 获取所需的所有 RedisKeys
+        Set keys = redisTemplate.keys(RedisUtil.getRedisKey4DailyTicket(form.getDate(), form.getCode(), form.getStart(), form.getEnd()));
 
         // 获取 dailyTrainTickets
-        List<DailyTrainTicket> dailyTrainTickets = dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
+        List<DailyTrainTicket> dailyTrainTickets = new ArrayList<>();
+        for (Object key : keys) {
+            String redisKey = (String) key;
+            String dailyTrainTicketJSONString = (String) redisTemplate.opsForValue().get(redisKey);
+            DailyTrainTicket dailyTrainTicket = JSON.parseObject(dailyTrainTicketJSONString, DailyTrainTicket.class);
+            dailyTrainTickets.add(dailyTrainTicket);
+        }
 
-        // 获得 pageInfo 对象，并将其 List 的模板类型改为 DailyTrainTicketQueryVo
-        // 注意这里必须先获取 pageInfo，再尝试获取 List<DailyTrainTicketQueryVo>，否则无法正确获取 pageNum，pages 等重要属性
-        PageInfo<DailyTrainTicket> pageInfo = new PageInfo<>(dailyTrainTickets);
+        // 按照 "date desc, train_code, start_index, end_index" 排序
+        Collections.sort(dailyTrainTickets, Comparator
+                .comparing(DailyTrainTicket::getDate)
+                .thenComparing(DailyTrainTicket::getTrainCode)
+                .thenComparingInt(DailyTrainTicket::getStartIndex)
+                .thenComparingInt(DailyTrainTicket::getEndIndex));
+
+        // 创建 PageInfo 对象
+        PageInfo<DailyTrainTicket> pageInfo = PageUtil.getPageInfo(dailyTrainTickets, form.getPageNum(), form.getPageSize());
+
+        // 创建 List<DailyTrainTicketQueryVo>
         List<DailyTrainTicketQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), DailyTrainTicketQueryVo.class);
 
         // 获取 PageVo 对象
@@ -107,20 +121,21 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
     }
 
     @Override
-    public void delete(Long id) {
-        dailyTrainTicketMapper.deleteByPrimaryKey(id);
+    public void delete(Date date, String trainCode, String start, String end) {
+        redisTemplate.delete(RedisUtil.getRedisKey4DailyTicket(date, trainCode, start, end));
     }
 
     @Override
     @Transactional
     public void genDaily(Date date, Train train) {
+        long s = System.nanoTime();
         String trainCode = train.getCode();
         // 删除 date, trainCode 下已存在的所有 ticket
-        DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
-        dailyTrainTicketExample.createCriteria()
-                .andDateEqualTo(date)
-                .andTrainCodeEqualTo(trainCode);
-        dailyTrainTicketMapper.deleteByExample(dailyTrainTicketExample);
+        Set keys = redisTemplate.keys(RedisUtil.getRedisKey4DailyTicket(date, trainCode, null, null));
+        for (Object key : keys) {
+            String redisKey = (String) key;
+            redisTemplate.delete(redisKey);
+        }
 
         // 查询所有座位类型的余票数量，int[4]
         int[] seats4SeatTypes = getSeats4SeatTypes(trainCode);
@@ -182,6 +197,7 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
             }
         }
         log.info("已生成 【{}】 车次 【{}】 的所有每日余票", DateUtil.format(date, "yyyy-MM-dd"), train.getCode());
+        log.info("-------------------------- 用时 {} 纳秒 --------------------------", System.nanoTime() - s);
     }
 
     /**
@@ -202,29 +218,11 @@ public class DailyTrainTicketServiceImpl implements DailyTrainTicketService {
     }
 
     @Override
-    public List<DailyTrainTicket> queryByTrainCode(String trainCode) {
-        DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
-        dailyTrainTicketExample.createCriteria()
-                .andTrainCodeEqualTo(trainCode);
-        return dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
-    }
-
-    @Override
-    public List<DailyTrainTicket> queryByDate(Date date) {
-        DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
-        dailyTrainTicketExample.createCriteria()
-                .andDateEqualTo(date);
-        return dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
-    }
-
-    @Override
     public List<DailyTrainTicket> queryByDateAndTrainCodeAndStartAndEnd(Date date, String trainCode, String start, String end) {
-        DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
-        dailyTrainTicketExample.createCriteria()
-                .andDateEqualTo(date)
-                .andTrainCodeEqualTo(trainCode)
-                .andStartEqualTo(start)
-                .andEndEqualTo(end);
-        return dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
+        DailyTrainTicket dailyTrainTicket = JSON.parseObject((String) redisTemplate.opsForValue().get(RedisUtil.getRedisKey4DailyTicket(date, trainCode, start, end)), DailyTrainTicket.class);
+        ArrayList<DailyTrainTicket> list = new ArrayList<>();
+        if (ObjectUtil.isNotNull(dailyTrainTicket)) // 要判空，否则会把 null 加进去，也算一个元素，导致抛出 Duplicate 的异常
+            list.add(dailyTrainTicket);
+        return list;
     }
 }

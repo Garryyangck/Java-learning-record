@@ -31,16 +31,12 @@ public interface DailyTrainTicketService {
     /**
      * 根据 id(主键) 删除余票信息
      */
-    void delete(Long id);
+    void delete(Date date, String trainCode, String start, String end);
 
     /**
      * 生成每日余票
      */
     void genDaily(Date date, Train train);
-
-    List<DailyTrainTicket> queryByTrainCode(String trainCode);
-
-    List<DailyTrainTicket> queryByDate(Date date);
 
     List<DailyTrainTicket> queryByDateAndTrainCodeAndStartAndEnd(Date date, String trainCode, String start, String end);
 }

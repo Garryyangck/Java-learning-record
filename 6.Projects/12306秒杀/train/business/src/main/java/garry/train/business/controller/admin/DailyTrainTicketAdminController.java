@@ -38,10 +38,4 @@ public class DailyTrainTicketAdminController {
         PageVo<DailyTrainTicketQueryVo> vo = dailyTrainTicketService.queryList(form);
         return ResponseVo.success(vo);
     }
-
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseVo delete(@PathVariable Long id) {
-        dailyTrainTicketService.delete(id);
-        return ResponseVo.success();
-    }
 }
