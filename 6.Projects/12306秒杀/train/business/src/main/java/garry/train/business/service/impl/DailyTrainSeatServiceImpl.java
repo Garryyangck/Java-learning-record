@@ -23,6 +23,7 @@ import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -102,6 +103,7 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
     }
 
     @Override
+    @Transactional
     public void genDaily(Date date, Train train) {
         // 删除 date 下 train 的所有 daily-train-seat
         DailyTrainSeatExample dailyTrainSeatExample = new DailyTrainSeatExample();

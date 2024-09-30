@@ -2,6 +2,8 @@
 <template>
   <p>
     <a-space>
+      <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
+      <train-select-view v-model:value="params.code" style="width: 300px"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
     </a-space>
   </p>
@@ -18,12 +20,14 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref} from 'vue';
+import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
+import TrainSelectView from "@/components/train-select.vue";
 
 export default defineComponent({
   name: "daily-train-ticket-view",
+  components: {TrainSelectView},
   setup() {
     const visible = ref(false);
     const dailyTrainTicket = reactive({
@@ -56,6 +60,10 @@ export default defineComponent({
       pageSize: 10,
     });
     let loading = ref(false);
+    let params = ref({
+      code: null,
+      date: null,
+    });
     const columns = ref([
     {
       title: '日期',
@@ -149,6 +157,19 @@ export default defineComponent({
     },
     ]);
 
+    watch(() => params.value.code, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
+
+    watch(() => params.value.date, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
 
     const handleQuery = (param) => {
       let byRefresh = false;
@@ -157,6 +178,8 @@ export default defineComponent({
           pageNum: 1,
           pageSize: pagination.value.pageSize,
         };
+        params.value.code = null;
+        params.value.date = null;
         byRefresh = true;
       }
       loading.value = true;
@@ -164,6 +187,8 @@ export default defineComponent({
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
+          code: params.value.code,
+          date: params.value.date,
         }
       }).then((response) => {
         loading.value = false;
@@ -207,6 +232,7 @@ export default defineComponent({
       pagination,
       columns,
       loading,
+      params,
       handleQuery,
       handleTableChange,
     };

@@ -118,6 +118,7 @@ public class TrainCarriageServiceImpl implements TrainCarriageService {
     public List<TrainCarriage> queryByTrainCode(String trainCode) {
         TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
         trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        trainCarriageExample.setOrderByClause("`index` asc");
         return trainCarriageMapper.selectByExample(trainCarriageExample);
     }
 

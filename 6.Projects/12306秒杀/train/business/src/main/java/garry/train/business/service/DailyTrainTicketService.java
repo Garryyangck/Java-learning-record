@@ -3,6 +3,7 @@ package garry.train.business.service;
 import garry.train.business.form.DailyTrainTicketQueryForm;
 import garry.train.business.form.DailyTrainTicketSaveForm;
 import garry.train.business.pojo.DailyTrainTicket;
+import garry.train.business.pojo.Train;
 import garry.train.business.vo.DailyTrainTicketQueryVo;
 import garry.train.common.vo.PageVo;
 
@@ -31,6 +32,11 @@ public interface DailyTrainTicketService {
      * 根据 id(主键) 删除余票信息
      */
     void delete(Long id);
+
+    /**
+     * 生成每日余票
+     */
+    void genDaily(Date date, Train train);
 
     List<DailyTrainTicket> queryByTrainCode(String trainCode);
 

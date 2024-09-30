@@ -22,6 +22,7 @@ import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -44,6 +45,9 @@ public class DailyTrainServiceImpl implements DailyTrainService {
 
     @Resource
     private DailyTrainSeatService dailyTrainSeatService;
+
+    @Resource
+    private DailyTrainTicketService dailyTrainTicketService;
 
     @Resource
     private DailyTrainMapper dailyTrainMapper;
@@ -109,6 +113,7 @@ public class DailyTrainServiceImpl implements DailyTrainService {
     }
 
     @Override
+    @Transactional
     public void genDaily(Date date) {
         List<Train> trains = trainService.selectAll();
         if (CollUtil.isEmpty(trains)) {
@@ -122,6 +127,7 @@ public class DailyTrainServiceImpl implements DailyTrainService {
     }
 
     @Override
+    @Transactional
     public void genDailyTrain(Date date, Train train) {
         // 删除本天已有的车次，一个一个删除，降低耦合度
         DailyTrainExample dailyTrainExample = new DailyTrainExample();
@@ -146,6 +152,9 @@ public class DailyTrainServiceImpl implements DailyTrainService {
 
         // 生成 dailyTrainSeat
         dailyTrainSeatService.genDaily(date, train);
+
+        // 生成 dailyTrainTicket
+        dailyTrainTicketService.genDaily(date, train);
 
         log.info("已生成 【{}】 车次 【{}】 的所有每日数据", DateUtil.format(date, "yyyy-MM-dd"), train.getCode());
     }

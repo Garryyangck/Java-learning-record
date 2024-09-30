@@ -136,6 +136,7 @@ public class TrainStationServiceImpl implements TrainStationService {
     public List<TrainStation> queryByTrainCode(String trainCode) {
         TrainStationExample trainStationExample = new TrainStationExample();
         trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        trainStationExample.setOrderByClause("`index` asc");
         return trainStationMapper.selectByExample(trainStationExample);
     }
 
