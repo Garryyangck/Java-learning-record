@@ -38,4 +38,9 @@ public class CommonConst {
      * DailyTrainJob 中生成 DAILY_TRAIN_OFFSET_DAYS 天后的车次数据
      */
     public static final Integer DAILY_TRAIN_OFFSET_DAYS = 15;
+
+    /**
+     * 导航页默认大小
+     */
+    public static final Integer DEFAULT_NAVIGATE_PAGES = 8;
 }
