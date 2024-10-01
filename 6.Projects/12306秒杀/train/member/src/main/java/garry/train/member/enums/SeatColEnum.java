@@ -1,4 +1,4 @@
-package garry.train.generator.enums.business;
+package garry.train.member.enums;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

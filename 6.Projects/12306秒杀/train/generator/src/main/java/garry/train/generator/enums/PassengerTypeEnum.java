@@ -1,4 +1,4 @@
-package garry.train.generator.enums.member;
+package garry.train.generator.enums;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

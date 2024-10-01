@@ -1,4 +1,4 @@
-package garry.train.generator.enums.business;
+package garry.train.generator.enums;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,30 +8,30 @@ import java.util.List;
 
 /**
  * @author Garry
- * 2024-09-22 20:53
+ * 2024-09-22 13:27
  */
-public enum SeatTypeEnum {
-    YDZ("1", "一等座", new BigDecimal("0.4")),
+public enum TrainTypeEnum {
 
-    EDZ("2", "二等座", new BigDecimal("0.3")),
+    G("G", "高铁", new BigDecimal("1.2")),
 
-    RW("3", "软卧", new BigDecimal("0.6")),
+    D("D", "动车", new BigDecimal("1")),
 
-    YW("4", "硬卧", new BigDecimal("0.5"));
+    K("K", "快速", new BigDecimal("0.8"))
+    ;
 
     private final String code;
 
     private final String desc;
 
     /**
-     * 基础票价 N元/公里，0.4即为0.4元/公里
+     * 票价比例，例：1.1，则票价 = 1.1 * 每公里单价（SeatTypeEnum.price） * 公里（station.km）
      */
-    private final BigDecimal price;
+    private final BigDecimal priceRate;
 
-    SeatTypeEnum(String code, String desc, BigDecimal price) {
+    TrainTypeEnum(String code, String desc, BigDecimal priceRate) {
         this.code = code;
         this.desc = desc;
-        this.price = price;
+        this.priceRate = priceRate;
     }
 
     public String getCode() {
@@ -42,13 +42,13 @@ public enum SeatTypeEnum {
         return desc;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPriceRate() {
+        return priceRate;
     }
 
     public static List<HashMap<String, String>> getEnumList() {
         List<HashMap<String, String>> list = new ArrayList<>();
-        for (SeatTypeEnum anEnum : EnumSet.allOf(SeatTypeEnum.class)) {
+        for (TrainTypeEnum anEnum : EnumSet.allOf(TrainTypeEnum.class)) {
             HashMap<String, String> map = new HashMap<>();
             map.put("code", anEnum.code);
             map.put("desc", anEnum.desc);

@@ -7,7 +7,7 @@ import garry.train.member.vo.TicketQueryVo;
 
 /**
  * @author Garry
- * 2024-09-18 16:17
+ * 2024-10-01 17:21
  */
 public interface TicketService {
     /**

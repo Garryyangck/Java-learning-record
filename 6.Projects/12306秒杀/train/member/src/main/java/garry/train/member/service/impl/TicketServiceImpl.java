@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * @author Garry
- * 2024-09-18 16:17
+ * 2024-10-01 17:21
  */
 @Slf4j
 @Service
@@ -36,7 +36,10 @@ public class TicketServiceImpl implements TicketService {
         DateTime now = DateTime.now();
 
         if (ObjectUtil.isNull(ticket.getId())) { // 插入
-            // 对Id、memberId、createTime、updateTime 重新赋值
+            // 插入时要看数据库有没有唯一键约束，在此校验唯一键约束，防止出现 DuplicationKeyException
+
+            // 对Id、createTime、updateTime 重新赋值
+            // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             ticket.setId(CommonUtil.getSnowflakeNextId());
             ticket.setMemberId(form.getMemberId()); // 用户在 Controller 直接 hostHolder 获取 memberId；管理员则是输入用户 memberId
             ticket.setCreateTime(now);
