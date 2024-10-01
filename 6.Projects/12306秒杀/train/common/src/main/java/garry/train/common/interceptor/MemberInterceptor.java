@@ -33,17 +33,17 @@ public class MemberInterceptor implements HandlerInterceptor {
         String path = request.getContextPath() + request.getServletPath();
         log.info("MemberInterceptor 拦截路径 = {}", path);
         String token = request.getHeader("token");
-        if (StrUtil.isNotBlank(token)) {
-            log.info("获取会员登录 token = {}", token);
-            JSONObject loginMember = JWTUtil.getJSONObject(token);
+        log.info("获取会员登录 token = {}", token);
+        JSONObject loginMember = null;
+        if (StrUtil.isNotBlank(token) && (loginMember = JWTUtil.getJSONObject(token)) != null) {
             MemberLoginVo memberLoginVo = JSONUtil.toBean(loginMember, MemberLoginVo.class);
             memberLoginVo.setToken(token);
             log.info("当前登录会员：{}", memberLoginVo);
             hostHolder.setMember(memberLoginVo);
         } else {
             log.info("{} 的 token 不存在或已过期", path);
+            return false;
         }
-
         return true;
     }
 

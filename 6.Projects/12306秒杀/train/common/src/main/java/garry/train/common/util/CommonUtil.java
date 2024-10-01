@@ -5,14 +5,19 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import garry.train.common.consts.CommonConst;
 import garry.train.common.vo.ResponseVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 public class CommonUtil {
+    private static final Logger log = LoggerFactory.getLogger(CommonUtil.class);
+
     /**
      * 生成去除了 “-” 的 UUID
+     *
      * @param limit UUID 的位数
      */
     public static String generateUUID(int limit) {
@@ -43,6 +48,7 @@ public class CommonUtil {
             return (ResponseVo<String>) constructor.newInstance(args);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
+            log.error("反序列化 ResponseVo 失败，responseVoStr = {}", responseVoStr);
             throw new RuntimeException(e);
         }
     }

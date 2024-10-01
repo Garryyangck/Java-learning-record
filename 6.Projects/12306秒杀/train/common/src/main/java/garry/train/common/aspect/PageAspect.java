@@ -54,6 +54,7 @@ public class PageAspect {
             PageVo vo = (PageVo) result;
             log.info("总行数: {}", vo.getSize());
             log.info("总页数: {}", vo.getPages());
+            log.info("总记录数: {}", vo.getTotal());
         }
 
         return result;

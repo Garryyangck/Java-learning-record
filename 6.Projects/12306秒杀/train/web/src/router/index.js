@@ -42,7 +42,7 @@ const router = createRouter({
 // 统一路由拦截校验
 router.beforeEach((to, from, next) => {
     // 要不要对meta.loginRequire属性做监控拦截
-    if (to.matched.some(function (item) {
+    if (to.matched.some((item) => {
         console.log("\"" + item.path + "\"是否需要登录校验：", item.meta.loginRequire || false);
         return item.meta.loginRequire;
     })) {

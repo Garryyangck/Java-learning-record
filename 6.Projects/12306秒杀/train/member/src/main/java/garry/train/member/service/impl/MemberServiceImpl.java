@@ -118,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessException(ResponseEnum.MEMBER_WRONG_CODE);
         }
 
-        log.info("手机号 {} 的用户身份验证成功，使用JWT设置token", mobile);
+        log.info("手机号 {} 的用户身份验证成功，使用 JWT 设置 token", mobile);
         Member member = members.get(0);
         MemberLoginVo vo = BeanUtil.copyProperties(member, MemberLoginVo.class);
         vo.setToken(JWTUtil.createToken(member.getId(), member.getMobile()));

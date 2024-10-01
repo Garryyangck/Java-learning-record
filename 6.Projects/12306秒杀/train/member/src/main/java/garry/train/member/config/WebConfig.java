@@ -31,8 +31,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/hello",
+                        "/member/register",
                         "/member/send-code",
                         "/member/login"
-                );
+                        );
     }
 }

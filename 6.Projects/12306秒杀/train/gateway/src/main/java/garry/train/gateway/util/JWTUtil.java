@@ -27,7 +27,7 @@ public class JWTUtil {
         payload.put("mobile", mobile);
 
         DateTime now = DateTime.now();
-        DateTime expireTime = now.offsetNew(DateField.HOUR, 24);
+        DateTime expireTime = now.offsetNew(DateField.HOUR, 24); // 这里用不了 CommonConst，只能写死
         payload.put(JWTPayload.ISSUED_AT, now); // 签发时间
         payload.put(JWTPayload.EXPIRES_AT, expireTime); // 过期时间
         payload.put(JWTPayload.NOT_BEFORE, now); // 生效时间
@@ -45,22 +45,27 @@ public class JWTUtil {
             JWT jwt = JWT.of(token).setKey(key.getBytes());
             return jwt.validate(0);
         } catch (Exception e) {
-            log.error("校验异常", e);
+            log.error("JWT校验异常", e);
             return false;
         }
     }
 
     /**
      * 获取 JWT 中的原始内容
+     * 若 token 无效，则返回 null
      */
     public static JSONObject getJSONObject(String token) {
-        validate(token);
-        JWT jwt = JWT.of(token).setKey(key.getBytes());
-        JSONObject payloads = jwt.getPayloads();
-        payloads.remove(JWTPayload.ISSUED_AT);
-        payloads.remove(JWTPayload.EXPIRES_AT);
-        payloads.remove(JWTPayload.NOT_BEFORE);
-        log.info("根据token获取的原始内容: {}", payloads);
-        return payloads;
+        if (validate(token)) {
+            JWT jwt = JWT.of(token).setKey(key.getBytes());
+            JSONObject payloads = jwt.getPayloads();
+            payloads.remove(JWTPayload.ISSUED_AT);
+            payloads.remove(JWTPayload.EXPIRES_AT);
+            payloads.remove(JWTPayload.NOT_BEFORE);
+            log.info("根据token获取的原始内容: {}", payloads);
+            return payloads;
+        } else {
+            log.error("token无效或已过期，无法获取token.payloads");
+            return null;
+        }
     }
 }

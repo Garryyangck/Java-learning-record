@@ -168,6 +168,9 @@ public class DBUtil {
         }
     }
 
+    /**
+     * 获取一个数据库中所有表在 mybatis-generator 中 <table tableName="xxx_xxx" domainObjectName="XxxXxx"/> 的表示
+     */
     public static void main(String[] args) throws Exception {
         DBUtil.url = "jdbc:mysql://localhost:3306/train_business?characterEncoding=UTF-8&amp;autoReconnect=true&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai";
         DBUtil.user = "root";

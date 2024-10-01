@@ -16,12 +16,12 @@
            :loading="loading">
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'station'">
-        {{record.start}}<br/>
-        {{record.end}}
+        出发站：{{record.start}}<br/>
+        到达站：{{record.end}}
       </template>
       <template v-else-if="column.dataIndex === 'time'">
-        {{record.startTime}}<br/>
-        {{record.endTime}}
+        出站：{{record.startTime}}<br/>
+        到站：{{record.endTime}}
       </template>
       <template v-else-if="column.dataIndex === 'duration'">
         {{calDuration(record.startTime, record.endTime)}}<br/>
@@ -34,8 +34,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'ydz'">
         <div v-if="record.ydz >= 0">
-          {{record.ydz}}<br/>
-          {{record.ydzPrice}}￥
+          余票：{{record.ydz}}<br/>
+          票价：{{record.ydzPrice}}￥
         </div>
         <div v-else>
           --
@@ -43,8 +43,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'edz'">
         <div v-if="record.edz >= 0">
-          {{record.edz}}<br/>
-          {{record.edzPrice}}￥
+          余票：{{record.edz}}<br/>
+          票价：{{record.edzPrice}}￥
         </div>
         <div v-else>
           --
@@ -52,8 +52,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'rw'">
         <div v-if="record.rw >= 0">
-          {{record.rw}}<br/>
-          {{record.rwPrice}}￥
+          余票：{{record.rw}}<br/>
+          票价：{{record.rwPrice}}￥
         </div>
         <div v-else>
           --
@@ -61,8 +61,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'yw'">
         <div v-if="record.yw >= 0">
-          {{record.yw}}<br/>
-          {{record.ywPrice}}￥
+          余票：{{record.yw}}<br/>
+          票价：{{record.ywPrice}}￥
         </div>
         <div v-else>
           --

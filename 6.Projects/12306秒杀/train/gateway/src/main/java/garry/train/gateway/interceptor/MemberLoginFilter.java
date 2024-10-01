@@ -49,7 +49,8 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
         }
 
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-            // 在请求处理之后执行的逻辑
+            // 在对接口的请求完成之后执行的逻辑
+            // ...
             log.info("------------- 结束 {} -------------\n", path);
         }));
     }
