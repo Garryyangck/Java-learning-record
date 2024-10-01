@@ -2,281 +2,257 @@
 <template>
   <p>
     <a-space>
+      <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
+      <train-select-view v-model:value="params.code" style="width: 300px"/>
+      <station-select-view v-model:value="params.start" placeholder="请选择出发站" style="width: 150px"/>
+      <station-select-view v-model:value="params.end" placeholder="请选择到达站" style="width: 150px"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
-      <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
   </p>
-  <a-table :dataSource="tickets"
+  <a-table :dataSource="dailyTrainTickets"
            :columns="columns"
            :pagination="pagination"
            @change="handleTableChange"
            :loading="loading">
     <template #bodyCell="{ column, record }">
-      <template v-if="column.dataIndex === 'operation'">
-        <a-space>
-          <a-popconfirm
-              title="删除后不可恢复，确认删除?"
-              @confirm="onDelete(record)"
-              ok-text="确认" cancel-text="取消">
-            <a style="color: red">删除</a>
-          </a-popconfirm>
-          <a @click="onEdit(record)">编辑</a>
-        </a-space>
+      <template v-if="column.dataIndex === 'station'">
+        出发站：{{record.start}}<br/>
+        到达站：{{record.end}}
       </template>
-      <template v-else-if="column.dataIndex === 'seatCol'">
-        <span v-for="item in SEAT_COL_ARRAY" :key="item.code">
-          <span v-if="item.code === record.seatCol">
-            {{item.desc}}
-          </span>
-        </span>
+      <template v-else-if="column.dataIndex === 'time'">
+        出站：{{record.startTime}}<br/>
+        到站：{{record.endTime}}
       </template>
-      <template v-else-if="column.dataIndex === 'seatType'">
-        <span v-for="item in SEAT_TYPE_ARRAY" :key="item.code">
-          <span v-if="item.code === record.seatType">
-            {{item.desc}}
-          </span>
-        </span>
+      <template v-else-if="column.dataIndex === 'duration'">
+        {{calDuration(record.startTime, record.endTime)}}<br/>
+        <div v-if="record.startTime.replaceAll(':', '') >= record.endTime.replaceAll(':', '')">
+          次日到达
+        </div>
+        <div v-else>
+          当日到达
+        </div>
+      </template>
+      <template v-else-if="column.dataIndex === 'ydz'">
+        <div v-if="record.ydz >= 0">
+          余票：{{record.ydz}}<br/>
+          票价：{{record.ydzPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
+      </template>
+      <template v-else-if="column.dataIndex === 'edz'">
+        <div v-if="record.edz >= 0">
+          余票：{{record.edz}}<br/>
+          票价：{{record.edzPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
+      </template>
+      <template v-else-if="column.dataIndex === 'rw'">
+        <div v-if="record.rw >= 0">
+          余票：{{record.rw}}<br/>
+          票价：{{record.rwPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
+      </template>
+      <template v-else-if="column.dataIndex === 'yw'">
+        <div v-if="record.yw >= 0">
+          余票：{{record.yw}}<br/>
+          票价：{{record.ywPrice}}￥
+        </div>
+        <div v-else>
+          --
+        </div>
       </template>
     </template>
   </a-table>
-  <a-modal v-model:visible="visible" title="车票" @ok="handleOk"
-           ok-text="确认" cancel-text="取消">
-    <a-form :model="ticket" :label-col="{span: 4}" :wrapper-col="{span: 18}">
-      <a-form-item label="会员id">
-        <a-input v-model:value="ticket.memberId" />
-      </a-form-item>
-      <a-form-item label="乘客id">
-        <a-input v-model:value="ticket.passengerId" />
-      </a-form-item>
-      <a-form-item label="乘客姓名">
-        <a-input v-model:value="ticket.passengerName" />
-      </a-form-item>
-      <a-form-item label="日期">
-        <a-date-picker v-model:value="ticket.trainDate" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
-      </a-form-item>
-      <a-form-item label="车次编号">
-        <a-input v-model:value="ticket.trainCode" />
-      </a-form-item>
-      <a-form-item label="箱序">
-        <a-input v-model:value="ticket.carriageIndex" />
-      </a-form-item>
-      <a-form-item label="排号">
-        <a-input v-model:value="ticket.seatRow" />
-      </a-form-item>
-      <a-form-item label="列号">
-        <a-select v-model:value="ticket.seatCol">
-          <a-select-option v-for="item in SEAT_COL_ARRAY" :key="item.code" :value="item.code">
-            {{item.desc}}
-          </a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="出发站">
-        <a-input v-model:value="ticket.startStation" />
-      </a-form-item>
-      <a-form-item label="出发时间">
-        <a-time-picker v-model:value="ticket.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
-      </a-form-item>
-      <a-form-item label="到达站">
-        <a-input v-model:value="ticket.endStation" />
-      </a-form-item>
-      <a-form-item label="到站时间">
-        <a-time-picker v-model:value="ticket.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
-      </a-form-item>
-      <a-form-item label="座位类型">
-        <a-select v-model:value="ticket.seatType">
-          <a-select-option v-for="item in SEAT_TYPE_ARRAY" :key="item.code" :value="item.code">
-            {{item.desc}}
-          </a-select-option>
-        </a-select>
-      </a-form-item>
-    </a-form>
-  </a-modal>
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref} from 'vue';
+import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
+import TrainSelectView from "@/components/train-select.vue";
+import StationSelectView from "@/components/station-select.vue";
+import dayjs from "dayjs";
 
 export default defineComponent({
-  name: "ticket-view",
+  name: "daily-train-ticket-view",
+  components: {StationSelectView, TrainSelectView},
   setup() {
-    const SEAT_COL_ARRAY = window.SEAT_COL_ARRAY;
-    const SEAT_TYPE_ARRAY = window.SEAT_TYPE_ARRAY;
     const visible = ref(false);
-    const ticket = reactive({
+    const dailyTrainTicket = reactive({
       id: undefined,
-      memberId: undefined,
-      passengerId: undefined,
-      passengerName: undefined,
-      trainDate: undefined,
+      date: undefined,
       trainCode: undefined,
-      carriageIndex: undefined,
-      seatRow: undefined,
-      seatCol: undefined,
-      startStation: undefined,
+      start: undefined,
+      startPinyin: undefined,
       startTime: undefined,
-      endStation: undefined,
+      startIndex: undefined,
+      end: undefined,
+      endPinyin: undefined,
       endTime: undefined,
-      seatType: undefined,
+      endIndex: undefined,
+      ydz: undefined,
+      ydzPrice: undefined,
+      edz: undefined,
+      edzPrice: undefined,
+      rw: undefined,
+      rwPrice: undefined,
+      yw: undefined,
+      ywPrice: undefined,
       createTime: undefined,
       updateTime: undefined,
     });
-    const tickets = ref([]);
+    const dailyTrainTickets = ref([]);
     const pagination = ref({
       total: 0,
       current: 1,
       pageSize: 10,
     });
     let loading = ref(false);
+    let params = ref({
+      code: null,
+      date: null,
+      start: null,
+      end: null,
+    });
     const columns = ref([
-    {
-      title: '会员id',
-      dataIndex: 'memberId',
-      key: 'memberId',
-    },
-    {
-      title: '乘客id',
-      dataIndex: 'passengerId',
-      key: 'passengerId',
-    },
-    {
-      title: '乘客姓名',
-      dataIndex: 'passengerName',
-      key: 'passengerName',
-    },
-    {
-      title: '日期',
-      dataIndex: 'trainDate',
-      key: 'trainDate',
-    },
-    {
-      title: '车次编号',
-      dataIndex: 'trainCode',
-      key: 'trainCode',
-    },
-    {
-      title: '箱序',
-      dataIndex: 'carriageIndex',
-      key: 'carriageIndex',
-    },
-    {
-      title: '排号',
-      dataIndex: 'seatRow',
-      key: 'seatRow',
-    },
-    {
-      title: '列号',
-      dataIndex: 'seatCol',
-      key: 'seatCol',
-    },
-    {
-      title: '出发站',
-      dataIndex: 'startStation',
-      key: 'startStation',
-    },
-    {
-      title: '出发时间',
-      dataIndex: 'startTime',
-      key: 'startTime',
-    },
-    {
-      title: '到达站',
-      dataIndex: 'endStation',
-      key: 'endStation',
-    },
-    {
-      title: '到站时间',
-      dataIndex: 'endTime',
-      key: 'endTime',
-    },
-    {
-      title: '座位类型',
-      dataIndex: 'seatType',
-      key: 'seatType',
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation'
-    }
+      {
+        title: '日期',
+        dataIndex: 'date',
+        key: 'date',
+      },
+      {
+        title: '车次编号',
+        dataIndex: 'trainCode',
+        key: 'trainCode',
+      },
+      {
+        title: '车站',
+        dataIndex: 'station',
+      },
+      {
+        title: '时间',
+        dataIndex: 'time',
+      },
+      {
+        title: '历时',
+        dataIndex: 'duration',
+      },
+      // {
+      //   title: '出发站',
+      //   dataIndex: 'start',
+      //   key: 'start',
+      // },
+      // {
+      //   title: '出发站拼音',
+      //   dataIndex: 'startPinyin',
+      //   key: 'startPinyin',
+      // },
+      // {
+      //   title: '出发时间',
+      //   dataIndex: 'startTime',
+      //   key: 'startTime',
+      // },
+      // {
+      //   title: '出发站序',
+      //   dataIndex: 'startIndex',
+      //   key: 'startIndex',
+      // },
+      // {
+      //   title: '到达站',
+      //   dataIndex: 'end',
+      //   key: 'end',
+      // },
+      // {
+      //   title: '到达站拼音',
+      //   dataIndex: 'endPinyin',
+      //   key: 'endPinyin',
+      // },
+      // {
+      //   title: '到站时间',
+      //   dataIndex: 'endTime',
+      //   key: 'endTime',
+      // },
+      // {
+      //   title: '到站站序',
+      //   dataIndex: 'endIndex',
+      //   key: 'endIndex',
+      // },
+      {
+        title: '一等座',
+        dataIndex: 'ydz',
+        key: 'ydz',
+      },
+      // {
+      //   title: '一等座票价',
+      //   dataIndex: 'ydzPrice',
+      //   key: 'ydzPrice',
+      // },
+      {
+        title: '二等座',
+        dataIndex: 'edz',
+        key: 'edz',
+      },
+      // {
+      //   title: '二等座票价',
+      //   dataIndex: 'edzPrice',
+      //   key: 'edzPrice',
+      // },
+      {
+        title: '软卧',
+        dataIndex: 'rw',
+        key: 'rw',
+      },
+      // {
+      //   title: '软卧票价',
+      //   dataIndex: 'rwPrice',
+      //   key: 'rwPrice',
+      // },
+      {
+        title: '硬卧',
+        dataIndex: 'yw',
+        key: 'yw',
+      },
+      // {
+      //   title: '硬卧票价',
+      //   dataIndex: 'ywPrice',
+      //   key: 'ywPrice',
+      // },
     ]);
 
-    const onAdd = () => {
-      ticket.id = undefined;
-      ticket.memberId = undefined;
-      ticket.passengerId = undefined;
-      ticket.passengerName = undefined;
-      ticket.trainDate = undefined;
-      ticket.trainCode = undefined;
-      ticket.carriageIndex = undefined;
-      ticket.seatRow = undefined;
-      ticket.seatCol = undefined;
-      ticket.startStation = undefined;
-      ticket.startTime = undefined;
-      ticket.endStation = undefined;
-      ticket.endTime = undefined;
-      ticket.seatType = undefined;
-      ticket.createTime = undefined;
-      ticket.updateTime = undefined;
-      visible.value = true;
-    };
+    watch(() => params.value.code, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
 
-    const onEdit = (record) => {
-      ticket.id = record.id;
-      ticket.memberId = record.memberId;
-      ticket.passengerId = record.passengerId;
-      ticket.passengerName = record.passengerName;
-      ticket.trainDate = record.trainDate;
-      ticket.trainCode = record.trainCode;
-      ticket.carriageIndex = record.carriageIndex;
-      ticket.seatRow = record.seatRow;
-      ticket.seatCol = record.seatCol;
-      ticket.startStation = record.startStation;
-      ticket.startTime = record.startTime;
-      ticket.endStation = record.endStation;
-      ticket.endTime = record.endTime;
-      ticket.seatType = record.seatType;
-      ticket.createTime = record.createTime;
-      ticket.updateTime = record.updateTime;
-      visible.value = true;
-    };
+    watch(() => params.value.date, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
 
-    const onDelete = (record) => {
-      axios.delete("/member/ticket/delete/" + record.id).then((response) => {
-        let responseVo = response.data;
-        if (responseVo.success) {
-          handleQuery({
-            pageNum: 1,
-            pageSize: pagination.value.pageSize,
-          });
-          notification.success({description: '删除成功'});
-        } else {
-          notification.error({description: responseVo.msg});
-        }
-      })
-    };
+    watch(() => params.value.start, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
 
-    const handleOk = () => {
-      axios.post("/member/ticket/save", ticket).then((response) => {
-        let responseVo = response.data;
-        if (responseVo.success) {
-          handleQuery({
-            pageNum: 1,
-            pageSize: pagination.value.pageSize,
-          });
-          if (ticket.id === undefined)
-            notification.success({description: '新增成功'});
-          else
-            notification.success({description: '修改成功'});
-          visible.value = false;
-        } else {
-          let msgs = responseVo.msg.split('\n');
-          for (const msg of msgs) {
-            notification.error({description: msg});
-          }
-        }
-      })
-    };
+    watch(() => params.value.end, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
 
     const handleQuery = (param) => {
       let byRefresh = false;
@@ -285,19 +261,27 @@ export default defineComponent({
           pageNum: 1,
           pageSize: pagination.value.pageSize,
         };
+        params.value.code = null;
+        params.value.date = null;
+        params.value.start = null;
+        params.value.end = null;
         byRefresh = true;
       }
       loading.value = true;
-      axios.get("/member/ticket/query-list", {
+      axios.get("/business/daily-train-ticket/query-list", {
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
+          code: params.value.code,
+          date: params.value.date,
+          start: params.value.start,
+          end: params.value.end,
         }
       }).then((response) => {
         loading.value = false;
         let responseVo = response.data;
         if (responseVo.success) {
-          tickets.value = responseVo.data.list;
+          dailyTrainTickets.value = responseVo.data.list;
           pagination.value.total = responseVo.data.total;
           pagination.value.current = responseVo.data.pageNum;
           pagination.value.pageSize = responseVo.data.pageSize; // 让修改页面可行，否则即使修改为 50，查出来 50 条，还是只能显示 10 条
@@ -320,8 +304,16 @@ export default defineComponent({
       });
     };
 
+    /**
+     * 计算 endTime - startTime，如果 endTime < startTime，则会返回 24:00:00 - (startTime - endTime)
+     */
+    const calDuration = (startTime, endTime) => {
+      let diff = dayjs(endTime, 'HH:mm:ss').diff(dayjs(startTime, 'HH:mm:ss'), 'seconds');
+      return dayjs('00:00:00', 'HH:mm:ss').second(diff).format('HH:mm:ss');
+    };
+
     onMounted(() => {
-      document.title = '车票';
+      document.title = '余票查询';
       handleQuery({
         pageNum: 1,
         pageSize: pagination.value.pageSize,
@@ -329,20 +321,16 @@ export default defineComponent({
     });
 
     return {
-      SEAT_COL_ARRAY,
-      SEAT_TYPE_ARRAY,
       visible,
-      ticket,
-      tickets,
+      dailyTrainTicket,
+      dailyTrainTickets,
       pagination,
       columns,
       loading,
-      onAdd,
-      onEdit,
-      onDelete,
-      handleOk,
+      params,
       handleQuery,
       handleTableChange,
+      calDuration,
     };
   },
 });

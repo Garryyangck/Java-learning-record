@@ -66,7 +66,7 @@ export default defineComponent({
         console.log("queryAllStation 读取缓存", list);
         stations.value = list;
       } else {
-        axios.get("/business/admin/station/query-all").then((response) => {
+        axios.get("/business/station/query-all").then((response) => {
           let responseVo = response.data;
           if (responseVo.success) {
             stations.value = responseVo.data;

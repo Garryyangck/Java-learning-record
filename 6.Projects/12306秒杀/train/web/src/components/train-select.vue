@@ -88,7 +88,7 @@ export default defineComponent({
         console.log("queryAllTrain 读取缓存", list);
         trains.value = list;
       } else {
-        axios.get("/business/admin/train/query-all").then((response) => {
+        axios.get("/business/train/query-all").then((response) => {
           let responseVo = response.data;
           if (responseVo.success) {
             trains.value = responseVo.data;
