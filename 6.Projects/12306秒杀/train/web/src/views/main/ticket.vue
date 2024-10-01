@@ -3,7 +3,6 @@
   <p>
     <a-space>
       <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
-      <train-select-view v-model:value="params.code" style="width: 300px"/>
       <station-select-view v-model:value="params.start" placeholder="请选择出发站" style="width: 150px"/>
       <station-select-view v-model:value="params.end" placeholder="请选择到达站" style="width: 150px"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
@@ -16,15 +15,15 @@
            :loading="loading">
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'station'">
-        出发站：{{record.start}}<br/>
-        到达站：{{record.end}}
+        出发站：{{ record.start }}<br/>
+        到达站：{{ record.end }}
       </template>
       <template v-else-if="column.dataIndex === 'time'">
-        出站：{{record.startTime}}<br/>
-        到站：{{record.endTime}}
+        出站：{{ record.startTime }}<br/>
+        到站：{{ record.endTime }}
       </template>
       <template v-else-if="column.dataIndex === 'duration'">
-        {{calDuration(record.startTime, record.endTime)}}<br/>
+        {{ calDuration(record.startTime, record.endTime) }}<br/>
         <div v-if="record.startTime.replaceAll(':', '') >= record.endTime.replaceAll(':', '')">
           次日到达
         </div>
@@ -34,8 +33,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'ydz'">
         <div v-if="record.ydz >= 0">
-          余票：{{record.ydz}}<br/>
-          票价：{{record.ydzPrice}}￥
+          余票：{{ record.ydz }}<br/>
+          票价：{{ record.ydzPrice }}￥
         </div>
         <div v-else>
           --
@@ -43,8 +42,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'edz'">
         <div v-if="record.edz >= 0">
-          余票：{{record.edz}}<br/>
-          票价：{{record.edzPrice}}￥
+          余票：{{ record.edz }}<br/>
+          票价：{{ record.edzPrice }}￥
         </div>
         <div v-else>
           --
@@ -52,8 +51,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'rw'">
         <div v-if="record.rw >= 0">
-          余票：{{record.rw}}<br/>
-          票价：{{record.rwPrice}}￥
+          余票：{{ record.rw }}<br/>
+          票价：{{ record.rwPrice }}￥
         </div>
         <div v-else>
           --
@@ -61,8 +60,8 @@
       </template>
       <template v-else-if="column.dataIndex === 'yw'">
         <div v-if="record.yw >= 0">
-          余票：{{record.yw}}<br/>
-          票价：{{record.ywPrice}}￥
+          余票：{{ record.yw }}<br/>
+          票价：{{ record.ywPrice }}￥
         </div>
         <div v-else>
           --
@@ -81,7 +80,7 @@ import StationSelectView from "@/components/station-select.vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
-  name: "daily-train-ticket-view",
+  name: "ticket-view",
   components: {StationSelectView, TrainSelectView},
   setup() {
     const visible = ref(false);
@@ -116,17 +115,11 @@ export default defineComponent({
     });
     let loading = ref(false);
     let params = ref({
-      code: null,
       date: null,
       start: null,
       end: null,
     });
     const columns = ref([
-      {
-        title: '日期',
-        dataIndex: 'date',
-        key: 'date',
-      },
       {
         title: '车次编号',
         dataIndex: 'trainCode',
@@ -144,94 +137,27 @@ export default defineComponent({
         title: '历时',
         dataIndex: 'duration',
       },
-      // {
-      //   title: '出发站',
-      //   dataIndex: 'start',
-      //   key: 'start',
-      // },
-      // {
-      //   title: '出发站拼音',
-      //   dataIndex: 'startPinyin',
-      //   key: 'startPinyin',
-      // },
-      // {
-      //   title: '出发时间',
-      //   dataIndex: 'startTime',
-      //   key: 'startTime',
-      // },
-      // {
-      //   title: '出发站序',
-      //   dataIndex: 'startIndex',
-      //   key: 'startIndex',
-      // },
-      // {
-      //   title: '到达站',
-      //   dataIndex: 'end',
-      //   key: 'end',
-      // },
-      // {
-      //   title: '到达站拼音',
-      //   dataIndex: 'endPinyin',
-      //   key: 'endPinyin',
-      // },
-      // {
-      //   title: '到站时间',
-      //   dataIndex: 'endTime',
-      //   key: 'endTime',
-      // },
-      // {
-      //   title: '到站站序',
-      //   dataIndex: 'endIndex',
-      //   key: 'endIndex',
-      // },
       {
         title: '一等座',
         dataIndex: 'ydz',
         key: 'ydz',
       },
-      // {
-      //   title: '一等座票价',
-      //   dataIndex: 'ydzPrice',
-      //   key: 'ydzPrice',
-      // },
       {
         title: '二等座',
         dataIndex: 'edz',
         key: 'edz',
       },
-      // {
-      //   title: '二等座票价',
-      //   dataIndex: 'edzPrice',
-      //   key: 'edzPrice',
-      // },
       {
         title: '软卧',
         dataIndex: 'rw',
         key: 'rw',
       },
-      // {
-      //   title: '软卧票价',
-      //   dataIndex: 'rwPrice',
-      //   key: 'rwPrice',
-      // },
       {
         title: '硬卧',
         dataIndex: 'yw',
         key: 'yw',
       },
-      // {
-      //   title: '硬卧票价',
-      //   dataIndex: 'ywPrice',
-      //   key: 'ywPrice',
-      // },
     ]);
-
-    watch(() => params.value.code, () => {
-      handleQuery({
-        pageNum: 1,
-        pageSize: pagination.value.pageSize,
-      });
-    });
 
     watch(() => params.value.date, () => {
       handleQuery({
@@ -261,7 +187,6 @@ export default defineComponent({
           pageNum: 1,
           pageSize: pagination.value.pageSize,
         };
-        params.value.code = null;
         params.value.date = null;
         params.value.start = null;
         params.value.end = null;
@@ -272,7 +197,6 @@ export default defineComponent({
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
-          code: params.value.code,
           date: params.value.date,
           start: params.value.start,
           end: params.value.end,
