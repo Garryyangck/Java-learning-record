@@ -21,9 +21,6 @@ public class DailyTrainTicketAdminController {
     @Resource
     private DailyTrainTicketService dailyTrainTicketService;
 
-    @Resource
-    private HostHolder hostHolder;
-
     /**
      * 接收新增和修改余票信息的请求，如果 form.id = null，则为新增；反之为修改
      */

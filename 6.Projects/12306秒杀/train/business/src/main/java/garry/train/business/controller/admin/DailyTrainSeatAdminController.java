@@ -1,12 +1,11 @@
 package garry.train.business.controller.admin;
 
-import garry.train.common.util.HostHolder;
-import garry.train.common.vo.PageVo;
-import garry.train.common.vo.ResponseVo;
 import garry.train.business.form.DailyTrainSeatQueryForm;
 import garry.train.business.form.DailyTrainSeatSaveForm;
 import garry.train.business.service.DailyTrainSeatService;
 import garry.train.business.vo.DailyTrainSeatQueryVo;
+import garry.train.common.vo.PageVo;
+import garry.train.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class DailyTrainSeatAdminController {
     @Resource
     private DailyTrainSeatService dailyTrainSeatService;
-
-    @Resource
-    private HostHolder hostHolder;
 
     /**
      * 接收新增和修改每日座位的请求，如果 form.id = null，则为新增；反之为修改

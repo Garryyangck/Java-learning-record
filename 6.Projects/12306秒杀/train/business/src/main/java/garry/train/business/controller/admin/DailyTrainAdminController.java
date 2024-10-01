@@ -4,7 +4,6 @@ import garry.train.business.form.DailyTrainQueryForm;
 import garry.train.business.form.DailyTrainSaveForm;
 import garry.train.business.service.DailyTrainService;
 import garry.train.business.vo.DailyTrainQueryVo;
-import garry.train.common.util.HostHolder;
 import garry.train.common.vo.PageVo;
 import garry.train.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
@@ -23,9 +22,6 @@ import java.util.Date;
 public class DailyTrainAdminController {
     @Resource
     private DailyTrainService dailyTrainService;
-
-    @Resource
-    private HostHolder hostHolder;
 
     /**
      * 接收新增和修改每日车次的请求，如果 form.id = null，则为新增；反之为修改
