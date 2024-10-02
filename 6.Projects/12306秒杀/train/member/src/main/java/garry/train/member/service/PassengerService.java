@@ -5,6 +5,8 @@ import garry.train.member.form.PassengerQueryForm;
 import garry.train.member.form.PassengerSaveForm;
 import garry.train.member.vo.PassengerQueryVo;
 
+import java.util.List;
+
 /**
  * @author Garry
  * 2024-09-18 16:17
@@ -27,4 +29,14 @@ public interface PassengerService {
      * 根据 id(主键) 删除乘车人
      */
     void delete(Long id);
+
+    /**
+     * 统计会员的乘车人总数
+     */
+    int countByMemberId(Long memberId);
+
+    /**
+     * 查询会员的所有乘车人
+     */
+    List<PassengerQueryVo> queryAll(Long memberId);
 }

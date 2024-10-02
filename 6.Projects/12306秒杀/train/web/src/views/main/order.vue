@@ -1,3 +1,4 @@
+<!--suppress JSCheckFunctionSignatures -->
 <template>
   <div class="order-train">
     <span class="order-train-main">{{ dailyTrainTicket.date }}</span>&nbsp;
@@ -16,19 +17,24 @@
       </span>
     </div>
   </div>
+
+  <a-divider/>
+  {{passengers}}
 </template>
 
 <script>
 import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
+import axios from "axios";
+import {notification} from "ant-design-vue";
 
 export default defineComponent({
   name: 'order-view',
   setup() {
+    const passengers = ref([]);
     const dailyTrainTicket = SessionStorage.get('dailyTrainTicket') || {};
     console.log("下单的车次信息", dailyTrainTicket);
 
     const SEAT_TYPE = window.SEAT_TYPE; // 带 YDZ, EDZ, RW, YW
-    console.log(SEAT_TYPE)
     // 本车次提供的座位类型(count >= 0) seatTypes，含票价，余票等信息，例：
     // {
     //   type: "YDZ",
@@ -51,9 +57,25 @@ export default defineComponent({
         })
       }
     }
-    console.log("本车次提供的座位：", seatTypes)
+    console.log("本车次提供的座位：", seatTypes);
+
+    const handleQueryPassenger = () => {
+      axios.get('/member/passenger/query-all').then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          passengers.value = responseVo.data;
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
+    onMounted(() => {
+      handleQueryPassenger();
+    });
 
     return {
+      passengers,
       dailyTrainTicket,
       seatTypes,
     };

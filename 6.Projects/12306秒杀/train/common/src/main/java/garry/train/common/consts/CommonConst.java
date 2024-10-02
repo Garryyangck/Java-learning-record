@@ -43,4 +43,9 @@ public class CommonConst {
      * 导航页默认大小
      */
     public static final Integer DEFAULT_NAVIGATE_PAGES = 8;
+
+    /**
+     * 每个会员持有的乘车人上限
+     */
+    public static final Integer PASSENGER_LIMIT = 50;
 }

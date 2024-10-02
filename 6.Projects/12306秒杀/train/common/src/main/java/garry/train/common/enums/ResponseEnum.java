@@ -1,5 +1,6 @@
 package garry.train.common.enums;
 
+import garry.train.common.consts.CommonConst;
 import lombok.Getter;
 
 /**
@@ -70,6 +71,8 @@ public enum ResponseEnum {
     API_ARGUMENT_MISMATCH(28, "接口参数不匹配"),
 
     BUSINESS_DUPLICATE_DAILY_TRAIN_TICKET_DATE_TRAIN_CODE_START_END(29, "该日该车次该起点终点站车票已存在"),
+
+    MEMBER_EXCEED_PASSENGER_LIMIT(30, "乘车人总数不能超过上限" + CommonConst.PASSENGER_LIMIT),
     ;
 
     private final Integer code;

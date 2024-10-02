@@ -5,6 +5,9 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import garry.train.common.consts.CommonConst;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import garry.train.member.form.PassengerQueryForm;
@@ -41,6 +44,12 @@ public class PassengerServiceImpl implements PassengerService {
             passenger.setMemberId(form.getMemberId()); // 用户在 Controller 直接 hostHolder 获取 memberId；管理员则是输入用户 memberId
             passenger.setCreateTime(now);
             passenger.setUpdateTime(now);
+
+            // 持有的乘客总数不能超过 CommonConst.PASSENGER_LIMIT
+            if (countByMemberId(passenger.getMemberId()) > CommonConst.PASSENGER_LIMIT) {
+                throw new BusinessException(ResponseEnum.MEMBER_EXCEED_PASSENGER_LIMIT);
+            }
+
             passengerMapper.insert(passenger);
             log.info("插入乘车人：{}", passenger);
         } else { // 修改
@@ -54,7 +63,7 @@ public class PassengerServiceImpl implements PassengerService {
     public PageVo<PassengerQueryVo> queryList(PassengerQueryForm form) {
         Long memberId = form.getMemberId();
         PassengerExample passengerExample = new PassengerExample();
-        passengerExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
+        passengerExample.setOrderByClause("name desc");
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
 
         // 用户只能查自己 memberId 下的乘车人
@@ -83,5 +92,22 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     public void delete(Long id) {
         passengerMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int countByMemberId(Long memberId) {
+        PassengerExample passengerExample = new PassengerExample();
+        passengerExample.createCriteria()
+                .andMemberIdEqualTo(memberId);
+        return (int) passengerMapper.countByExample(passengerExample);
+    }
+
+    @Override
+    public List<PassengerQueryVo> queryAll(Long memberId) {
+        PassengerExample passengerExample = new PassengerExample();
+        passengerExample.createCriteria()
+                .andMemberIdEqualTo(memberId);
+        passengerExample.setOrderByClause("name");
+        return BeanUtil.copyToList(passengerMapper.selectByExample(passengerExample), PassengerQueryVo.class);
     }
 }

@@ -11,6 +11,8 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author Garry
  * 2024-09-18 16:17
@@ -45,5 +47,11 @@ public class PassengerController {
     public ResponseVo delete(@PathVariable Long id) {
         passengerService.delete(id);
         return ResponseVo.success();
+    }
+
+    @RequestMapping(value = "/query-all", method = RequestMethod.GET)
+    public ResponseVo<List<PassengerQueryVo>> queryAll() {
+        List<PassengerQueryVo> vo = passengerService.queryAll(hostHolder.getMemberId());
+        return ResponseVo.success(vo);
     }
 }
