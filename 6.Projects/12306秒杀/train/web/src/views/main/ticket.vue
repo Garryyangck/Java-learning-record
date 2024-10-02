@@ -14,7 +14,14 @@
            @change="handleTableChange"
            :loading="loading">
     <template #bodyCell="{ column, record }">
-      <template v-if="column.dataIndex === 'station'">
+      <template v-if="column.dataIndex === 'operation'">
+        <a-space>
+          <a-button type="primary" @click="toOrder(record)" size="middle">
+            预定
+          </a-button>
+        </a-space>
+      </template>
+      <template v-else-if="column.dataIndex === 'station'">
         出发站：{{ record.start }}<br/>
         到达站：{{ record.end }}
       </template>
@@ -75,9 +82,9 @@
 import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
-import TrainSelectView from "@/components/train-select.vue";
 import StationSelectView from "@/components/station-select.vue";
 import dayjs from "dayjs";
+import router from "@/router";
 
 export default defineComponent({
   name: "ticket-view",
@@ -157,18 +164,30 @@ export default defineComponent({
         dataIndex: 'yw',
         key: 'yw',
       },
+      {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation',
+      },
     ]);
+
+    const toOrder = (record) => {
+      SessionStorage.set('dailyTrainTicket', record);
+      router.push('/order');
+    };
 
     const handleQuery = (param) => {
       if (Tool.isEmpty(params.value.date)) {
         notification.error({description: '请选择日期'});
         return;
       }
+      let bySearch = false;
       if (!param) {
         param = {
           pageNum: 1,
           pageSize: pagination.value.pageSize,
         };
+        bySearch = true;
       }
       loading.value = true;
       axios.get("/business/daily-train-ticket/query-list", {
@@ -187,7 +206,8 @@ export default defineComponent({
           pagination.value.total = responseVo.data.total;
           pagination.value.current = responseVo.data.pageNum;
           pagination.value.pageSize = responseVo.data.pageSize; // 让修改页面可行，否则即使修改为 50，查出来 50 条，还是只能显示 10 条
-          notification.success({description: '查询成功'});
+          if (bySearch)
+            notification.success({description: '查询成功'});
         } else {
           let msgs = responseVo.msg.split('\n');
           for (const msg of msgs) {
@@ -225,6 +245,7 @@ export default defineComponent({
       columns,
       loading,
       params,
+      toOrder,
       handleQuery,
       handleTableChange,
       calDuration,
