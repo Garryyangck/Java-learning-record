@@ -172,7 +172,7 @@ export default defineComponent({
     ]);
 
     const toOrder = (record) => {
-      SessionStorage.set('dailyTrainTicket', record);
+      SessionStorage.set(SESSION_ORDER, record);
       router.push('/order');
     };
 
@@ -200,6 +200,7 @@ export default defineComponent({
         }
       }).then((response) => {
         loading.value = false;
+        SessionStorage.set(SESSION_TICKET_PARAM, params.value);
         let responseVo = response.data;
         if (responseVo.success) {
           dailyTrainTickets.value = responseVo.data.list;
@@ -235,6 +236,13 @@ export default defineComponent({
 
     onMounted(() => {
       document.title = '余票查询';
+      params.value = SessionStorage.get(SESSION_TICKET_PARAM);
+      if (Tool.isNotEmpty(params.value.date)) {
+        handleQuery({
+          pageNum: 1,
+          pageSize: pagination.value.pageSize,
+        });
+      }
     });
 
     return {
