@@ -5,7 +5,7 @@
         GARRY
       </router-link>
     </div>
-    <div style="float: right; color: white;">
+    <div style="margin-left: auto; color: white;">
       欢迎使用管理控制台
     </div>
     <a-menu

@@ -420,7 +420,7 @@
     align-items: center;
     justify-content: space-between;
     /* 添加渐变效果 */
-    background-image: linear-gradient(160deg, #000000 0%, #042e2e 100%);
+    background-image: linear-gradient(160deg, #000000 0%, rgb(0, 21, 41) 100%);
     /* 添加阴影效果 */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     /* 添加过渡动画 */
@@ -460,52 +460,115 @@
     /* 设置导航菜单项之间的间距 */
     margin-right: 20px;
     /* 设置导航菜单项的悬停效果 */
+
     .ant-menu-item:hover {
         color: #f0f0f0;
         background-color: rgba(255, 255, 255, 0.1);
     }
 }
 
+/* 将导航菜单放到页面的左边 */
+.ant-layout-header .ant-menu {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+/* 增加菜单项的背景高度 */
+.ant-layout-header .ant-menu-item,
+.ant-layout-header .ant-menu-submenu-title {
+    height: 60px;
+    line-height: 60px;
+}
+
+/* 移除菜单项之间的间距 */
+.ant-layout-header .ant-menu-inline .ant-menu-item,
+.ant-layout-header .ant-menu-inline .ant-menu-submenu {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* 增加菜单项的横向间距 */
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu {
+    border-bottom: 2px solid transparent;
+}
+
+/* 设置选中或悬停时菜单项的底部边框颜色 */
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item-selected,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item:hover,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu:hover {
+    border-bottom-color: #1890ff;
+}
+
+/* 增加菜单项的悬停效果 */
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item:hover,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu:hover {
+    color: #1890ff;
+}
+
 /* ----------------------------------- a-layout-sider ----------------------------------- */
 /* 定义sider的样式 */
 .ant-layout-sider {
-    background-color: #7a43b6;
-    background-image: linear-gradient(160deg, #7a43b6 0%, #a95ec7 100%);
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    background-color: #e6f7ff; /* 天蓝色背景 */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    transition: background-color 0.3s ease; /* 过渡动画 */
 }
 
 /* 当鼠标悬停在sider上时，改变背景颜色 */
 .ant-layout-sider:hover {
-    background-color: #6e35b7;
+    background-color: #b3e5fc; /* 深天蓝色 */
 }
 
-/* 使用 ) 选择器来穿透组件作用域，定义sider内部的菜单样式 */
+/* 定义sider内部的菜单样式 */
 .ant-layout-sider .ant-menu-dark {
-    color: #ffffff;
+    color: #0c73c2; /* 天蓝色文字颜色 */
     background: transparent; /* 确保菜单背景透明以显示渐变背景 */
 }
 
 /* 设置选中菜单项的背景颜色 */
 .ant-layout-sider .ant-menu-item-selected {
-    background-color: #5b2a90;
-    color: #ffffff;
+    background-color: #cce5ff; /* 选中项的背景颜色 */
+    color: #0c73c2; /* 选中项的文字颜色 */
 }
 
 /* 设置菜单项的背景颜色当鼠标悬停时 */
 .ant-layout-sider .ant-menu-item:hover {
-    background-color: #6e35b7;
-    color: #ffffff;
+    background-color: #d9e9ff; /* 悬停时的背景颜色 */
+    color: #0c73c2; /* 悬停时的文字颜色 */
 }
 
 /* 定义sider的触发按钮样式 */
 .ant-layout-sider .ant-layout-sider-trigger {
-    background-color: #6e35b7;
-    border-radius: 0 4px 4px 0;
-    transition: background-color 0.3s ease;
+    background-color: #cce5ff; /* 触发按钮的背景颜色 */
+    border-radius: 0 4px 4px 0; /* 圆角效果 */
+    transition: background-color 0.3s ease; /* 过渡动画 */
 }
 
 /* 当鼠标悬停在触发按钮上时，改变背景颜色 */
 .ant-layout-sider .ant-layout-sider-trigger:hover {
-    background-color: #5b2a90;
+    background-color: #b3e5fc; /* 悬停时的背景颜色 */
+}
+
+/* 定义sider内部的菜单项样式 */
+.ant-layout-sider .ant-menu-item {
+    border-left: 3px solid transparent; /* 菜单项左侧边框，用于选中时高亮 */
+    margin: 0; /* 移除菜单项之间的垂直间距 */
+    padding: 10px 0; /* 增加菜单项的背景高度 */
+}
+
+/* 设置选中菜单项的左侧边框颜色 */
+.ant-layout-sider .ant-menu-item-selected {
+    border-left-color: #40a9ff; /* 天蓝色边框 */
+}
+
+/* 移除菜单项之间的间距 */
+.ant-layout-sider .ant-menu-item {
+    margin: 0;
+    padding: 10px 0;
+}
+
+/* 增加菜单项的背景高度 */
+.ant-layout-sider .ant-menu-item {
+    padding-top: 12px;
+    padding-bottom: 12px;
 }

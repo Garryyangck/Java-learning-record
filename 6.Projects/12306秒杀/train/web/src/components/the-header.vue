@@ -5,7 +5,7 @@
         GARRY
       </router-link>
     </div>
-    <div style="float: right; color: white;">
+    <div style="margin-left: auto; color: white;">
       您好：{{member.mobile}} &nbsp;&nbsp;
       <router-link to="/login" style="color: white;">
         <a-button>
@@ -13,28 +13,28 @@
         </a-button>
       </router-link>
     </div>
-<!--    <a-menu-->
-<!--        v-model:selectedKeys="selectedKeys"-->
-<!--        theme="dark"-->
-<!--        mode="horizontal"-->
-<!--        :style="{ lineHeight: '64px' }"-->
-<!--    >-->
-<!--      <a-menu-item key="/welcome">-->
-<!--        <router-link to="/welcome">-->
-<!--          <coffee-outlined/> &nbsp; 欢迎-->
-<!--        </router-link>-->
-<!--      </a-menu-item>-->
-<!--      <a-menu-item key="/passenger">-->
-<!--        <router-link to="/passenger">-->
-<!--          <user-outlined/> &nbsp; 乘车人管理-->
-<!--        </router-link>-->
-<!--      </a-menu-item>-->
-<!--      <a-menu-item key="/ticket">-->
-<!--        <router-link to="/ticket">-->
-<!--          <user-outlined/> &nbsp; 余票查询-->
-<!--        </router-link>-->
-<!--      </a-menu-item>-->
-<!--    </a-menu>-->
+    <a-menu
+        v-model:selectedKeys="selectedKeys"
+        theme="dark"
+        mode="horizontal"
+        :style="{ lineHeight: '64px' }"
+    >
+      <a-menu-item key="/welcome">
+        <router-link to="/welcome">
+          <coffee-outlined/> &nbsp; 欢迎
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="/passenger">
+        <router-link to="/passenger">
+          <user-outlined/> &nbsp; 乘车人管理
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="/ticket">
+        <router-link to="/ticket">
+          <user-outlined/> &nbsp; 余票查询
+        </router-link>
+      </a-menu-item>
+    </a-menu>
   </a-layout-header>
 </template>
 
