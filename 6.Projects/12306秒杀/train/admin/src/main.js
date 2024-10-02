@@ -9,6 +9,7 @@ import 'ant-design-vue/dist/antd.css' // 全局引入 ant-design-vue 的 css
 import * as Icons from '@ant-design/icons-vue'; // 全局引入 ant-design-vue 的所有图标
 import axios from "axios";
 import './assets/js/enums'
+import './assets/css/global.css'
 
 const app = createApp(App);
 app.use(store).use(router).use(Antd);

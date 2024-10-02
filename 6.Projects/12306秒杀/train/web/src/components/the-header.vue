@@ -8,31 +8,33 @@
     <div style="float: right; color: white;">
       您好：{{member.mobile}} &nbsp;&nbsp;
       <router-link to="/login" style="color: white;">
-        退出登录
+        <a-button>
+          退出登录
+        </a-button>
       </router-link>
     </div>
-    <a-menu
-        v-model:selectedKeys="selectedKeys"
-        theme="dark"
-        mode="horizontal"
-        :style="{ lineHeight: '64px' }"
-    >
-      <a-menu-item key="/welcome">
-        <router-link to="/welcome">
-          <coffee-outlined/> &nbsp; 欢迎
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="/passenger">
-        <router-link to="/passenger">
-          <user-outlined/> &nbsp; 乘车人管理
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="/ticket">
-        <router-link to="/ticket">
-          <user-outlined/> &nbsp; 余票查询
-        </router-link>
-      </a-menu-item>
-    </a-menu>
+<!--    <a-menu-->
+<!--        v-model:selectedKeys="selectedKeys"-->
+<!--        theme="dark"-->
+<!--        mode="horizontal"-->
+<!--        :style="{ lineHeight: '64px' }"-->
+<!--    >-->
+<!--      <a-menu-item key="/welcome">-->
+<!--        <router-link to="/welcome">-->
+<!--          <coffee-outlined/> &nbsp; 欢迎-->
+<!--        </router-link>-->
+<!--      </a-menu-item>-->
+<!--      <a-menu-item key="/passenger">-->
+<!--        <router-link to="/passenger">-->
+<!--          <user-outlined/> &nbsp; 乘车人管理-->
+<!--        </router-link>-->
+<!--      </a-menu-item>-->
+<!--      <a-menu-item key="/ticket">-->
+<!--        <router-link to="/ticket">-->
+<!--          <user-outlined/> &nbsp; 余票查询-->
+<!--        </router-link>-->
+<!--      </a-menu-item>-->
+<!--    </a-menu>-->
   </a-layout-header>
 </template>
 
@@ -65,12 +67,5 @@ export default defineComponent({
 </script>
 
 <style scoped> /*scoped修饰的css只在本页面生效*/
-.logo {
-  float: left;
-  height: 32px;
-  width: 150px;
-  color: white; /* 设置文字颜色为白色 */
-  font-weight: bold; /* 设置文字加粗 */
-  font-size: 20px;
-}
+
 </style>

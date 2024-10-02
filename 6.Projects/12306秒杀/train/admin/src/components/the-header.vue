@@ -54,12 +54,5 @@ export default defineComponent({
 </script>
 
 <style scoped> /*scoped修饰的css只在本页面生效*/
-.logo {
-  float: left;
-  height: 32px;
-  width: 150px;
-  color: white; /* 设置文字颜色为白色 */
-  font-weight: bold; /* 设置文字加粗 */
-  font-size: 20px;
-}
+
 </style>
