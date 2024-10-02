@@ -1,3 +1,12 @@
+:root {
+    font-family: Consolas, "Microsoft Yahei", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+}
+
+/* 覆盖 Ant Design Vue 组件的默认字体 */
+.ant-checkbox-group, .ant-select, .ant-btn, .ant-table, .ant-modal {
+    font-family: Consolas, "Microsoft Yahei", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+}
+
 /* ----------------------------------- a-checkbox-group ----------------------------------- */
 /* 定制复选框组样式，使其子项水平排列且不换行 */
 .ant-checkbox-group {
@@ -23,7 +32,7 @@
     color: #3498db; /* 字体颜色变为蓝色 */
     transform: scale(1.05); /* 字体轻微放大 */
     background-color: #ecf0f1; /* 背景颜色 */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* 轻微的阴影效果 */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* 轻微的阴影效果 */
 }
 
 /* 定制复选框内部正方形框的样式 */
@@ -255,7 +264,7 @@
 /* ----------------------------------- a-table ----------------------------------- */
 /* 设置表格的全局样式 */
 .ant-table {
-    font-family: 'Arial', sans-serif; /* 使用Arial字体 */
+    font-family: Consolas, "Microsoft Yahei", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
     color: #333333; /* 文本颜色为深灰色 */
     border-radius: 8px; /* 边框圆角为8px */
     overflow: hidden; /* 隐藏溢出的内容 */
