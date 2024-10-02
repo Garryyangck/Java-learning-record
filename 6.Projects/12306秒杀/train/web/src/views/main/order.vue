@@ -299,11 +299,13 @@ export default defineComponent({
   color: #333;
   margin-right: 10px; /* 相邻 label 之间的距离 */
   white-space: nowrap; /* 防止标签内的换行 */
+  transition: transform 0.2s ease-in-out; /* 添加变换动画 */
 }
 
 /* 光标放到label上，文字的样式 */
 :deep(.ant-checkbox-wrapper:hover) {
   color: #3498db;
+  transform: scale(1.05); /* 轻微放大效果 */
 }
 
 :deep(.ant-checkbox-wrapper) {
@@ -323,11 +325,13 @@ export default defineComponent({
   background-color: #fff;
   width: 18px;
   height: 18px;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* 添加平滑过渡 */
 }
 
 /* 选择后，前面正方形的样式 */
 :deep(.ant-checkbox-checked .ant-checkbox-inner) {
   background-color: #3498db;
+  border-color: #3498db;
 }
 
 /* 正方形里面的勾的样式 */
@@ -340,6 +344,7 @@ export default defineComponent({
   left: 5px;
   top: 1px;
   transform: rotate(45deg);
+  transition: border-color 0.2s ease-in-out; /* 添加平滑过渡 */
 }
 
 :deep(.ant-checkbox:hover .ant-checkbox-inner) {
@@ -347,6 +352,7 @@ export default defineComponent({
 }
 
 :deep(.ant-checkbox-checked:hover .ant-checkbox-inner) {
+  background-color: #2980b9;
   border-color: #2980b9;
 }
 
@@ -357,6 +363,7 @@ export default defineComponent({
 :deep(.ant-checkbox-disabled .ant-checkbox-inner) {
   background-color: #f5f5f5;
   border-color: #d9d9d9;
+  opacity: 0.6; /* 禁用状态的透明度降低 */
 }
 
 :deep(.ant-checkbox-disabled .ant-checkbox-inner::after) {
