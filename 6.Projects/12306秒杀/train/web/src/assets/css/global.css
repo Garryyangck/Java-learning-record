@@ -1,0 +1,84 @@
+/* ----------------------------------- a-checkbox-group ----------------------------------- */
+/* 定制复选框样式 */
+.ant-checkbox-group {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    flex-wrap: nowrap; /* 禁止换行 */
+}
+
+/* .ant-checkbox-wrapper: 后面的文字 */
+.ant-checkbox-wrapper {
+    font-size: 16px;
+    color: #333;
+    margin-right: 10px; /* 相邻 label 之间的距离 */
+    white-space: nowrap; /* 防止标签内的换行 */
+    transition: transform 0.2s ease-in-out; /* 添加变换动画 */
+}
+
+/* 光标放到label上，文字的样式 */
+.ant-checkbox-wrapper:hover {
+    color: #3498db;
+    transform: scale(1.05); /* 轻微放大效果 */
+}
+
+.ant-checkbox-wrapper {
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.ant-checkbox-wrapper:hover {
+    background-color: #ecf0f1;
+}
+
+/* 前面的正方形框 */
+.ant-checkbox-inner {
+    border-radius: 4px;
+    border: 2px solid #3498db;
+    background-color: #fff;
+    width: 18px;
+    height: 18px;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* 添加平滑过渡 */
+}
+
+/* 选择后，前面正方形的样式 */
+.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+/* 正方形里面的勾的样式 */
+.ant-checkbox-inner::after {
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    height: 10px;
+    width: 4px;
+    left: 5px;
+    top: 1px;
+    transform: rotate(45deg);
+    transition: border-color 0.2s ease-in-out; /* 添加平滑过渡 */
+}
+
+.ant-checkbox:hover .ant-checkbox-inner {
+    border-color: #2980b9;
+}
+
+.ant-checkbox-checked:hover .ant-checkbox-inner {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.ant-checkbox-checked::after {
+    border-color: #fff;
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner {
+    background-color: #f5f5f5;
+    border-color: #d9d9d9;
+    opacity: 0.6; /* 禁用状态的透明度降低 */
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner::after {
+    border-color: #ccc;
+}
