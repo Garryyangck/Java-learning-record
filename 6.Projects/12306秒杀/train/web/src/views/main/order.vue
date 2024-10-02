@@ -97,7 +97,7 @@ export default defineComponent({
     const passengers = ref([]);
     const passengerOptions = ref([]); // 绑定复选框，进行列表展示
     const passengerChecks = ref([]); // 勾选的结果，里面存储的是 passengerOptions.value，即整个 passengerQueryVo
-    const dailyTrainTicket = SessionStorage.get('dailyTrainTicket') || {};
+    const dailyTrainTicket = SessionStorage.get(SESSION_ORDER) || {};
     console.log("下单的车次信息", dailyTrainTicket);
 
     const SEAT_TYPE = window.SEAT_TYPE; // 带 YDZ, EDZ, RW, YW
@@ -213,6 +213,80 @@ export default defineComponent({
 .order-train .order-train-ticket .order-train-ticket-main {
   color: red;
   font-size: 18px;
+}
+
+/* 定制复选框样式 */
+:deep(.ant-checkbox-group) {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  flex-wrap: nowrap; /* 禁止换行 */
+}
+
+:deep(.ant-checkbox-wrapper) {
+  font-size: 16px;
+  color: #333;
+  margin-right: 20px;
+  align-items: center;
+  white-space: nowrap; /* 防止标签内的换行 */
+}
+
+:deep(.ant-checkbox-wrapper:hover) {
+  color: #3498db;
+}
+
+:deep(.ant-checkbox-inner) {
+  border-radius: 4px;
+  border: 2px solid #3498db;
+  background-color: #fff;
+  width: 18px;
+  height: 18px;
+}
+
+:deep(.ant-checkbox-checked .ant-checkbox-inner) {
+  background-color: #3498db;
+}
+
+:deep(.ant-checkbox-inner::after) {
+  border: 2px solid #fff;
+  border-top: 0;
+  border-left: 0;
+  height: 8px;
+  width: 4px;
+  left: 5px;
+  top: 1px;
+  transform: rotate(45deg);
+}
+
+:deep(.ant-checkbox:hover .ant-checkbox-inner) {
+  border-color: #2980b9;
+}
+
+:deep(.ant-checkbox-checked:hover .ant-checkbox-inner) {
+  border-color: #2980b9;
+}
+
+:deep(.ant-checkbox-checked::after) {
+  border-color: #fff;
+}
+
+:deep(.ant-checkbox-disabled .ant-checkbox-inner) {
+  background-color: #f5f5f5;
+  border-color: #d9d9d9;
+}
+
+:deep(.ant-checkbox-disabled .ant-checkbox-inner::after) {
+  border-color: #ccc;
+}
+
+/* 定制label样式 */
+:deep(.ant-checkbox-wrapper) {
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+:deep(.ant-checkbox-wrapper:hover) {
+  background-color: #ecf0f1;
 }
 
 .order-tickets {
