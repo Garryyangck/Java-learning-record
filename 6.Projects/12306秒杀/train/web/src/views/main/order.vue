@@ -201,6 +201,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+/* ------------------------- order-train ------------------------- */
 .order-train .order-train-main {
   font-size: 18px;
   font-weight: bold;
@@ -215,6 +216,7 @@ export default defineComponent({
   font-size: 18px;
 }
 
+/* ------------------------- ant-checkbox-group ------------------------- */
 /* 定制复选框样式 */
 :deep(.ant-checkbox-group) {
   display: flex;
@@ -222,18 +224,30 @@ export default defineComponent({
   flex-wrap: nowrap; /* 禁止换行 */
 }
 
+/* .ant-checkbox-wrapper: 后面的文字 */
 :deep(.ant-checkbox-wrapper) {
   font-size: 16px;
   color: #333;
-  margin-right: 20px;
-  align-items: center;
+  margin-right: 20px; /* 相邻 label 之间的距离 */
   white-space: nowrap; /* 防止标签内的换行 */
 }
 
+/* 光标放到label上，文字的样式 */
 :deep(.ant-checkbox-wrapper:hover) {
   color: #3498db;
 }
 
+:deep(.ant-checkbox-wrapper) {
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+:deep(.ant-checkbox-wrapper:hover) {
+  background-color: #ecf0f1;
+}
+
+/* 前面的正方形框 */
 :deep(.ant-checkbox-inner) {
   border-radius: 4px;
   border: 2px solid #3498db;
@@ -242,15 +256,17 @@ export default defineComponent({
   height: 18px;
 }
 
+/* 选择后，前面正方形的样式 */
 :deep(.ant-checkbox-checked .ant-checkbox-inner) {
   background-color: #3498db;
 }
 
+/* 正方形里面的勾的样式 */
 :deep(.ant-checkbox-inner::after) {
   border: 2px solid #fff;
   border-top: 0;
   border-left: 0;
-  height: 8px;
+  height: 10px;
   width: 4px;
   left: 5px;
   top: 1px;
@@ -278,17 +294,7 @@ export default defineComponent({
   border-color: #ccc;
 }
 
-/* 定制label样式 */
-:deep(.ant-checkbox-wrapper) {
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-:deep(.ant-checkbox-wrapper:hover) {
-  background-color: #ecf0f1;
-}
-
+/* ------------------------- order-tickets ------------------------- */
 .order-tickets {
   margin: 10px 0;
 }
