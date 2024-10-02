@@ -236,7 +236,7 @@ export default defineComponent({
 
     onMounted(() => {
       document.title = '余票查询';
-      params.value = SessionStorage.get(SESSION_TICKET_PARAM);
+      params.value = SessionStorage.get(SESSION_TICKET_PARAM) || {};
       if (Tool.isNotEmpty(params.value.date)) {
         handleQuery({
           pageNum: 1,
