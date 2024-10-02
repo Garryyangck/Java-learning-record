@@ -2,12 +2,12 @@
 <template>
   <div class="order-train">
     <span class="order-train-main">{{ dailyTrainTicket.date }}</span>&nbsp;
-    <span class="order-train-main">{{ dailyTrainTicket.trainCode }}</span>次&nbsp;
-    <span class="order-train-main">{{ dailyTrainTicket.start }}</span>站
-    <span class="order-train-main">({{ dailyTrainTicket.startTime }})</span>&nbsp;
+    <span class="order-train-main">{{ dailyTrainTicket.trainCode }} 次</span>&nbsp;
+    <span class="order-train-main">{{ dailyTrainTicket.start }}站</span>&nbsp;
+    <span class="order-train-main">{{ dailyTrainTicket.startTime }}</span>&nbsp;
     <span class="order-train-main">——</span>&nbsp;
-    <span class="order-train-main">{{ dailyTrainTicket.end }}</span>站
-    <span class="order-train-main">({{ dailyTrainTicket.endTime }})</span>&nbsp;
+    <span class="order-train-main">{{ dailyTrainTicket.end }}站</span>&nbsp;
+    <span class="order-train-main">{{ dailyTrainTicket.endTime }}</span>&nbsp;
 
     <div class="order-train-ticket">
       <span v-for="item in seatTypes" :key="item.type">
@@ -19,7 +19,6 @@
   </div>
 
   <a-divider/>
-  <strong>选择要购票的乘客：</strong>&nbsp;
   <a-checkbox-group v-model:value="passengerChecks" :options="passengerOptions"/>
   <br/>
   <div class="order-tickets">
@@ -205,15 +204,56 @@ export default defineComponent({
 .order-train .order-train-main {
   font-size: 18px;
   font-weight: bold;
+  color: #333; /* 更深的文本颜色 */
+  line-height: 1.3; /* 增加行高以提高可读性 */
+  margin-bottom: 10px; /* 添加底部边距 */
+  font-family: 'Arial', sans-serif; /* 设置字体族 */
+  background-color: #f0f0f0; /* 轻微的背景颜色 */
+  padding: 8px 15px; /* 添加内边距 */
+  border-radius: 5px; /* 圆角边框 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  display: inline-block; /* 使背景和阴影应用在文本周围 */
+  transition: all 0.3s ease; /* 添加过渡效果 */
+}
+
+.order-train .order-train-main:hover {
+  background-color: #e0e0e0; /* 鼠标悬停时背景颜色变深 */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* 鼠标悬停时阴影效果增强 */
+  transform: translateY(-2px); /* 鼠标悬停时轻微上移 */
+}
+
+/* 添加文本阴影以增强视觉效果 */
+.order-train .order-train-main {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 如果需要，可以添加一个边框 */
+.order-train .order-train-main {
+  border: 1px solid transparent; /* 透明边框，以便在添加边框样式时不影响布局 */
+  border-radius: 5px; /* 圆角边框 */
+}
+
+.order-train .order-train-main:hover {
+  border-color: #d0d0d0; /* 鼠标悬停时显示边框 */
 }
 
 .order-train .order-train-ticket {
   margin-top: 15px;
+  padding: 20px; /* 添加内边距 */
+  background-color: #f9f9f9; /* 轻微的背景颜色 */
+  border-radius: 8px; /* 圆角边框 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
 }
 
 .order-train .order-train-ticket .order-train-ticket-main {
-  color: red;
+  color: #e53e3e; /* 更鲜艳的红色，增加了透明度渐变 */
   font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s ease; /* 添加颜色变化过渡效果 */
+}
+
+.order-train .order-train-ticket .order-train-ticket-main:hover {
+  color: #c12f2f; /* 鼠标悬停时颜色变深 */
 }
 
 /* ------------------------- ant-checkbox-group ------------------------- */
@@ -228,7 +268,7 @@ export default defineComponent({
 :deep(.ant-checkbox-wrapper) {
   font-size: 16px;
   color: #333;
-  margin-right: 20px; /* 相邻 label 之间的距离 */
+  margin-right: 10px; /* 相邻 label 之间的距离 */
   white-space: nowrap; /* 防止标签内的换行 */
 }
 
