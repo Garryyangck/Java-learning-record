@@ -92,7 +92,7 @@
 .ant-select-item-option {
     transition: font-size 0.3s ease, text-shadow 0.3s ease; /* 为字体大小和文字阴影添加渐变动画 */
     font-weight: normal; /* 默认字体不加粗 */
-    color: #1d6cbf; /* 文字颜色 */
+    color: #333; /* 文字颜色改为深灰色 */
     font-size: 1em; /* 默认字体大小 */
     text-shadow: none; /* 默认没有文字阴影 */
 }
@@ -100,14 +100,14 @@
 .ant-select-item-option:hover {
     font-weight: bold; /* 悬停时文字加粗 */
     background-color: #e8f4fd; /* 悬停时选项背景色，使用更浅的蓝色 */
-    color: #1d6cbf; /* 悬停时文字颜色变深 */
+    color: #000; /* 悬停时文字颜色改为黑色 */
     font-size: 1.2em; /* 悬停时字体大小 */
-    text-shadow: 0 0 5px rgba(86, 163, 240, 0.6); /* 悬停时添加文字阴影 */
+    text-shadow: 0 0 5px #e3f1ff; /* 悬停时添加文字阴影 */
 }
 
 .ant-select-item-option-selected {
     background-color: #d0eaff; /* 选项选中背景色，使用更浅的蓝色 */
-    color: #1d6cbf; /* 选中时文字颜色变深 */
+    color: #000; /* 选中时文字颜色改为黑色 */
 }
 
 /* 自定义Select组件的下拉框样式 */
@@ -135,53 +135,53 @@
 
 /* 自定义Select组件的箭头样式 */
 .ant-select-arrow {
-    color: #6c8ebf; /* 箭头颜色 */
+    color: #333; /* 箭头颜色改为深灰色 */
     transition: color 0.3s ease, transform 0.3s ease; /* 添加平滑过渡动画 */
 }
 
 .ant-select-arrow:hover {
-    color: #1d6cbf; /* 悬停时箭头颜色变深 */
+    color: #000; /* 悬停时箭头颜色改为黑色 */
     transform: rotate(90deg); /* 悬停时箭头旋转 */
 }
 
 /* 自定义Select组件的清除按钮样式 */
 .ant-select-clear-icon {
-    color: #6c8ebf; /* 清除按钮颜色 */
+    color: #333; /* 清除按钮颜色改为深灰色 */
     transition: color 0.3s ease, transform 0.3s ease; /* 添加平滑过渡动画 */
 }
 
 .ant-select-clear-icon:hover {
-    color: #1d6cbf; /* 悬停时清除按钮颜色变深 */
+    color: #000; /* 悬停时清除按钮颜色改为黑色 */
     transform: scale(1.2); /* 悬停时清除按钮放大 */
 }
 
 /* 自定义Select组件的搜索框样式 */
 .ant-select-search__field {
-    color: #6c8ebf; /* 搜索框文字颜色 */
+    color: #333; /* 搜索框文字颜色改为深灰色 */
 }
 
 /* 自定义Select组件的多选标签样式 */
 .ant-select-selection__rendered .ant-select-selection__choice {
     background-color: #d0eaff; /* 多选标签背景色 */
     border-color: #6c8ebf; /* 多选标签边框颜色 */
-    color: #1d6cbf; /* 多选标签文字颜色 */
+    color: #333; /* 多选标签文字颜色改为深灰色 */
     border-radius: 20px; /* 圆角边框 */
     padding: 2px 10px; /* 内边距 */
     margin: 2px; /* 外边距 */
 }
 
 .ant-select-selection__rendered .ant-select-selection__choice__remove {
-    color: #1d6cbf; /* 多选标签移除按钮颜色 */
+    color: #333; /* 多选标签移除按钮颜色改为深灰色 */
     margin-left: 5px; /* 移除按钮的左边距 */
 }
 
 .ant-select-selection__rendered .ant-select-selection__choice__remove:hover {
-    color: #002884; /* 悬停时多选标签移除按钮颜色变深 */
+    color: #000; /* 悬停时多选标签移除按钮颜色改为黑色 */
 }
 
 /* 自定义Select组件的加载中样式 */
 .ant-select-loading {
-    color: #6c8ebf; /* 加载中图标颜色 */
+    color: #333; /* 加载中图标颜色改为深灰色 */
 }
 
 /* 自定义Select组件的placeholder样式 */
@@ -331,3 +331,5 @@
         overflow-x: auto;
     }
 }
+
+/* ----------------------------------- a-modal ----------------------------------- */
