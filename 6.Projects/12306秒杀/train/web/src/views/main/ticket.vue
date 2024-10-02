@@ -5,7 +5,7 @@
       <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
       <station-select-view v-model:value="params.start" placeholder="请选择出发站" style="width: 150px"/>
       <station-select-view v-model:value="params.end" placeholder="请选择到达站" style="width: 150px"/>
-      <a-button type="primary" @click="handleQuery()">刷新</a-button>
+      <a-button type="primary" @click="handleQuery()">查询</a-button>
     </a-space>
   </p>
   <a-table :dataSource="dailyTrainTickets"
@@ -19,8 +19,8 @@
         到达站：{{ record.end }}
       </template>
       <template v-else-if="column.dataIndex === 'time'">
-        出站：{{ record.startTime }}<br/>
-        到站：{{ record.endTime }}
+        出发：{{ record.startTime }}<br/>
+        到达：{{ record.endTime }}
       </template>
       <template v-else-if="column.dataIndex === 'duration'">
         {{ calDuration(record.startTime, record.endTime) }}<br/>
@@ -81,7 +81,7 @@ import dayjs from "dayjs";
 
 export default defineComponent({
   name: "ticket-view",
-  components: {StationSelectView, TrainSelectView},
+  components: {StationSelectView},
   setup() {
     const visible = ref(false);
     const dailyTrainTicket = reactive({
@@ -159,38 +159,16 @@ export default defineComponent({
       },
     ]);
 
-    watch(() => params.value.date, () => {
-      handleQuery({
-        pageNum: 1,
-        pageSize: pagination.value.pageSize,
-      });
-    });
-
-    watch(() => params.value.start, () => {
-      handleQuery({
-        pageNum: 1,
-        pageSize: pagination.value.pageSize,
-      });
-    });
-
-    watch(() => params.value.end, () => {
-      handleQuery({
-        pageNum: 1,
-        pageSize: pagination.value.pageSize,
-      });
-    });
-
     const handleQuery = (param) => {
-      let byRefresh = false;
+      if (Tool.isEmpty(params.value.date)) {
+        notification.error({description: '请选择日期'});
+        return;
+      }
       if (!param) {
         param = {
           pageNum: 1,
           pageSize: pagination.value.pageSize,
         };
-        params.value.date = null;
-        params.value.start = null;
-        params.value.end = null;
-        byRefresh = true;
       }
       loading.value = true;
       axios.get("/business/daily-train-ticket/query-list", {
@@ -209,8 +187,7 @@ export default defineComponent({
           pagination.value.total = responseVo.data.total;
           pagination.value.current = responseVo.data.pageNum;
           pagination.value.pageSize = responseVo.data.pageSize; // 让修改页面可行，否则即使修改为 50，查出来 50 条，还是只能显示 10 条
-          if (byRefresh)
-            notification.success({description: '刷新成功'});
+          notification.success({description: '查询成功'});
         } else {
           let msgs = responseVo.msg.split('\n');
           for (const msg of msgs) {
@@ -238,10 +215,6 @@ export default defineComponent({
 
     onMounted(() => {
       document.title = '余票查询';
-      handleQuery({
-        pageNum: 1,
-        pageSize: pagination.value.pageSize,
-      })
     });
 
     return {

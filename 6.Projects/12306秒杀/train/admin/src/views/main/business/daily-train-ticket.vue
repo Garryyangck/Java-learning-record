@@ -20,8 +20,8 @@
         到达站：{{record.end}}
       </template>
       <template v-else-if="column.dataIndex === 'time'">
-        出站：{{record.startTime}}<br/>
-        到站：{{record.endTime}}
+        出发：{{record.startTime}}<br/>
+        到达：{{record.endTime}}
       </template>
       <template v-else-if="column.dataIndex === 'duration'">
         {{calDuration(record.startTime, record.endTime)}}<br/>
