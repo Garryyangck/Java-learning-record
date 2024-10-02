@@ -27,7 +27,7 @@ app.mount('#app');
  */
 axios.interceptors.request.use(function (config) {
     // 给所有的请求加上token
-    console.log('请求参数: ', config);
+    console.log(config.url + '请求参数: ', config);
     const token = store.state.member.token;
     if (token) {
         config.headers.token = token; /*必须写死token，因为网关就写死从headers里面获取"token"*/
@@ -39,7 +39,7 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(function (response) {
-    console.log('返回结果: ', response);
+    console.log(response.config.url + '返回结果: ', response);
     return response;
 }, error => {
     const response = error.response;
