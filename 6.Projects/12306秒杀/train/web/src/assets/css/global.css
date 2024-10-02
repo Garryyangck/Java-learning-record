@@ -1,86 +1,90 @@
 /* ----------------------------------- a-checkbox-group ----------------------------------- */
-/* 定制复选框样式 */
+/* 定制复选框组样式，使其子项水平排列且不换行 */
 .ant-checkbox-group {
     display: flex;
-    align-items: center; /* 垂直居中 */
-    flex-wrap: nowrap; /* 禁止换行 */
+    align-items: center; /* 子项垂直居中对齐 */
+    flex-wrap: nowrap; /* 禁止子项换行 */
 }
 
-/* .ant-checkbox-wrapper: 后面的文字 */
+/* 定制复选框标签的样式 */
 .ant-checkbox-wrapper {
-    font-size: 16px;
-    color: #333;
-    margin-right: 10px; /* 相邻 label 之间的距离 */
-    white-space: nowrap; /* 防止标签内的换行 */
-    transition: transform 0.2s ease-in-out; /* 添加变换动画 */
+    font-size: 16px; /* 字体大小 */
+    color: #333; /* 字体颜色 */
+    margin-right: 10px; /* 右侧间距 */
+    white-space: nowrap; /* 防止文本换行 */
+    transition: transform 0.2s ease-in-out, color 0.3s; /* 变换和颜色过渡动画 */
+    padding: 4px 8px; /* 内边距 */
+    border-radius: 4px; /* 边框圆角 */
+    position: relative; /* 相对定位，为伪元素定位做准备 */
 }
 
-/* 光标放到label上，文字的样式 */
+/* 当鼠标悬停在复选框标签上时的样式 */
 .ant-checkbox-wrapper:hover {
-    color: #3498db;
-    transform: scale(1.05); /* 轻微放大效果 */
+    color: #3498db; /* 字体颜色变为蓝色 */
+    transform: scale(1.05); /* 字体轻微放大 */
+    background-color: #ecf0f1; /* 背景颜色 */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* 轻微的阴影效果 */
 }
 
-.ant-checkbox-wrapper {
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.ant-checkbox-wrapper:hover {
-    background-color: #ecf0f1;
-}
-
-/* 前面的正方形框 */
+/* 定制复选框内部正方形框的样式 */
 .ant-checkbox-inner {
-    border-radius: 4px;
-    border: 2px solid #3498db;
-    background-color: #fff;
-    width: 18px;
-    height: 18px;
-    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* 添加平滑过渡 */
+    border-radius: 4px; /* 边框圆角 */
+    border: 2px solid #3498db; /* 边框颜色 */
+    background-color: #fff; /* 背景颜色 */
+    width: 18px; /* 宽度 */
+    height: 18px; /* 高度 */
+    position: relative; /* 相对定位，为伪元素定位做准备 */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* 背景和边框颜色过渡动画 */
 }
 
-/* 选择后，前面正方形的样式 */
+/* 当复选框被选中时，内部正方形框的样式 */
 .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #3498db;
-    border-color: #3498db;
+    background-image: linear-gradient(to right, #3498db, #89cff0); /* 背景渐变色 */
+    border-color: #3498db; /* 边框颜色 */
 }
 
-/* 正方形里面的勾的样式 */
+/* 定制复选框内部勾的样式 */
 .ant-checkbox-inner::after {
-    border: 2px solid #fff;
-    border-top: 0;
-    border-left: 0;
-    height: 10px;
-    width: 8px;
-    left: 2px;
-    top: 6px;
-    transform: rotate(45deg);
-    transition: border-color 0.2s ease-in-out; /* 添加平滑过渡 */
+    border: 2px solid #fff; /* 边框颜色 */
+    border-top: 0; /* 上边框隐藏 */
+    border-left: 0; /* 左边框隐藏 */
+    height: 10px; /* 高度 */
+    width: 8px; /* 宽度 */
+    left: 3px; /* 左侧位置 */
+    top: 1px; /* 顶部位置 */
+    transform: rotate(45deg); /* 旋转45度 */
+    transition: border-color 0.2s ease-in-out; /* 边框颜色过渡动画 */
+    content: ''; /* 伪元素内容 */
+    position: absolute; /* 绝对定位 */
 }
 
-.ant-checkbox:hover .ant-checkbox-inner {
-    border-color: #2980b9;
+/* 当复选框被选中时，勾的动画效果 */
+.ant-checkbox-checked .ant-checkbox-inner::after {
+    animation: checkAnimation 0.3s ease-in-out forwards; /* 动画名称和持续时间 */
 }
 
-.ant-checkbox-checked:hover .ant-checkbox-inner {
-    background-color: #2980b9;
-    border-color: #2980b9;
+/* 定义勾的动画效果 */
+@keyframes checkAnimation {
+    0% {
+        opacity: 0; /* 开始时透明度为0 */
+        transform: scale(0) rotate(45deg); /* 开始时缩小并旋转 */
+    }
+    100% {
+        opacity: 1; /* 结束时透明度为1 */
+        transform: scale(1) rotate(45deg); /* 结束时放大并旋转 */
+    }
 }
 
-.ant-checkbox-checked::after {
-    border-color: #fff;
-}
-
+/* 当复选框处于禁用状态时，内部正方形框的样式 */
 .ant-checkbox-disabled .ant-checkbox-inner {
-    background-color: #f5f5f5;
-    border-color: #d9d9d9;
-    opacity: 0.6; /* 禁用状态的透明度降低 */
+    background-color: #f5f5f5; /* 背景颜色 */
+    border-color: #d9d9d9; /* 边框颜色 */
+    opacity: 0.6; /* 透明度降低 */
 }
 
+/* 当复选框处于禁用状态时，内部勾的样式 */
 .ant-checkbox-disabled .ant-checkbox-inner::after {
-    border-color: #ccc;
+    border-color: #ccc; /* 边框颜色 */
 }
 
 /* ----------------------------------- a-select ----------------------------------- */
