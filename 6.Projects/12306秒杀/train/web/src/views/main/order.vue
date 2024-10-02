@@ -23,22 +23,22 @@
   <br/>
   <div class="order-tickets">
     <a-row class="order-tickets-header" v-if="tickets.length > 0">
-      <a-col :span="2">乘客</a-col>
-      <a-col :span="6">身份证</a-col>
-      <a-col :span="4">票种</a-col>
-      <a-col :span="4">座位类型</a-col>
+      <a-col :span="3">乘客</a-col>
+      <a-col :span="9">身份证</a-col>
+      <a-col :span="6">票种</a-col>
+      <a-col :span="6">座位类型</a-col>
     </a-row>
     <a-row class="order-tickets-row" v-for="ticket in tickets" :key="ticket.passengerId">
-      <a-col :span="2">{{ticket.passengerName}}</a-col>
-      <a-col :span="6">{{ticket.passengerIdCard}}</a-col>
-      <a-col :span="4">
+      <a-col :span="3">{{ticket.passengerName}}</a-col>
+      <a-col :span="9">{{ticket.passengerIdCard}}</a-col>
+      <a-col :span="6">
         <a-select v-model:value="ticket.passengerType" style="width: 100%">
           <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">
             {{item.desc}}
           </a-select-option>
         </a-select>
       </a-col>
-      <a-col :span="4">
+      <a-col :span="6">
         <a-select v-model:value="ticket.seatTypeCode" style="width: 100%">
           <a-select-option v-for="item in seatTypes" :key="item.code" :value="item.code">
             {{item.desc}}
@@ -57,22 +57,22 @@
            @ok="showFirstImageCodeModal">
     <div class="order-tickets">
       <a-row class="order-tickets-header" v-if="tickets.length > 0">
-        <a-col :span="3">乘客</a-col>
-        <a-col :span="15">身份证</a-col>
-        <a-col :span="3">票种</a-col>
-        <a-col :span="3">座位类型</a-col>
+        <a-col :span="6">乘客</a-col>
+        <a-col :span="8">身份证</a-col>
+        <a-col :span="5">票种</a-col>
+        <a-col :span="5">座位类型</a-col>
       </a-row>
       <a-row class="order-tickets-row" v-for="ticket in tickets" :key="ticket.passengerId">
-        <a-col :span="3">{{ticket.passengerName}}</a-col>
-        <a-col :span="15">{{ticket.passengerIdCard}}</a-col>
-        <a-col :span="3">
+        <a-col :span="6">{{ticket.passengerName}}</a-col>
+        <a-col :span="8">{{ticket.passengerIdCard}}</a-col>
+        <a-col :span="5">
           <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code">
             <span v-if="item.code === ticket.passengerType">
               {{item.desc}}
             </span>
           </span>
         </a-col>
-        <a-col :span="3">
+        <a-col :span="5">
           <span v-for="item in seatTypes" :key="item.code">
             <span v-if="item.code === ticket.seatTypeCode">
               {{item.desc}}
@@ -241,8 +241,16 @@ export default defineComponent({
   margin-top: 15px;
   padding: 20px; /* 添加内边距 */
   background-color: #f9f9f9; /* 轻微的背景颜色 */
+  background-image: linear-gradient(to bottom, #ffffff, #f9f9f9); /* 添加渐变背景 */
   border-radius: 8px; /* 圆角边框 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 添加变换和阴影的过渡效果 */
+  will-change: transform, box-shadow; /* 优化动画性能 */
+}
+
+.order-train .order-train-ticket:hover {
+  transform: translateY(-5px); /* 鼠标悬停时轻微上移 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 鼠标悬停时阴影效果增强 */
 }
 
 .order-train .order-train-ticket .order-train-ticket-main {
@@ -250,10 +258,31 @@ export default defineComponent({
   font-size: 18px;
   font-weight: bold;
   transition: color 0.3s ease; /* 添加颜色变化过渡效果 */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加文本阴影 */
 }
 
 .order-train .order-train-ticket .order-train-ticket-main:hover {
   color: #c12f2f; /* 鼠标悬停时颜色变深 */
+}
+
+/* 添加一个轻微的动画效果，使文本在悬停时有跳动感 */
+.order-train .order-train-ticket .order-train-ticket-main {
+  position: relative; /* 设置相对定位 */
+  display: inline-block; /* 使动画效果应用于行内块级元素 */
+}
+
+.order-train .order-train-ticket .order-train-ticket-main:hover {
+  animation: jump 0.6s ease-in-out infinite alternate; /* 应用跳动动画 */
+}
+
+/* 定义跳动动画 */
+@keyframes jump {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-3px);
+  }
 }
 
 /* ------------------------- ant-checkbox-group ------------------------- */
@@ -337,10 +366,18 @@ export default defineComponent({
 /* ------------------------- order-tickets ------------------------- */
 .order-tickets {
   margin: 10px 0;
+  background-color: #f8f9fa; /* 轻微的背景颜色 */
+  border-radius: 8px; /* 圆角边框 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
 }
 
 .order-tickets .ant-col {
-  padding: 5px 10px;
+  padding: 10px; /* 增加内边距 */
+  border-right: 1px solid #e9ecef; /* 添加列之间的分隔线 */
+}
+
+.order-tickets .ant-col:last-child {
+  border-right: none; /* 最后一列不加右边界 */
 }
 
 .order-tickets .order-tickets-header {
@@ -348,17 +385,48 @@ export default defineComponent({
   border: solid 1px cornflowerblue;
   color: white;
   font-size: 16px;
-  padding: 5px 0;
+  padding: 10px 0;
+  text-align: center; /* 文本居中 */
+  font-weight: bold; /* 字体加粗 */
 }
 
 .order-tickets .order-tickets-row {
-  border: solid 1px cornflowerblue;
+  border: 1px solid #e9ecef; /* 统一边框颜色 */
   border-top: none;
   vertical-align: middle;
-  line-height: 30px;
+  line-height: 1.5; /* 增加行高 */
+  padding: 10px 0; /* 增加上下内边距 */
+}
+
+.order-tickets .order-tickets-row:first-child {
+  border-top: 1px solid #e9ecef; /* 第一行添加顶部边框 */
 }
 
 .order-tickets .choose-seat-item {
-  margin: 5px 5px;
+  margin: 5px 0; /* 调整为上下边距 */
+  padding: 5px 10px; /* 增加内边距 */
+  background-color: #ffffff; /* 白色背景 */
+  border: 1px solid #dee2e6; /* 边框颜色 */
+  border-radius: 4px; /* 圆角边框 */
+  cursor: pointer; /* 鼠标悬停时显示指针 */
+  transition: all 0.3s ease; /* 过渡效果 */
+}
+
+.order-tickets .choose-seat-item:hover {
+  background-color: #e9ecef; /* 鼠标悬停时背景颜色 */
+  border-color: #adb5bd; /* 鼠标悬停时边框颜色 */
+}
+
+/* 为表头和行添加间隙和圆角 */
+.order-tickets .order-tickets-row:last-child,
+.order-tickets .order-tickets-header:last-child {
+  border-bottom-left-radius: 8px; /* 左下角圆角 */
+  border-bottom-right-radius: 8px; /* 右下角圆角 */
+}
+
+.order-tickets .order-tickets-row:first-child,
+.order-tickets .order-tickets-header:first-child {
+  border-top-left-radius: 8px; /* 左上角圆角 */
+  border-top-right-radius: 8px; /* 右上角圆角 */
 }
 </style>
