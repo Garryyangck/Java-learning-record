@@ -70,3 +70,76 @@
         overflow-x: auto;
     }
 }
+
+/* 设置表格分页器的样式 */
+.ant-pagination {
+    margin-top: 10px; /* 分页器与表格的间距 */
+}
+
+.ant-pagination-item {
+    background-color: #ffffff; /* 分页器按钮背景颜色 */
+    border-radius: 15px; /* 分页器按钮圆角 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* 添加平滑过渡动画 */
+}
+
+/* 分页器按钮悬停时的样式 */
+.ant-pagination-item:hover {
+    background-color: #f1f1f1; /* 悬停时背景颜色变深 */
+    transform: scale(1.15); /* 悬停时按钮放大 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 悬停时添加阴影效果 */
+}
+
+/* 分页器激活的按钮样式 */
+.ant-pagination-item-active {
+    background-color: #ffffff; /* 激活按钮背景颜色 */
+    color: #ffffff; /* 激活按钮文字颜色 */
+}
+
+/* 分页器激活的按钮悬停时的样式 */
+.ant-pagination-item-active:hover {
+    background-color: #f1f1f1; /* 激活按钮悬停时背景颜色 */
+}
+
+/* 分页器输入框样式 */
+.ant-pagination-options-size-changer.ant-select-selection {
+    background-color: #f0f0f0; /* 输入框背景颜色 */
+    border-color: #d0d0d0; /* 输入框边框颜色 */
+    transition: border-color 0.3s ease; /* 边框颜色过渡动画 */
+}
+
+/* 分页器输入框悬停时的样式 */
+.ant-pagination-options-size-changer.ant-select-selection:hover {
+    border-color: #4fc3f7; /* 悬停时边框颜色 */
+}
+
+/* 分页器快速跳转输入框样式 */
+.ant-pagination-options-quick-jumper input {
+    margin: 0 8px; /* 输入框的左右间距 */
+    padding: 4px; /* 输入框内边距 */
+    border: 1px solid #d0d0d0; /* 输入框边框颜色 */
+    border-radius: 4px; /* 输入框圆角 */
+    transition: border-color 0.3s ease; /* 边框颜色过渡动画 */
+}
+
+/* 分页器快速跳转输入框聚焦时的样式 */
+.ant-pagination-options-quick-jumper input:focus {
+    border-color: #4fc3f7; /* 聚焦时边框颜色 */
+}
+
+/* 分页器跳转按钮样式 */
+.ant-pagination-options-quick-jumper button {
+    background-color: #ffffff; /* 按钮背景颜色 */
+    border-radius: 15px; /* 按钮圆角 */
+    transition: background-color 0.3s ease; /* 背景颜色过渡动画 */
+}
+
+/* 分页器跳转按钮悬停时的样式 */
+.ant-pagination-options-quick-jumper button:hover {
+    background-color: #f1f1f1; /* 悬停时按钮背景颜色 */
+}
+
+/* 分页器跳转按钮激活时的样式 */
+.ant-pagination-options-quick-jumper button:active {
+    background-color: #ffffff; /* 激活时按钮背景颜色 */
+    color: #ffffff; /* 激活时按钮文字颜色 */
+}
