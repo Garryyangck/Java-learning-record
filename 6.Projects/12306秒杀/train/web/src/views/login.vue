@@ -224,28 +224,6 @@ export default defineComponent({
   margin-bottom: 20px;
 }
 
-/* 登录框内的输入框样式 */
-.login :deep(.ant-col).login-main .ant-input {
-  /* 设置边框颜色 */
-  border-color: #40a9ff;
-  /* 设置圆角 */
-  border-radius: 4px;
-  /* 设置内边距 */
-  padding: 12px;
-  /* 设置字体大小 */
-  font-size: 16px;
-  /* 设置过渡动画 */
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-/* 输入框聚焦时的样式 */
-.login :deep(.ant-col).login-main .ant-input:focus {
-  /* 设置边框颜色 */
-  border-color: #1890ff;
-  /* 添加阴影效果 */
-  box-shadow: 0 0 0 2px rgba(64, 169, 255, 0.2);
-}
-
 /* 登录框内的按钮样式 */
 .login :deep(.ant-col).login-main .ant-btn {
   /* 设置背景颜色 */
