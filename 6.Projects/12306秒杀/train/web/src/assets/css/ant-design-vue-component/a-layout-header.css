@@ -1,100 +1,121 @@
 /* 定义布局头部的样式 */
 .ant-layout-header {
-    /* 设置背景颜色为明亮的天蓝色 */
-    background-color: #011111;
-    /* 设置高度 */
-    height: 60px;
-    /* 设置内边距 */
-    padding: 0 20px;
-    /* 设置文字颜色为白色 */
-    color: #fff;
-    /* 设置布局为 flex 以实现水平居中和两端对齐 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* 添加渐变效果 */
-    background-image: linear-gradient(160deg, #000000 0%, rgb(0, 21, 41) 100%);
-    /* 添加阴影效果 */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    /* 添加过渡动画 */
-    transition: background-color 0.3s, box-shadow 0.3s;
+    background-color: #011111; /* 深色天蓝背景 */
+    height: 60px; /* 设置头部高度 */
+    padding: 0 20px; /* 内边距 */
+    color: #fff; /* 文字颜色为白色 */
+    display: flex; /* Flex 布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: space-between; /* 两端对齐 */
+    background-image: linear-gradient(160deg, #000000 0%, rgb(0, 21, 41) 100%); /* 渐变背景 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* 阴影效果 */
+    transition: background-color 0.3s, box-shadow 0.3s; /* 平滑过渡 */
 }
 
 /* 定义布局头部中的 logo 样式 */
 .ant-layout-header .logo {
-    /* 设置 logo 的字体大小 */
-    font-size: 24px;
-    /* 设置 logo 的字体颜色 */
-    color: #fff;
-    /* 设置 logo 的字体加粗 */
-    font-weight: bold;
-    /* 添加 logo 的微妙动画效果 */
-    animation: logoPulse 2s infinite;
+    font-size: 24px; /* logo 字体大小 */
+    color: #fff; /* logo 颜色 */
+    font-weight: bold; /* 字体加粗 */
+    animation: logoPulse 2s infinite; /* logo 轻微脉冲动画 */
 }
 
 /* 定义 logo 的脉冲动画 */
 @keyframes logoPulse {
     0%, 100% {
-        transform: scale(1);
+        transform: scale(1); /* 初始和结束状态为原始大小 */
     }
     50% {
-        transform: scale(1.05);
+        transform: scale(1.05); /* 动画中间时轻微放大 */
     }
 }
 
-/* 定义布局头部中的导航菜单样式 */
+/* 定义导航菜单样式 */
 .ant-layout-header .ant-menu {
-    /* 确保菜单不折叠 */
-    width: auto;
-    /* 设置导航菜单的字体大小 */
-    font-size: 16px;
-    /* 设置导航菜单的字体颜色 */
-    color: #fff;
-    /* 设置导航菜单项之间的间距 */
-    margin-right: 20px;
-    /* 设置导航菜单项的悬停效果 */
-
-    .ant-menu-item:hover {
-        color: #f0f0f0;
-        background-color: rgba(255, 255, 255, 0.1);
-    }
+    width: auto; /* 确保菜单项自适应宽度 */
+    font-size: 16px; /* 菜单项字体大小 */
+    color: #fff; /* 字体颜色 */
+    margin-left: 20px; /* 菜单位于 logo 右侧 */
+    background: transparent; /* 菜单背景透明 */
+    border-bottom: none; /* 移除底部边框 */
+    transition: color 0.3s ease, background-color 0.3s ease; /* 颜色和背景的平滑过渡 */
 }
 
-/* 将导航菜单放到页面的左边 */
-.ant-layout-header .ant-menu {
-    margin-right: 0;
-    margin-left: auto;
+/* 将导航菜单放到页面左侧 logo 右边 */
+.ant-layout-header .ant-menu-horizontal {
+    margin-left: 20px; /* 菜单紧贴 logo */
+    display: flex; /* Flex 布局排列菜单 */
+    justify-content: left; /* 菜单靠左对齐 */
 }
 
-/* 增加菜单项的背景高度 */
-.ant-layout-header .ant-menu-item,
-.ant-layout-header .ant-menu-submenu-title {
-    height: 60px;
-    line-height: 60px;
+/* 设置菜单项的悬停效果 */
+.ant-layout-header .ant-menu-item:hover {
+    color: #1890ff; /* 悬停时文字变为浅天蓝色 */
+    background-color: rgba(255, 255, 255, 0.1); /* 悬停时背景为透明白 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
 }
 
-/* 移除菜单项之间的间距 */
-.ant-layout-header .ant-menu-inline .ant-menu-item,
-.ant-layout-header .ant-menu-inline .ant-menu-submenu {
-    margin-top: 0;
-    margin-bottom: 0;
+/* 菜单项样式 */
+.ant-layout-header .ant-menu-item {
+    height: 60px; /* 菜单项高度 */
+    line-height: 60px; /* 菜单项内容居中 */
+    padding: 0 15px; /* 内边距 */
+    transition: color 0.3s ease, border-color 0.3s ease; /* 添加平滑的颜色变化过渡 */
 }
 
-/* 增加菜单项的横向间距 */
-.ant-layout-header .ant-menu-horizontal > .ant-menu-item,
-.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu {
-    border-bottom: 2px solid transparent;
-}
-
-/* 设置选中或悬停时菜单项的底部边框颜色 */
+/* 选中或悬停时菜单项底部的样式 */
 .ant-layout-header .ant-menu-horizontal > .ant-menu-item-selected,
-.ant-layout-header .ant-menu-horizontal > .ant-menu-item:hover,
-.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu:hover {
-    border-bottom-color: #1890ff;
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item:hover {
+    border-bottom: 2px solid #1890ff; /* 底部天蓝色边框 */
 }
 
-/* 增加菜单项的悬停效果 */
-.ant-layout-header .ant-menu-horizontal > .ant-menu-item:hover,
-.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu:hover {
-    color: #1890ff;
+/* 设置子菜单的样式 */
+.ant-layout-header .ant-menu-submenu-title {
+    color: #fff; /* 子菜单标题颜色 */
+    padding: 0 15px; /* 子菜单内边距 */
+    height: 60px; /* 子菜单项高度 */
+    line-height: 60px; /* 子菜单项内容居中 */
+}
+
+/* 悬停时的子菜单样式 */
+.ant-layout-header .ant-menu-submenu:hover .ant-menu-submenu-title {
+    color: #1890ff; /* 悬停时子菜单颜色变为天蓝色 */
+    background-color: rgba(255, 255, 255, 0.1); /* 背景透明白 */
+}
+
+/* 子菜单展开时的过渡动画 */
+.ant-menu-submenu-open {
+    transition: all 0.3s ease-in-out; /* 展开时动画 */
+}
+
+/* 子菜单项的悬停效果 */
+.ant-layout-header .ant-menu-submenu .ant-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 背景颜色 */
+    color: #1890ff; /* 天蓝色文字 */
+}
+
+/* 菜单项的动画 */
+.ant-menu-item {
+    position: relative; /* 相对定位 */
+}
+
+.ant-menu-item:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #1890ff; /* 天蓝色下划线 */
+    transition: width 0.3s ease; /* 添加下划线过渡动画 */
+}
+
+.ant-menu-item:hover:before {
+    width: 100%; /* 悬停时下划线展开 */
+}
+
+/* 设置子菜单下拉时的背景色 */
+.ant-menu-submenu-popup {
+    background-color: #001529; /* 深色背景 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* 添加阴影效果 */
 }

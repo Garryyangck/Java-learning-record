@@ -5,14 +5,6 @@
         GARRY
       </router-link>
     </div>
-    <div style="margin-left: auto; color: white;">
-      您好：{{member.mobile}} &nbsp;&nbsp;
-      <router-link to="/login" style="color: white;">
-        <a-button>
-          退出登录
-        </a-button>
-      </router-link>
-    </div>
     <a-menu
         v-model:selectedKeys="selectedKeys"
         theme="dark"
@@ -35,6 +27,14 @@
         </router-link>
       </a-menu-item>
     </a-menu>
+    <div style="margin-left: auto; color: white;">
+      您好：{{member.mobile}} &nbsp;&nbsp;
+      <router-link to="/login" style="color: white;">
+        <a-button>
+          退出登录
+        </a-button>
+      </router-link>
+    </div>
   </a-layout-header>
 </template>
 
