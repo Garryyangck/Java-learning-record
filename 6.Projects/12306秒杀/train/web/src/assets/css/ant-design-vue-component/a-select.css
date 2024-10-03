@@ -34,13 +34,22 @@
     background-color: #f8f9fa; /* 输入框背景色为更浅的灰色 */
     border: 1px solid #d0eaff; /* 输入框边框颜色 */
     border-radius: 6px; /* 圆角边框 */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 添加平滑过渡动画 */
+    transition:
+            border-color 0.3s ease,
+            box-shadow 0.3s ease,
+            background-color 0.3s ease; /* 添加平滑过渡动画 */
     cursor: pointer; /* 将鼠标指针设置为手形 */
 }
 
 .ant-select-selection:hover {
     border-color: #aadfff; /* 悬停时边框颜色 */
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); /* 悬停时的阴影效果 */
+}
+
+/* 输入框聚焦时的样式 */
+.ant-select-selection:focus {
+    border-color: #4fc3f7; /* 聚焦时边框颜色 */
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.4); /* 聚焦时的阴影效果 */
 }
 
 /* 自定义Select组件的箭头样式 */
@@ -51,7 +60,6 @@
 
 .ant-select-arrow:hover {
     color: #000; /* 悬停时箭头颜色改为黑色 */
-    transform: rotate(90deg); /* 悬停时箭头旋转 */
 }
 
 /* 自定义Select组件的清除按钮样式 */
