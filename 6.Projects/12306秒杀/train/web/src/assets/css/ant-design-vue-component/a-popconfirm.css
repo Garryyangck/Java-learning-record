@@ -25,6 +25,8 @@
     text-align: right; /* 右对齐按钮 */
     padding: 10px 15px; /* 内边距 */
     background: linear-gradient(to right, #e6f7ff, #ffffff); /* 背景渐变，与头部相反方向 */
+    border-top: 1px solid #40a9ff; /* 添加顶部天蓝色边框 */
+    border-radius: 0 0 8px 8px; /* 设置底部圆角，符合整体风格 */
 }
 
 /* 确认按钮样式 */
@@ -54,4 +56,8 @@
 .ant-popover-buttons button:not(.ant-btn-primary):hover {
     background-color: #f0f9ff; /* 浅天蓝色背景 */
     color: #0050b3; /* 更深的蓝色文字 */
+}
+
+.ant-popover.ant-popover-zoom-leave {
+    animation: popconfirm-fade-out 0.3s ease forwards; /* 弹出框关闭时的动画 */
 }
