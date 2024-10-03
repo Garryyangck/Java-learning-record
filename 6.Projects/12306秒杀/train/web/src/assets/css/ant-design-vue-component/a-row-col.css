@@ -2,15 +2,10 @@
 .ant-row {
     background-color: #ffffff; /* 设置背景色为白色 */
     margin: 10px 0; /* 设置外边距 */
-    padding: 10px; /* 设置内边距 */
+    padding: 5px; /* 设置内边距 */
     border-radius: 8px; /* 设置圆角 */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 设置阴影效果 */
     transition: all 0.3s ease-in-out; /* 设置过渡动画 */
-}
-
-/* 为 a-row 组件添加渐变背景 */
-.ant-row:hover {
-    background-image: linear-gradient(to right, #ffffff, #e6f7ff); /* 渐变背景色 */
 }
 
 /* 设置 a-col 组件的样式 */
@@ -18,11 +13,6 @@
     padding: 10px; /* 设置内边距 */
     border-radius: 4px; /* 设置圆角 */
     transition: background-color 0.3s ease-in-out; /* 设置过渡动画 */
-}
-
-/* 为 a-col 组件添加悬停效果 */
-.ant-col:hover {
-    background-color: #e6f7ff; /* 悬停时的背景颜色 */
 }
 
 /* 为 a-row 和 a-col 组件添加动画效果，使它们在加载时从左侧滑入 */
