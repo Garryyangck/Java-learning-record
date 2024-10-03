@@ -3,7 +3,7 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import Antd from 'ant-design-vue' // 全局引入 ant-design-vue 的所有组件
+import Antd, {notification} from 'ant-design-vue' // 全局引入 ant-design-vue 的所有组件
 import 'ant-design-vue/dist/antd.css' // 全局引入 ant-design-vue 的 css
 import * as Icons from '@ant-design/icons-vue'; // 全局引入 ant-design-vue 的所有图标
 import axios from "axios";

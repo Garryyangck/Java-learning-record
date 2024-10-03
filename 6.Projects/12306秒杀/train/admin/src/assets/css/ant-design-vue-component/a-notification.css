@@ -1,0 +1,54 @@
+/* 基础样式 */
+.ant-notification-notice {
+    /* 设置圆角 */
+    border-radius: 8px;
+    /* 添加阴影以增加立体感 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* 使用渐变背景作为基础样式 */
+    background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+    /* 设置过渡效果，用于平滑显示隐藏 */
+    transition: all 0.3s ease;
+}
+
+/* Info 类型的通知 */
+.ant-notification-notice.ant-notification-notice-info {
+    /* 主体颜色使用明亮的天蓝色渐变 */
+    background: linear-gradient(135deg, #ffffff 0%, #d1eaf0 100%);
+    /* 当鼠标悬停时，稍微加深背景色 */
+    &:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #bde2ec 100%);
+    }
+}
+
+/* Error 类型的通知 */
+.ant-notification-notice.ant-notification-notice-error {
+    /* 主体颜色使用醒目的红色渐变 */
+    background: linear-gradient(135deg, #ffffff 0%, #ffdddd 100%);
+    /* 当鼠标悬停时，稍微加深背景色 */
+    &:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #ffd1d1 100%);
+    }
+}
+
+/* 关闭按钮样式 */
+.ant-notification-notice .ant-notification-notice-close {
+    /* 更改关闭按钮颜色 */
+    color: #aaa;
+    /* 当鼠标悬停时改变颜色 */
+    &:hover {
+        color: #555;
+    }
+}
+
+/* 动画：当通知出现或消失时 */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    50% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* 应用动画到通知元素 */
+.ant-notification-notice-enter,
+.ant-notification-notice-leave-to {
+    animation: fadeInOut 0.5s forwards;
+}

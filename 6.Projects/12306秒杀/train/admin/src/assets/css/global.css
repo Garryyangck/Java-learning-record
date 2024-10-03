@@ -5,6 +5,13 @@
 @import "ant-design-vue-component/a-modal.css";
 @import "ant-design-vue-component/a-layout-header.css";
 @import "ant-design-vue-component/a-layout-sider.css";
+@import "ant-design-vue-component/a-input.css";
+@import "ant-design-vue-component/a-row-col.css";
+@import "ant-design-vue-component/a-date-picker.css";
+@import "ant-design-vue-component/a-time-picker.css";
+@import "ant-design-vue-component/a-divider.css";
+@import "ant-design-vue-component/a-popconfirm.css";
+@import "ant-design-vue-component/a-notification.css";
 
 :root {
     font-family: Arial, 'Segoe UI Emoji', sans-serif;

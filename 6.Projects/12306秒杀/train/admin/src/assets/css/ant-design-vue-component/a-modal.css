@@ -29,11 +29,40 @@
 /* 覆盖 Modal 关闭按钮样式 */
 .ant-modal-close-x {
     color: #ffffff; /* 白色文字 */
+    transition: all 0.3s ease; /* 平滑过渡效果 */
+    opacity: 1; /* 初始不透明 */
+    position: relative; /* 设置相对定位 */
+}
+
+/* 添加关闭按钮的动画效果 */
+.ant-modal-close-x::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%; /* 背景圆圈的大小 */
+    height: 50%; /* 背景圆圈的大小 */
+    background-color: rgba(255, 255, 255, 0.2); /* 动画的背景颜色，白色半透明 */
+    border-radius: 50%; /* 圆形效果 */
+    transform: translate(-50%, -50%) scale(0); /* 初始缩放为0，隐藏动画 */
+    transition: all 0.3s ease;
+    opacity: 0;
 }
 
 /* 覆盖 Modal 遮罩层样式 */
 .ant-modal-mask {
     background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色遮罩 */
+}
+
+/* Modal 关闭按钮悬停样式 */
+.ant-modal-close-x:hover {
+    transform: scale(1.2); /* 悬停时放大 */
+}
+
+/* 悬停时显示动画 */
+.ant-modal-close-x:hover::after {
+    transform: translate(-50%, -50%) scale(1); /* 悬停时放大到1，显示动画 */
+    opacity: 1;
 }
 
 /* Modal 进入动画 */

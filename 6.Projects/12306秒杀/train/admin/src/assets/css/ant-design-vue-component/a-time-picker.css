@@ -1,0 +1,83 @@
+/* 整体样式重置，确保样式的一致性 */
+.ant-picker {
+    border: 1px solid #d9d9d9; /* 设置边框颜色 */
+}
+
+/* 鼠标悬停时的样式 */
+.ant-picker:hover {
+    border-color: #40a9ff; /* 设置悬停时的边框颜色 */
+}
+
+/* 日期选择器的输入框样式 */
+.ant-picker-input {
+    background-color: #ffffff; /* 背景色 */
+    color: #333333; /* 文字颜色 */
+    border: none; /* 移除边框 */
+    outline: none; /* 移除轮廓 */
+}
+
+/* 设置面板中时间列表的样式 */
+.ant-picker-panel .ant-picker-time-panel-column {
+    background-color: #ffffff; /* 背景色 */
+    padding: 8px 0; /* 添加上下内边距 */
+}
+
+/* 滚动条样式 */
+.ant-picker-panel .ant-picker-time-panel-column::-webkit-scrollbar {
+    width: 6px; /* 滚动条宽度 */
+}
+
+.ant-picker-panel .ant-picker-time-panel-column::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* 滚动条轨道背景色 */
+}
+
+.ant-picker-panel .ant-picker-time-panel-column::-webkit-scrollbar-thumb {
+    background-color: #40a9ff; /* 滚动条滑块颜色 */
+    border-radius: 3px; /* 圆角 */
+}
+
+/* 面板中日期悬停时的样式 */
+.ant-picker-cell:hover .ant-picker-cell-inner {
+    background-color: rgba(64, 169, 255, 0.2); /* 设置悬停时背景颜色为天蓝色的浅色 */
+    transition: background-color 0.3s, color 0.3s; /* 平滑过渡效果 */
+    border-radius: 20px; /* 圆角 */
+}
+
+/* 被选中的日期样式 */
+.ant-picker-time-panel-cell-selected {
+    background-color: #40a9ff; /* 天蓝色背景 */
+    color: #ffffff; /* 白色文字 */
+    font-weight: bold; /* 加粗 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    border-radius: 4px; /* 圆角 */
+    transition: background-color 0.3s, box-shadow 0.3s; /* 平滑过渡效果 */
+}
+
+/* 时间选择面板样式 */
+.ant-picker-time-panel {
+    background-color: #f9f9f9; /* 背景色为浅灰白色，突出面板 */
+    border-radius: 6px; /* 面板圆角 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+}
+
+/* 当鼠标悬停在时间单元时，覆盖所有可能的状态 */
+.ant-picker-time-panel-cell:hover,
+.ant-picker-time-panel-cell:focus,
+.ant-picker-time-panel-cell:active {
+    background-color: #40a9ff !important; /* 悬停时背景颜色 */
+    color: #ffffff !important; /* 悬停时文字颜色 */
+    cursor: pointer; /* 鼠标变为指针 */
+    transition: background-color 1s ease, color 1s ease; /* 添加过渡效果 */
+}
+
+/* 面板顶部显示当前日期的样式 */
+.ant-picker-header-view {
+    color: #40a9ff; /* 标题文字为天蓝色 */
+    font-weight: bold; /* 加粗 */
+    font-size: 16px; /* 字体大小 */
+}
+
+/* 选择器中的占位符文字样式 */
+.ant-picker-placeholder {
+    color: #bfbfbf; /* 占位符文字颜色 */
+}

@@ -1,0 +1,63 @@
+/* 基本弹出框背景 */
+.ant-popover {
+    background-color: #ffffff; /* 白色背景 */
+    border: 1px solid #e6f7ff; /* 边框颜色为浅天蓝色 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 添加轻微阴影效果 */
+}
+
+/* 弹出框内的标题 */
+.ant-popover-title {
+    background: linear-gradient(to right, #ffffff, #e6f7ff); /* 头部背景渐变，从白到浅天蓝 */
+    color: #1890ff; /* 文字颜色为天蓝色 */
+    font-weight: bold; /* 加粗文字 */
+    padding: 10px 15px; /* 内边距 */
+    border-bottom: 1px solid #e6f7ff; /* 底部线条颜色 */
+}
+
+/* 弹出框内容区域 */
+.ant-popover-inner-content {
+    padding: 15px; /* 内边距 */
+    color: #333; /* 文字颜色 */
+}
+
+/* 按钮容器 */
+.ant-popover-buttons {
+    text-align: right; /* 右对齐按钮 */
+    padding: 10px 15px; /* 内边距 */
+    background: linear-gradient(to right, #e6f7ff, #ffffff); /* 背景渐变，与头部相反方向 */
+    border-top: 1px solid #40a9ff; /* 添加顶部天蓝色边框 */
+    border-radius: 0 0 8px 8px; /* 设置底部圆角，符合整体风格 */
+}
+
+/* 确认按钮样式 */
+.ant-popover-buttons button.ant-btn-primary {
+    background-color: #1890ff; /* 主要按钮背景为天蓝色 */
+    border-color: #1890ff; /* 边框颜色同背景 */
+    color: #fff; /* 字体颜色为白色 */
+    transition: all 0.3s ease; /* 平滑过渡效果 */
+}
+
+/* 当鼠标悬停在确认按钮上时的样式 */
+.ant-popover-buttons button.ant-btn-primary:hover {
+    background-color: #40a9ff; /* 更深一点的天蓝色 */
+    border-color: #40a9ff;
+    transform: scale(1.05); /* 微小放大以增加交互感 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 鼠标悬停时加强阴影效果 */
+}
+
+/* 取消按钮样式 */
+.ant-popover-buttons button:not(.ant-btn-primary) {
+    color: #1890ff; /* 文字颜色为天蓝色 */
+    background: transparent; /* 透明背景 */
+    border-color: #e6f7ff; /* 边框颜色 */
+}
+
+/* 当鼠标悬停在取消按钮上时的样式 */
+.ant-popover-buttons button:not(.ant-btn-primary):hover {
+    background-color: #f0f9ff; /* 浅天蓝色背景 */
+    color: #0050b3; /* 更深的蓝色文字 */
+}
+
+.ant-popover.ant-popover-zoom-leave {
+    animation: popconfirm-fade-out 0.3s ease forwards; /* 弹出框关闭时的动画 */
+}

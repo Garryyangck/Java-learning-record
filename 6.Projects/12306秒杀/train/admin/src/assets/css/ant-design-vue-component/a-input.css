@@ -1,0 +1,45 @@
+/* 定义输入框的样式 */
+.ant-input {
+    /* 设置背景颜色为白色 */
+    background-color: #ffffff;
+    /* 设置字体颜色 */
+    color: #000000;
+    /* 设置边框宽度 */
+    border-width: 1px;
+    /* 设置字体大小 */
+    font-size: 14px;
+    /* 添加渐变效果，当输入框聚焦时应用 */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 当输入框聚焦时的样式 */
+.ant-input:focus {
+    /* 设置边框颜色为更深的天蓝色，表示聚焦状态 */
+    border-color: #1890ff;
+    /* 添加阴影效果，使输入框在聚焦时更加突出 */
+    box-shadow: 0 0 0 2px rgba(64, 169, 255, 0.2);
+}
+
+/* 定义输入框的占位符样式 */
+.ant-input::placeholder {
+    /* 设置占位符字体颜色 */
+    color: #bfbfbf;
+}
+
+/* 定义输入框的悬停样式 */
+.ant-input:hover {
+    /* 设置边框颜色为天蓝色，表示鼠标悬停状态 */
+    border-color: #40a9ff;
+    /* 添加轻微的阴影效果，使输入框在悬停时更加立体 */
+    box-shadow: 0 1px 4px rgba(64, 169, 255, 0.1);
+}
+
+/* 定义输入框的禁用样式 */
+.ant-input[disabled] {
+    /* 设置背景颜色为浅灰色 */
+    background-color: #f5f5f5;
+    /* 设置边框颜色为灰色 */
+    border-color: #d9d9d9;
+    /* 设置字体颜色为灰色 */
+    color: #bfbfbf;
+}

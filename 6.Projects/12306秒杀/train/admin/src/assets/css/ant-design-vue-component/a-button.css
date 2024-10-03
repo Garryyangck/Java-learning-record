@@ -46,7 +46,7 @@
     width: 120%; /* 稍微超出按钮尺寸，使动画更明显 */
     height: 120%; /* 稍微超出按钮尺寸 */
     background-color: rgba(255, 255, 255, 0.3); /* 动画的背景颜色，更明显的白色半透明 */
-    border-radius: 50%; /* 圆形效果，使动画更美观 */
+    border-radius: 40%; /* 圆形效果，使动画更美观 */
     transform: translate(-50%, -50%) scale(0); /* 初始缩放为0，隐藏动画 */
     transition: all 0.3s ease;
     opacity: 0;
