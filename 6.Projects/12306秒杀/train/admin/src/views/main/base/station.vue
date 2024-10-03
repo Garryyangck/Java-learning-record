@@ -14,13 +14,13 @@
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'operation'">
         <a-space>
+          <a-button size="small" @click="onEdit(record)">编辑</a-button>
           <a-popconfirm
               title="删除后不可恢复，确认删除?"
               @confirm="onDelete(record)"
               ok-text="确认" cancel-text="取消">
-            <a style="color: red">删除</a>
+            <a-button type="danger" size="small">删除</a-button>
           </a-popconfirm>
-          <a @click="onEdit(record)">编辑</a>
         </a-space>
       </template>
     </template>

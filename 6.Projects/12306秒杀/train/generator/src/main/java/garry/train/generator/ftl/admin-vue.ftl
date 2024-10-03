@@ -15,12 +15,12 @@
       <template v-if="column.dataIndex === 'operation'">
         <#if !readOnly>
         <a-space>
-          <a-button @click="onEdit(record)">编辑</a-button>
+          <a-button size="small" @click="onEdit(record)">编辑</a-button>
           <a-popconfirm
               title="删除后不可恢复，确认删除?"
               @confirm="onDelete(record)"
               ok-text="确认" cancel-text="取消">
-            <a-button type="danger" style="color: red">删除</a-button>
+            <a-button type="danger" size="small">删除</a-button>
           </a-popconfirm>
         </a-space>
         </#if>

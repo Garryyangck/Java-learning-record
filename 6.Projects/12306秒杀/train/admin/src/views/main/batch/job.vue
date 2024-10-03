@@ -50,7 +50,7 @@
                 </a-button>
               </a-popconfirm>
             </template>
-            <a-button type="primary" @click="handleEdit(record)" size="small">
+            <a-button type="primary" size="small" @click="handleEdit(record)">
               编辑
             </a-button>
             <a-popconfirm

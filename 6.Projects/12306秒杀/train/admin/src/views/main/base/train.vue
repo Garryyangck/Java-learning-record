@@ -15,24 +15,24 @@
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'operation'">
         <a-space>
-          <a-popconfirm
-              title="删除后不可恢复，确认删除?"
-              @confirm="onDelete(record)"
-              ok-text="确认" cancel-text="取消">
-            <a style="color: red">删除</a>
-          </a-popconfirm>
-          <a @click="onEdit(record)">编辑</a>
+          <a-button size="small" @click="onEdit(record)">编辑</a-button>
           <a-popconfirm
               title="生成车站将删除已有的车站，确认生成?"
               @confirm="genTrainStation(record)"
               ok-text="确认" cancel-text="取消">
-            <a>生成车站</a>
+            <a-button size="small">生成车站</a-button>
           </a-popconfirm>
           <a-popconfirm
               title="生成座位将删除已有的座位，确认生成?"
               @confirm="genTrainSeat(record)"
               ok-text="确认" cancel-text="取消">
-            <a>生成座位</a>
+            <a-button size="small">生成座位</a-button>
+          </a-popconfirm>
+          <a-popconfirm
+              title="同时删除该车次的所有数据，不可恢复"
+              @confirm="onDelete(record)"
+              ok-text="确认" cancel-text="取消">
+            <a-button type="danger" size="small">删除</a-button>
           </a-popconfirm>
         </a-space>
       </template>
