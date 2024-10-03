@@ -1,0 +1,72 @@
+/* 重置 a-row 组件的样式 */
+.ant-row {
+    background-color: #ffffff; /* 设置背景色为白色 */
+    margin: 10px 0; /* 设置外边距 */
+    padding: 10px; /* 设置内边距 */
+    border-radius: 8px; /* 设置圆角 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 设置阴影效果 */
+    transition: all 0.3s ease-in-out; /* 设置过渡动画 */
+}
+
+/* 为 a-row 组件添加渐变背景 */
+.ant-row:hover {
+    background-image: linear-gradient(to right, #ffffff, #e6f7ff); /* 渐变背景色 */
+}
+
+/* 设置 a-col 组件的样式 */
+.ant-col {
+    padding: 10px; /* 设置内边距 */
+    border-radius: 4px; /* 设置圆角 */
+    transition: background-color 0.3s ease-in-out; /* 设置过渡动画 */
+}
+
+/* 为 a-col 组件添加悬停效果 */
+.ant-col:hover {
+    background-color: #e6f7ff; /* 悬停时的背景颜色 */
+}
+
+/* 为 a-row 和 a-col 组件添加动画效果，使它们在加载时从左侧滑入 */
+.ant-row,
+.ant-col {
+    animation: slideInFromLeft 0.5s ease-out forwards; /* 应用动画 */
+}
+
+/* 定义滑入动画 */
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* 重置 a-row 组件的样式，用于网格布局 */
+.ant-row-grid {
+    background-color: #ffffff; /* 设置背景色为白色 */
+    border: 2px solid #40a9ff; /* 设置边框颜色为天蓝色 */
+    border-radius: 8px; /* 设置圆角 */
+    padding: 10px; /* 设置内边距 */
+    margin-bottom: 10px; /* 设置底部外边距 */
+}
+
+/* 为 a-row 组件添加阴影和悬停时放大效果 */
+.ant-row-grid:hover {
+    box-shadow: 0 4px 16px rgba(64, 169, 255, 0.3); /* 设置阴影效果 */
+    transform: scale(1.02); /* 放大效果 */
+}
+
+/* 设置 a-col 组件的样式，用于网格布局 */
+.ant-col-grid {
+    background-color: #ffffff; /* 设置背景色为白色 */
+    border: 1px solid #d9d9d9; /* 设置边框颜色为浅灰色 */
+    margin: 5px; /* 设置外边距 */
+    padding: 10px; /* 设置内边距 */
+}
+
+/* 为 a-col 组件添加悬停效果 */
+.ant-col-grid:hover {
+    border-color: #40a9ff; /* 悬停时的边框颜色 */
+}
