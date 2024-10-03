@@ -36,3 +36,13 @@
     background-color: #40a9ff; /* 设置滚动条滑块的背景色为天蓝色 */
     border-radius: 3px; /* 设置圆角 */
 }
+
+/* 最上方当前被选中的日期 */
+.ant-picker-time-panel-cell-selected {
+    background-color: #40a9ff; /* 设置背景颜色为天蓝色 */
+    color: #ffffff; /* 设置文字颜色为白色 */
+    font-weight: bold; /* 字体加粗 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微的阴影效果 */
+    border-radius: 4px; /* 设置圆角 */
+    transition: background-color 0.3s, box-shadow 0.3s; /* 平滑背景色和阴影的过渡 */
+}
