@@ -184,22 +184,6 @@ export default defineComponent({
   transition: transform 0.3s ease-in-out;
 }
 
-/* 定义动画效果 */
-@keyframes scaleUp {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.1); /* 设置放大的比例 */
-  }
-}
-
-/* 应用动画效果到登录框 */
-.login :deep(.ant-col).login-main {
-  /* 添加动画效果，使登录框在加载时等比例放大 */
-  animation: scaleUp 2s ease-in-out forwards;
-}
-
 /* 登录框内的标题样式 */
 .login :deep(.ant-col).login-main h1 {
   /* 设置字体颜色 */
@@ -210,32 +194,6 @@ export default defineComponent({
   font-weight: bold;
   /* 设置动画效果 */
   animation: logoPulse 2s infinite;
-}
-
-/* 登录框内的表单样式 */
-.login :deep(.ant-col).login-main .ant-form {
-  /* 设置内边距 */
-  padding: 20px 0;
-}
-
-/* 登录框内的表单项样式 */
-.login :deep(.ant-col).login-main .ant-form-item {
-  /* 设置内边距 */
-  margin-bottom: 20px;
-}
-
-/* 登录框内的按钮样式 */
-.login :deep(.ant-col).login-main .ant-btn {
-  /* 设置背景颜色 */
-  background-color: #40a9ff;
-  /* 设置边框颜色 */
-  border-color: #40a9ff;
-  /* 设置圆角 */
-  border-radius: 4px;
-  /* 设置字体大小 */
-  font-size: 16px;
-  /* 设置过渡动画 */
-  transition: background-color 0.3s, border-color 0.3s;
 }
 
 /* 按钮悬停时的样式 */
