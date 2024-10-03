@@ -10,10 +10,7 @@
 @import "ant-design-vue-component/a-col.css";
 @import "ant-design-vue-component/a-date-picker.css";
 @import "ant-design-vue-component/a-time-picker.css";
-@import "ant-design-vue-component/a-menu.css";
-@import "ant-design-vue-component/a-space.css";
-@import "ant-design-vue-component/a-diver.css";
-@import "ant-design-vue-component/a-form.css";
+@import "ant-design-vue-component/a-divider.css";
 @import "ant-design-vue-component/a-popconfirm.css";
 
 :root {
