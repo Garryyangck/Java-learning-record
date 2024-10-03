@@ -52,20 +52,6 @@
     transition: background-color 0.3s ease; /* 渐变效果的过渡时间为0.3秒 */
 }
 
-/* 设置表格内按钮的样式 */
-.ant-table .ant-btn {
-    color: #ffffff; /* 按钮文本颜色为白色 */
-    background-color: #4fc3f7; /* 按钮背景颜色为天蓝色 */
-    border-color: #4fc3f7; /* 按钮边框颜色为天蓝色 */
-    transition: all 0.3s ease; /* 所有变化的过渡时间为0.3秒 */
-}
-
-/* 设置表格内按钮悬停时的样式 */
-.ant-table .ant-btn:hover {
-    background-color: #29b6f6; /* 悬停时按钮背景颜色为更深的天蓝色 */
-    border-color: #29b6f6; /* 悬停时按钮边框颜色为更深的天蓝色 */
-}
-
 /* 设置表格内图标的样式 */
 .ant-table .anticon {
     color: #4fc3f7; /* 图标颜色为天蓝色 */

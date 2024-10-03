@@ -11,7 +11,13 @@
 }
 
 /* 覆盖 Ant Design Vue 组件的默认字体 */
-.ant-checkbox-group, .ant-select, .ant-btn, .ant-table, .ant-modal, .ant-layout-header {
+.ant-checkbox-group,
+.ant-select,
+.ant-btn,
+.ant-table,
+.ant-modal,
+.ant-layout-header,
+.ant-layout-sider {
     font-family: Arial, 'Segoe UI Emoji', sans-serif;
 }
 

@@ -1,8 +1,8 @@
 /* 覆盖默认的按钮样式 */
 .ant-btn {
-    background-color: #87CEEB; /* 使用明亮的天蓝色作为背景颜色 */
+    background-color: #4fc3f7; /* 使用明亮的天蓝色作为背景颜色 */
     color: #ffffff; /* 白色字体，确保文字在蓝色背景上清晰可见 */
-    border: 1px solid #40A9FF; /* 边框颜色，选择稍微深一些的天蓝色以形成对比 */
+    border: 1px solid #4fc3f7; /* 边框颜色，选择稍微深一些的天蓝色以形成对比 */
     transition: all 0.3s ease; /* 平滑过渡效果，使颜色变化更自然 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微的阴影，增加立体感 */
     border-radius: 4px; /* 按钮圆角 */
@@ -11,9 +11,10 @@
 
 /* 覆盖默认的悬停样式 */
 .ant-btn:hover {
-    border-color: #56b3fc; /* 悬停时的边框颜色，与背景颜色一致 */
+    border-color: #29b6f6; /* 悬停时的边框颜色，与背景颜色一致 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 悬停时的阴影，稍微加深以突出显示 */
     opacity: 0.9; /* 按钮悬停透明度 */
+    background-color: #29b6f6; /* 悬停时按钮背景颜色为更深的天蓝色 */
 }
 
 /* 覆盖默认的激活样式 */
