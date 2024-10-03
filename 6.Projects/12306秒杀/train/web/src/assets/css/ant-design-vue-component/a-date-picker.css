@@ -16,11 +16,6 @@
     outline: none; /* 移除轮廓线 */
 }
 
-/* 设置日期选择器的图标样式 */
-.ant-picker-icon {
-    color: #40a9ff; /* 设置图标颜色 */
-}
-
 /* 设置日期选择器的下拉面板样式 */
 .ant-picker-dropdown {
     background-color: #ffffff; /* 设置背景颜色 */
@@ -36,33 +31,4 @@
 /* 设置日期选择器的日期单元格悬停样式 */
 .ant-picker-cell:hover {
     background-color: #40a9ff; /* 设置悬停时的背景颜色 */
-}
-
-/* 设置日期选择器的今天日期样式 */
-.ant-picker-today .ant-picker-cell-inner {
-    color: #40a9ff; /* 设置今天日期的文字颜色 */
-    font-weight: bold; /* 设置文字加粗 */
-}
-
-/* 设置日期选择器的周头样式 */
-.ant-picker-header-label {
-    color: #333333; /* 设置文字颜色 */
-}
-
-/* 设置日期选择器的年月选择器样式 */
-.ant-picker-year-select, .ant-picker-month-select {
-    color: #40a9ff; /* 设置文字颜色 */
-}
-
-/* 设置日期选择器的确认按钮样式 */
-.ant-picker-confirm {
-    background-color: #40a9ff; /* 设置背景颜色 */
-    color: #ffffff; /* 设置文字颜色 */
-    border-radius: 4px; /* 设置边框圆角 */
-    transition: background-color 0.3s ease; /* 设置背景颜色的过渡动画效果 */
-}
-
-/* 设置日期选择器的确认按钮悬停样式 */
-.ant-picker-confirm:hover {
-    background-color: #20b8ff; /* 设置悬停时的背景颜色 */
 }

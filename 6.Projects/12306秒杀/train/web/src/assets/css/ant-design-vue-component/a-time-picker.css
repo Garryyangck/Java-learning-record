@@ -1,0 +1,38 @@
+/* 整体样式重置，确保样式的一致性 */
+.ant-picker {
+    border: 1px solid #d9d9d9; /* 设置边框颜色 */
+}
+
+/* 当鼠标悬停在日期选择器上时的样式 */
+.ant-picker:hover {
+    border-color: #40a9ff; /* 设置悬停时的边框颜色 */
+}
+
+/* 设置日期选择器的输入框样式 */
+.ant-picker-input {
+    background-color: #ffffff; /* 设置背景颜色 */
+    color: #333333; /* 设置文字颜色 */
+    border: none; /* 移除边框 */
+    outline: none; /* 移除轮廓线 */
+}
+
+/* 设置面板中时间列表的样式 */
+.ant-picker-panel .ant-picker-time-panel-column {
+    background-color: #ffffff; /* 设置背景色为白色 */
+}
+
+/* 设置面板中滚动条的样式 */
+.ant-picker-panel .ant-picker-time-panel-column::-webkit-scrollbar {
+    width: 6px; /* 设置滚动条的宽度 */
+}
+
+/* 设置面板中滚动条轨道的样式 */
+.ant-picker-panel .ant-picker-time-panel-column::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* 设置滚动条轨道的背景色 */
+}
+
+/* 设置面板中滚动条滑块的样式 */
+.ant-picker-panel .ant-picker-time-panel-column::-webkit-scrollbar-thumb {
+    background-color: #40a9ff; /* 设置滚动条滑块的背景色为天蓝色 */
+    border-radius: 3px; /* 设置圆角 */
+}
