@@ -19,7 +19,7 @@
               title="删除后不可恢复，确认删除?"
               @confirm="onDelete(record)"
               ok-text="确认" cancel-text="取消">
-            <a-button>删除</a-button>
+            <a-button type="danger">删除</a-button>
           </a-popconfirm>
         </a-space>
       </template>
