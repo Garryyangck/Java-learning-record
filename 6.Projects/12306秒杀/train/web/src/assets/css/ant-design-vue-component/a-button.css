@@ -76,3 +76,66 @@
 .ant-btn-dashed:not(.ant-btn-danger):hover {
     opacity: 1;
 }
+
+/* 覆盖danger按钮的默认样式 */
+.ant-btn-danger {
+    background-color: #ff4d4d; /* 鲜艳的红色背景颜色 */
+    color: #ffffff; /* 白色字体，确保文字在红色背景上清晰可见 */
+    border: 1px solid #ff4d4d; /* 边框颜色，与背景颜色一致 */
+    transition: all 0.3s ease; /* 平滑过渡效果，使颜色变化更自然 */
+    box-shadow: 0 2px 4px rgba(255, 0, 0, 0.2); /* 添加轻微的阴影，增加立体感 */
+    border-radius: 4px; /* 按钮圆角 */
+}
+
+/* 覆盖danger按钮悬停时的样式 */
+.ant-btn-danger:hover {
+    background-color: #ff0000; /* 悬停时按钮背景颜色为更深的红色 */
+    border-color: #ff0000; /* 悬停时的边框颜色 */
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3); /* 悬停时的阴影，加深以突出显示 */
+    transform: scale(1.05); /* 悬停时放大 */
+}
+
+/* 覆盖danger按钮激活时的样式 */
+.ant-btn-danger:active {
+    background-color: #cc0000; /* 点击时的背景颜色，更深的红色 */
+    border-color: #cc0000; /* 点击时的边框颜色 */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* 点击时的内阴影效果，增加按下感 */
+}
+
+/* 添加动画效果 */
+.ant-btn-danger::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%; /* 稍微超出按钮尺寸，使动画更明显 */
+    height: 120%; /* 稍微超出按钮尺寸 */
+    background-color: rgba(255, 255, 255, 0.2); /* 动画的背景颜色，白色半透明 */
+    border-radius: 50%; /* 圆形效果，使动画更美观 */
+    transform: translate(-50%, -50%) scale(0); /* 初始缩放为0，隐藏动画 */
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.ant-btn-danger:hover::after {
+    transform: translate(-50%, -50%) scale(1); /* 悬停时放大到1，显示动画 */
+    opacity: 1;
+    animation: shake 0.5s; /* 添加抖动动画 */
+    animation-iteration-count: infinite; /* 动画无限循环 */
+}
+
+/* 添加抖动动画关键帧 */
+@keyframes shake {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    25% {
+        transform: translate(-50%, -50%) scale(1) rotate(-5deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1) rotate(5deg);
+    }
+    75% {
+        transform: translate(-50%, -50%) scale(1) rotate(-5deg);
+    }
+}
