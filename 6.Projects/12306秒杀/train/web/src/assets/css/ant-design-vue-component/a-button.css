@@ -1,0 +1,44 @@
+/* 覆盖默认的按钮样式 */
+.ant-btn {
+    background-color: #87CEEB; /* 使用明亮的天蓝色作为背景颜色 */
+    color: #ffffff; /* 白色字体，确保文字在蓝色背景上清晰可见 */
+    border: 1px solid #40A9FF; /* 边框颜色，选择稍微深一些的天蓝色以形成对比 */
+    transition: all 0.3s ease; /* 平滑过渡效果，使颜色变化更自然 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微的阴影，增加立体感 */
+    border-radius: 4px; /* 按钮圆角 */
+    background-image: linear-gradient(to right, #5cb3fd, #45aaf2); /* 按钮渐变色 */
+}
+
+/* 覆盖默认的悬停样式 */
+.ant-btn:hover {
+    border-color: #56b3fc; /* 悬停时的边框颜色，与背景颜色一致 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 悬停时的阴影，稍微加深以突出显示 */
+    opacity: 0.9; /* 按钮悬停透明度 */
+}
+
+/* 覆盖默认的激活样式 */
+.ant-btn:active {
+    border-color: #3185ce; /* 点击时的边框颜色，与背景颜色一致 */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* 点击时的内阴影效果，增加按下感 */
+    transition: all 0.1s ease; /* 快速过渡效果，使点击反应更迅速 */
+}
+
+/* 添加动画效果 */
+.ant-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%; /* 稍微超出按钮尺寸，使动画更明显 */
+    height: 120%; /* 稍微超出按钮尺寸 */
+    background-color: rgba(255, 255, 255, 0.2); /* 动画的背景颜色，白色半透明 */
+    border-radius: 50%; /* 圆形效果，使动画更美观 */
+    transform: translate(-50%, -50%) scale(0); /* 初始缩放为0，隐藏动画 */
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.ant-btn:hover::before {
+    transform: translate(-50%, -50%) scale(1); /* 悬停时放大到1，显示动画 */
+    opacity: 1;
+}

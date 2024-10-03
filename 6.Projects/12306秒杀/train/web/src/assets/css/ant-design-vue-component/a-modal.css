@@ -1,0 +1,70 @@
+/* 覆盖 Modal 头部样式 */
+.ant-modal-header {
+    background-color: #5cb3fd; /* 天蓝色背景 */
+    color: #ffffff; /* 白色文字 */
+    padding: 16px 24px; /* 内边距 */
+    background-image: linear-gradient(to right, #5cb3fd, #45aaf2); /* 渐变色 */
+}
+
+/* 覆盖 Modal 标题样式 */
+.ant-modal-title {
+    color: #ffffff; /* 白色文字 */
+    font-size: 18px; /* 字体大小 */
+    font-weight: bold; /* 字体加粗 */
+}
+
+/* 覆盖 Modal 内容区域样式 */
+.ant-modal-body {
+    padding: 24px; /* 内边距 */
+}
+
+/* 覆盖 Modal 底部按钮区域样式 */
+.ant-modal-footer {
+    padding: 10px 24px; /* 内边距 */
+    border-top: 1px solid #e0ebfd; /* 边框颜色 */
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05); /* 底部阴影 */
+    text-align: right; /* 按钮右对齐 */
+}
+
+/* 覆盖 Modal 关闭按钮样式 */
+.ant-modal-close-x {
+    color: #ffffff; /* 白色文字 */
+}
+
+/* 覆盖 Modal 遮罩层样式 */
+.ant-modal-mask {
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色遮罩 */
+}
+
+/* Modal 进入动画 */
+.ant-modal.zoom-enter-active,
+.ant-modal.zoom-appear-active {
+    animation-duration: 0.3s; /* 动画持续时间 */
+    animation-fill-mode: both; /* 动画填充模式 */
+}
+
+/* Modal 进入开始状态 */
+.ant-modal.zoom-enter,
+.ant-modal.zoom-appear {
+    transform: scale(0.5) translate(-50%, -50%); /* 缩放和位置 */
+    opacity: 0; /* 透明度 */
+}
+
+/* Modal 进入结束状态 */
+.ant-modal.zoom-enter-to,
+.ant-modal.zoom-appear-to {
+    transform: scale(1) translate(-50%, -50%); /* 缩放和位置 */
+    opacity: 1; /* 透明度 */
+}
+
+/* Modal 退出动画 */
+.ant-modal.zoom-leave-active {
+    animation-duration: 0.3s; /* 动画持续时间 */
+    animation-fill-mode: both; /* 动画填充模式 */
+}
+
+/* Modal 退出开始状态 */
+.ant-modal.zoom-leave-to {
+    transform: scale(0.5) translate(-50%, -50%); /* 缩放和位置 */
+    opacity: 0; /* 透明度 */
+}

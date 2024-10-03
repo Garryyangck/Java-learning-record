@@ -55,8 +55,8 @@ export default defineComponent({
     const sendCodeRef = ref(null); // 发送验证码的样式
     const router = useRouter(); // 路由转发
     const loginForm = reactive({
-      mobile: '',
-      code: '',
+      mobile: '17380672612',
+      code: 'gary',
     });
 
     const setupTimer = (countdownSecond) => {

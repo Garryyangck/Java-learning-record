@@ -1,0 +1,86 @@
+/* 设置表格的全局样式 */
+.ant-table {
+    color: #333333; /* 文本颜色为深灰色 */
+    border-radius: 8px; /* 边框圆角为8px */
+    overflow: hidden; /* 隐藏溢出的内容 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加轻微的阴影效果 */
+    border: 1px solid #4fc3f7; /* 边框颜色为天蓝色，更明显 */
+}
+
+/* 设置表头单元格的样式 */
+.ant-table-thead > tr > th {
+    background-color: #e1f5fe; /* 背景颜色为天蓝色，色调更浅 */
+    color: #333333; /* 文本颜色为深灰色 */
+    font-weight: bold; /* 字体加粗 */
+    border-bottom: 1px solid #4fc3f7; /* 底部边框更明显，颜色为天蓝色 */
+}
+
+/* 设置表体单元格的样式 */
+.ant-table-tbody > tr > td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* 底部边框颜色为天蓝色，更明显 */
+}
+
+/* 设置表头和表体单元格的左右边框 */
+.ant-table-thead th.ant-table-cell:first-child,
+.ant-table-tbody td.ant-table-cell:first-child {
+    border-left: 0 solid #4fc3f7; /* 左边边框更明显，颜色为天蓝色 */
+}
+
+.ant-table-thead th.ant-table-cell:last-child,
+.ant-table-tbody td.ant-table-cell:last-child {
+    border-right: 0 solid #4fc3f7; /* 右边边框更明显，颜色为天蓝色 */
+}
+
+/* 设置表体单元格悬停时的样式 */
+.ant-table-tbody > tr:hover > td {
+    background-color: #b3e5fc; /* 悬停时背景颜色为更深的天蓝色 */
+}
+
+/* 设置选中行的样式 */
+.ant-table-tbody > tr.ant-table-row-selected > td {
+    background-color: #81d4fa; /* 选中行的背景颜色为更深的天蓝色 */
+}
+
+/* 设置表头单元格的渐变背景和悬停效果 */
+.ant-table-thead > tr > th {
+    background: linear-gradient(to bottom, #e1f5fe 0%, #4fc3f7 100%); /* 顶部为浅天蓝色，底部为天蓝色的渐变 */
+    transition: background-color 0.3s ease; /* 渐变效果的过渡时间为0.3秒 */
+}
+
+/* 设置表体单元格的悬停渐变效果 */
+.ant-table-tbody > tr > td {
+    transition: background-color 0.3s ease; /* 渐变效果的过渡时间为0.3秒 */
+}
+
+/* 设置表格内按钮的样式 */
+.ant-table .ant-btn {
+    color: #ffffff; /* 按钮文本颜色为白色 */
+    background-color: #4fc3f7; /* 按钮背景颜色为天蓝色 */
+    border-color: #4fc3f7; /* 按钮边框颜色为天蓝色 */
+    transition: all 0.3s ease; /* 所有变化的过渡时间为0.3秒 */
+}
+
+/* 设置表格内按钮悬停时的样式 */
+.ant-table .ant-btn:hover {
+    background-color: #29b6f6; /* 悬停时按钮背景颜色为更深的天蓝色 */
+    border-color: #29b6f6; /* 悬停时按钮边框颜色为更深的天蓝色 */
+}
+
+/* 设置表格内图标的样式 */
+.ant-table .anticon {
+    color: #4fc3f7; /* 图标颜色为天蓝色 */
+    transition: color 0.3s ease; /* 颜色变化的过渡时间为0.3秒 */
+}
+
+/* 设置表格内图标悬停时的样式 */
+.ant-table .anticon:hover {
+    color: #039be5; /* 悬停时图标颜色为更深的天蓝色 */
+}
+
+/* 设置响应式设计，使表格在小屏幕上滚动 */
+@media (max-width: 768px) {
+    .ant-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

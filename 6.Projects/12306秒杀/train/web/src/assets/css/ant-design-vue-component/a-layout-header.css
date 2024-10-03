@@ -1,0 +1,100 @@
+/* 定义布局头部的样式 */
+.ant-layout-header {
+    /* 设置背景颜色为明亮的天蓝色 */
+    background-color: #011111;
+    /* 设置高度 */
+    height: 60px;
+    /* 设置内边距 */
+    padding: 0 20px;
+    /* 设置文字颜色为白色 */
+    color: #fff;
+    /* 设置布局为 flex 以实现水平居中和两端对齐 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* 添加渐变效果 */
+    background-image: linear-gradient(160deg, #000000 0%, rgb(0, 21, 41) 100%);
+    /* 添加阴影效果 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    /* 添加过渡动画 */
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/* 定义布局头部中的 logo 样式 */
+.ant-layout-header .logo {
+    /* 设置 logo 的字体大小 */
+    font-size: 24px;
+    /* 设置 logo 的字体颜色 */
+    color: #fff;
+    /* 设置 logo 的字体加粗 */
+    font-weight: bold;
+    /* 添加 logo 的微妙动画效果 */
+    animation: logoPulse 2s infinite;
+}
+
+/* 定义 logo 的脉冲动画 */
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* 定义布局头部中的导航菜单样式 */
+.ant-layout-header .ant-menu {
+    /* 确保菜单不折叠 */
+    width: auto;
+    /* 设置导航菜单的字体大小 */
+    font-size: 16px;
+    /* 设置导航菜单的字体颜色 */
+    color: #fff;
+    /* 设置导航菜单项之间的间距 */
+    margin-right: 20px;
+    /* 设置导航菜单项的悬停效果 */
+
+    .ant-menu-item:hover {
+        color: #f0f0f0;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* 将导航菜单放到页面的左边 */
+.ant-layout-header .ant-menu {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+/* 增加菜单项的背景高度 */
+.ant-layout-header .ant-menu-item,
+.ant-layout-header .ant-menu-submenu-title {
+    height: 60px;
+    line-height: 60px;
+}
+
+/* 移除菜单项之间的间距 */
+.ant-layout-header .ant-menu-inline .ant-menu-item,
+.ant-layout-header .ant-menu-inline .ant-menu-submenu {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* 增加菜单项的横向间距 */
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu {
+    border-bottom: 2px solid transparent;
+}
+
+/* 设置选中或悬停时菜单项的底部边框颜色 */
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item-selected,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item:hover,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu:hover {
+    border-bottom-color: #1890ff;
+}
+
+/* 增加菜单项的悬停效果 */
+.ant-layout-header .ant-menu-horizontal > .ant-menu-item:hover,
+.ant-layout-header .ant-menu-horizontal > .ant-menu-submenu:hover {
+    color: #1890ff;
+}
