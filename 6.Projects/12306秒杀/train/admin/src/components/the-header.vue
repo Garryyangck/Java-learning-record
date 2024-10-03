@@ -5,9 +5,6 @@
         GARRY
       </router-link>
     </div>
-    <div style="margin-left: auto; color: white;">
-      欢迎使用管理控制台
-    </div>
     <a-menu
         v-model:selectedKeys="selectedKeys"
         theme="dark"
@@ -25,6 +22,9 @@
         </router-link>
       </a-menu-item>
     </a-menu>
+    <div style="margin-left: auto; color: white;">
+      欢迎使用管理控制台
+    </div>
   </a-layout-header>
 </template>
 

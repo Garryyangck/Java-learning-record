@@ -28,7 +28,7 @@
   </a-table>
   <a-modal v-model:visible="visible" title="火车车站" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
-    <a-form :model="trainStation" :label-col="{span: 4}" :wrapper-col="{span: 18}">
+    <a-form :model="trainStation" :label-col="{span: 6}" :wrapper-col="{span: 18}">
       <a-form-item label="车次编号">
         <train-select-view v-model:value="trainStation.trainCode"/>
       </a-form-item>

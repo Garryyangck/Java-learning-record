@@ -29,7 +29,7 @@
   </a-table>
   <a-modal v-model:visible="visible" title="每日车站" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
-    <a-form :model="dailyTrainStation" :label-col="{span: 4}" :wrapper-col="{span: 18}">
+    <a-form :model="dailyTrainStation" :label-col="{span: 6}" :wrapper-col="{span: 18}">
       <a-form-item label="日期">
         <a-date-picker v-model:value="dailyTrainStation.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
       </a-form-item>
