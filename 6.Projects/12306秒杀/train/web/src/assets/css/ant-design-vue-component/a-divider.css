@@ -1,0 +1,98 @@
+/* 定义 a-divider 的基本样式 */
+.ant-divider {
+    border-color: #40a9ff; /* 设置分割线的颜色为明亮的天蓝色 */
+    margin: 16px 0; /* 设置上下间距 */
+    transition: all 0.3s ease; /* 添加平滑的过渡效果 */
+}
+
+/* 垂直分割线的样式 */
+.ant-divider-vertical {
+    height: 40px; /* 设置垂直分割线的高度 */
+    width: 2px; /* 设置垂直分割线的宽度 */
+    background-color: #40a9ff; /* 设置垂直分割线的背景色为天蓝色 */
+    transition: background-color 0.3s ease, height 0.3s ease; /* 背景颜色和平滑的高度过渡效果 */
+}
+
+/* 鼠标悬停时垂直分割线的动画效果 */
+.ant-divider-vertical:hover {
+    height: 50px; /* 悬停时增加垂直分割线的高度 */
+    background-color: #69c0ff; /* 改变悬停时的背景色为更亮的天蓝色 */
+}
+
+/* 带文字的水平分割线样式 */
+.ant-divider-with-text {
+    font-size: 14px; /* 设置文字的字体大小 */
+    color: #40a9ff; /* 设置文字颜色为天蓝色 */
+    font-weight: bold; /* 文字加粗 */
+    transition: color 0.3s ease; /* 平滑文字颜色的过渡效果 */
+}
+
+/* 设置分割线文字两侧的虚线效果 */
+.ant-divider-dashed {
+    border-top-style: dashed; /* 使用虚线边框 */
+    border-color: #40a9ff; /* 设置虚线的颜色 */
+    transition: border-color 0.3s ease; /* 虚线颜色的过渡效果 */
+}
+
+/* 鼠标悬停在带文字分割线上的样式 */
+.ant-divider-with-text:hover {
+    color: #69c0ff; /* 鼠标悬停时文字颜色变亮 */
+}
+
+/* 渐变效果的水平分割线 */
+.ant-divider-horizontal {
+    border-top: 1px solid transparent; /* 设置边框为透明，以便添加渐变效果 */
+    background: linear-gradient(to right, #ffffff, #40a9ff, #ffffff); /* 从白色到天蓝色再回到白色的渐变效果 */
+    height: 2px; /* 设置分割线的高度 */
+    transition: background 0.3s ease, height 0.3s ease; /* 渐变背景和平滑高度的过渡效果 */
+}
+
+/* 鼠标悬停时渐变分割线的动画效果 */
+.ant-divider-horizontal:hover {
+    height: 4px; /* 悬停时增加分割线的高度 */
+    background: linear-gradient(to right, #ffffff, #69c0ff, #ffffff); /* 渐变背景颜色变亮 */
+}
+
+/* 垂直分割线的阴影效果 */
+.ant-divider-vertical {
+    box-shadow: 2px 0 10px rgba(64, 169, 255, 0.3); /* 添加天蓝色阴影效果 */
+    transition: box-shadow 0.3s ease; /* 阴影的平滑过渡效果 */
+}
+
+/* 鼠标悬停时阴影效果增强 */
+.ant-divider-vertical:hover {
+    box-shadow: 2px 0 15px rgba(64, 169, 255, 0.5); /* 增强悬停时的阴影 */
+}
+
+/* 带文字的分割线阴影效果 */
+.ant-divider-with-text {
+    text-shadow: 0 2px 5px rgba(64, 169, 255, 0.3); /* 添加文字的天蓝色阴影 */
+    transition: text-shadow 0.3s ease; /* 文字阴影的过渡效果 */
+}
+
+/* 鼠标悬停时文字阴影增强 */
+.ant-divider-with-text:hover {
+    text-shadow: 0 4px 10px rgba(64, 169, 255, 0.5); /* 增强文字悬停时的阴影效果 */
+}
+
+/* 使用动画效果，使分割线的渐变动态流动 */
+@keyframes flow-gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* 让渐变水平分割线使用流动的动画效果 */
+.ant-divider-horizontal-flowing {
+    background: linear-gradient(270deg, #ffffff, #40a9ff, #ffffff); /* 定义从左到右流动的渐变 */
+    background-size: 400% 400%; /* 扩大背景尺寸以实现流动效果 */
+    animation: flow-gradient 3s ease infinite; /* 应用动画，3秒内完成一次循环 */
+}
+
+/* 鼠标悬停时动画暂停 */
+.ant-divider-horizontal-flowing:hover {
+    animation-play-state: paused; /* 悬停时暂停动画 */
+}
