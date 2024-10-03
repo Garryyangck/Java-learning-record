@@ -60,11 +60,14 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
 }
 
-/* 当鼠标悬停在时间单元时 */
-.ant-picker-time-panel-cell:hover {
-    background-color: #40a9ff; /* 悬停时背景颜色 */
-    color: #ffffff; /* 悬停时文字颜色 */
+/* 当鼠标悬停在时间单元时，覆盖所有可能的状态 */
+.ant-picker-time-panel-cell:hover,
+.ant-picker-time-panel-cell:focus,
+.ant-picker-time-panel-cell:active {
+    background-color: #40a9ff !important; /* 悬停时背景颜色 */
+    color: #ffffff !important; /* 悬停时文字颜色 */
     cursor: pointer; /* 鼠标变为指针 */
+    transition: background-color 1s ease, color 1s ease; /* 添加过渡效果 */
 }
 
 /* 面板顶部显示当前日期的样式 */
