@@ -14,6 +14,11 @@ import './assets/css/global.css'
 const app = createApp(App);
 app.use(store).use(router).use(Antd);
 
+notification.config({
+    duration: 1.5,  // 持续时间
+    placement: 'topRight',  // 全局通知弹出的位置
+});
+
 /**
  * 全局注册图标组件
  */
