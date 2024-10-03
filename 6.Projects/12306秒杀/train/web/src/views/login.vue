@@ -1,7 +1,8 @@
 <!--suppress JSCheckFunctionSignatures -->
 <template>
   <a-row class="login">
-    <a-col :span="8" :offset="8" class="login-main"> <!--登录框长度为8，offset即前面有8个格子-->
+    <!--<a-col :span="8" :offset="8" class="login-main">--> <!--登录框长度为8，offset即前面有8个格子-->
+    <a-col class="login-main">
       <h1 style="text-align: center">
         <rocket-two-tone/>
         Garry售票系统
@@ -32,7 +33,7 @@
         </a-form-item>
 
         <a-form-item>
-          <a-button type="primary" block @click="login">登录</a-button>
+          <a-button type="primary" block style="height: auto" @click="login">登录</a-button>
         </a-form-item>
       </a-form>
     </a-col>
@@ -151,18 +152,129 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.login-main h1 { /*定义的是login-main下的h1标签，而不是所有的login-main和h1标签*/
-  font-size: 25px;
-  font-weight: bold;
+/* 定义登录页面的整体样式 */
+.login {
+  /* 设置背景颜色为明亮的天蓝色 */
+  background-color: #e6f7ff;
+  /* 设置页面居中 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 设置最小高度为视口的高度 */
+  min-height: 100vh;
+  /* 添加渐变背景 */
+  background-image: linear-gradient(#e6f7ff, #ffffff);
 }
 
-.login-main {
-  margin-top: 200px;
-  padding: 30px 30px 20px;
-  border: 2px solid grey;
-  border-radius: 10px;
-  background-color: #fcfcfc;
-  transform: scale(1.2); /* 等比例放大 */
-  transform-origin: center; /* 确保放大的基点是中心 */
+/* 使用 :deep 伪元素穿透作用域，定义登录框的样式 */
+.login :deep(.ant-col).login-main {
+  /* 设置背景颜色为白色 */
+  background-color: #ffffff;
+  /* 设置阴影效果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 设置圆角 */
+  border-radius: 8px;
+  /* 设置内边距 */
+  padding: 20px;
+  /* 设置宽度 */
+  width: 100%;
+  /* 设置最大宽度 */
+  max-width: 500px; /* 放大登录框的尺寸 */
+  /* 设置等比例放大的动画 */
+  transition: transform 0.3s ease-in-out;
+}
+
+/* 定义动画效果 */
+@keyframes scaleUp {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1); /* 设置放大的比例 */
+  }
+}
+
+/* 应用动画效果到登录框 */
+.login :deep(.ant-col).login-main {
+  /* 添加动画效果，使登录框在加载时等比例放大 */
+  animation: scaleUp 2s ease-in-out forwards;
+}
+
+/* 登录框内的标题样式 */
+.login :deep(.ant-col).login-main h1 {
+  /* 设置字体颜色 */
+  color: #0c73c2;
+  /* 设置字体大小 */
+  font-size: 24px;
+  /* 设置字体加粗 */
+  font-weight: bold;
+  /* 设置动画效果 */
+  animation: logoPulse 2s infinite;
+}
+
+/* 登录框内的表单样式 */
+.login :deep(.ant-col).login-main .ant-form {
+  /* 设置内边距 */
+  padding: 20px 0;
+}
+
+/* 登录框内的表单项样式 */
+.login :deep(.ant-col).login-main .ant-form-item {
+  /* 设置内边距 */
+  margin-bottom: 20px;
+}
+
+/* 登录框内的输入框样式 */
+.login :deep(.ant-col).login-main .ant-input {
+  /* 设置边框颜色 */
+  border-color: #40a9ff;
+  /* 设置圆角 */
+  border-radius: 4px;
+  /* 设置内边距 */
+  padding: 12px;
+  /* 设置字体大小 */
+  font-size: 16px;
+  /* 设置过渡动画 */
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 输入框聚焦时的样式 */
+.login :deep(.ant-col).login-main .ant-input:focus {
+  /* 设置边框颜色 */
+  border-color: #1890ff;
+  /* 添加阴影效果 */
+  box-shadow: 0 0 0 2px rgba(64, 169, 255, 0.2);
+}
+
+/* 登录框内的按钮样式 */
+.login :deep(.ant-col).login-main .ant-btn {
+  /* 设置背景颜色 */
+  background-color: #40a9ff;
+  /* 设置边框颜色 */
+  border-color: #40a9ff;
+  /* 设置圆角 */
+  border-radius: 4px;
+  /* 设置字体大小 */
+  font-size: 16px;
+  /* 设置过渡动画 */
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* 按钮悬停时的样式 */
+.login :deep(.ant-col).login-main .ant-btn:hover {
+  /* 设置背景颜色 */
+  background-color: #1890ff;
+  /* 设置边框颜色 */
+  border-color: #1890ff;
+}
+
+/* 定义动画效果 */
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 </style>
