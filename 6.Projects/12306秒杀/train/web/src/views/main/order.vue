@@ -29,26 +29,28 @@
       <a-col :span="6">座位类型</a-col>
     </a-row>
     <a-row class="order-tickets-row" v-for="ticket in tickets" :key="ticket.passengerId">
-      <a-col :span="3">{{ticket.passengerName}}</a-col>
-      <a-col :span="9">{{ticket.passengerIdCard}}</a-col>
+      <a-col :span="3">{{ ticket.passengerName }}</a-col>
+      <a-col :span="9">{{ ticket.passengerIdCard }}</a-col>
       <a-col :span="6">
         <a-select v-model:value="ticket.passengerType" style="width: 100%">
           <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">
-            {{item.desc}}
+            {{ item.desc }}
           </a-select-option>
         </a-select>
       </a-col>
       <a-col :span="6">
         <a-select v-model:value="ticket.seatTypeCode" style="width: 100%">
           <a-select-option v-for="item in seatTypes" :key="item.code" :value="item.code">
-            {{item.desc}}
+            {{ item.desc }}
           </a-select-option>
         </a-select>
       </a-col>
     </a-row>
   </div>
   <div v-if="tickets.length > 0">
-    <a-button type="primary" size="large" @click="finishCheckPassenger">提交订单</a-button>
+    <a-button type="primary" size="large" @click="finishCheckPassenger"
+              style="margin-top: 20px">提交订单
+    </a-button>
   </div>
 
   <a-modal v-model:visible="visible" title="请核对以下信息"
@@ -63,19 +65,19 @@
         <a-col :span="5">座位类型</a-col>
       </a-row>
       <a-row class="order-tickets-row" v-for="ticket in tickets" :key="ticket.passengerId">
-        <a-col :span="6">{{ticket.passengerName}}</a-col>
-        <a-col :span="8">{{ticket.passengerIdCard}}</a-col>
+        <a-col :span="6">{{ ticket.passengerName }}</a-col>
+        <a-col :span="8">{{ ticket.passengerIdCard }}</a-col>
         <a-col :span="5">
           <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code">
             <span v-if="item.code === ticket.passengerType">
-              {{item.desc}}
+              {{ item.desc }}
             </span>
           </span>
         </a-col>
         <a-col :span="5">
           <span v-for="item in seatTypes" :key="item.code">
             <span v-if="item.code === ticket.seatTypeCode">
-              {{item.desc}}
+              {{ item.desc }}
             </span>
           </span>
         </a-col>
@@ -249,7 +251,6 @@ export default defineComponent({
 }
 
 .order-train .order-train-ticket:hover {
-  transform: translateY(-5px); /* 鼠标悬停时轻微上移 */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 鼠标悬停时阴影效果增强 */
 }
 
