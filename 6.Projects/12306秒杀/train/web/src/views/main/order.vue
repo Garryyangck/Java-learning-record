@@ -86,9 +86,25 @@
     </div>
     <br/>
     <div v-if="chooseSeatType === 0" style="color: red;">
-      您购买的车票不支持选座
-      <div>12306规则：只有全部是一等座或全部是二等座才支持选座</div>
-      <div>12306规则：余票小于一定数量时，不允许选座（本项目以20为例）</div>
+      <a-alert
+          type="error"
+          show-icon
+      >
+        <template #message>
+          <div style="font-weight: bold">
+            您购买的车票不支持选座
+          </div>
+        </template>
+        <template #icon>
+          <smile-outlined/>
+        </template>
+        <template #description>
+          <div style="color: #e24444">
+            <div>12306规则：只有全部是一等座或全部是二等座才支持选座</div>
+          <div>12306规则：余票小于一定数量时，不允许选座（本项目以20为例）</div>
+          </div>
+        </template>
+      </a-alert>
     </div>
     <div v-else style="text-align: center">
       <a-switch class="choose-seat-item" v-for="item in SEAT_COL_ARRAY" :key="item.code"
@@ -102,13 +118,13 @@
       <div style="color: #999999; margin-top: 10px">提示：您可以选择{{ tickets.length }}个座位</div>
     </div>
     <br/>
-<!--    chooseSeatType = {{ chooseSeatType }}-->
-<!--    <a-divider/>-->
-<!--    chooseSeatObj = {{ chooseSeatObj }}-->
-<!--    <a-divider/>-->
-<!--    SEAT_COL_ARRAY = {{ SEAT_COL_ARRAY }}-->
-<!--    <a-divider/>-->
-<!--    tickets = {{tickets}}-->
+    <!--    chooseSeatType = {{ chooseSeatType }}-->
+    <!--    <a-divider/>-->
+    <!--    chooseSeatObj = {{ chooseSeatObj }}-->
+    <!--    <a-divider/>-->
+    <!--    SEAT_COL_ARRAY = {{ SEAT_COL_ARRAY }}-->
+    <!--    <a-divider/>-->
+    <!--    tickets = {{tickets}}-->
   </a-modal>
 
 </template>
