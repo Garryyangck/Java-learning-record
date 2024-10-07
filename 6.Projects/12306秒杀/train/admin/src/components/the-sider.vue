@@ -56,6 +56,11 @@
             业务管理
           </span>
         </template>
+        <a-menu-item key="/business/confirm-order">
+          <router-link to="/business/confirm-order">
+            <FormOutlined /> &nbsp; 订单信息
+          </router-link>
+        </a-menu-item>
         <a-menu-item key="/business/daily-train">
           <router-link to="/business/daily-train">
             <FormOutlined /> &nbsp; 每日火车

@@ -1,28 +1,34 @@
-package garry.train.business.pojo;
+package garry.train.business.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
  * 2024-10-07 19:53
  */
 @Data
-public class ConfirmOrder {
+public class ConfirmOrderQueryVo {
 
     /**
      * id
      */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
     /**
      * 会员id
      */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long memberId;
 
     /**
      * 日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date date;
 
     /**
@@ -43,6 +49,7 @@ public class ConfirmOrder {
     /**
      * 余票ID
      */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long dailyTrainTicketId;
 
     /**
@@ -58,11 +65,13 @@ public class ConfirmOrder {
     /**
      * 新增时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
     /**
      * 修改时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
 }
