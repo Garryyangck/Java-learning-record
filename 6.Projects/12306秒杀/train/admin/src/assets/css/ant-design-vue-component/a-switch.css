@@ -5,54 +5,48 @@
   border: 1px solid #4a90e2; /* 边框颜色，更饱和的天蓝色 */
   border-radius: 20px; /* 圆角边框 */
   transition: all 0.3s ease; /* 平滑过渡效果 */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* 内阴影效果 */
 }
 
 /* 当开关处于激活状态时的样式 */
 .ant-switch-checked {
   background-color: #4a90e2; /* 开关激活时的背景颜色，更饱和 */
   border-color: #096dd9; /* 开关激活时的边框颜色，更饱和 */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); /* 内阴影效果 */
 }
 
-/* 开关内部的小圆点（滑块）的样式 */
+/* 开关内部的文字样式 */
 .ant-switch-inner {
   font-size: 12px; /* 字体大小 */
+  transition: color 0.3s ease; /* 文字颜色过渡效果 */
 }
 
 /* 未激活状态下的文字颜色 */
 .ant-switch:not(.ant-switch-checked) .ant-switch-inner {
   color: #000; /* 文字颜色为黑色 */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5); /* 文字阴影 */
 }
 
-/* 激活状态下的文字颜色保持为白色 */
+/* 激活状态下的文字颜色 */
 .ant-switch-checked .ant-switch-inner {
   color: #fff; /* 文字颜色为白色 */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* 文字阴影 */
 }
 
 /* 开关滑块的样式 */
 .ant-switch-handle {
   width: 18px; /* 滑块宽度 */
   height: 18px; /* 滑块高度 */
-  background-color: #fff; /* 滑块背景颜色，白色 */
+  background-color: #ccc; /* 滑块背景颜色，灰色 */
+  border: 1px solid #ccc; /* 滑块边框颜色，灰色 */
   border-radius: 50%; /* 滑块圆角 */
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2); /* 滑块阴影效果 */
   transition: all 0.3s ease; /* 平滑过渡效果 */
 }
 
 /* 当开关处于激活状态时滑块的样式 */
-.ant-switch-handle::before {
-  background: linear-gradient(to right, #096dd9, #4a90e2); /* 渐变背景，更饱和 */
-  border-radius: 50%; /* 圆角 */
-  content: ''; /* 伪元素内容为空 */
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transition: all 0.3s ease; /* 平滑过渡效果 */
-}
-
-/* 当开关处于激活状态时，滑块的阴影效果 */
 .ant-switch-checked .ant-switch-handle {
+  border-color: #096dd9; /* 滑块边框颜色 */
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3); /* 阴影效果更明显 */
 }
 
@@ -61,15 +55,18 @@
   background-color: #e6e6e6; /* 禁用状态的背景颜色，更深一些 */
   border-color: #c2c2c2; /* 禁用状态的边框颜色，更深一些 */
   cursor: not-allowed; /* 禁用状态的鼠标样式 */
+  box-shadow: none; /* 移除阴影效果 */
 }
 
 /* 开关处于禁用状态时滑块的样式 */
 .ant-switch-disabled .ant-switch-handle {
   background-color: #e6e6e6; /* 滑块背景颜色，更深一些 */
+  border-color: #c2c2c2; /* 滑块边框颜色 */
   box-shadow: none; /* 移除阴影效果 */
 }
 
 /* 开关处于禁用状态时内部文字的样式 */
 .ant-switch-disabled .ant-switch-inner {
   color: rgba(0, 0, 0, 0.25); /* 文字颜色 */
+  text-shadow: none; /* 移除文字阴影 */
 }
