@@ -26,7 +26,7 @@
         transform: scale(1); /* 初始和结束状态为原始大小 */
     }
     50% {
-        transform: scale(1.05); /* 动画中间时轻微放大 */
+        transform: scale(1.1); /* 动画中间时轻微放大 */
     }
 }
 
