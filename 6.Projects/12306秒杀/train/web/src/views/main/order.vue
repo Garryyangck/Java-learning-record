@@ -102,9 +102,13 @@
       <div style="color: #999999; margin-top: 10px">提示：您可以选择{{ tickets.length }}个座位</div>
     </div>
     <br/>
-    chooseSeatType = {{chooseSeatType}}
-    chooseSeatObj = {{chooseSeatObj}}
-    SEAT_COL_ARRAY = {{ SEAT_COL_ARRAY}}
+<!--    chooseSeatType = {{ chooseSeatType }}-->
+<!--    <a-divider/>-->
+<!--    chooseSeatObj = {{ chooseSeatObj }}-->
+<!--    <a-divider/>-->
+<!--    SEAT_COL_ARRAY = {{ SEAT_COL_ARRAY }}-->
+<!--    <a-divider/>-->
+<!--    tickets = {{tickets}}-->
   </a-modal>
 
 </template>
@@ -155,6 +159,7 @@ export default defineComponent({
     //   passengerName: "张三",
     //   passengerIdCard: "12323132132",
     //   seatTypeCode: "1",
+    //   seat: "A1"
     // }
     const tickets = ref([]);
     const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
@@ -215,7 +220,30 @@ export default defineComponent({
     };
 
     const handleOk = () => {
+      console.log("选好的座位：", chooseSeatObj.value);
 
+      // 设置每张票的座位
+      // 先清空购票列表的座位，有可能之前选了并设置座位了，但选座数不对被拦截了，又重新选一遍
+      for (let i = 0; i < tickets.value.length; i++) {
+        tickets.value[i].seat = null;
+      }
+      let chooseSeatCount = 0; // 用户实际选择的座位数
+      for (let key in chooseSeatObj.value) {
+        if (chooseSeatObj.value[key]) { // { A1: false, C1: true... }
+          chooseSeatCount++;
+          if (chooseSeatCount > tickets.value.length) {
+            notification.error({description: '所选座位数大于购票数'});
+            return;
+          }
+          tickets.value[chooseSeatCount - 1].seat = key; // 为每一个选择的乘车人，赋予一个选择的座位
+        }
+      }
+      if (chooseSeatCount > 0 && chooseSeatCount < tickets.value.length) {
+        notification.error({description: '所选座位数小于购票数'});
+        return;
+      }
+
+      console.log("最终购票：", tickets.value);
     };
 
     const finishCheckPassenger = () => {
@@ -283,6 +311,11 @@ export default defineComponent({
               }
             }
           }
+        }
+
+        // 解决上一次座位的选择，在新打开一个 modal 后仍然显示的问题
+        for (let key in chooseSeatObj.value) {
+          chooseSeatObj.value[key] = false;
         }
       }
 
