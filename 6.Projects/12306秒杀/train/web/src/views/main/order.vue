@@ -21,6 +21,7 @@
   <a-divider/>
   <a-checkbox-group v-model:value="passengerChecks" :options="passengerOptions"/>
   <br/>
+
   <div class="order-tickets">
     <a-row class="order-tickets-header" v-if="tickets.length > 0">
       <a-col :span="3">乘客</a-col>
@@ -56,7 +57,7 @@
   <a-modal v-model:visible="visible" title="请核对以下信息"
            style="top: 50px; width: 800px"
            ok-text="确认" cancel-text="取消"
-           @ok="showFirstImageCodeModal">
+           @ok="handleOk">
     <div class="order-tickets">
       <a-row class="order-tickets-header" v-if="tickets.length > 0">
         <a-col :span="6">乘客</a-col>
@@ -83,12 +84,33 @@
         </a-col>
       </a-row>
     </div>
+    <br/>
+    <div v-if="chooseSeatType === 0" style="color: red;">
+      您购买的车票不支持选座
+      <div>12306规则：只有全部是一等座或全部是二等座才支持选座</div>
+      <div>12306规则：余票小于一定数量时，不允许选座（本项目以20为例）</div>
+    </div>
+    <div v-else style="text-align: center">
+      <a-switch class="choose-seat-item" v-for="item in SEAT_COL_ARRAY" :key="item.code"
+                v-model:checked="chooseSeatObj[item.code + '1']" :checked-children="item.desc"
+                :un-checked-children="item.desc"/>
+      <div v-if="tickets.length > 1">
+        <a-switch class="choose-seat-item" v-for="item in SEAT_COL_ARRAY" :key="item.code"
+                  v-model:checked="chooseSeatObj[item.code + '2']" :checked-children="item.desc"
+                  :un-checked-children="item.desc"/>
+      </div>
+      <div style="color: #999999; margin-top: 10px">提示：您可以选择{{ tickets.length }}个座位</div>
+    </div>
+    <br/>
+    chooseSeatType = {{chooseSeatType}}
+    chooseSeatObj = {{chooseSeatObj}}
+    SEAT_COL_ARRAY = {{ SEAT_COL_ARRAY}}
   </a-modal>
 
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref, watch} from 'vue';
+import {computed, defineComponent, onMounted, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 
@@ -140,7 +162,7 @@ export default defineComponent({
 
     // 勾选或去掉某个乘客时，在购票列表中加上或去掉一张表
     watch(() => passengerChecks.value, (newVal, oldVal) => {
-      console.log("勾选乘客发生变化", oldVal, newVal);
+      console.log("勾选乘客发生变化(oldVal, newVal)", oldVal, newVal);
       // 每次有变化时，把购票列表清空，重新构造列表
       tickets.value = [];
       passengerChecks.value.forEach((item) => tickets.value.push({
@@ -150,6 +172,28 @@ export default defineComponent({
         passengerName: item.name,
         passengerIdCard: item.idCard,
       }));
+    }, {immediate: true});
+
+    // 0: 不支持选座；1: 一等座；2: 二等座
+    const chooseSeatType = ref(0);
+    // 支持选座的列，类似于[{code:"A",desc:"A",type:"1"},{code:"C",desc:"C",type:"1"},{code:"D",desc:"D",type:"1"},{code:"F",desc:"F",type:"1"}]
+    const SEAT_COL_ARRAY = computed(() => { // 使用 computed，只有上面的 chooseSeatType 变化，才会发生变化
+      return window.SEAT_COL_ARRAY.filter((item) => item.type === chooseSeatType.value);
+    });
+    // 选择的座位
+    // {
+    //   A1: false, C1: true，D1: false, F1: false
+    //   A2: false, C2: false，D2: true, F2: false
+    // }
+    const chooseSeatObj = ref({});
+    watch(() => SEAT_COL_ARRAY.value, () => {
+      chooseSeatObj.value = {};
+      for (let i = 1; i <= 2; i++) {
+        SEAT_COL_ARRAY.value.forEach((item) => {
+          chooseSeatObj.value[item.code + i] = false;
+        })
+      }
+      console.log("初始化两排座位，都是未选中：", chooseSeatObj.value);
     }, {immediate: true});
 
     const handleQueryPassenger = () => {
@@ -170,12 +214,76 @@ export default defineComponent({
       })
     };
 
+    const handleOk = () => {
+
+    };
+
     const finishCheckPassenger = () => {
       console.log("购票列表：", tickets.value);
 
       if (tickets.value.length > 5) {
         notification.error({description: '最多只能购买5张车票'});
         return;
+      }
+      console.log('买票上限校验通过');
+
+      let seatTypesTemp = Tool.copy(seatTypes);
+      for (let i = 0; i < tickets.value.length; i++) {
+        for (let j = 0; j < seatTypesTemp.length; j++) {
+          let seatType = seatTypesTemp[j];
+          if (tickets.value[i].seatTypeCode === seatType.code) { // 这里tickets是const，必须加上value，否则直接tickets[i]会报错
+            if (--seatType.count < 0) {
+              notification.error({description: seatType.desc + '余票不足'});
+              return;
+            }
+          }
+        }
+      }
+      console.log('余票校验通过');
+
+      // 判断是否支持选座，只有纯一等座和纯二等座支持选座
+      // 先筛选出购票列表中的所有座位类型，比如四张表：[1, 1, 2, 2]
+      let ticketSeatTypeCodes = [];
+      for (let i = 0; i < tickets.value.length; i++) {
+        let ticket = tickets.value[i];
+        ticketSeatTypeCodes.push(ticket.seatTypeCode);
+      }
+
+      // 为购票列表中的所有座位类型去重：[1, 2]
+      const ticketSeatTypeCodesSet = Array.from(new Set(ticketSeatTypeCodes));
+      console.log("选好的座位类型：", ticketSeatTypeCodesSet);
+
+      if (ticketSeatTypeCodesSet.length !== 1) {
+        console.log("选了多种座位，不支持选座");
+        chooseSeatType.value = 0;
+      } else {
+        // ticketSeatTypeCodesSet.length === 1，即只选择了一种座位（不是一个座位，是一种座位）
+        if (ticketSeatTypeCodesSet[0] === SEAT_TYPE.YDZ.code) {
+          console.log("一等座选座");
+          chooseSeatType.value = SEAT_TYPE.YDZ.code;
+        } else if (ticketSeatTypeCodesSet[0] === SEAT_TYPE.EDZ.code) {
+          console.log("二等座选座");
+          chooseSeatType.value = SEAT_TYPE.EDZ.code;
+        } else {
+          console.log("不是一等座或二等座，不支持选座");
+          chooseSeatType.value = 0;
+        }
+
+        // 余票小于20张时，不允许选座，否则选座成功率不高，影响出票
+        if (chooseSeatType.value !== 0) {
+          for (let i = 0; i < seatTypes.length; i++) {
+            let seatType = seatTypes[i];
+            // 找到同类型座位
+            if (chooseSeatType.value === seatType.code) {
+              // 判断余票，小于20张就不支持选座
+              if (seatType.count < 20) {
+                console.log(seatType.desc + "余票小于20张，不支持选座")
+                chooseSeatType.value = 0;
+                break;
+              }
+            }
+          }
+        }
       }
 
       // 弹出确认界面
@@ -195,7 +303,11 @@ export default defineComponent({
       tickets,
       PASSENGER_TYPE_ARRAY,
       visible,
+      chooseSeatType,
+      chooseSeatObj,
+      SEAT_COL_ARRAY,
       finishCheckPassenger,
+      handleOk,
     };
   },
 });
