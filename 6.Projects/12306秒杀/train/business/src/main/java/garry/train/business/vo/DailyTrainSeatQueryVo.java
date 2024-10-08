@@ -1,14 +1,15 @@
 package garry.train.business.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
- * 2024-09-28 20:53
+ * 2024-10-09 00:00
  */
 @Data
 public class DailyTrainSeatQueryVo {
@@ -56,11 +57,6 @@ public class DailyTrainSeatQueryVo {
     private Integer carriageSeatIndex;
 
     /**
-     * 售卖情况|将经过的车站用01拼接，0表示可卖，1表示已卖
-     */
-    private String sell;
-
-    /**
      * 新增时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
@@ -71,5 +67,10 @@ public class DailyTrainSeatQueryVo {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
+
+    /**
+     * 售卖情况|将经过的车站用01拼接，0表示可卖，1表示已卖
+     */
+    private String sell;
 
 }

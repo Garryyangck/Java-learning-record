@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * @author Garry
- * 2024-09-28 20:53
+ * 2024-10-09 00:00
  */
 public interface DailyTrainSeatService {
     /**

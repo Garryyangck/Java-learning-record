@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Garry
- * 2024-09-28 20:53
+ * 2024-10-09 00:00
  */
 @RestController
 @RequestMapping(value = "/admin/daily-train-seat")

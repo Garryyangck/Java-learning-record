@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.form.DailyTrainSeatQueryForm;
@@ -15,6 +16,7 @@ import garry.train.business.pojo.Train;
 import garry.train.business.pojo.TrainSeat;
 import garry.train.business.service.DailyTrainSeatService;
 import garry.train.business.service.TrainSeatService;
+import garry.train.business.service.TrainService;
 import garry.train.business.service.TrainStationService;
 import garry.train.business.vo.DailyTrainSeatQueryVo;
 import garry.train.common.util.CommonUtil;
@@ -25,15 +27,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * @author Garry
- * 2024-09-28 20:53
+ * 2024-10-09 00:00
  */
 @Slf4j
 @Service
 public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
+    @Resource
+    private TrainService trainService;
+
     @Resource
     private TrainSeatService trainSeatService;
 
@@ -89,6 +95,22 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
         PageInfo<DailyTrainSeat> pageInfo = new PageInfo<>(dailyTrainSeats);
         List<DailyTrainSeatQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), DailyTrainSeatQueryVo.class);
 
+        // 将 DailyTrainSeatQueryVo.sell(String) 从 "0"(Integer) 改为 BinaryString
+        // 注意，BinaryString 的长度应该为车次车站数 - 1，如果不够，需要向左补 '0'
+        // 为了解决 trainCode 为空，全查出来时，各个不同车次 sell 长度不同的问题，可以先查一个 map，然后 stream 中通过 map 查对应的 len
+        HashMap<String/*trainCode*/, Integer/*binaryStringLen*/> map = new HashMap<>(); // <trainCode, binaryStringLen>
+        List<Train> trains = trainService.selectAll();
+        for (Train train : trains) {
+            int binaryStringLen = trainStationService.queryByTrainCode(train.getCode()).size() - 1;
+            map.put(train.getCode(), binaryStringLen);
+        }
+        voList = voList.stream()
+                .peek(vo -> vo.setSell(StrUtil.fillBefore(
+                        Integer.toBinaryString(Integer.parseInt(vo.getSell())),
+                        '0',
+                        map.get(vo.getTrainCode())))
+                ).toList();
+
         // 获取 PageVo 对象
         PageVo<DailyTrainSeatQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
         vo.setList(voList);
@@ -116,9 +138,6 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
         for (TrainSeat trainSeat : trainSeats) {
             DailyTrainSeat dailyTrainSeat = BeanUtil.copyProperties(trainSeat, DailyTrainSeat.class);
             dailyTrainSeat.setDate(date);
-            // sell 字段不能为空，赋值为一连串 0，个数等于 count(TrainStation + 1)
-//            int len = trainStationService.queryByTrainCode(train.getCode()).size() - 1;
-//            dailyTrainSeat.setSell(StrUtil.fillBefore("", '0', len));
             dailyTrainSeat.setSell(0); // 初始座位情况肯定是 int(0)
             dailyTrainSeat.setId(null); // 防止跑到修改去了
             dailyTrainSeat.setCreateTime(null);

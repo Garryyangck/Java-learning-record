@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
- * 2024-09-28 20:53
+ * 2024-10-09 00:00
  */
 @Data
 public class DailyTrainSeatSaveForm {
@@ -62,12 +62,6 @@ public class DailyTrainSeatSaveForm {
     private Integer carriageSeatIndex;
 
     /**
-     * 售卖情况|将经过的车站用01拼接，0表示可卖，1表示已卖
-     */
-    @NotBlank(message = "【售卖情况】不能为空")
-    private String sell;
-
-    /**
      * 新增时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
@@ -78,5 +72,11 @@ public class DailyTrainSeatSaveForm {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
+
+    /**
+     * 售卖情况|将经过的车站用01拼接，0表示可卖，1表示已卖
+     */
+    @NotNull(message = "【售卖情况】不能为空")
+    private Integer sell;
 
 }
