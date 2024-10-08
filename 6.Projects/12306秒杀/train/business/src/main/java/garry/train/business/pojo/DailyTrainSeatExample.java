@@ -652,76 +652,6 @@ public class DailyTrainSeatExample {
             return (Criteria) this;
         }
 
-        public Criteria andSellIsNull() {
-            addCriterion("sell is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellIsNotNull() {
-            addCriterion("sell is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellEqualTo(String value) {
-            addCriterion("sell =", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellNotEqualTo(String value) {
-            addCriterion("sell <>", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellGreaterThan(String value) {
-            addCriterion("sell >", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellGreaterThanOrEqualTo(String value) {
-            addCriterion("sell >=", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellLessThan(String value) {
-            addCriterion("sell <", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellLessThanOrEqualTo(String value) {
-            addCriterion("sell <=", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellLike(String value) {
-            addCriterion("sell like", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellNotLike(String value) {
-            addCriterion("sell not like", value, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellIn(List<String> values) {
-            addCriterion("sell in", values, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellNotIn(List<String> values) {
-            addCriterion("sell not in", values, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellBetween(String value1, String value2) {
-            addCriterion("sell between", value1, value2, "sell");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellNotBetween(String value1, String value2) {
-            addCriterion("sell not between", value1, value2, "sell");
-            return (Criteria) this;
-        }
-
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -839,6 +769,66 @@ public class DailyTrainSeatExample {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellIsNull() {
+            addCriterion("sell is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellIsNotNull() {
+            addCriterion("sell is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellEqualTo(Integer value) {
+            addCriterion("sell =", value, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellNotEqualTo(Integer value) {
+            addCriterion("sell <>", value, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellGreaterThan(Integer value) {
+            addCriterion("sell >", value, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sell >=", value, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellLessThan(Integer value) {
+            addCriterion("sell <", value, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellLessThanOrEqualTo(Integer value) {
+            addCriterion("sell <=", value, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellIn(List<Integer> values) {
+            addCriterion("sell in", values, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellNotIn(List<Integer> values) {
+            addCriterion("sell not in", values, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellBetween(Integer value1, Integer value2) {
+            addCriterion("sell between", value1, value2, "sell");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellNotBetween(Integer value1, Integer value2) {
+            addCriterion("sell not between", value1, value2, "sell");
             return (Criteria) this;
         }
     }
