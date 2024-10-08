@@ -2,7 +2,7 @@ package garry.train.business.service;
 
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.ConfirmOrderQueryForm;
-import garry.train.business.form.ConfirmOrderSaveForm;
+import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.vo.ConfirmOrderQueryVo;
 
 /**
@@ -15,7 +15,7 @@ public interface ConfirmOrderService {
      * 如果 form.id = null，则为插入；
      * 如果 form.id != null，则为修改
      */
-    void save(ConfirmOrderSaveForm form);
+    void save(ConfirmOrderDoForm form);
 
     /**
      * 根据 memberId 查询所有的确认订单
@@ -27,4 +27,9 @@ public interface ConfirmOrderService {
      * 根据 id(主键) 删除确认订单
      */
     void delete(Long id);
+
+    /**
+     * 处理订票操作
+     */
+    void doConfirm(ConfirmOrderDoForm form);
 }

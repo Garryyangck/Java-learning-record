@@ -1,27 +1,23 @@
 package garry.train.business.form;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
 /**
  * @author Garry
  * 2024-10-07 19:53
  */
 @Data
-public class ConfirmOrderSaveForm {
-
-    /**
-     * id
-     */
-    private Long id;
+public class ConfirmOrderDoForm {
 
     /**
      * 会员id
      */
-    @NotNull(message = "【会员id】不能为空")
     private Long memberId;
 
     /**
@@ -58,25 +54,7 @@ public class ConfirmOrderSaveForm {
     /**
      * 车票
      */
-    @NotBlank(message = "【车票】不能为空")
-    private String tickets;
-
-    /**
-     * 订单状态|枚举[ConfirmOrderStatusEnum]
-     */
-    @NotBlank(message = "【订单状态】不能为空")
-    private String status;
-
-    /**
-     * 新增时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date updateTime;
+    @NotNull(message = "【车票】不能为空")
+    private List<ConfirmOrderTicketForm> tickets;
 
 }

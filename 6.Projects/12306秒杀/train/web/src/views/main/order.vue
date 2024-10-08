@@ -101,7 +101,7 @@
         <template #description>
           <div style="color: #e24444">
             <div>12306规则：只有全部是一等座或全部是二等座才支持选座</div>
-          <div>12306规则：余票小于一定数量时，不允许选座（本项目以20为例）</div>
+            <div>12306规则：余票小于一定数量时，不允许选座（本项目以20为例）</div>
           </div>
         </template>
       </a-alert>
@@ -260,6 +260,22 @@ export default defineComponent({
       }
 
       console.log("最终购票：", tickets.value);
+
+      axios.post("business/confirm-order/do", {
+        date: dailyTrainTicket.date,
+        trainCode: dailyTrainTicket.trainCode,
+        start: dailyTrainTicket.start,
+        end: dailyTrainTicket.end,
+        dailyTrainTicketId: dailyTrainTicket.id,
+        tickets: tickets.value,
+      }).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          notification.success({description: '下单成功'});
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
     };
 
     const finishCheckPassenger = () => {

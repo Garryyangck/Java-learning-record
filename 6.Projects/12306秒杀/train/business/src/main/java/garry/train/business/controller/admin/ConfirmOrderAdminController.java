@@ -1,7 +1,7 @@
 package garry.train.business.controller.admin;
 
 import garry.train.business.form.ConfirmOrderQueryForm;
-import garry.train.business.form.ConfirmOrderSaveForm;
+import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.service.ConfirmOrderService;
 import garry.train.business.vo.ConfirmOrderQueryVo;
 import garry.train.common.vo.PageVo;
@@ -24,7 +24,7 @@ public class ConfirmOrderAdminController {
      * 接收新增和修改确认订单的请求，如果 form.id = null，则为新增；反之为修改
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseVo save(@Valid @RequestBody ConfirmOrderSaveForm form) {
+    public ResponseVo save(@Valid @RequestBody ConfirmOrderDoForm form) {
         confirmOrderService.save(form);
         return ResponseVo.success();
     }

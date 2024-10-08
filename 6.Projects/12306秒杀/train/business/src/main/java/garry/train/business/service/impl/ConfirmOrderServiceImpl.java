@@ -8,7 +8,7 @@ import com.github.pagehelper.PageInfo;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.ConfirmOrderQueryForm;
-import garry.train.business.form.ConfirmOrderSaveForm;
+import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.mapper.ConfirmOrderMapper;
 import garry.train.business.pojo.ConfirmOrder;
 import garry.train.business.pojo.ConfirmOrderExample;
@@ -31,7 +31,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     private ConfirmOrderMapper confirmOrderMapper;
 
     @Override
-    public void save(ConfirmOrderSaveForm form) {
+    public void save(ConfirmOrderDoForm form) {
         ConfirmOrder confirmOrder = BeanUtil.copyProperties(form, ConfirmOrder.class);
         DateTime now = DateTime.now();
 
@@ -84,5 +84,32 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     @Override
     public void delete(Long id) {
         confirmOrderMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void doConfirm(ConfirmOrderDoForm form) {
+        // 业务数据校验，车次是否存在，车票是否存在，是否有余票，车次时间是否合法，tickets 是否 > 0，同一乘客不能购买同一车次
+
+        // 创建对象，插入 confirm_order 表，状态为初始
+
+        // 扣减余票，判断余票是否足够 (伪减少库存，并没有真的写入)
+
+        // 选座 (当然，要先根据 tickets 判断用户是否要选座)
+
+            // 遍历每一个车厢，首先找到 SeatType 符合的车厢
+
+                // 按座位顺序 (index) 遍历车厢的座位，先找到第一个 SeatCol.code 正确的座位
+                // 然后判断其 start ~ end 是否被卖出 TODO 为了提高效率，把 sell 换为 int 类型，进行二进制数的位运算进行判断
+                // 没有卖出则判断是否选 > 1 个座位，如果是则寻找从当前座位开始的两排内，是否满足所有选座条件
+                // 不满足则返回第一个正确座位的 index，继续向后遍历，直到找到新的正确座位，或者遍历完该车厢
+
+        // 遍历完所有车厢也没有找到合适选座，或不选座，则自动分配座位 (同一车厢，顺序分配未卖出的座位)
+
+        // 选完所有座位后 trx (事务) 处理
+
+            // daily_train_seat 修改 sell 售卖情况
+            // daily_train_ticket 修改余票数
+            // (member)ticket 增加用户购票的记录
+            // confirm_order 修改状态为成功
     }
 }
