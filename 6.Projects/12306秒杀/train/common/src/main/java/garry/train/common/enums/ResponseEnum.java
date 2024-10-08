@@ -73,6 +73,8 @@ public enum ResponseEnum {
     BUSINESS_DUPLICATE_DAILY_TRAIN_TICKET_DATE_TRAIN_CODE_START_END(29, "该日该车次该起点终点站车票已存在"),
 
     MEMBER_EXCEED_PASSENGER_LIMIT(30, "乘车人总数不能超过上限" + CommonConst.PASSENGER_LIMIT),
+
+    BUSINESS_SELL_FAILED_LACK_OF_TICKETS(31, "售票失败，该座位票已售出"),
     ;
 
     private final Integer code;

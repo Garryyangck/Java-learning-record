@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.form.DailyTrainSeatQueryForm;
@@ -18,6 +17,7 @@ import garry.train.business.service.DailyTrainSeatService;
 import garry.train.business.service.TrainSeatService;
 import garry.train.business.service.TrainService;
 import garry.train.business.service.TrainStationService;
+import garry.train.business.util.SellUtil;
 import garry.train.business.vo.DailyTrainSeatQueryVo;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
@@ -105,9 +105,8 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
             map.put(train.getCode(), binaryStringLen);
         }
         voList = voList.stream()
-                .peek(vo -> vo.setSell(StrUtil.fillBefore(
-                        Integer.toBinaryString(Integer.parseInt(vo.getSell())),
-                        '0',
+                .peek(vo -> vo.setSell(SellUtil.getBinaryString(
+                        Integer.parseInt(vo.getSell()),
                         map.get(vo.getTrainCode())))
                 ).toList();
 
