@@ -68,6 +68,8 @@ public class SellUtil {
         System.out.println(getBinaryString(sell, 4));
         System.out.println(isSold(sell, 2, 3));
         System.out.println(isSold(sell, 3, 4));
-        sell(sell, 1, 5);
+        System.out.println(isSold(sell, 1, 3));
+        System.out.println(isSold(sell, 3, 5));
+        System.out.println(isSold(sell, 1, 5));
     }
 }
