@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.form.DailyTrainSeatQueryForm;
@@ -118,8 +117,9 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
             DailyTrainSeat dailyTrainSeat = BeanUtil.copyProperties(trainSeat, DailyTrainSeat.class);
             dailyTrainSeat.setDate(date);
             // sell 字段不能为空，赋值为一连串 0，个数等于 count(TrainStation + 1)
-            int len = trainStationService.queryByTrainCode(train.getCode()).size() - 1;
-            dailyTrainSeat.setSell(StrUtil.fillBefore("", '0', len));
+//            int len = trainStationService.queryByTrainCode(train.getCode()).size() - 1;
+//            dailyTrainSeat.setSell(StrUtil.fillBefore("", '0', len));
+            dailyTrainSeat.setSell(0); // 初始座位情况肯定是 int(0)
             dailyTrainSeat.setId(null); // 防止跑到修改去了
             dailyTrainSeat.setCreateTime(null);
             dailyTrainSeat.setUpdateTime(null);
