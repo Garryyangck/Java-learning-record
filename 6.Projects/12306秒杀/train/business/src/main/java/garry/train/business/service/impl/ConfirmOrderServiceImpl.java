@@ -286,13 +286,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
                                 DailyTrainSeat dailyTrainSeat = carriageSeats.stream()
                                         .filter(carriageSeat -> carriageSeat.getCarriageSeatIndex().equals(seatsIndex))
                                         .toList().get(0);
-                                SeatChosen seatChosen = BeanUtil.copyProperties(form, SeatChosen.class);
-                                seatChosen.setTicket(form.getTickets().get(i));
-                                seatChosen.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
-                                seatChosen.setRow(dailyTrainSeat.getRow());
-                                seatChosen.setCol(dailyTrainSeat.getCol());
-                                seatChosen.setSeatType(dailyTrainSeat.getSeatType());
-                                seatChosen.setCarriageSeatIndex(dailyTrainSeat.getCarriageSeatIndex());
+                                SeatChosen seatChosen = getSeatChosen(form, i, dailyTrainSeat);
                                 seatChosenList.add(seatChosen);
                             }
 
@@ -336,13 +330,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             for (int i = 0; i < chosenSeatsIndex.size(); i++) {
                 Integer index = chosenSeatsIndex.get(i);
                 DailyTrainSeat dailyTrainSeat = seatList.get(index);
-                SeatChosen seatChosen = BeanUtil.copyProperties(form, SeatChosen.class);
-                seatChosen.setTicket(form.getTickets().get(i));
-                seatChosen.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
-                seatChosen.setRow(dailyTrainSeat.getRow());
-                seatChosen.setCol(dailyTrainSeat.getCol());
-                seatChosen.setSeatType(dailyTrainSeat.getSeatType());
-                seatChosen.setCarriageSeatIndex(dailyTrainSeat.getCarriageSeatIndex());
+                SeatChosen seatChosen = getSeatChosen(form, i, dailyTrainSeat);
                 seatChosenList.add(seatChosen);
             }
 
@@ -351,5 +339,19 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         }
 
         return seatChosenList;
+    }
+
+    /**
+     * @param i tickets 的顺序，也是遍历 chosenSeatsIndex 的 i
+     */
+    private SeatChosen getSeatChosen(ConfirmOrderDoForm form, int i, DailyTrainSeat dailyTrainSeat) {
+        SeatChosen seatChosen = BeanUtil.copyProperties(form, SeatChosen.class);
+        seatChosen.setTicket(form.getTickets().get(i));
+        seatChosen.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
+        seatChosen.setRow(dailyTrainSeat.getRow());
+        seatChosen.setCol(dailyTrainSeat.getCol());
+        seatChosen.setSeatType(dailyTrainSeat.getSeatType());
+        seatChosen.setCarriageSeatIndex(dailyTrainSeat.getCarriageSeatIndex());
+        return seatChosen;
     }
 }
