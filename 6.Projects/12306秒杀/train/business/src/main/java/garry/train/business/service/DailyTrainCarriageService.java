@@ -42,4 +42,9 @@ public interface DailyTrainCarriageService {
      * 校验唯一键
      */
     List<DailyTrainCarriage> queryByDateAndTrainCodeAndIndex(Date date, String trainCode, Integer index);
+
+    /**
+     * 一次性查出 date, trainCode 下的所有车厢，以便遍历
+     */
+    List<DailyTrainCarriage> queryByDateAndTrainCode(Date date, String trainCode);
 }

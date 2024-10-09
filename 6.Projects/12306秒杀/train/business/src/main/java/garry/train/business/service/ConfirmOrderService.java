@@ -1,10 +1,12 @@
 package garry.train.business.service;
 
-import garry.train.business.pojo.ConfirmOrder;
-import garry.train.common.vo.PageVo;
-import garry.train.business.form.ConfirmOrderQueryForm;
 import garry.train.business.form.ConfirmOrderDoForm;
+import garry.train.business.form.ConfirmOrderQueryForm;
+import garry.train.business.form.ConfirmOrderTicketForm;
+import garry.train.business.pojo.ConfirmOrder;
 import garry.train.business.vo.ConfirmOrderQueryVo;
+import garry.train.common.vo.PageVo;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +16,70 @@ import java.util.List;
  * 2024-10-07 19:53
  */
 public interface ConfirmOrderService {
+
+    /**
+     * 用于处理选座相关的业务，并提供相关字段
+     */
+    @Data
+    class SeatChosen {
+
+        /**
+         * 会员id
+         */
+        private Long memberId;
+
+        /**
+         * 日期
+         */
+        private Date date;
+
+        /**
+         * 车次编号
+         */
+        private String trainCode;
+
+        /**
+         * 出发站
+         */
+        private String start;
+
+        /**
+         * 到达站
+         */
+        private String end;
+
+        /**
+         * 乘客的座位需求
+         */
+        private ConfirmOrderTicketForm ticket;
+
+        /**
+         * 箱序
+         */
+        private Integer carriageIndex;
+
+        /**
+         * 排号|01, 02
+         */
+        private String row;
+
+        /**
+         * 列号|枚举[SeatColEnum]
+         */
+        private String col;
+
+        /**
+         * 座位类型|枚举[SeatTypeEnum]
+         */
+        private String seatType;
+
+        /**
+         * 同车箱座序
+         */
+        private Integer carriageSeatIndex;
+
+    }
+
     /**
      * 插入新确认订单，将其状态设置为 INIT
      */

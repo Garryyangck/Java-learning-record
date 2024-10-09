@@ -68,7 +68,7 @@ public class DailyTrainCarriageServiceImpl implements DailyTrainCarriageService 
     @Override
     public PageVo<DailyTrainCarriageQueryVo> queryList(DailyTrainCarriageQueryForm form) {
         DailyTrainCarriageExample dailyTrainCarriageExample = new DailyTrainCarriageExample();
-        dailyTrainCarriageExample.setOrderByClause("date desc, train_code asc, `index` asc"); // 最新更新的数据，最先被查出来
+        dailyTrainCarriageExample.setOrderByClause("date desc, train_code asc, `index` asc");
         DailyTrainCarriageExample.Criteria criteria = dailyTrainCarriageExample.createCriteria();
         // 注意用 isNotEmpty 而不是 isNotNUll，按照车次编号过滤
         if (ObjectUtil.isNotEmpty(form.getTrainCode())) {
@@ -127,10 +127,21 @@ public class DailyTrainCarriageServiceImpl implements DailyTrainCarriageService 
     @Override
     public List<DailyTrainCarriage> queryByDateAndTrainCodeAndIndex(Date date, String trainCode, Integer index) {
         DailyTrainCarriageExample dailyTrainCarriageExample = new DailyTrainCarriageExample();
+        dailyTrainCarriageExample.setOrderByClause("date desc, train_code asc, `index` asc");
         dailyTrainCarriageExample.createCriteria()
                 .andDateEqualTo(date)
                 .andTrainCodeEqualTo(trainCode)
                 .andIndexEqualTo(index);
+        return dailyTrainCarriageMapper.selectByExample(dailyTrainCarriageExample);
+    }
+
+    @Override
+    public List<DailyTrainCarriage> queryByDateAndTrainCode(Date date, String trainCode) {
+        DailyTrainCarriageExample dailyTrainCarriageExample = new DailyTrainCarriageExample();
+        dailyTrainCarriageExample.setOrderByClause("date desc, train_code asc, `index` asc");
+        dailyTrainCarriageExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
         return dailyTrainCarriageMapper.selectByExample(dailyTrainCarriageExample);
     }
 }

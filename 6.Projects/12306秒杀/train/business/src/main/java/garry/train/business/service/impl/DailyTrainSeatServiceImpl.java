@@ -145,4 +145,13 @@ public class DailyTrainSeatServiceImpl implements DailyTrainSeatService {
         }
         log.info("已生成 【{}】 车次 【{}】 的所有每日座位", DateUtil.format(date, "yyyy-MM-dd"), train.getCode());
     }
+
+    @Override
+    public List<DailyTrainSeat> queryByDateAndTrainCode(Date date, String trainCode) {
+        DailyTrainSeatExample dailyTrainSeatExample = new DailyTrainSeatExample();
+        dailyTrainSeatExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
+        return dailyTrainSeatMapper.selectByExample(dailyTrainSeatExample);
+    }
 }

@@ -3,23 +3,22 @@ package garry.train.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
+import garry.train.business.enums.SeatColEnum;
 import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.form.ConfirmOrderQueryForm;
 import garry.train.business.form.ConfirmOrderTicketForm;
 import garry.train.business.mapper.ConfirmOrderMapper;
-import garry.train.business.pojo.ConfirmOrder;
-import garry.train.business.pojo.ConfirmOrderExample;
-import garry.train.business.pojo.DailyTrainTicket;
-import garry.train.business.pojo.Train;
-import garry.train.business.service.ConfirmOrderService;
-import garry.train.business.service.DailyTrainTicketService;
-import garry.train.business.service.TrainService;
+import garry.train.business.pojo.*;
+import garry.train.business.service.*;
+import garry.train.business.util.SellUtil;
 import garry.train.business.vo.ConfirmOrderQueryVo;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
@@ -29,10 +28,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +39,16 @@ import java.util.stream.Collectors;
 @Service
 public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     @Resource
-    private TrainService trainService;
+    private DailyTrainService dailyTrainService;
+
+    @Resource
+    private DailyTrainStationService dailyTrainStationService;
+
+    @Resource
+    private DailyTrainCarriageService dailyTrainCarriageService;
+
+    @Resource
+    private DailyTrainSeatService dailyTrainSeatService;
 
     @Resource
     private DailyTrainTicketService dailyTrainTicketService;
@@ -117,16 +122,9 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         // 创建对象，插入 confirm_order 表，状态为初始
         init(form);
 
-        // 选座 (当然，要先根据 tickets 判断用户是否要选座)
-
-            // 遍历每一个车厢，首先找到 SeatType 符合的车厢
-
-                // 按座位顺序 (index) 遍历车厢的座位，先找到第一个 SeatCol.code 正确的座位
-                // 然后判断其 start ~ end 是否被卖出 (为了提高效率，把 sell 换为 int 类型，进行二进制数的位运算进行判断)
-                // 没有卖出则判断是否选 > 1 个座位，如果是则寻找从当前座位开始的两排内，是否满足所有选座条件
-                // 不满足则返回第一个正确座位的 index，继续向后遍历，直到找到新的正确座位，或者遍历完该车厢
-
-        // 遍历完所有车厢也没有找到合适选座，或不选座，则自动分配座位 (同一车厢，顺序分配未卖出的座位)
+        // 选座
+        List<SeatChosen> seatChosenList = chooseSeat(form);
+        log.info("seatChosenList = {}", JSONUtil.toJsonPrettyStr(seatChosenList));
 
         // 选完所有座位后 trx (事务) 处理
 
@@ -155,7 +153,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
      */
     private boolean checkConfirmOrder(ConfirmOrderDoForm form) {
         // 车次是否存在
-        List<Train> trains = trainService.queryByCode(form.getTrainCode());
+        List<DailyTrain> trains = dailyTrainService.queryByDateAndCode(form.getDate(), form.getTrainCode());
         if (CollUtil.isEmpty(trains)) {
             log.info("车次不存在");
             return false;
@@ -208,5 +206,150 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
         log.info("订单校验成功");
         return true;
+    }
+
+    private List<SeatChosen> chooseSeat(ConfirmOrderDoForm form) {
+        ArrayList<SeatChosen> seatChosenList = new ArrayList<>();
+        Integer startIndex = dailyTrainStationService.queryByDateAndTrainCodeAndName(form.getDate(), form.getTrainCode(), form.getStart()).get(0).getIndex();
+        Integer endIndex = dailyTrainStationService.queryByDateAndTrainCodeAndName(form.getDate(), form.getTrainCode(), form.getEnd()).get(0).getIndex();
+        List<DailyTrainCarriage> trainCarriages = dailyTrainCarriageService.queryByDateAndTrainCode(form.getDate(), form.getTrainCode());
+        List<DailyTrainSeat> trainSeats = dailyTrainSeatService.queryByDateAndTrainCode(form.getDate(), form.getTrainCode());
+        ConfirmOrderTicketForm firstTicketForm = form.getTickets().get(0);
+
+        // 先根据 ticket.seat 判断用户是否要选座
+        if (StrUtil.isNotBlank(firstTicketForm.getSeat())) {
+            String firstSeat = firstTicketForm.getSeat(); // "A1"
+            String firstSeatCol = firstSeat.substring(0, 1); // "A"
+            int firstSeatRow = Integer.parseInt(firstSeat.substring(1)); // 1 相对排数
+            String seatTypeCode = firstTicketForm.getSeatTypeCode(); // "1" 一等座
+
+            // 遍历每一个车厢，首先找到 SeatType 符合的车厢
+            for (DailyTrainCarriage trainCarriage : trainCarriages) {
+                if (!seatTypeCode.equals(trainCarriage.getSeatType())) {
+                    continue;
+                }
+
+                List<String> colTypes = SeatColEnum.getColsByType(seatTypeCode).stream().map(SeatColEnum::getCode).toList(); // ["A", "C", "D", "F"]
+                List<DailyTrainSeat> carriageSeats = trainSeats.stream()
+                        .filter(trainSeat -> trainSeat.getCarriageIndex().equals(trainCarriage.getIndex()))
+                        .sorted(Comparator.comparingInt(DailyTrainSeat::getCarriageSeatIndex)).toList();
+
+                // 按座位顺序 (carriageSeatIndex) 遍历车厢的座位
+                for (int carriageSeatIndex = 1; carriageSeatIndex <= carriageSeats.size(); carriageSeatIndex++) {
+                    int row = (carriageSeatIndex - 1) / colTypes.size() + 1;
+                    int col = carriageSeatIndex - (row - 1) * colTypes.size();
+                    String colType = colTypes.get(col - 1); // 注意是 col - 1
+                    int finalCarriageSeatIndex = carriageSeatIndex;
+                    DailyTrainSeat seat = carriageSeats.stream()
+                            .filter(carriageSeat -> carriageSeat.getCarriageSeatIndex().equals(finalCarriageSeatIndex))
+                            .toList().get(0); // 第 carriageSeatIndex 位置的 dailySeat
+
+                    // 先找到第一个 SeatCol.code 正确的座位，并判断其 start ~ end 是否被卖出
+                    if (firstSeatCol.equals(colType)
+                            && !SellUtil.isSold(seat.getSell(), startIndex, endIndex)) {
+                        ArrayList<Integer> chosenSeatsIndex = new ArrayList<>();
+                        chosenSeatsIndex.add(carriageSeatIndex);
+                        int index = carriageSeatIndex; // 继续遍历的 index
+
+                        // 遍历不属于第一个乘客的 ticket
+                        for (int i = 1; i < form.getTickets().size(); i++) {
+                            String passengerSeat = form.getTickets().get(i).getSeat(); // 非第一个乘客的 ticket.seat "C2"
+                            String seatCol = passengerSeat.substring(0, 1); // "C"
+                            int seatRow = Integer.parseInt(passengerSeat.substring(1)); // 2
+                            int carriageSeatIndexLimit = Math.min((row + (seatRow - firstSeatRow)) * colTypes.size(), trainCarriage.getSeatCount()); // 该乘客可选座位的 carriageIndex 上限
+
+                            // 遍历该乘客可选的座位
+                            for (index = index + 1; index <= carriageSeatIndexLimit; index++) {
+                                int _row = (index - 1) / colTypes.size() + 1;
+                                int _col = index - (_row - 1) * colTypes.size();
+                                String _colType = colTypes.get(_col - 1);  // 注意是 _col - 1
+                                int finalIndex = index;
+                                DailyTrainSeat _seat = carriageSeats.stream()
+                                        .filter(carriageSeat -> carriageSeat.getCarriageSeatIndex().equals(finalIndex))
+                                        .toList().get(0); // 第 index 位置的 dailySeat
+
+                                // 判断其 seatCol，和 row 的相对位置，以及是否卖出
+                                if (seatCol.equals(_colType)
+                                        && ((_row - row) == (seatRow - firstSeatRow))
+                                        && !SellUtil.isSold(_seat.getSell(), startIndex, endIndex)) {
+                                    chosenSeatsIndex.add(index);
+                                    break;
+                                }
+                            }
+                        }
+
+                        // 遍历完其它所有乘客，检查 chosenSeatsIndex 选中的个数是否与 form.getTickets().size() 相等，相等则成功
+                        if (chosenSeatsIndex.size() == form.getTickets().size()) {
+                            // 构造 SeatChosen，return
+                            for (int i = 0; i < chosenSeatsIndex.size(); i++) {
+                                Integer seatsIndex = chosenSeatsIndex.get(i);
+                                DailyTrainSeat dailyTrainSeat = carriageSeats.stream()
+                                        .filter(carriageSeat -> carriageSeat.getCarriageSeatIndex().equals(seatsIndex))
+                                        .toList().get(0);
+                                SeatChosen seatChosen = BeanUtil.copyProperties(form, SeatChosen.class);
+                                seatChosen.setTicket(form.getTickets().get(i));
+                                seatChosen.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
+                                seatChosen.setRow(dailyTrainSeat.getRow());
+                                seatChosen.setCol(dailyTrainSeat.getCol());
+                                seatChosen.setSeatType(dailyTrainSeat.getSeatType());
+                                seatChosen.setCarriageSeatIndex(dailyTrainSeat.getCarriageSeatIndex());
+                                seatChosenList.add(seatChosen);
+                            }
+
+                            return seatChosenList;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 遍历完所有车厢也没有找到合适选座，或不选座，则自动分配座位 (从第一个车厢开始，分配遍历到的第一个没卖出的座位)
+        ArrayList<Integer> chosenSeatsIndex = new ArrayList<>();
+        List<DailyTrainSeat> seatList = trainSeats.stream()
+                .filter(trainSeat -> !SellUtil.isSold(trainSeat.getSell(), startIndex, endIndex))
+                .sorted((o1, o2) -> {
+                    if (!Objects.equals(o1.getCarriageIndex(), o2.getCarriageIndex())) {
+                        return o1.getCarriageIndex() - o2.getCarriageIndex();
+                    } else {
+                        return o1.getCarriageSeatIndex() - o2.getCarriageSeatIndex();
+                    }
+                }).toList(); // 没被卖出的座位
+
+        // 遍历每一个座位
+        for (int index = 0; index < seatList.size(); index++) {
+            DailyTrainSeat seat = seatList.get(index);
+
+            // 遍历每一个乘客
+            for (ConfirmOrderTicketForm ticketForm : form.getTickets()) {
+                String seatTypeCode = ticketForm.getSeatTypeCode();
+
+                if (seatTypeCode.equals(seat.getSeatType())) {
+                    chosenSeatsIndex.add(index);
+                    break;
+                }
+            }
+        }
+
+        // 遍历完所有乘客，检查 chosenSeatsIndex 选中的个数是否与 form.getTickets().size() 相等，相等则成功
+        if (chosenSeatsIndex.size() == form.getTickets().size()) {
+            // 构造 SeatChosen，return
+            for (int i = 0; i < chosenSeatsIndex.size(); i++) {
+                Integer index = chosenSeatsIndex.get(i);
+                DailyTrainSeat dailyTrainSeat = seatList.get(index);
+                SeatChosen seatChosen = BeanUtil.copyProperties(form, SeatChosen.class);
+                seatChosen.setTicket(form.getTickets().get(i));
+                seatChosen.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
+                seatChosen.setRow(dailyTrainSeat.getRow());
+                seatChosen.setCol(dailyTrainSeat.getCol());
+                seatChosen.setSeatType(dailyTrainSeat.getSeatType());
+                seatChosen.setCarriageSeatIndex(dailyTrainSeat.getCarriageSeatIndex());
+                seatChosenList.add(seatChosen);
+            }
+
+        } else {
+            throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHOOSE_SEAT_FAILED);
+        }
+
+        return seatChosenList;
     }
 }

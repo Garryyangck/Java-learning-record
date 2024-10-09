@@ -1,5 +1,6 @@
 package garry.train.business.service;
 
+import garry.train.business.pojo.DailyTrainSeat;
 import garry.train.business.pojo.Train;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.DailyTrainSeatQueryForm;
@@ -7,6 +8,7 @@ import garry.train.business.form.DailyTrainSeatSaveForm;
 import garry.train.business.vo.DailyTrainSeatQueryVo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Garry
@@ -35,4 +37,9 @@ public interface DailyTrainSeatService {
      * 生成 date 日，train 下的所有 seat
      */
     void genDaily(Date date, Train train);
+
+    /**
+     * 一次性查出 date, trainCode 下的所有座位，之后再通过 stream 进行筛选，减少查数据库的次数
+     */
+    List<DailyTrainSeat> queryByDateAndTrainCode(Date date, String trainCode);
 }
