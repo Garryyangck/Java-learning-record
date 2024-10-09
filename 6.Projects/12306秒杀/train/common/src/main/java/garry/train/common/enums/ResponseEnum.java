@@ -75,6 +75,10 @@ public enum ResponseEnum {
     MEMBER_EXCEED_PASSENGER_LIMIT(30, "乘车人总数不能超过上限" + CommonConst.PASSENGER_LIMIT),
 
     BUSINESS_SELL_FAILED_LACK_OF_TICKETS(31, "售票失败，该座位票已售出"),
+
+    BUSINESS_CONFIRM_ORDER_CHECK_FAILED(32, "订单校验失败"),
+
+    BUSINESS_CONFIRM_ORDER_LACK_OF_TICKETS(33, "余票不足，订单创建失败"),
     ;
 
     private final Integer code;

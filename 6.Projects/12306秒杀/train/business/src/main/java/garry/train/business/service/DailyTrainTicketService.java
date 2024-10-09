@@ -8,7 +8,9 @@ import garry.train.business.vo.DailyTrainTicketQueryVo;
 import garry.train.common.vo.PageVo;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Garry
@@ -38,5 +40,21 @@ public interface DailyTrainTicketService {
      */
     void genDaily(Date date, Train train);
 
+    /**
+     * 唯一键检验，和根据唯一键查询
+     */
     List<DailyTrainTicket> queryByDateAndTrainCodeAndStartAndEnd(Date date, String trainCode, String start, String end);
+
+    /**
+     * 获取 DailyTrainTicket 各个座位类型的余票的 map
+     * Map<String, Integer> => SeatTypeCode => RemainingNumber
+     */
+    static Map<String, Integer> getSeatCodeRemainNumMap(DailyTrainTicket dailyTrainTicket) {
+        HashMap<String, Integer> seatCodeRemainNumMap = new HashMap<>();
+        seatCodeRemainNumMap.put("1", dailyTrainTicket.getYdz());
+        seatCodeRemainNumMap.put("2", dailyTrainTicket.getEdz());
+        seatCodeRemainNumMap.put("3", dailyTrainTicket.getRw());
+        seatCodeRemainNumMap.put("4", dailyTrainTicket.getYw());
+        return seatCodeRemainNumMap;
+    }
 }
