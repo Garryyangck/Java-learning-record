@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -124,7 +123,6 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
         // 选座
         List<SeatChosen> seatChosenList = chooseSeat(form);
-        log.info("seatChosenList = {}", JSONUtil.toJsonPrettyStr(seatChosenList));
 
         // 选完所有座位后 trx (事务) 处理
 
@@ -222,6 +220,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             String firstSeatCol = firstSeat.substring(0, 1); // "A"
             int firstSeatRow = Integer.parseInt(firstSeat.substring(1)); // 1 相对排数
             String seatTypeCode = firstTicketForm.getSeatTypeCode(); // "1" 一等座
+            log.info("用户要选座，seatTypeCode = {}", seatTypeCode);
 
             // 遍历每一个车厢，首先找到 SeatType 符合的车厢
             for (DailyTrainCarriage trainCarriage : trainCarriages) {
@@ -290,6 +289,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
                                 seatChosenList.add(seatChosen);
                             }
 
+                            log.info("用户选座成功，seatChosenList = {}", seatChosenList);
                             return seatChosenList;
                         }
                     }
@@ -298,6 +298,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         }
 
         // 遍历完所有车厢也没有找到合适选座，或不选座，则自动分配座位 (从第一个车厢开始，分配遍历到的第一个没卖出的座位)
+        log.info("用户不选座，或选座失败");
         ArrayList<Integer> chosenSeatsIndex = new ArrayList<>();
         List<DailyTrainSeat> seatList = trainSeats.stream()
                 .filter(trainSeat -> !SellUtil.isSold(trainSeat.getSell(), startIndex, endIndex))
@@ -314,13 +315,22 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             DailyTrainSeat seat = seatList.get(index);
 
             // 遍历每一个乘客
-            for (ConfirmOrderTicketForm ticketForm : form.getTickets()) {
-                String seatTypeCode = ticketForm.getSeatTypeCode();
+            for (int ticketIndex = 0; ticketIndex < form.getTickets().size(); ticketIndex++) {
+                // 当前乘客已选座位，则 continue
+                if (chosenSeatsIndex.size() > ticketIndex) {
+                    continue;
+                }
 
+                String seatTypeCode = form.getTickets().get(ticketIndex).getSeatTypeCode();
                 if (seatTypeCode.equals(seat.getSeatType())) {
                     chosenSeatsIndex.add(index);
                     break;
                 }
+            }
+
+            // 如果已为每一个乘客选好座位，则直接 break
+            if (chosenSeatsIndex.size() == form.getTickets().size()) {
+                break;
             }
         }
 
@@ -338,6 +348,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHOOSE_SEAT_FAILED);
         }
 
+        log.info("系统自动分配的座位 seatChosenList = {}", seatChosenList);
         return seatChosenList;
     }
 
