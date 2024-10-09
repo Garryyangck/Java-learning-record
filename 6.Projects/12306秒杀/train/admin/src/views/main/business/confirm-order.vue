@@ -12,13 +12,29 @@
            @change="handleTableChange"
            :loading="loading">
     <template #bodyCell="{ column, record }">
-      <template v-if="column.dataIndex === 'operation'">
-      </template>
-      <template v-else-if="column.dataIndex === 'status'">
+      <template v-if="column.dataIndex === 'status'">
         <span v-for="item in CONFIRM_ORDER_STATUS_ARRAY" :key="item.code">
           <span v-if="item.code === record.status">
             {{item.desc}}
           </span>
+        </span>
+      </template>
+      <template v-if="column.dataIndex === 'tickets'">
+        <span v-for="item in record.tickets" :key="item.passengerId">
+          <div>
+            {{item.passengerName}}&nbsp;
+            <span v-for="passengerType in PASSENGER_TYPE_ARRAY" :key="passengerType.code">
+              <span v-if="passengerType.code === item.passengerType">
+                {{passengerType.desc}}
+              </span>
+            </span>&nbsp;
+            <span v-for="seatType in SEAT_TYPE_ARRAY" :key="seatType.code">
+              <span v-if="seatType.code === item.seatTypeCode">
+                {{seatType.desc}}
+              </span>
+            </span>&nbsp;
+            {{item.seat}}
+          </div>
         </span>
       </template>
     </template>
@@ -34,6 +50,8 @@ export default defineComponent({
   name: "confirm-order-view",
   setup() {
     const CONFIRM_ORDER_STATUS_ARRAY = window.CONFIRM_ORDER_STATUS_ARRAY;
+    const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
+    const SEAT_TYPE_ARRAY = window.SEAT_TYPE_ARRAY;
     const visible = ref(false);
     const confirmOrder = reactive({
       id: undefined,
@@ -57,7 +75,7 @@ export default defineComponent({
     let loading = ref(false);
     const columns = ref([
     {
-      title: '会员id',
+      title: '会员ID',
       dataIndex: 'memberId',
       key: 'memberId',
     },
@@ -81,11 +99,11 @@ export default defineComponent({
       dataIndex: 'end',
       key: 'end',
     },
-    {
-      title: '余票ID',
-      dataIndex: 'dailyTrainTicketId',
-      key: 'dailyTrainTicketId',
-    },
+    // {
+    //   title: '余票ID',
+    //   dataIndex: 'dailyTrainTicketId',
+    //   key: 'dailyTrainTicketId',
+    // },
     {
       title: '车票',
       dataIndex: 'tickets',
@@ -119,6 +137,9 @@ export default defineComponent({
         let responseVo = response.data;
         if (responseVo.success) {
           confirmOrders.value = responseVo.data.list;
+          confirmOrders.value.forEach(item => {
+            item.tickets = JSON.parse(item.tickets); // 将每一个 confirm-order 的 tickets 从 JSONStr 转换为对象
+          })
           pagination.value.total = responseVo.data.total;
           pagination.value.current = responseVo.data.pageNum;
           pagination.value.pageSize = responseVo.data.pageSize; // 让修改页面可行，否则即使修改为 50，查出来 50 条，还是只能显示 10 条
@@ -151,6 +172,8 @@ export default defineComponent({
 
     return {
       CONFIRM_ORDER_STATUS_ARRAY,
+      PASSENGER_TYPE_ARRAY,
+      SEAT_TYPE_ARRAY,
       visible,
       confirmOrder,
       confirmOrders,
