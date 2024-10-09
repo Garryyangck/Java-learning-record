@@ -79,6 +79,8 @@ public enum ResponseEnum {
     BUSINESS_CONFIRM_ORDER_CHECK_FAILED(32, "订单校验失败"),
 
     BUSINESS_CONFIRM_ORDER_LACK_OF_TICKETS(33, "余票不足，订单创建失败"),
+
+    BUSINESS_CONFIRM_ORDER_DUPLICATE_PASSENGER(34, "同一乘客不能购买同一车次"),
     ;
 
     private final Integer code;

@@ -3,7 +3,9 @@ package garry.train.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
@@ -30,6 +32,8 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Garry
@@ -188,10 +192,18 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         }
 
         // 同一乘客不能购买同一车次
+        Set<Long> passengerIdSet = form.getTickets().stream()
+                .map(ConfirmOrderTicketForm::getPassengerId).collect(Collectors.toSet());
         List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
-        if (CollUtil.isNotEmpty(confirmOrders)) {
-            log.info("同一乘客不能购买同一车次");
-            return false;
+        for (ConfirmOrder confirmOrder : confirmOrders) {
+            // 使用 fastjson，将 JSON 字符串转化为 List<ConfirmOrderTicketForm> 对象
+            List<ConfirmOrderTicketForm> ticketList = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {});
+            for (ConfirmOrderTicketForm ticketForm : ticketList) {
+                if (passengerIdSet.contains(ticketForm.getPassengerId())) {
+                    log.info("同一乘客不能购买同一车次");
+                    throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DUPLICATE_PASSENGER);
+                }
+            }
         }
 
         log.info("订单校验成功");
