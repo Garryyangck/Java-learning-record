@@ -223,4 +223,13 @@ public class DailyTrainTicketServiceMysqlImpl implements DailyTrainTicketService
                 .andEndEqualTo(end);
         return dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
     }
+
+    @Override
+    public List<DailyTrainTicket> queryByDateAndTrainCode(Date date, String trainCode) {
+        DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
+        dailyTrainTicketExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
+        return dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
+    }
 }

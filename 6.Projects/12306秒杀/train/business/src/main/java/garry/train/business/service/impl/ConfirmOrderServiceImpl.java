@@ -56,26 +56,38 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     @Resource
     private ConfirmOrderMapper confirmOrderMapper;
 
-    @Override
-    public void init(ConfirmOrderDoForm form) {
+    private ConfirmOrder save(ConfirmOrderDoForm form, ConfirmOrderStatusEnum statusEnum) {
         ConfirmOrder confirmOrder = BeanUtil.copyProperties(form, ConfirmOrder.class);
         DateTime now = DateTime.now();
 
-        // 插入时要看数据库有没有唯一键约束，在此校验唯一键约束，防止出现 DuplicationKeyException
-
-        // 对Id、createTime、updateTime 重新赋值
-        // 可能还需要重新赋值其它的字段，比如 ConfirmOrder.memberId
-        confirmOrder.setId(CommonUtil.getSnowflakeNextId());
-        confirmOrder.setMemberId(form.getMemberId());
-        confirmOrder.setCreateTime(now);
+        // 设置初始 status 以及 json 类型的 tickets
+        confirmOrder.setTickets(JSONObject.toJSONString(form.getTickets()));
+        confirmOrder.setStatus(statusEnum.getCode());
         confirmOrder.setUpdateTime(now);
 
-        // 设置初始 status 以及 json 类型的 tickets
-        confirmOrder.setStatus(ConfirmOrderStatusEnum.INIT.getCode());
-        confirmOrder.setTickets(JSONObject.toJSONString(form.getTickets()));
+        // 判断是新增还是修改
+        if (statusEnum.equals(ConfirmOrderStatusEnum.INIT)) {
+            // 插入时要看数据库有没有唯一键约束，在此校验唯一键约束，防止出现 DuplicationKeyException
 
-        confirmOrderMapper.insert(confirmOrder);
-        log.info("插入初始化确认订单：{}", confirmOrder);
+            // 为 id 和 createTime 赋值
+            confirmOrder.setId(CommonUtil.getSnowflakeNextId());
+            confirmOrder.setCreateTime(now);
+            confirmOrderMapper.insert(confirmOrder);
+        } else {
+            confirmOrderMapper.updateByPrimaryKeySelective(confirmOrder);
+        }
+        return confirmOrder;
+    }
+
+    private void init(ConfirmOrderDoForm form) {
+        ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
+        log.info("插入 INIT 订单：{}", confirmOrder);
+    }
+
+    private void success(ConfirmOrderDoForm form, Long id) {
+        form.setId(id);
+        ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.SUCCESS);
+        log.info("将订单状态修改为 SUCCESS：{}", confirmOrder);
     }
 
     @Override
@@ -375,11 +387,12 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     protected boolean handleSeatChosenList(List<SeatChosen> seatChosenList, ConfirmOrderDoForm form) {
         Integer startIndex = dailyTrainStationService.queryByDateAndTrainCodeAndName(form.getDate(), form.getTrainCode(), form.getStart()).get(0).getIndex();
         Integer endIndex = dailyTrainStationService.queryByDateAndTrainCodeAndName(form.getDate(), form.getTrainCode(), form.getEnd()).get(0).getIndex();
-        for (SeatChosen seatChosen : seatChosenList) {
-            String seatType = seatChosen.getSeatType();
+        List<DailyTrainSeat> dailyTrainSeats = dailyTrainSeatService.queryByDateAndTrainCode(form.getDate(), form.getTrainCode());
+        List<DailyTrainTicket> dailyTrainTickets = dailyTrainTicketService.queryByDateAndTrainCode(form.getDate(), form.getTrainCode());
 
+        for (SeatChosen seatChosen : seatChosenList) {
             // daily_train_seat 修改 sell 售卖情况
-            DailyTrainSeat dailyTrainSeat = dailyTrainSeatService.queryByDateAndTrainCode(form.getDate(), form.getTrainCode()).stream()
+            DailyTrainSeat dailyTrainSeat = dailyTrainSeats.stream()
                     .filter(trainSeat -> seatChosen.getCarriageIndex().equals(trainSeat.getCarriageIndex())
                             && seatChosen.getCarriageSeatIndex().equals(trainSeat.getCarriageSeatIndex()))
                     .toList().get(0);
@@ -389,43 +402,49 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             log.info("乘客 {} 的 daily_train_seat 修改 sell 售卖情况完成", seatChosen.getTicket().getPassengerName());
 
             // daily_train_ticket 修改余票数
-            DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.queryByDateAndTrainCodeAndStartAndEnd(form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd()).get(0);
-            DailyTrainTicketSaveForm ticketSaveForm = BeanUtil.copyProperties(dailyTrainTicket, DailyTrainTicketSaveForm.class);
-            switch (seatChosen.getSeatType()) {
-                case "1":
-                    ticketSaveForm.setYdz(ticketSaveForm.getYdz() - 1);
-                    break;
-                case "2":
-                    ticketSaveForm.setEdz(ticketSaveForm.getEdz() - 1);
-                    break;
-                case "3":
-                    ticketSaveForm.setRw(ticketSaveForm.getRw() - 1);
-                    break;
-                case "4":
-                    ticketSaveForm.setYw(ticketSaveForm.getYw() - 1);
-                    break;
-                default:
-                    break;
+            List<DailyTrainTicket> tickets = dailyTrainTickets.stream()
+                    .filter(dailyTrainTicket -> dailyTrainTicket.getStartIndex() >= startIndex
+                            && dailyTrainTicket.getEndIndex() <= endIndex).toList(); // startIndex, endIndex 之间的所有车站的票都要减少
+            for (DailyTrainTicket dailyTrainTicket : tickets) {
+                switch (seatChosen.getSeatType()) {
+                    case "1":
+                        dailyTrainTicket.setYdz(dailyTrainTicket.getYdz() - 1);
+                        break;
+                    case "2":
+                        dailyTrainTicket.setEdz(dailyTrainTicket.getEdz() - 1);
+                        break;
+                    case "3":
+                        dailyTrainTicket.setRw(dailyTrainTicket.getRw() - 1);
+                        break;
+                    case "4":
+                        dailyTrainTicket.setYw(dailyTrainTicket.getYw() - 1);
+                        break;
+                    default:
+                        break;
+                }
+                DailyTrainTicketSaveForm ticketSaveForm = BeanUtil.copyProperties(dailyTrainTicket, DailyTrainTicketSaveForm.class);
+                dailyTrainTicketService.save(ticketSaveForm);
             }
-            dailyTrainTicketService.save(ticketSaveForm);
             log.info("乘客 {} 的 daily_train_ticket 修改余票数完成", seatChosen.getTicket().getPassengerName());
 
             // TODO (member)ticket 增加用户购票的记录，还没有创建 ticket 表
             log.info("乘客 {} 的 (member)ticket 增加用户购票的记录完成", seatChosen.getTicket().getPassengerName());
-
-            // confirm_order 修改状态为成功
-            List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
-            for (ConfirmOrder confirmOrder : confirmOrders) {
-                // 根据 tickets 判断该 confirmOrder 是否是我们要找的 confirmOrder
-                if (JSONObject.toJSONString(form.getTickets()).equals(confirmOrder.getTickets())) {
-                    // 改为 ConfirmOrderStatusEnum.SUCCESS.getCode() TODO 写一个 success 方法，并把 init 方法的参数也换为 confirmOrder
-                    success(confirmOrder);
-                    break;
-                }
-            }
-            log.info("乘客 {} 的 confirm_order 修改状态为成功完成", seatChosen.getTicket().getPassengerName());
         }
 
+        // confirm_order 修改状态为成功 (不要放到循环里面，confirm_order 的状态只需要修改一次就可以了)
+        List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
+        for (ConfirmOrder confirmOrder : confirmOrders) {
+            // 根据 tickets 判断该 confirmOrder 是否是我们要找的 confirmOrder
+            List<ConfirmOrderTicketForm> ticketForms = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {
+            });
+            if (form.getTickets().equals(ticketForms)) {
+                // 修改对应订单的状态为 SUCCESS
+                success(form, confirmOrder.getId());
+                break;
+            }
+        }
+
+        log.info("confirm_order 修改状态为 SUCCESS 完成");
         return true;
     }
 

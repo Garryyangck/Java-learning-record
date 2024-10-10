@@ -16,6 +16,11 @@ import java.util.List;
 public class ConfirmOrderDoForm {
 
     /**
+     * id
+     */
+    private Long id;
+
+    /**
      * 会员id
      */
     private Long memberId;

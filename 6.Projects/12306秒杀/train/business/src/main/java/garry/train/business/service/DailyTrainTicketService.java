@@ -46,6 +46,11 @@ public interface DailyTrainTicketService {
     List<DailyTrainTicket> queryByDateAndTrainCodeAndStartAndEnd(Date date, String trainCode, String start, String end);
 
     /**
+     * 查出某一车次下所有的始末站的车票，以便减少它们的余票
+     */
+    List<DailyTrainTicket> queryByDateAndTrainCode(Date date, String trainCode);
+
+    /**
      * 获取 DailyTrainTicket 各个座位类型的余票的 map
      * Map<String, Integer> => SeatTypeCode => RemainingNumber
      */

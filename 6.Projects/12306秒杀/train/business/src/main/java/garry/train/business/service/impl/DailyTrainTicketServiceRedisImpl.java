@@ -225,4 +225,16 @@ public class DailyTrainTicketServiceRedisImpl implements DailyTrainTicketService
             list.add(dailyTrainTicket);
         return list;
     }
+
+    @Override
+    public List<DailyTrainTicket> queryByDateAndTrainCode(Date date, String trainCode) {
+        ArrayList<DailyTrainTicket> dailyTrainTickets = new ArrayList<>();
+        Set keys = redisTemplate.keys(RedisUtil.getRedisKey4DailyTicket(date, trainCode, null, null));
+        for (Object key : keys) {
+            String redisKey = (String) key;
+            DailyTrainTicket dailyTrainTicket = JSON.parseObject((String) redisTemplate.opsForValue().get(redisKey), DailyTrainTicket.class);
+            dailyTrainTickets.add(dailyTrainTicket);
+        }
+        return dailyTrainTickets;
+    }
 }

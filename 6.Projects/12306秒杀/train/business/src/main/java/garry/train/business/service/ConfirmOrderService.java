@@ -81,11 +81,6 @@ public interface ConfirmOrderService {
     }
 
     /**
-     * 插入新确认订单，将其状态设置为 INIT
-     */
-    void init(ConfirmOrderDoForm form);
-
-    /**
      * 根据 memberId 查询所有的确认订单
      * 如果 form.memberId = null，则为管理员查询
      */
