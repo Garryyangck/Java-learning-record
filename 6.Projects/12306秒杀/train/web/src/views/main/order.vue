@@ -356,6 +356,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      document.title = '购票页面';
       handleQueryPassenger();
     });
 
