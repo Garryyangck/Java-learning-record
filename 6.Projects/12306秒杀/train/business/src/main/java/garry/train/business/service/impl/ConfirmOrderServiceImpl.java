@@ -11,9 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
 import garry.train.business.enums.SeatColEnum;
-import garry.train.business.form.ConfirmOrderDoForm;
-import garry.train.business.form.ConfirmOrderQueryForm;
-import garry.train.business.form.ConfirmOrderTicketForm;
+import garry.train.business.form.*;
 import garry.train.business.mapper.ConfirmOrderMapper;
 import garry.train.business.pojo.*;
 import garry.train.business.service.*;
@@ -26,6 +24,9 @@ import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -112,6 +113,9 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW,
+            isolation = Isolation.REPEATABLE_READ,
+            rollbackFor = RuntimeException.class)
     public void doConfirm(ConfirmOrderDoForm form) {
         // 业务数据校验
         if (!checkConfirmOrder(form)) {
@@ -125,11 +129,9 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         List<SeatChosen> seatChosenList = chooseSeat(form);
 
         // 选完所有座位后 trx (事务) 处理
-
-            // daily_train_seat 修改 sell 售卖情况
-            // daily_train_ticket 修改余票数
-            // (member)ticket 增加用户购票的记录
-            // confirm_order 修改状态为成功
+        if (!handleSeatChosenList(seatChosenList, form)) {
+            throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_HANDLE_SEAT_CHOSEN_FAILED);
+        }
     }
 
     @Override
@@ -161,7 +163,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         List<DailyTrainTicket> dailyTrainTickets = dailyTrainTicketService.queryByDateAndTrainCodeAndStartAndEnd(form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
         if (CollUtil.isEmpty(dailyTrainTickets)) {
             log.info("车票不存在");
-           return false;
+            return false;
         }
 
         // 车次时间是否合法
@@ -193,7 +195,8 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
         for (ConfirmOrder confirmOrder : confirmOrders) {
             // 使用 fastjson，将 JSON 字符串转化为 List<ConfirmOrderTicketForm> 对象
-            List<ConfirmOrderTicketForm> ticketList = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {});
+            List<ConfirmOrderTicketForm> ticketList = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {
+            });
             for (ConfirmOrderTicketForm ticketForm : ticketList) {
                 if (passengerIdSet.contains(ticketForm.getPassengerId())) {
                     log.info("同一乘客不能购买同一车次");
@@ -206,6 +209,10 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         return true;
     }
 
+    /**
+     * 选座，全为一等座或二等座时会根据相对位置选座，选座必须在同一车厢
+     * 如果不能选座或选座失败，则自动分配符合 seatType 的座位
+     */
     private List<SeatChosen> chooseSeat(ConfirmOrderDoForm form) {
         ArrayList<SeatChosen> seatChosenList = new ArrayList<>();
         Integer startIndex = dailyTrainStationService.queryByDateAndTrainCodeAndName(form.getDate(), form.getTrainCode(), form.getStart()).get(0).getIndex();
@@ -350,6 +357,76 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
         log.info("系统自动分配的座位 seatChosenList = {}", seatChosenList);
         return seatChosenList;
+    }
+
+    /**
+     * 处理选座后的 List<SeatChosen> seatChosenList，包括：
+     * daily_train_seat 修改 sell 售卖情况
+     * daily_train_ticket 修改余票数
+     * (member)ticket 增加用户购票的记录
+     * confirm_order 修改状态为成功
+     * 需要进行事务处理
+     *
+     * @return 处理是否成功
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW,
+            isolation = Isolation.REPEATABLE_READ,
+            rollbackFor = RuntimeException.class)
+    protected boolean handleSeatChosenList(List<SeatChosen> seatChosenList, ConfirmOrderDoForm form) {
+        Integer startIndex = dailyTrainStationService.queryByDateAndTrainCodeAndName(form.getDate(), form.getTrainCode(), form.getStart()).get(0).getIndex();
+        Integer endIndex = dailyTrainStationService.queryByDateAndTrainCodeAndName(form.getDate(), form.getTrainCode(), form.getEnd()).get(0).getIndex();
+        for (SeatChosen seatChosen : seatChosenList) {
+            String seatType = seatChosen.getSeatType();
+
+            // daily_train_seat 修改 sell 售卖情况
+            DailyTrainSeat dailyTrainSeat = dailyTrainSeatService.queryByDateAndTrainCode(form.getDate(), form.getTrainCode()).stream()
+                    .filter(trainSeat -> seatChosen.getCarriageIndex().equals(trainSeat.getCarriageIndex())
+                            && seatChosen.getCarriageSeatIndex().equals(trainSeat.getCarriageSeatIndex()))
+                    .toList().get(0);
+            DailyTrainSeatSaveForm seatSaveForm = BeanUtil.copyProperties(dailyTrainSeat, DailyTrainSeatSaveForm.class);
+            seatSaveForm.setSell(SellUtil.sell(seatSaveForm.getSell(), startIndex, endIndex));
+            dailyTrainSeatService.save(seatSaveForm);
+            log.info("乘客 {} 的 daily_train_seat 修改 sell 售卖情况完成", seatChosen.getTicket().getPassengerName());
+
+            // daily_train_ticket 修改余票数
+            DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.queryByDateAndTrainCodeAndStartAndEnd(form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd()).get(0);
+            DailyTrainTicketSaveForm ticketSaveForm = BeanUtil.copyProperties(dailyTrainTicket, DailyTrainTicketSaveForm.class);
+            switch (seatChosen.getSeatType()) {
+                case "1":
+                    ticketSaveForm.setYdz(ticketSaveForm.getYdz() - 1);
+                    break;
+                case "2":
+                    ticketSaveForm.setEdz(ticketSaveForm.getEdz() - 1);
+                    break;
+                case "3":
+                    ticketSaveForm.setRw(ticketSaveForm.getRw() - 1);
+                    break;
+                case "4":
+                    ticketSaveForm.setYw(ticketSaveForm.getYw() - 1);
+                    break;
+                default:
+                    break;
+            }
+            dailyTrainTicketService.save(ticketSaveForm);
+            log.info("乘客 {} 的 daily_train_ticket 修改余票数完成", seatChosen.getTicket().getPassengerName());
+
+            // TODO (member)ticket 增加用户购票的记录，还没有创建 ticket 表
+            log.info("乘客 {} 的 (member)ticket 增加用户购票的记录完成", seatChosen.getTicket().getPassengerName());
+
+            // confirm_order 修改状态为成功
+            List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
+            for (ConfirmOrder confirmOrder : confirmOrders) {
+                // 根据 tickets 判断该 confirmOrder 是否是我们要找的 confirmOrder
+                if (JSONObject.toJSONString(form.getTickets()).equals(confirmOrder.getTickets())) {
+                    // 改为 ConfirmOrderStatusEnum.SUCCESS.getCode() TODO 写一个 success 方法，并把 init 方法的参数也换为 confirmOrder
+                    success(confirmOrder);
+                    break;
+                }
+            }
+            log.info("乘客 {} 的 confirm_order 修改状态为成功完成", seatChosen.getTicket().getPassengerName());
+        }
+
+        return true;
     }
 
     /**

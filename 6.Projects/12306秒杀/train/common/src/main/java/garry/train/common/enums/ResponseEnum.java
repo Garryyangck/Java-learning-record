@@ -83,6 +83,8 @@ public enum ResponseEnum {
     BUSINESS_CONFIRM_ORDER_DUPLICATE_PASSENGER(34, "同一乘客不能购买同一车次"),
 
     BUSINESS_CONFIRM_ORDER_CHOOSE_SEAT_FAILED(35, "选座失败，未能为所有乘客选到座位"),
+
+    BUSINESS_CONFIRM_ORDER_HANDLE_SEAT_CHOSEN_FAILED(36, "处理选座结果数据失败"),
     ;
 
     private final Integer code;
