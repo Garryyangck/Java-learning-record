@@ -96,7 +96,7 @@
           </div>
         </template>
         <template #icon>
-          <smile-outlined/>
+          <FrownOutlined />
         </template>
         <template #description>
           <div style="color: #e24444">

@@ -8,7 +8,7 @@
     >
       <a-menu-item key="/welcome">
         <router-link to="/welcome">
-          <coffee-outlined/> &nbsp; 欢迎
+          <HomeOutlined/> &nbsp; 欢迎
         </router-link>
       </a-menu-item>
       <a-menu-item key="/passenger">
@@ -18,7 +18,7 @@
       </a-menu-item>
       <a-menu-item key="/ticket">
         <router-link to="/ticket">
-          <user-outlined/> &nbsp; 余票查询
+          <EyeOutlined /> &nbsp; 余票查询
         </router-link>
       </a-menu-item>
     </a-menu>
