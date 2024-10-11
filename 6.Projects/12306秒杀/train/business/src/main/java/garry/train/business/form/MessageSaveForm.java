@@ -39,6 +39,7 @@ public class MessageSaveForm {
     /**
      * 消息内容
      */
+    @NotBlank(message = "【消息内容】不能为空")
     private String content;
 
     /**

@@ -219,7 +219,7 @@ create table `message` (
   `from_id` bigint not null comment '发出者id，系统消息则为0',
   `to_id` bigint not null comment '接收者id',
   `type` char not null comment '消息类型|枚举[MessageTypeEnum]',
-  `content` text null comment '消息内容',
+  `content` text not null comment '消息内容',
   `status` char not null comment '消息状态|枚举[MessageStatusEnum]',
   `create_time` datetime(3) comment '新增时间',
   `update_time` datetime(3) comment '修改时间',
