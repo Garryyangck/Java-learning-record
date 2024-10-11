@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, from_id, to_id, `type`, `status`, create_time, update_time
+    id, from_id, to_id, `type`, `content`, `status`, create_time, update_time
   </sql>
   <sql id="Blob_Column_List">
     content
