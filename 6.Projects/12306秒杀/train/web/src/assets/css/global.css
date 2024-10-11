@@ -14,6 +14,7 @@
 @import "ant-design-vue-component/a-notification.css";
 @import "ant-design-vue-component/a-switch.css";
 @import "ant-design-vue-component/a-badge.css";
+@import "ant-design-vue-component/a-list.css";
 
 :root {
     font-family: Arial, 'Segoe UI Emoji', sans-serif;
