@@ -13,6 +13,7 @@
 @import "ant-design-vue-component/a-popconfirm.css";
 @import "ant-design-vue-component/a-notification.css";
 @import "ant-design-vue-component/a-switch.css";
+@import "ant-design-vue-component/a-badge.css";
 
 :root {
     font-family: Arial, 'Segoe UI Emoji', sans-serif;

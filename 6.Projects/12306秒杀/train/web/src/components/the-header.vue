@@ -13,7 +13,7 @@
     >
       <a-menu-item key="/welcome">
         <router-link to="/welcome">
-          <HomeOutlined /> &nbsp; 欢迎
+          <HomeOutlined/> &nbsp; 欢迎
         </router-link>
       </a-menu-item>
       <a-menu-item key="/passenger">
@@ -23,15 +23,17 @@
       </a-menu-item>
       <a-menu-item key="/ticket">
         <router-link to="/ticket">
-          <EyeOutlined /> &nbsp; 余票查询
+          <EyeOutlined/> &nbsp; 余票查询
         </router-link>
       </a-menu-item>
     </a-menu>
     <div style="margin-left: auto; color: white;">
       <router-link to="/message">
-        <a-button style="margin-right: 10px">
-          <MessageOutlined /> &nbsp; 我的消息
-        </a-button>
+        <a-badge :dot="true">
+          <a-button style="margin-right: 10px">
+            <MessageOutlined/> &nbsp; 我的消息
+          </a-button>
+        </a-badge>
       </router-link>
       您好：{{ member.mobile }} &nbsp;&nbsp;
       <router-link to="/login" style="color: white;">

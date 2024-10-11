@@ -30,6 +30,10 @@ const routes = [
                 path: 'order',
                 component: () => import('../views/main/order.vue'),
             },
+            {
+                path: 'message',
+                component: () => import('../views/main/message.vue'),
+            },
         ]
     },
     {
