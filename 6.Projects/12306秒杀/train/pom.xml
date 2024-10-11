@@ -18,6 +18,7 @@
         <module>generator</module>
         <module>business</module>
         <module>batch</module>
+        <module>websocket</module>
     </modules>
 
     <!--配置信息-->
