@@ -43,6 +43,11 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--websocket，用于服务器主动给浏览器发消息，比如“我的消息”未读数-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
 
     </dependencies>
 

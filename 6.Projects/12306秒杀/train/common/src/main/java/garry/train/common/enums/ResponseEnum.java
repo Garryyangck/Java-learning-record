@@ -85,6 +85,8 @@ public enum ResponseEnum {
     BUSINESS_CONFIRM_ORDER_CHOOSE_SEAT_FAILED(35, "选座失败，未能为所有乘客选到座位"),
 
     BUSINESS_CONFIRM_ORDER_HANDLE_SEAT_CHOSEN_FAILED(36, "处理选座结果数据失败"),
+
+    BUSINESS_WEBSOCKET_MESSAGE_SEND_FAILED(37, "通过websocket发送消息失败"),
     ;
 
     private final Integer code;
