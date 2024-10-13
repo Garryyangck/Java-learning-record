@@ -52,4 +52,10 @@ public class MessageController {
         messageService.read(id);
         return ResponseVo.success();
     }
+
+    @RequestMapping(value = "/unread-number/{memberId}", method = RequestMethod.GET)
+    public ResponseVo<Integer> unReadNum(@PathVariable Long memberId) {
+        int unreadNum = messageService.getUnreadNum(memberId);
+        return ResponseVo.success(unreadNum);
+    }
 }

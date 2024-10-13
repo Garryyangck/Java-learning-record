@@ -1,3 +1,4 @@
+<!--suppress JSCheckFunctionSignatures -->
 <template>
   <a-layout-header class="header">
     <div class="logo">
@@ -29,7 +30,7 @@
     </a-menu>
     <div style="margin-left: auto; color: white;">
       <router-link to="/message">
-        <a-badge :dot="true">
+        <a-badge :count="unreadNum">
           <a-button style="margin-right: 10px">
             <MessageOutlined/> &nbsp; 我的消息
           </a-button>
@@ -46,16 +47,18 @@
 </template>
 
 <script>
-import {defineComponent, ref, watch} from 'vue';
+import {defineComponent, onMounted, ref, watch} from 'vue';
 import store from "@/store";
 import router from "@/router";
+import axios from "axios";
+import {notification} from "ant-design-vue";
 
 export default defineComponent({
   name: 'the-header-view',
   setup() {
     let member = store.state.member;
-
     const selectedKeys = ref(['/welcome']);
+    const unreadNum = ref(0);
 
     /**
      * 动态监视 router.currentRoute.value.path 的变化，变化时触发后面的函数
@@ -63,11 +66,31 @@ export default defineComponent({
     watch(() => router.currentRoute.value.path, (newValue) => {
       selectedKeys.value = [];
       selectedKeys.value.push(newValue);
+      axios.get("/business/message/unread-number/" + member.id).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          unreadNum.value = responseVo.data;
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      });
     }, {immediate: true});
+
+    onMounted(() => {
+      axios.get("/business/message/unread-number/" + member.id).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          unreadNum.value = responseVo.data;
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      });
+    });
 
     return {
       selectedKeys,
       member,
+      unreadNum,
     };
   },
 });

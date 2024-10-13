@@ -79,7 +79,7 @@
         </template>
         <a-row style="margin: 0">
           <span v-for="item in MESSAGE_TYPE_ARRAY" :key="item.code">
-            <span v-if="item.code === message.status">
+            <span v-if="item.code === message.type">
               {{ item.desc }}
             </span>
           </span>
@@ -93,7 +93,7 @@
         </template>
         <a-row style="margin: 0">
           <span v-for="item in MESSAGE_STATUS_ARRAY" :key="item.code">
-            <span v-if="item.code === message.type">
+            <span v-if="item.code === message.status">
               {{ item.desc }}
             </span>
           </span>
