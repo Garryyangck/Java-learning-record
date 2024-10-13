@@ -3,6 +3,7 @@ package garry.train.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -10,8 +11,6 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
-import garry.train.business.enums.MessageStatusEnum;
-import garry.train.business.enums.MessageTypeEnum;
 import garry.train.business.enums.SeatColEnum;
 import garry.train.business.form.*;
 import garry.train.business.mapper.ConfirmOrderMapper;
@@ -19,7 +18,6 @@ import garry.train.business.pojo.*;
 import garry.train.business.service.*;
 import garry.train.business.util.SellUtil;
 import garry.train.business.vo.ConfirmOrderQueryVo;
-import garry.train.business.vo.MessageSendVo;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
@@ -151,16 +149,15 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_HANDLE_SEAT_CHOSEN_FAILED);
         }
 
-        // 给前端发送消息，通知其选票成功
-        MessageSendVo sendVo = new MessageSendVo();
-        sendVo.setId(CommonUtil.getSnowflakeNextId());
-        sendVo.setFromId(0L);
-        sendVo.setToId(form.getMemberId());
-        sendVo.setType(MessageTypeEnum.SYSTEM_MESSAGE.getCode());
-        sendVo.setContent("订票成功");
-        sendVo.setStatus(MessageStatusEnum.UNREAD.getCode());
-        sendVo.setUnreadNum(1);
-        messageService.sendMessage(sendVo, form.getMemberId());
+        // 给 websocket 发送消息，通知用户选票成功、未读消息数，并创建 Message 对象存入数据库
+        for (SeatChosen seatChosen : seatChosenList) {
+            String content = "您成功为乘客【%s】买到【%s】从【%s】开往【%s】的【%s】车次的车票：【%s号车厢，%s行%s列】。"
+                    .formatted(seatChosen.getTicket().getPassengerName(), DateUtil.format(seatChosen.getDate(), "yyyy-MM-dd"),
+                            seatChosen.getStart(), seatChosen.getEnd(),
+                            seatChosen.getTrainCode(), seatChosen.getCarriageIndex(),
+                            seatChosen.getRow(), seatChosen.getCol());
+            messageService.sendSystemMessage(form.getMemberId(), content);
+        }
     }
 
     @Override

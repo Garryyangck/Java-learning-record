@@ -1,6 +1,5 @@
 package garry.train.business.service;
 
-import garry.train.business.vo.MessageSendVo;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.MessageQueryForm;
 import garry.train.business.form.MessageSaveForm;
@@ -30,7 +29,12 @@ public interface MessageService {
     void delete(Long id);
 
     /**
-     * 通过 websocket 发送消息
+     * 给 websocket 发送消息，通知用户选票成功、未读消息数，并创建 Message 对象存入数据库
      */
-    void sendMessage(MessageSendVo vo, Long memberId);
+    void sendSystemMessage(Long memberId, String content);
+
+    /**
+     * 查询用户的未读消息数
+     */
+    int getUnreadNum(Long toId);
 }

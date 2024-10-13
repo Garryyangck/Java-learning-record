@@ -5,6 +5,8 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import garry.train.business.enums.MessageStatusEnum;
+import garry.train.business.enums.MessageTypeEnum;
 import garry.train.business.form.MessageQueryForm;
 import garry.train.business.form.MessageSaveForm;
 import garry.train.business.mapper.MessageMapper;
@@ -13,6 +15,10 @@ import garry.train.business.pojo.MessageExample;
 import garry.train.business.service.MessageService;
 import garry.train.business.vo.MessageQueryVo;
 import garry.train.business.vo.MessageSendVo;
+import garry.train.business.websocket.WebSocketClient;
+import garry.train.common.consts.CommonConst;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
@@ -31,6 +37,9 @@ public class MessageServiceImpl implements MessageService {
     @Resource
     private MessageMapper messageMapper;
 
+    @Resource
+    private WebSocketClient webSocketClient;
+
     @Override
     public void save(MessageSaveForm form) {
         Message message = BeanUtil.copyProperties(form, Message.class);
@@ -45,11 +54,11 @@ public class MessageServiceImpl implements MessageService {
             message.setCreateTime(now);
             message.setUpdateTime(now);
             messageMapper.insert(message);
-            log.info("插入：{}", message);
+            log.info("插入消息：{}", message);
         } else { // 修改
             message.setUpdateTime(now);
             messageMapper.updateByPrimaryKeySelective(message);
-            log.info("修改：{}", message);
+            log.info("修改消息：{}", message);
         }
     }
 
@@ -77,7 +86,7 @@ public class MessageServiceImpl implements MessageService {
         // 获取 PageVo 对象
         PageVo<MessageQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
         vo.setList(voList);
-        vo.setMsg("查询列表成功");
+        vo.setMsg("查询消息列表成功");
         return vo;
     }
 
@@ -87,7 +96,34 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendMessage(MessageSendVo vo, Long memberId) {
+    public void sendSystemMessage(Long memberId, String content) {
+        // 创建 message 对象持久化
+        MessageSaveForm saveForm = new MessageSaveForm();
+        saveForm.setFromId(CommonConst.SystemId);
+        saveForm.setToId(memberId);
+        saveForm.setType(MessageTypeEnum.SYSTEM_MESSAGE.getCode());
+        saveForm.setContent(content);
+        saveForm.setStatus(MessageStatusEnum.UNREAD.getCode());
+        save(saveForm);
 
+        // 获取未读消息数
+        MessageSendVo sendVo = BeanUtil.copyProperties(saveForm, MessageSendVo.class);
+        sendVo.setUnreadNum(getUnreadNum(memberId));
+
+        // 给 websocket 服务器发送消息
+        try {
+            webSocketClient.sendMessage(sendVo);
+        } catch (Exception e) {
+            throw new BusinessException(ResponseEnum.BUSINESS_WEBSOCKET_MESSAGE_SEND_FAILED);
+        }
+    }
+
+    @Override
+    public int getUnreadNum(Long toId) {
+        MessageExample messageExample = new MessageExample();
+        messageExample.createCriteria()
+                .andToIdEqualTo(toId)
+                .andStatusEqualTo(MessageStatusEnum.UNREAD.getCode());
+        return messageMapper.selectByExample(messageExample).size();
     }
 }
