@@ -5,8 +5,6 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.MessageQueryForm;
 import garry.train.business.form.MessageSaveForm;
 import garry.train.business.mapper.MessageMapper;
@@ -14,6 +12,9 @@ import garry.train.business.pojo.Message;
 import garry.train.business.pojo.MessageExample;
 import garry.train.business.service.MessageService;
 import garry.train.business.vo.MessageQueryVo;
+import garry.train.business.vo.MessageSendVo;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -83,5 +84,10 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void delete(Long id) {
         messageMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void sendMessage(MessageSendVo vo, Long memberId) {
+
     }
 }

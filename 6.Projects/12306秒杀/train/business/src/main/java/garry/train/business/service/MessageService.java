@@ -1,5 +1,6 @@
 package garry.train.business.service;
 
+import garry.train.business.vo.MessageSendVo;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.MessageQueryForm;
 import garry.train.business.form.MessageSaveForm;
@@ -27,4 +28,9 @@ public interface MessageService {
      * 根据 id(主键) 删除
      */
     void delete(Long id);
+
+    /**
+     * 通过 websocket 发送消息
+     */
+    void sendMessage(MessageSendVo vo, Long memberId);
 }

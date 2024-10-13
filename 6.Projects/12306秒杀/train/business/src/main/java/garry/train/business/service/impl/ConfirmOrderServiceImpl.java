@@ -10,6 +10,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
+import garry.train.business.enums.MessageStatusEnum;
+import garry.train.business.enums.MessageTypeEnum;
 import garry.train.business.enums.SeatColEnum;
 import garry.train.business.form.*;
 import garry.train.business.mapper.ConfirmOrderMapper;
@@ -17,6 +19,7 @@ import garry.train.business.pojo.*;
 import garry.train.business.service.*;
 import garry.train.business.util.SellUtil;
 import garry.train.business.vo.ConfirmOrderQueryVo;
+import garry.train.business.vo.MessageSendVo;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
@@ -52,6 +55,9 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
     @Resource
     private DailyTrainTicketService dailyTrainTicketService;
+
+    @Resource
+    private MessageService messageService;
 
     @Resource
     private ConfirmOrderMapper confirmOrderMapper;
@@ -144,6 +150,17 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         if (!handleSeatChosenList(seatChosenList, form)) {
             throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_HANDLE_SEAT_CHOSEN_FAILED);
         }
+
+        // 给前端发送消息，通知其选票成功
+        MessageSendVo sendVo = new MessageSendVo();
+        sendVo.setId(CommonUtil.getSnowflakeNextId());
+        sendVo.setFromId(0L);
+        sendVo.setToId(form.getMemberId());
+        sendVo.setType(MessageTypeEnum.SYSTEM_MESSAGE.getCode());
+        sendVo.setContent("订票成功");
+        sendVo.setStatus(MessageStatusEnum.UNREAD.getCode());
+        sendVo.setUnreadNum(1);
+        messageService.sendMessage(sendVo, form.getMemberId());
     }
 
     @Override
