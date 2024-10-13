@@ -131,9 +131,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void read(Long id) {
+    public int read(Long id, Long memberId) {
         Message message = messageMapper.selectByPrimaryKey(id);
         message.setStatus(MessageStatusEnum.READ.getCode());
         messageMapper.updateByPrimaryKeySelective(message);
+        return getUnreadNum(memberId);
     }
 }

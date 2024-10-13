@@ -117,6 +117,7 @@
 import {defineComponent, onMounted, reactive, ref} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
+import store from "@/store";
 
 export default defineComponent({
   name: "message-view",
@@ -208,6 +209,9 @@ export default defineComponent({
             pageNum: 1,
             pageSize: pagination.value.pageSize,
           });
+          if (store.state.unreadNum !== responseVo.data) {
+            store.state.unreadNum = store.state.unreadNum - 1;
+          }
         } else {
           notification.error({description: responseVo.msg});
         }

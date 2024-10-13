@@ -48,9 +48,9 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/read/{id}", method = RequestMethod.POST)
-    public ResponseVo read(@PathVariable Long id) {
-        messageService.read(id);
-        return ResponseVo.success();
+    public ResponseVo<Integer> read(@PathVariable Long id) {
+        int unreadNum = messageService.read(id, hostHolder.getMemberId());
+        return ResponseVo.success(unreadNum);
     }
 
     @RequestMapping(value = "/unread-number/{memberId}", method = RequestMethod.GET)

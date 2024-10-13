@@ -4,7 +4,8 @@ const MEMBER = 'MEMBER';
 
 export default createStore({
   state: { // 定义全局变量
-    member: window.SessionStorage.get(MEMBER) || {}
+    member: window.SessionStorage.get(MEMBER) || {},
+    unreadNum: 0
   },
   getters: { // 定义全局变量的get方法
 
@@ -13,7 +14,7 @@ export default createStore({
     setMember (state, member) {
       state.member = member;
       window.SessionStorage.set(MEMBER, member);
-    }
+    },
   },
   actions: { // 定义异步方法
 

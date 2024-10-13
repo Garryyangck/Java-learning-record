@@ -53,6 +53,7 @@ import router from "@/router";
 import axios from "axios";
 import {notification} from "ant-design-vue";
 
+// TODO 加入 websocket 依赖，与 ws://localhost:999/ws/message/{memberId} 建立联系
 export default defineComponent({
   name: 'the-header-view',
   setup() {
@@ -69,18 +70,26 @@ export default defineComponent({
       axios.get("/business/message/unread-number/" + member.id).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
-          unreadNum.value = responseVo.data;
+          store.state.unreadNum = responseVo.data;
         } else {
           notification.error({description: responseVo.msg});
         }
       });
     }, {immediate: true});
 
+    watch(() => store.state.unreadNum, (newValue) => {
+      if (newValue < 0) {
+        unreadNum.value = 0;
+      } else {
+        unreadNum.value = newValue;
+      }
+    })
+
     onMounted(() => {
       axios.get("/business/message/unread-number/" + member.id).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
-          unreadNum.value = responseVo.data;
+          store.state.unreadNum = responseVo.data;
         } else {
           notification.error({description: responseVo.msg});
         }

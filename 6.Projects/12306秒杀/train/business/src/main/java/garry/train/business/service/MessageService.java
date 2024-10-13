@@ -41,5 +41,5 @@ public interface MessageService {
     /**
      * 修改状态为已读
      */
-    void read(Long id);
+    int read(Long id, Long memberId);
 }
