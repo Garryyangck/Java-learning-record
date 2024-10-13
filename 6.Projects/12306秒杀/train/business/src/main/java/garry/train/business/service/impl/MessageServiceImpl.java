@@ -129,4 +129,11 @@ public class MessageServiceImpl implements MessageService {
                 .andStatusEqualTo(MessageStatusEnum.UNREAD.getCode());
         return messageMapper.selectByExample(messageExample).size();
     }
+
+    @Override
+    public void read(Long id) {
+        Message message = messageMapper.selectByPrimaryKey(id);
+        message.setStatus(MessageStatusEnum.READ.getCode());
+        messageMapper.updateByPrimaryKeySelective(message);
+    }
 }

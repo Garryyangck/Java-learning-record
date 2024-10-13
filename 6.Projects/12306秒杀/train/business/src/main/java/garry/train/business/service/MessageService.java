@@ -37,4 +37,9 @@ public interface MessageService {
      * 查询用户的未读消息数
      */
     int getUnreadNum(Long toId);
+
+    /**
+     * 修改状态为已读
+     */
+    void read(Long id);
 }

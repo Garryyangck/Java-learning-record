@@ -46,4 +46,10 @@ public class MessageController {
         messageService.delete(id);
         return ResponseVo.success();
     }
+
+    @RequestMapping(value = "/read/{id}", method = RequestMethod.POST)
+    public ResponseVo read(@PathVariable Long id) {
+        messageService.read(id);
+        return ResponseVo.success();
+    }
 }

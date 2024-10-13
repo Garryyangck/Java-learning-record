@@ -3,7 +3,7 @@
   <p>
     <a-space>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
-      <a-button type="primary" @click="handleQuery()">全部标为已读</a-button> <!--TODO 全部标为已读-->
+      <a-button type="primary" @click="readAll()">全部标为已读</a-button>
     </a-space>
   </p>
   <a-list :dataSource="messages"
@@ -19,7 +19,7 @@
               <a-list-item-meta style="margin-left: 10px" @click="showModal(item)">
                 <template #title>
                   {{ type.desc }}
-                  <span v-if="item.type === MESSAGE_STATUS.UNREAD.code"
+                  <span v-if="MESSAGE_STATUS.UNREAD.code === item.status"
                         style="color: red; font-size: small"
                   >
                     【未读】
@@ -67,7 +67,7 @@
             系统
           </span>
           <span v-else>
-            {{message.fromId}}
+            {{ message.fromId }}
           </span>
         </a-row>
       </a-form-item>
@@ -80,7 +80,7 @@
         <a-row style="margin: 0">
           <span v-for="item in MESSAGE_TYPE_ARRAY" :key="item.code">
             <span v-if="item.code === message.status">
-              {{item.desc}}
+              {{ item.desc }}
             </span>
           </span>
         </a-row>
@@ -94,7 +94,7 @@
         <a-row style="margin: 0">
           <span v-for="item in MESSAGE_STATUS_ARRAY" :key="item.code">
             <span v-if="item.code === message.type">
-              {{item.desc}}
+              {{ item.desc }}
             </span>
           </span>
         </a-row>
@@ -106,7 +106,7 @@
           </a-row>
         </template>
         <a-row style="margin: 0">
-          {{message.content}}
+          {{ message.content }}
         </a-row>
       </a-form-item>
     </a-form>
@@ -197,6 +197,31 @@ export default defineComponent({
       message.createTime = record.createTime;
       message.updateTime = record.updateTime;
       visible.value = true;
+      read(record.id);
+    };
+
+    const read = (id) => {
+      axios.post("/business/message/read/" + id).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          handleQuery({
+            pageNum: 1,
+            pageSize: pagination.value.pageSize,
+          });
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
+    const readAll = () => {
+      messages.value.forEach((item) => {
+        read(item.id);
+      });
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
     };
 
     const onDelete = (record) => {
@@ -280,6 +305,7 @@ export default defineComponent({
       pagination,
       loading,
       showModal,
+      readAll,
       onDelete,
       handleOk,
       handleQuery,
