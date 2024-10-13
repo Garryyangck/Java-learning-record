@@ -3,7 +3,7 @@
   <p>
     <a-space>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
-      <a-button type="primary" @click="onAdd">新增</a-button>
+      <a-button type="primary" @click="handleQuery()">全部标为已读</a-button> <!--TODO 全部标为已读-->
     </a-space>
   </p>
   <a-list :dataSource="messages"
@@ -14,12 +14,39 @@
     <template #renderItem="{ item }">
       <span v-for="type in MESSAGE_TYPE_ARRAY" :key="type.code">
         <span v-if="type.code === item.type">
-          <li @click="onEdit(item)">
+          <li>
             <a-list-item>
-              <a-list-item-meta
-                :title="type.desc"
-                :description="item.content">
+              <a-list-item-meta style="margin-left: 10px" @click="onEdit(item)">
+                <template #title>
+                  {{ type.desc }}
+                  <span v-if="item.type === MESSAGE_STATUS.UNREAD.code"
+                        style="color: red; font-size: small"
+                  >
+                    【未读】
+                  </span>
+                  <span style="color: #8c8c8c; font-size: x-small">
+                    {{ item.updateTime }}
+                  </span>
+                </template>
+                <template #description>
+                  <div style="font-weight: bold">
+                    {{ item.content }}
+                  </div>
+                </template>
               </a-list-item-meta>
+              <div style="float: right; margin-right: 50px;">
+                <span style="color: #8c8c8c; font-size: x-small">
+                  操作：
+                </span>
+                <a-popconfirm
+                    title="删除后不可恢复，确认删除?"
+                    @confirm="onDelete(item)"
+                    ok-text="确认" cancel-text="取消">
+                      <a-button type="danger" size="small">
+                        删除
+                      </a-button>
+                </a-popconfirm>
+              </div>
             </a-list-item>
           </li>
         </span>
@@ -66,6 +93,7 @@ export default defineComponent({
   setup() {
     const MESSAGE_TYPE_ARRAY = window.MESSAGE_TYPE_ARRAY;
     const MESSAGE_STATUS_ARRAY = window.MESSAGE_STATUS_ARRAY;
+    const MESSAGE_STATUS = window.MESSAGE_STATUS;
     const visible = ref(false);
     const message = reactive({
       id: undefined,
@@ -78,7 +106,7 @@ export default defineComponent({
       updateTime: undefined,
     });
     const messages = ref([]);
-    const pagination = ref({
+    const pagination = ref({ // TODO 分页功能无效
       total: 0,
       current: 1,
       pageSize: 10,
@@ -116,17 +144,17 @@ export default defineComponent({
     //   }
     // ]);
 
-    const onAdd = () => {
-      message.id = undefined;
-      message.fromId = undefined;
-      message.toId = undefined;
-      message.type = undefined;
-      message.content = undefined;
-      message.status = undefined;
-      message.createTime = undefined;
-      message.updateTime = undefined;
-      visible.value = true;
-    };
+    // const onAdd = () => {
+    //   message.id = undefined;
+    //   message.fromId = undefined;
+    //   message.toId = undefined;
+    //   message.type = undefined;
+    //   message.content = undefined;
+    //   message.status = undefined;
+    //   message.createTime = undefined;
+    //   message.updateTime = undefined;
+    //   visible.value = true;
+    // };
 
     const onEdit = (record) => {
       message.id = record.id;
@@ -231,12 +259,12 @@ export default defineComponent({
     return {
       MESSAGE_TYPE_ARRAY,
       MESSAGE_STATUS_ARRAY,
+      MESSAGE_STATUS,
       visible,
       message,
       messages,
       pagination,
       loading,
-      onAdd,
       onEdit,
       onDelete,
       handleOk,
