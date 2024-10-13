@@ -56,11 +56,11 @@ public class WebSocketServer {
             webSocketMap.put(memberId, this);
             addOnlineCount();
         }
-        log.info("用户连接:{}，当前在线人数为:{}", memberId, getOnlineCount());
+        log.info("用户连接: {}，当前在线人数为: {}", memberId, getOnlineCount());
         try {
             sendMessage("连接成功");
         } catch (IOException e) {
-            log.error("用户:{}，网络异常!!!!!!", memberId);
+            log.error("用户: {} 网络异常，连接失败", memberId);
         }
     }
 
@@ -73,7 +73,7 @@ public class WebSocketServer {
             webSocketMap.remove(memberId);
             subOnlineCount();
         }
-        log.info("用户退出:{}，当前在线人数为:{}", memberId, getOnlineCount());
+        log.info("用户退出: {}，当前在线人数为: {}", memberId, getOnlineCount());
     }
 
     /**
@@ -83,7 +83,7 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        log.info("用户消息:{}，报文:{}", memberId, message);
+        log.info("用户消息: {}，报文: {}", memberId, message);
         if (StrUtil.isNotBlank(message)) {
             try {
                 JSONObject jsonObject = JSON.parseObject(message);
@@ -92,7 +92,7 @@ public class WebSocketServer {
                 if (ObjUtil.isNotNull(toId) && webSocketMap.containsKey(toId)) {
                     webSocketMap.get(toId).sendMessage(jsonObject.toJSONString());
                 } else {
-                    log.error("请求的 memberId:{} 不在该服务器上", toId);
+                    log.error("请求的 memberId: {} 不在该服务器上", toId);
                 }
             } catch (Exception e) {
                 log.error("message {} 参数解析错误", message);
@@ -105,7 +105,7 @@ public class WebSocketServer {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("用户错误:{}，原因:{}", this.memberId, error.getMessage());
+        log.error("用户错误: {}，原因: {}", this.memberId, error.getMessage());
     }
 
     /**
