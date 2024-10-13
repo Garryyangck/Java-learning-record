@@ -16,7 +16,7 @@
         <span v-if="type.code === item.type">
           <li>
             <a-list-item>
-              <a-list-item-meta style="margin-left: 10px" @click="onEdit(item)">
+              <a-list-item-meta style="margin-left: 10px" @click="showModal(item)">
                 <template #title>
                   {{ type.desc }}
                   <span v-if="item.type === MESSAGE_STATUS.UNREAD.code"
@@ -55,29 +55,59 @@
   </a-list>
   <a-modal v-model:visible="visible" title="消息详情" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
-    <a-form :model="message" :label-col="{span: 4}" :wrapper-col="{span: 18}">
-      <a-form-item label="发出者id，系统消息则为0">
-        <a-input v-model:value="message.fromId"/>
+    <a-form :model="message" :label-col="{span: 6}" :wrapper-col="{span: 18}">
+      <a-form-item>
+        <template #label>
+          <a-row>
+            发出者
+          </a-row>
+        </template>
+        <a-row style="margin: 0">
+          <span v-if="MESSAGE_TYPE.SYSTEM_MESSAGE.code === message.type">
+            系统
+          </span>
+          <span v-else>
+            {{message.fromId}}
+          </span>
+        </a-row>
       </a-form-item>
-      <a-form-item label="接收者id">
-        <a-input v-model:value="message.toId"/>
+      <a-form-item>
+        <template #label>
+          <a-row>
+            消息类型
+          </a-row>
+        </template>
+        <a-row style="margin: 0">
+          <span v-for="item in MESSAGE_TYPE_ARRAY" :key="item.code">
+            <span v-if="item.code === message.status">
+              {{item.desc}}
+            </span>
+          </span>
+        </a-row>
       </a-form-item>
-      <a-form-item label="消息类型">
-        <a-select v-model:value="message.type">
-          <a-select-option v-for="item in MESSAGE_TYPE_ARRAY" :key="item.code" :value="item.code">
-            {{ item.desc }}
-          </a-select-option>
-        </a-select>
+      <a-form-item>
+        <template #label>
+          <a-row>
+            消息状态
+          </a-row>
+        </template>
+        <a-row style="margin: 0">
+          <span v-for="item in MESSAGE_STATUS_ARRAY" :key="item.code">
+            <span v-if="item.code === message.type">
+              {{item.desc}}
+            </span>
+          </span>
+        </a-row>
       </a-form-item>
-      <a-form-item label="消息内容">
-        <a-input v-model:value="message.content"/>
-      </a-form-item>
-      <a-form-item label="消息状态">
-        <a-select v-model:value="message.status">
-          <a-select-option v-for="item in MESSAGE_STATUS_ARRAY" :key="item.code" :value="item.code">
-            {{ item.desc }}
-          </a-select-option>
-        </a-select>
+      <a-form-item>
+        <template #label>
+          <a-row>
+            消息内容
+          </a-row>
+        </template>
+        <a-row style="margin: 0">
+          {{message.content}}
+        </a-row>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -92,6 +122,7 @@ export default defineComponent({
   name: "message-view",
   setup() {
     const MESSAGE_TYPE_ARRAY = window.MESSAGE_TYPE_ARRAY;
+    const MESSAGE_TYPE = window.MESSAGE_TYPE;
     const MESSAGE_STATUS_ARRAY = window.MESSAGE_STATUS_ARRAY;
     const MESSAGE_STATUS = window.MESSAGE_STATUS;
     const visible = ref(false);
@@ -156,7 +187,7 @@ export default defineComponent({
     //   visible.value = true;
     // };
 
-    const onEdit = (record) => {
+    const showModal = (record) => {
       message.id = record.id;
       message.fromId = record.fromId;
       message.toId = record.toId;
@@ -184,25 +215,7 @@ export default defineComponent({
     };
 
     const handleOk = () => {
-      axios.post("/business/message/save", message).then((response) => {
-        let responseVo = response.data;
-        if (responseVo.success) {
-          handleQuery({
-            pageNum: 1,
-            pageSize: pagination.value.pageSize,
-          });
-          if (message.id === undefined)
-            notification.success({description: '新增成功'});
-          else
-            notification.success({description: '修改成功'});
-          visible.value = false;
-        } else {
-          let msgs = responseVo.msg.split('\n');
-          for (const msg of msgs) {
-            notification.error({description: msg});
-          }
-        }
-      })
+      visible.value = false;
     };
 
     const handleQuery = (param) => {
@@ -258,6 +271,7 @@ export default defineComponent({
 
     return {
       MESSAGE_TYPE_ARRAY,
+      MESSAGE_TYPE,
       MESSAGE_STATUS_ARRAY,
       MESSAGE_STATUS,
       visible,
@@ -265,7 +279,7 @@ export default defineComponent({
       messages,
       pagination,
       loading,
-      onEdit,
+      showModal,
       onDelete,
       handleOk,
       handleQuery,

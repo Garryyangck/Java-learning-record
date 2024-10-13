@@ -69,7 +69,8 @@ public class MessageServiceImpl implements MessageService {
         MessageExample.Criteria criteria = messageExample.createCriteria();
         // 用户只能查自己 memberId 下的
         if (ObjectUtil.isNotNull(form.getToId())) {
-            criteria.andToIdEqualTo(form.getToId());
+            criteria.andToIdEqualTo(form.getToId())
+                    .andStatusNotEqualTo(MessageStatusEnum.DELETE.getCode());
         }
 
         // 启动分页
@@ -92,7 +93,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void delete(Long id) {
-        messageMapper.deleteByPrimaryKey(id);
+        Message message = messageMapper.selectByPrimaryKey(id);
+        message.setStatus(MessageStatusEnum.DELETE.getCode());
+        messageMapper.updateByPrimaryKeySelective(message);
     }
 
     @Override

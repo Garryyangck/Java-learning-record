@@ -24,7 +24,7 @@ public interface MessageService {
     PageVo<MessageQueryVo> queryList(MessageQueryForm form);
 
     /**
-     * 根据 id(主键) 删除
+     * 根据 id(主键) 修改状态
      */
     void delete(Long id);
 
