@@ -10,11 +10,6 @@ import lombok.Data;
 public class MessageSendVo {
 
     /**
-     * id
-     */
-    private Long id;
-
-    /**
      * 发出者id，系统消息则为0
      */
     private Long fromId;

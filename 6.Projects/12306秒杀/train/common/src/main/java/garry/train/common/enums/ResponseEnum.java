@@ -87,6 +87,10 @@ public enum ResponseEnum {
     BUSINESS_CONFIRM_ORDER_HANDLE_SEAT_CHOSEN_FAILED(36, "处理选座结果数据失败"),
 
     BUSINESS_WEBSOCKET_MESSAGE_SEND_FAILED(37, "通过websocket发送消息失败"),
+
+    BUSINESS_WEBSOCKET_CONNECT_FAILED(38, "连接websocket失败"),
+
+    BUSINESS_WEBSOCKET_DISCONNECT_FAILED(39, "websocket断开连接失败"),
     ;
 
     private final Integer code;

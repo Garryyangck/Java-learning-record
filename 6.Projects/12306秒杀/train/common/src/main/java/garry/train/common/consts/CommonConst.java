@@ -48,4 +48,9 @@ public class CommonConst {
      * 每个会员持有的乘车人上限
      */
     public static final Integer PASSENGER_LIMIT = 50;
+
+    /**
+     * 系统的 id
+     */
+    public static final Long SystemId = 0L;
 }

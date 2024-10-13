@@ -25,3 +25,8 @@ logging:
       train:
         business:
           mapper: trace # garry.train.business.mapper下的日志等级设置为 trace，可以打印出 sql
+
+websocket:
+  message:
+    server:
+      uri: ws://localhost:9999/ws/message/ # 最后还要加一个 memberId
