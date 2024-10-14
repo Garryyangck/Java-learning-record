@@ -14,6 +14,10 @@ const routes = [
                 component: () => import('../views/main/about.vue'),
             },
             {
+                path: 'api',
+                component: () => import('../views/main/api.vue'),
+            },
+            {
                 path: 'base/',
                 children: [
                     {

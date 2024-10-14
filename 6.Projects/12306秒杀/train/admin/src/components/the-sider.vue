@@ -16,6 +16,11 @@
           <coffeeOutlined/> &nbsp; 关于
         </router-link>
       </a-menu-item>
+      <a-menu-item key="/api">
+        <router-link to="/api">
+          <BranchesOutlined /> &nbsp; 项目接口
+        </router-link>
+      </a-menu-item>
       <a-sub-menu key="base">
         <template #title>
           <span>
