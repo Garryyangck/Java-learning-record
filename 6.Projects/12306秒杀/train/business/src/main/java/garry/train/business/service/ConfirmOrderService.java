@@ -1,5 +1,6 @@
 package garry.train.business.service;
 
+import garry.train.business.enums.ConfirmOrderStatusEnum;
 import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.form.ConfirmOrderQueryForm;
 import garry.train.business.form.ConfirmOrderTicketForm;
@@ -79,6 +80,12 @@ public interface ConfirmOrderService {
         private Integer carriageSeatIndex;
 
     }
+
+    /**
+     * 如果 statusEnum 为 INIT，则新插入一条 status = INIT 的 confirmOrder
+     * 否则就是修改已有 confirmOrder 的状态
+     */
+    ConfirmOrder save(ConfirmOrderDoForm form, ConfirmOrderStatusEnum statusEnum);
 
     /**
      * 根据 memberId 查询所有的确认订单
