@@ -6,6 +6,7 @@
       <a-button type="primary" @click="readAll()">全部标为已读</a-button>
     </a-space>
   </p>
+
   <a-list :dataSource="messages"
           :pagination="pagination"
           @change="handleListChange"
@@ -14,45 +15,44 @@
     <template #renderItem="{ item }">
       <span v-for="type in MESSAGE_TYPE_ARRAY" :key="type.code">
         <span v-if="type.code === item.type">
-          <li>
-            <a-list-item>
-              <a-list-item-meta style="margin-left: 10px" @click="showModal(item)">
-                <template #title>
-                  {{ type.desc }}
-                  <span v-if="MESSAGE_STATUS.UNREAD.code === item.status"
-                        style="color: red; font-size: small"
-                  >
-                    【未读】
-                  </span>
-                  <span style="color: #8c8c8c; font-size: x-small">
-                    {{ item.updateTime }}
-                  </span>
-                </template>
-                <template #description>
-                  <div style="font-weight: bold">
-                    {{ item.content }}
-                  </div>
-                </template>
-              </a-list-item-meta>
-              <div style="float: right; margin-right: 50px;">
-                <span style="color: #8c8c8c; font-size: x-small">
-                  操作：
+          <a-list-item>
+            <a-list-item-meta style="margin-left: 10px" @click="showModal(item)">
+              <template #title>
+                {{ type.desc }}
+                <span v-if="MESSAGE_STATUS.UNREAD.code === item.status"
+                      style="color: red; font-size: small"
+                >
+                  【未读】
                 </span>
-                <a-popconfirm
-                    title="删除后不可恢复，确认删除?"
-                    @confirm="onDelete(item)"
-                    ok-text="确认" cancel-text="取消">
-                      <a-button type="danger" size="small">
-                        删除
-                      </a-button>
-                </a-popconfirm>
-              </div>
-            </a-list-item>
-          </li>
+                <span style="color: #8c8c8c; font-size: x-small">
+                  {{ item.updateTime }}
+                </span>
+              </template>
+              <template #description>
+                <div style="font-weight: bold">
+                  {{ item.content }}
+                </div>
+              </template>
+            </a-list-item-meta>
+            <div style="float: right; margin-right: 50px;">
+              <span style="color: #8c8c8c; font-size: x-small">
+                操作：
+              </span>
+              <a-popconfirm
+                  title="删除后不可恢复，确认删除?"
+                  @confirm="onDelete(item)"
+                  ok-text="确认" cancel-text="取消">
+                    <a-button type="danger" size="small">
+                      删除
+                    </a-button>
+              </a-popconfirm>
+            </div>
+          </a-list-item>
         </span>
       </span>
     </template>
   </a-list>
+
   <a-modal v-model:visible="visible" title="消息详情" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
     <a-form :model="message" :label-col="{span: 6}" :wrapper-col="{span: 18}">
@@ -105,8 +105,18 @@
             消息内容
           </a-row>
         </template>
+        <a-row style="margin: 0; font-weight: bold">
+          <div v-html="renderMessage(message.content)"/>
+        </a-row>
+      </a-form-item>
+      <a-form-item>
+        <template #label>
+          <a-row>
+            时间
+          </a-row>
+        </template>
         <a-row style="margin: 0">
-          {{ message.content }}
+          {{ message.updateTime }}
         </a-row>
       </a-form-item>
     </a-form>
@@ -290,6 +300,15 @@ export default defineComponent({
       });
     };
 
+    /**
+     * 利用正则表达式，将 【】 内部的内容加上标签
+     */
+    const renderMessage = (content) => {
+      const regex = /【(.*?)】/g;
+      return content.replace(regex, (match, p1) =>
+          `【<b style="color: rgb(24, 144, 255);">${p1}</b>】`);
+    };
+
     onMounted(() => {
       document.title = '我的消息';
       handleQuery({
@@ -314,6 +333,7 @@ export default defineComponent({
       handleOk,
       handleQuery,
       handleListChange,
+      renderMessage,
     };
   },
 });
