@@ -34,7 +34,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/member/register",
                         "/member/send-code",
                         "/member/login",
-                        "/admin/**"
+                        "/admin/**",
+                        "/feign/**"
                         );
     }
 }

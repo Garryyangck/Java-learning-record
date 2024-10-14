@@ -5,10 +5,8 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
-import garry.train.business.form.ConfirmOrderDoForm;
-import garry.train.business.form.ConfirmOrderTicketForm;
-import garry.train.business.form.DailyTrainSeatSaveForm;
-import garry.train.business.form.DailyTrainTicketSaveForm;
+import garry.train.business.feign.MemberFeign;
+import garry.train.business.form.*;
 import garry.train.business.pojo.ConfirmOrder;
 import garry.train.business.pojo.DailyTrainSeat;
 import garry.train.business.pojo.DailyTrainTicket;
@@ -55,6 +53,9 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
     @Resource
     private MessageService messageService;
 
+    @Resource
+    private MemberFeign memberFeign;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ, rollbackFor = RuntimeException.class)
     public boolean afterDoConfirm(List<ConfirmOrderService.SeatChosen> seatChosenList, ConfirmOrderDoForm form) {
@@ -100,7 +101,14 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
             }
             log.info("乘客 {} 的 daily_train_ticket 修改余票数完成", seatChosen.getTicket().getPassengerName());
 
-            // TODO (member)ticket 增加用户购票的记录，还没有创建 ticket 表
+            // (member)ticket 增加用户购票的记录，还没有创建 ticket 表
+            DailyTrainTicket dailyTrainTicket = dailyTrainTickets.stream()
+                    .filter(ticket -> ticket.getDate().equals(seatChosen.getDate())
+                            && ticket.getTrainCode().equals(seatChosen.getTrainCode())
+                            && ticket.getStart().equals(seatChosen.getStart())
+                            && ticket.getEnd().equals(seatChosen.getEnd())).toList().get(0);
+            TicketSaveForm ticketSaveForm = getTicketSaveForm(seatChosen, dailyTrainTicket);
+            memberFeign.save(ticketSaveForm);
             log.info("乘客 {} 的 (member)ticket 增加用户购票的记录完成", seatChosen.getTicket().getPassengerName());
         }
 
@@ -133,5 +141,23 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
         log.info("成功创建 message 入库，并通过 websocket 发送给前端浏览器");
 
         return true;
+    }
+
+    private static TicketSaveForm getTicketSaveForm(ConfirmOrderService.SeatChosen seatChosen, DailyTrainTicket dailyTrainTicket) {
+        TicketSaveForm ticketSaveForm = new TicketSaveForm();
+        ticketSaveForm.setMemberId(seatChosen.getMemberId());
+        ticketSaveForm.setPassengerId(seatChosen.getTicket().getPassengerId());
+        ticketSaveForm.setPassengerName(seatChosen.getTicket().getPassengerName());
+        ticketSaveForm.setTrainDate(seatChosen.getDate());
+        ticketSaveForm.setTrainCode(seatChosen.getTrainCode());
+        ticketSaveForm.setCarriageIndex(seatChosen.getCarriageIndex());
+        ticketSaveForm.setSeatRow(seatChosen.getRow());
+        ticketSaveForm.setSeatCol(seatChosen.getCol());
+        ticketSaveForm.setStartStation(seatChosen.getStart());
+        ticketSaveForm.setStartTime(dailyTrainTicket.getStartTime());
+        ticketSaveForm.setEndStation(seatChosen.getEnd());
+        ticketSaveForm.setEndTime(dailyTrainTicket.getEndTime());
+        ticketSaveForm.setSeatType(seatChosen.getSeatType());
+        return ticketSaveForm;
     }
 }
