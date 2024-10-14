@@ -128,6 +128,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
+    // TODO 把它换成异步的任务
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW,
             isolation = Isolation.REPEATABLE_READ,

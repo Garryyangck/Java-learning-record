@@ -260,6 +260,7 @@ export default defineComponent({
       }
 
       console.log("最终购票：", tickets.value);
+      visible.value = false;
 
       axios.post("business/confirm-order/do", {
         date: dailyTrainTicket.date,
@@ -271,7 +272,7 @@ export default defineComponent({
       }).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
-          notification.success({description: '下单成功'});
+          notification.success({description: '下单成功，请等待购票成功消息'});
         } else {
           notification.error({description: responseVo.msg});
         }

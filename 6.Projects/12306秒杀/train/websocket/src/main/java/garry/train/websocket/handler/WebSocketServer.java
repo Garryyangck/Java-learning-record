@@ -57,11 +57,6 @@ public class WebSocketServer {
             addOnlineCount();
         }
         log.info("用户连接: {}，当前在线人数为: {}", memberId, getOnlineCount());
-        try {
-            sendMessage("连接成功");
-        } catch (IOException e) {
-            log.error("用户: {} 网络异常，连接失败", memberId);
-        }
     }
 
     /**

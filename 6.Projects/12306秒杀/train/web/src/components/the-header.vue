@@ -53,7 +53,6 @@ import router from "@/router";
 import axios from "axios";
 import {notification} from "ant-design-vue";
 
-// TODO 加入 websocket 依赖，与 ws://localhost:999/ws/message/{memberId} 建立联系
 export default defineComponent({
   name: 'the-header-view',
   setup() {
@@ -83,7 +82,10 @@ export default defineComponent({
       } else {
         unreadNum.value = newValue;
       }
-    })
+    });
+
+    const url = 'ws://localhost:9999/ws/message/' + member.id;
+    const socket = ref(null);
 
     onMounted(() => {
       axios.get("/business/message/unread-number/" + member.id).then((response) => {
@@ -94,6 +96,22 @@ export default defineComponent({
           notification.error({description: responseVo.msg});
         }
       });
+
+      // 连接 websocket 服务器
+      socket.value = new WebSocket(url);
+      socket.value.onopen = () => {
+        console.log('WebSocket连接成功', url);
+      };
+      socket.value.onmessage = (event) => {
+        console.log('收到来自WebSocket服务器的消息', event);
+        store.state.unreadNum = JSON.parse(event.data).unreadNum;
+      };
+      socket.value.onclose = () => {
+        console.log('WebSocket断开连接', url);
+      };
+      socket.value.onerror = (error) => {
+        console.error('WebSocket连接出错:', error);
+      };
     });
 
     return {
