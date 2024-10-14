@@ -18,12 +18,12 @@ public class ApiDetailVo {
     /**
      * 接口的全路径
      */
-    private String FullApiPath;
+    private String fullApiPath;
 
     /**
      * 接口的类型 | GET, POST...
      */
-    private String ApiMethod;
+    private String apiMethod;
 
     /**
      * 模块名称

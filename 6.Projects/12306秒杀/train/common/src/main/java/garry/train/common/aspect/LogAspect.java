@@ -1,9 +1,9 @@
 package garry.train.common.aspect;
 
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import garry.train.common.pojo.ApiDetail;
+import garry.train.common.vo.ResponseVo;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -100,7 +100,11 @@ public class LogAspect {
         String apiMethod = request.getMethod();
         String moduleName = fullApiPath.split("/")[1];
         Long mills = executeMills;
-        Boolean success = JSONUtil.parseObj((String) result).get("success", Boolean.class);
+        Boolean success = false;
+        if (result instanceof ResponseVo<?>) {
+            ResponseVo responseVo = (ResponseVo) result;
+            success = responseVo.isSuccess();
+        }
         ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, mills, success);
 
         return result;

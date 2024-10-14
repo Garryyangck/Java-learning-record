@@ -1,6 +1,7 @@
 package garry.train.common.pojo;
 
 import lombok.Data;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,6 +19,7 @@ import java.util.Map;
 @Data
 public class ApiDetail {
 
+    @Getter
     private final static Map<String, ApiDetail> apiDetailMap;
 
     static {
