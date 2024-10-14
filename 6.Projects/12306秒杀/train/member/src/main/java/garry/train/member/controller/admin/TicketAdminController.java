@@ -1,4 +1,4 @@
-package garry.train.member.controller;
+package garry.train.member.controller.admin;
 
 import garry.train.common.util.HostHolder;
 import garry.train.common.vo.PageVo;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
  * 2024-10-14 15:19
  */
 @RestController
-@RequestMapping(value = "/ticket")
-public class TicketController {
+@RequestMapping(value = "/admin/ticket")
+public class TicketAdminController {
     @Resource
     private TicketService ticketService;
 
@@ -27,7 +27,6 @@ public class TicketController {
 
     @RequestMapping(value = "/query-list", method = RequestMethod.GET)
     public ResponseVo<PageVo<TicketQueryVo>> queryList(@Valid TicketQueryForm form) {
-        form.setMemberId(hostHolder.getMemberId()); // service 层是管理员和用户通用的接口，只有用户才需要取 memberId，因此取 memberId 的操作在 Controller 层实现
         PageVo<TicketQueryVo> vo = ticketService.queryList(form);
         return ResponseVo.success(vo);
     }

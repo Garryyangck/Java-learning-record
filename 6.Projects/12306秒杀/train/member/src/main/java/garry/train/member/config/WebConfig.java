@@ -33,7 +33,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/hello",
                         "/member/register",
                         "/member/send-code",
-                        "/member/login"
+                        "/member/login",
+                        "/admin/**"
                         );
     }
 }
