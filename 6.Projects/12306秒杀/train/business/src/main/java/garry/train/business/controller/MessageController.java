@@ -58,4 +58,16 @@ public class MessageController {
         int unreadNum = messageService.getUnreadNum(memberId);
         return ResponseVo.success(unreadNum);
     }
+
+    @RequestMapping(value = "/top/{id}", method = RequestMethod.POST)
+    public ResponseVo top(@PathVariable Long id) {
+        messageService.top(id);
+        return ResponseVo.success();
+    }
+
+    @RequestMapping(value = "/untop/{id}", method = RequestMethod.POST)
+    public ResponseVo untop(@PathVariable Long id) {
+        messageService.untop(id);
+        return ResponseVo.success();
+    }
 }

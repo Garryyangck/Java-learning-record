@@ -42,4 +42,14 @@ public interface MessageService {
      * 修改状态为已读
      */
     int read(Long id, Long memberId);
+
+    /**
+     * 修改状态为置顶
+     */
+    void top(Long id);
+
+    /**
+     * 取消置顶
+     */
+    void untop(Long id);
 }

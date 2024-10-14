@@ -17,19 +17,35 @@
           <a-list-item>
             <a-list-item-meta style="margin-left: 10px" @click="showModal(item)">
               <template #title>
-                {{ type.desc }}
-                <span v-if="MESSAGE_STATUS.UNREAD.code === item.status"
+                <span v-if="MESSAGE_STATUS.TOP.code === item.status"
+                      style="color: red"
+                >
+                  {{ type.desc }}
+                </span>
+                <span v-else>
+                  {{ type.desc }}
+                </span>
+                <span v-if="MESSAGE_STATUS.TOP.code === item.status"
+                      style="font-size: small"
+                >
+                  【置顶】
+                </span>
+                <span v-else-if="MESSAGE_STATUS.UNREAD.code === item.status"
                       style="color: red; font-size: small"
                 >
                   【未读】
                 </span>
+                <span v-else>&nbsp;</span>
                 <span style="color: #8c8c8c; font-size: x-small">
-                  {{ item.updateTime }}
+                  {{ item.createTime }}
                 </span>
               </template>
               <template #description>
                 <div style="font-weight: bold">
-                  {{ item.content }}
+                  <span v-if="MESSAGE_STATUS.TOP.code === item.status" v-html="renderMessage(item.content)"/>
+                  <span v-else>
+                    {{ item.content }}
+                  </span>
                 </div>
               </template>
             </a-list-item-meta>
@@ -37,6 +53,16 @@
               <span style="color: #8c8c8c; font-size: x-small">
                 操作：
               </span>
+              <template v-if="MESSAGE_STATUS.TOP.code !== item.status">
+                <a-button type="primary" size="small" @click="onTop(item)">
+                  置顶
+                </a-button>&nbsp;
+              </template>
+              <template v-if="MESSAGE_STATUS.TOP.code === item.status">
+                <a-button type="primary" size="small" @click="onUnTop(item) ">
+                  取消置顶
+                </a-button>&nbsp;
+              </template>
               <a-popconfirm
                   title="删除后不可恢复，确认删除?"
                   @confirm="onDelete(item)"
@@ -115,7 +141,7 @@
           </a-row>
         </template>
         <a-row style="margin: 0">
-          {{ message.updateTime }}
+          {{ message.createTime }}
         </a-row>
       </a-form-item>
     </a-form>
@@ -243,7 +269,41 @@ export default defineComponent({
       });
     };
 
+    const onTop = (record) => {
+      let status = record.status;
+      axios.post("/business/message/top/" + record.id).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          handleQuery({
+            pageNum: 1,
+            pageSize: pagination.value.pageSize,
+          });
+          if (MESSAGE_STATUS.UNREAD.code === status)
+            store.state.unreadNum = store.state.unreadNum - 1;
+          notification.success({description: '置顶成功'});
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
+    const onUnTop = (record) => {
+      axios.post("/business/message/untop/" + record.id).then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          handleQuery({
+            pageNum: 1,
+            pageSize: pagination.value.pageSize,
+          });
+          notification.success({description: '取消置顶成功'});
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
+    };
+
     const onDelete = (record) => {
+      let status = record.status;
       axios.delete("/business/message/delete/" + record.id).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
@@ -251,6 +311,8 @@ export default defineComponent({
             pageNum: 1,
             pageSize: pagination.value.pageSize,
           });
+          if (MESSAGE_STATUS.UNREAD.code === status)
+            store.state.unreadNum = store.state.unreadNum - 1;
           notification.success({description: '删除成功'});
         } else {
           notification.error({description: responseVo.msg});
@@ -326,6 +388,8 @@ export default defineComponent({
       loading,
       showModal,
       readAll,
+      onTop,
+      onUnTop,
       onDelete,
       handleOk,
       handleQuery,

@@ -65,7 +65,8 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public PageVo<MessageQueryVo> queryList(MessageQueryForm form) {
         MessageExample messageExample = new MessageExample();
-        messageExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
+        messageExample.setOrderByClause("case when status = '%s' then 0 else 1 end, update_time desc"
+                .formatted(MessageStatusEnum.TOP.getCode())); // 先置顶的最上面，然后按时间倒序
         MessageExample.Criteria criteria = messageExample.createCriteria();
         // 用户只能查自己 memberId 下的
         if (ObjectUtil.isNotNull(form.getToId())) {
@@ -133,8 +134,28 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public int read(Long id, Long memberId) {
         Message message = messageMapper.selectByPrimaryKey(id);
-        message.setStatus(MessageStatusEnum.READ.getCode());
-        messageMapper.updateByPrimaryKeySelective(message);
+        if (MessageStatusEnum.UNREAD.getCode().equals(message.getStatus())) {
+            message.setStatus(MessageStatusEnum.READ.getCode());
+            messageMapper.updateByPrimaryKeySelective(message);
+        }
         return getUnreadNum(memberId);
+    }
+
+    @Override
+    public void top(Long id) {
+        Message message = messageMapper.selectByPrimaryKey(id);
+        message.setStatus(MessageStatusEnum.TOP.getCode());
+        messageMapper.updateByPrimaryKeySelective(message);
+    }
+
+    @Override
+    public void untop(Long id) {
+        Message message = messageMapper.selectByPrimaryKey(id);
+        if (MessageStatusEnum.TOP.getCode().equals(message.getStatus())) {
+            message.setStatus(MessageStatusEnum.READ.getCode());
+            messageMapper.updateByPrimaryKeySelective(message);
+        } else {
+            throw new BusinessException(ResponseEnum.BUSINESS_MESSAGE_UNTOP_FAILED);
+        }
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
  * 2024-09-18 21:22
  */
 public class EnumGenerator {
-    private static String path = "web/src/assets/js/enums.js";
+    private static String path = "admin/src/assets/js/enums.js";
 
     public static void main(String[] args) {
         StringBuffer bufferObject = new StringBuffer();

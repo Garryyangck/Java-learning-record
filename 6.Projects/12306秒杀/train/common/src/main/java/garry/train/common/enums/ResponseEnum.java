@@ -91,6 +91,8 @@ public enum ResponseEnum {
     BUSINESS_WEBSOCKET_CONNECT_FAILED(38, "连接websocket失败"),
 
     BUSINESS_WEBSOCKET_DISCONNECT_FAILED(39, "websocket断开连接失败"),
+
+    BUSINESS_MESSAGE_UNTOP_FAILED(40, "取消置顶失败，消息还没有置顶"),
     ;
 
     private final Integer code;

@@ -12,6 +12,8 @@ public enum MessageStatusEnum {
 
     DELETE("2", "删除"),
 
+    TOP("3", "置顶"),
+
     ;
 
     private final String code;
