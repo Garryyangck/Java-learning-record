@@ -16,6 +16,7 @@ import garry.train.business.service.*;
 import garry.train.business.util.SellUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -40,7 +41,15 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
     @Resource
     private DailyTrainTicketService dailyTrainTicketService;
 
+    /**
+     * 这会产生循环依赖，可能导致 Bean 的状态不一致，从而引发各种问题。
+     * by AI: 检查 @Async 注解的使用：
+     * 如果你在使用 @Async 注解时遇到了循环依赖问题，
+     * 这可能是因为 @Async 会导致代理对象的创建，这可能会与循环依赖检测相互作用。
+     * 在这种情况下，你可能需要重新设计你的异步方法，或者使用 @Lazy 注解来延迟 Bean 的创建。
+     */
     @Resource
+    @Lazy
     private ConfirmOrderService confirmOrderService;
 
     @Resource

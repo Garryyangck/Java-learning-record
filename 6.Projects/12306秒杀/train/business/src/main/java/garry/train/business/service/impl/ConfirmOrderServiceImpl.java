@@ -25,6 +25,7 @@ import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -116,8 +117,8 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
-    // TODO 把它换成异步的任务
     @Override
+    @Async
     public void doConfirm(ConfirmOrderDoForm form) {
         // 业务数据校验
         if (!checkConfirmOrder(form)) {
@@ -130,6 +131,13 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
         // 选座
         List<SeatChosen> seatChosenList = chooseSeat(form);
+
+        // 模拟选座用时很久，毕竟还要排队什么的
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         // 选座成功后，进行相关座位售卖情况、余票数、购票信息、订单状态的修改，创建并通过 websocket 发送 message，事务处理
         if (!afterConfirmOrderService.afterDoConfirm(seatChosenList, form)) {
