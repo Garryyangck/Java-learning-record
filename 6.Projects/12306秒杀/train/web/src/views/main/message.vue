@@ -9,7 +9,6 @@
 
   <a-list :dataSource="messages"
           :pagination="pagination"
-          @change="handleListChange"
           :loading="loading"
   >
     <template #renderItem="{ item }">
@@ -148,11 +147,17 @@ export default defineComponent({
       updateTime: undefined,
     });
     const messages = ref([]);
-    const pagination = ref({ // TODO 分页功能无效
+    const pagination = ref({
       total: 0,
       current: 1,
       pageSize: 10,
     });
+    pagination.value.onChange = (page, pageSize) => { // a-list 解决无法分页的方法：定义 pagination 自带的回调函数 onChange(page, pageSize)
+      handleQuery({
+        pageNum: page,
+        pageSize: pageSize,
+      });
+    };
     let loading = ref(false);
     // const columns = ref([
     //   {
@@ -292,14 +297,6 @@ export default defineComponent({
       })
     };
 
-    const handleListChange = (pagination) => {
-      // handleListChange 自带一个 pagination 参数，含有 total，current，pageSize 三个属性
-      handleQuery({
-        pageNum: pagination.current,
-        pageSize: pagination.pageSize,
-      });
-    };
-
     /**
      * 利用正则表达式，将 【】 内部的内容加上标签
      */
@@ -332,7 +329,6 @@ export default defineComponent({
       onDelete,
       handleOk,
       handleQuery,
-      handleListChange,
       renderMessage,
     };
   },
