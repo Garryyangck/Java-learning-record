@@ -52,7 +52,6 @@ export default defineComponent({
     const CONFIRM_ORDER_STATUS_ARRAY = window.CONFIRM_ORDER_STATUS_ARRAY;
     const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
     const SEAT_TYPE_ARRAY = window.SEAT_TYPE_ARRAY;
-    const visible = ref(false);
     const confirmOrder = reactive({
       id: undefined,
       memberId: undefined,
@@ -174,7 +173,6 @@ export default defineComponent({
       CONFIRM_ORDER_STATUS_ARRAY,
       PASSENGER_TYPE_ARRAY,
       SEAT_TYPE_ARRAY,
-      visible,
       confirmOrder,
       confirmOrders,
       pagination,

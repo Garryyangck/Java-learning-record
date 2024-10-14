@@ -18,7 +18,7 @@
       </a-menu-item>
       <a-menu-item key="/api">
         <router-link to="/api">
-          <BranchesOutlined /> &nbsp; 项目接口
+          <BranchesOutlined /> &nbsp; 接口详情
         </router-link>
       </a-menu-item>
       <a-sub-menu key="base">

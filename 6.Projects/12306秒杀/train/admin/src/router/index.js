@@ -15,7 +15,7 @@ const routes = [
             },
             {
                 path: 'api',
-                component: () => import('../views/main/api.vue'),
+                component: () => import('../views/main/api-detail.vue'),
             },
             {
                 path: 'base/',
