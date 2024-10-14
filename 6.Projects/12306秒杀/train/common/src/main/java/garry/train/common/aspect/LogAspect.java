@@ -1,7 +1,9 @@
 package garry.train.common.aspect;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
+import garry.train.common.pojo.ApiDetail;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.net.URI;
 
 @Slf4j
 @Aspect
@@ -86,7 +90,19 @@ public class LogAspect {
         PropertyPreFilters.MySimplePropertyPreFilter excludeFilter = filters.addFilter();
         excludeFilter.addExcludes(excludeProperties);
         log.info("返回结果: {}", JSONObject.toJSONString(result, excludeFilter));
-        log.info("------------- 结束 耗时：{} ms -------------\n", System.currentTimeMillis() - startTime);
+        long executeMills = System.currentTimeMillis() - startTime;
+        log.info("------------- 结束 耗时：{} ms -------------\n", executeMills);
+
+        // ApiDetail 部分
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        String fullApiPath = new URI(request.getRequestURL().toString()).getPath();
+        String apiMethod = request.getMethod();
+        String moduleName = fullApiPath.split("/")[1];
+        Long mills = executeMills;
+        Boolean success = JSONUtil.parseObj((String) result).get("success", Boolean.class);
+        ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, mills, success);
+
         return result;
     }
 
