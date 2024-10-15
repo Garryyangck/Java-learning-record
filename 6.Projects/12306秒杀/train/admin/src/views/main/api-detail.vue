@@ -2,8 +2,23 @@
 <template>
   <p>
     <a-space>
+      <a-select v-model:value="params.apiMethod" placeholder="请选择接口类型" allowClear style="width: 100% ">
+        <a-select-option v-for="item in apiMethod_enum" :key="item.value" :value="item.value">
+          {{item.value}}
+        </a-select-option>
+      </a-select>
+      <a-select v-model:value="params.moduleName" placeholder="请选择模块" allowClear style="width: 100%">
+        <a-select-option v-for="item in moduleName_enum" :key="item.value" :value="item.value">
+          {{item.value}}
+        </a-select-option>
+      </a-select>
+      <a-select v-model:value="params.sortBy" placeholder="请选择排序字段" allowClear style="width: 100%">
+        <a-select-option v-for="item in sortBy_enum" :key="item.value" :value="item.value">
+          {{item.desc}}
+        </a-select-option>
+      </a-select>
+      <a-switch v-model:checked="params.isAsc" :checked-children="'正序'" :un-checked-children="'倒序'"/>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
-
     </a-space>
   </p>
   <a-table :dataSource="apiDetails"
@@ -15,7 +30,7 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref} from 'vue';
+import {defineComponent, onMounted, ref, watch} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 
@@ -30,6 +45,72 @@ export default defineComponent({
       pageSize: 10,
     });
     let loading = ref(false);
+    let params = ref({
+      apiMethod: null,
+      moduleName: null,
+      sortBy: null,
+      isAsc: null,
+    });
+    const apiMethod_enum = ref([
+      {
+        value: "GET",
+      },
+      {
+        value: "POST",
+      },
+      {
+        value: "PUT",
+      },
+      {
+        value: "DELETE",
+      },
+    ]);
+    const moduleName_enum = ref([
+      {
+        value: "member",
+      },
+      {
+        value: "business",
+      },
+    ]);
+    const sortBy_enum = ref([
+      {
+        value: "callTimes",
+        desc: "调用次数",
+      },
+      {
+        value: "successTimes",
+        desc: "成功调用次数",
+      },
+      {
+        value: "successRatio",
+        desc: "成功比例",
+      },
+      {
+        value: "maxExecuteMills",
+        desc: "最长执行时间",
+      },
+      {
+        value: "minExecuteMills",
+        desc: "最短执行时间",
+      },
+      {
+        value: "executeMills",
+        desc: "执行总时间",
+      },
+      {
+        value: "successExecuteMills",
+        desc: "成功执行总时间",
+      },
+      {
+        value: "avgExecuteMills",
+        desc: "平均执行时间",
+      },
+      {
+        value: "avgSuccessExecuteMills",
+        desc: "成功平均执行时间",
+      },
+    ]);
     const columns = ref([
       {
         title: '接口全路径',
@@ -93,6 +174,34 @@ export default defineComponent({
       },
     ]);
 
+    watch(() => params.value.apiMethod, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
+
+    watch(() => params.value.moduleName, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
+
+    watch(() => params.value.sortBy, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
+
+    watch(() => params.value.isAsc, () => {
+      handleQuery({
+        pageNum: 1,
+        pageSize: pagination.value.pageSize,
+      });
+    });
+
     const handleQuery = (param) => {
       let byRefresh = false;
       if (!param) {
@@ -107,6 +216,10 @@ export default defineComponent({
         params: {
           pageNum: param.pageNum,
           pageSize: param.pageSize,
+          apiMethod: params.value.apiMethod,
+          moduleName: params.value.moduleName,
+          sortBy: params.value.sortBy,
+          isAsc: params.value.isAsc,
         }
       }).then((response) => {
         loading.value = false;
@@ -149,6 +262,10 @@ export default defineComponent({
       pagination,
       columns,
       loading,
+      params,
+      apiMethod_enum,
+      moduleName_enum,
+      sortBy_enum,
       handleQuery,
       handleTableChange,
     };
