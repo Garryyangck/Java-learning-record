@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -69,7 +70,7 @@ public class ApiDetailAdminController {
                     Boolean judgeApiMethod = StrUtil.isBlank(form.getApiMethod()) || form.getApiMethod().equals(apiDetailVo.getApiMethod());
                     Boolean judgeModuleName = StrUtil.isBlank(form.getModuleName()) || form.getModuleName().equals(apiDetailVo.getModuleName());
                     return judgeApiMethod && judgeModuleName;
-                // 排序
+                    // 排序
                 }).sorted((apiDetailVo1, apiDetailVo2) -> {
                     // 按多个字段排序的思路：传来一个字符串数组，遍历数组，先遍历到的优先级更高
                     // 如果高优先级字段相同，则比较下一个优先级的字段，否则直接可以返回了
@@ -98,20 +99,23 @@ public class ApiDetailAdminController {
                             case "executeMills":
                                 sortNum = apiDetailVo1.getExecuteMills().compareTo(apiDetailVo2.getExecuteMills());
                                 break;
-                            case "successExecuteMills":
-                                sortNum = apiDetailVo1.getSuccessExecuteMills().compareTo(apiDetailVo2.getSuccessExecuteMills());
-                                break;
                             case "avgExecuteMills":
                                 sortNum = apiDetailVo1.getAvgExecuteMills().compareTo(apiDetailVo2.getAvgExecuteMills());
-                                break;
-                            case "avgSuccessExecuteMills":
-                                sortNum = apiDetailVo1.getAvgSuccessExecuteMills().compareTo(apiDetailVo2.getAvgSuccessExecuteMills());
                                 break;
                             default:
                                 break;
                         }
                     }
                     return (_isAsc ? 1 : -1) * sortNum;
+                }).toList();
+        // 特殊处理 api-detail/query 接口中，还没来得及把 success 插入，就查出来返回，导致成功执行次数少一的问题
+        businessApiDetails = businessApiDetails.stream()
+                .peek(apiDetailVo -> { // 把调用次数减一
+                    if (apiDetailVo.getFullApiPath().contains("api-detail/query")) {
+                        apiDetailVo.setCallTimes(apiDetailVo.getCallTimes().subtract(BigDecimal.ONE));
+                        apiDetailVo.setSuccessRatio(apiDetailVo.getCallTimes().compareTo(BigDecimal.ZERO) == 0 ? "0.00%" : String.format("%.2f%%", apiDetailVo.getSuccessTimes().divide(apiDetailVo.getCallTimes(), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).doubleValue()));
+                        apiDetailVo.setAvgExecuteMills(apiDetailVo.getCallTimes().compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : apiDetailVo.getExecuteMills().divide(apiDetailVo.getCallTimes(), 2, RoundingMode.HALF_UP));
+                    }
                 }).toList();
         PageInfo<ApiDetailVo> pageInfo = PageUtil.getPageInfo(businessApiDetails, form.getPageNum(), form.getPageSize());
         @SuppressWarnings("unchecked")

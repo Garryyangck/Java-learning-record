@@ -3,7 +3,6 @@ package garry.train.common.aspect;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import garry.train.common.util.ApiDetail;
-import garry.train.common.vo.ResponseVo;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,12 +14,18 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 @Slf4j
 @Aspect
@@ -43,8 +48,9 @@ public class LogAspect {
     /**
      * 前置通知
      */
+    @SuppressWarnings("DuplicatedCode")
     @Before("controllerPointcut()")
-    public void doBefore(JoinPoint joinPoint) {
+    public void doBefore(JoinPoint joinPoint) throws URISyntaxException {
 
         // 开始打印请求日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -76,11 +82,21 @@ public class LogAspect {
         PropertyPreFilters.MySimplePropertyPreFilter excludeFilter = filters.addFilter();
         excludeFilter.addExcludes(excludeProperties);
         log.info("请求参数: {}", JSONObject.toJSONString(arguments, excludeFilter));
+
+        // success = false 的 apiDetail 插入
+        ServletRequestAttributes _attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest _request = _attributes.getRequest();
+        String fullApiPath = new URI(_request.getRequestURL().toString()).getPath();
+        String apiMethod = _request.getMethod();
+        String moduleName = fullApiPath.split("/")[1];
+        fullApiPath = handlePathVariable(joinPoint, fullApiPath);
+        ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, 0L, false);
     }
 
     /**
      * 环绕通知
      */
+    @SuppressWarnings("DuplicatedCode")
     @Around("controllerPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
@@ -93,21 +109,33 @@ public class LogAspect {
         long executeMills = System.currentTimeMillis() - startTime;
         log.info("------------- 结束 耗时：{} ms -------------\n", executeMills);
 
-        // ApiDetail 部分
+        // success = true 的 apiDetail 插入
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String fullApiPath = new URI(request.getRequestURL().toString()).getPath();
+        // 检查参数是否右 @PathVariable 注解
         String apiMethod = request.getMethod();
         String moduleName = fullApiPath.split("/")[1];
         Long mills = executeMills;
-        Boolean success = false;
-        if (result instanceof ResponseVo<?>) {
-            ResponseVo responseVo = (ResponseVo) result;
-            success = responseVo.isSuccess();
-        }
-        ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, mills, success);
+        fullApiPath = handlePathVariable(proceedingJoinPoint, fullApiPath);
+        ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, mills, true);
 
         return result;
     }
 
+    private static String handlePathVariable(JoinPoint joinPoint, String fullApiPath) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Parameter[] parameters = method.getParameters();
+        for (Parameter parameter : parameters) {
+            Annotation[] annotations = parameter.getAnnotations();
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType() == PathVariable.class) {
+                    // 去掉最后一个 /xx
+                    fullApiPath = fullApiPath.substring(0, fullApiPath.lastIndexOf("/"));
+                }
+            }
+        }
+        return fullApiPath;
+    }
 }

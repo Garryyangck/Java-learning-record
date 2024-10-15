@@ -34,15 +34,13 @@ public class ApiDetail {
         apiDetail.setFullApiPath(fullApiPath);
         apiDetail.setApiMethod(apiMethod);
         apiDetail.setModuleName(moduleName);
-        apiDetail.setCallTimes(BigDecimal.ONE);
+        apiDetail.setCallTimes(success ? BigDecimal.ZERO : BigDecimal.ONE);
         apiDetail.setSuccessTimes(success ? BigDecimal.ONE : BigDecimal.ZERO);
         apiDetail.setSuccessRatio(success ? "100.00%" : "0.00%");
-        apiDetail.setMaxExecuteMills(BigDecimal.valueOf(mills));
-        apiDetail.setMinExecuteMills(BigDecimal.valueOf(mills));
+        apiDetail.setMaxExecuteMills(0L == mills ? BigDecimal.ZERO : BigDecimal.valueOf(mills));
+        apiDetail.setMinExecuteMills(0L == mills ? BigDecimal.valueOf(Long.MAX_VALUE) : BigDecimal.valueOf(mills));
         apiDetail.setExecuteMills(BigDecimal.valueOf(mills));
-        apiDetail.setSuccessExecuteMills(success ? BigDecimal.valueOf(mills) : BigDecimal.ZERO);
         apiDetail.setAvgExecuteMills(BigDecimal.valueOf(mills));
-        apiDetail.setAvgSuccessExecuteMills(success ? BigDecimal.valueOf(mills) : BigDecimal.ZERO);
         return apiDetail;
     }
 
@@ -84,9 +82,6 @@ public class ApiDetail {
         // 更新执行总时间(ms)
         BigDecimal newExecuteMills = oldApiDetail.getExecuteMills().add(newApiDetail.getExecuteMills());
 
-        // 更新成功执行总时间(ms)
-        BigDecimal newSuccessExecuteMills = oldApiDetail.getSuccessExecuteMills().add(newApiDetail.getSuccessExecuteMills());
-
         // 更新最长执行时间(ms)
         BigDecimal newMaxExecuteMills = oldApiDetail.getMaxExecuteMills().max(newApiDetail.getMaxExecuteMills());
 
@@ -101,10 +96,6 @@ public class ApiDetail {
         BigDecimal newAvgExecuteMills = newCallTimes.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO :
                 newExecuteMills.divide(newCallTimes, 2, RoundingMode.HALF_UP);
 
-        // 计算新的成功平均执行时间(ms)
-        BigDecimal newAvgSuccessExecuteMills = newSuccessTimes.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO :
-                newSuccessExecuteMills.divide(newSuccessTimes, 2, RoundingMode.HALF_UP);
-
         // 创建一个新的 ApiDetail 实例并设置合并后的值
         ApiDetail mergedApiDetail = new ApiDetail();
 
@@ -118,9 +109,7 @@ public class ApiDetail {
         mergedApiDetail.setMaxExecuteMills(newMaxExecuteMills);
         mergedApiDetail.setMinExecuteMills(newMinExecuteMills);
         mergedApiDetail.setExecuteMills(newExecuteMills);
-        mergedApiDetail.setSuccessExecuteMills(newSuccessExecuteMills);
         mergedApiDetail.setAvgExecuteMills(newAvgExecuteMills);
-        mergedApiDetail.setAvgSuccessExecuteMills(newAvgSuccessExecuteMills);
 
         return mergedApiDetail;
     }
@@ -171,17 +160,7 @@ public class ApiDetail {
     private BigDecimal executeMills;
 
     /**
-     * 成功执行总时间(ms)
-     */
-    private BigDecimal successExecuteMills;
-
-    /**
      * 平均执行时间(ms)
      */
     private BigDecimal avgExecuteMills;
-
-    /**
-     * 成功平均执行时间(ms)
-     */
-    private BigDecimal avgSuccessExecuteMills;
 }

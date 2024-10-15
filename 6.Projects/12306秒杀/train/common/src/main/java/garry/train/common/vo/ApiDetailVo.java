@@ -61,17 +61,7 @@ public class ApiDetailVo {
     private BigDecimal executeMills;
 
     /**
-     * 成功执行总时间(ms)
-     */
-    private BigDecimal successExecuteMills;
-
-    /**
      * 平均执行时间(ms)
      */
     private BigDecimal avgExecuteMills;
-
-    /**
-     * 成功平均执行时间(ms)
-     */
-    private BigDecimal avgSuccessExecuteMills;
 }

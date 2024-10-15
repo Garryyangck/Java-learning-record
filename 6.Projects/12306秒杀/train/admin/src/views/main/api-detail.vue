@@ -99,16 +99,8 @@ export default defineComponent({
         desc: "执行总时间",
       },
       {
-        value: "successExecuteMills",
-        desc: "成功执行总时间",
-      },
-      {
         value: "avgExecuteMills",
         desc: "平均执行时间",
-      },
-      {
-        value: "avgSuccessExecuteMills",
-        desc: "成功平均执行时间",
       },
     ]);
     const columns = ref([
@@ -158,19 +150,9 @@ export default defineComponent({
         key: 'executeMills',
       },
       {
-        title: '成功执行总时间(ms)',
-        dataIndex: 'successExecuteMills',
-        key: 'successExecuteMills',
-      },
-      {
         title: '平均执行时间(ms)',
         dataIndex: 'avgExecuteMills',
         key: 'avgExecuteMills',
-      },
-      {
-        title: '成功平均执行时间(ms)',
-        dataIndex: 'avgSuccessExecuteMills',
-        key: 'avgSuccessExecuteMills',
       },
     ]);
 
