@@ -1,4 +1,4 @@
-package garry.train.business.service;
+package garry.train.common.service;
 
 import garry.train.common.form.ApiDetailQueryForm;
 import garry.train.common.vo.ApiDetailVo;

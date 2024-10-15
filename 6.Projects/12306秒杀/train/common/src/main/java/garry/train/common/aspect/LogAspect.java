@@ -2,7 +2,7 @@ package garry.train.common.aspect;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
-import garry.train.common.pojo.ApiDetail;
+import garry.train.common.util.ApiDetail;
 import garry.train.common.vo.ResponseVo;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;

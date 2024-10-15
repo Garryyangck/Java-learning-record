@@ -1,4 +1,4 @@
-package garry.train.common.pojo;
+package garry.train.common.util;
 
 import lombok.Data;
 import lombok.Getter;

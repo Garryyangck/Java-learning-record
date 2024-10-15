@@ -1,10 +1,10 @@
-package garry.train.business.service.impl;
+package garry.train.common.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.github.pagehelper.PageInfo;
-import garry.train.business.service.ApiDetailService;
 import garry.train.common.form.ApiDetailQueryForm;
-import garry.train.common.pojo.ApiDetail;
+import garry.train.common.service.ApiDetailService;
+import garry.train.common.util.ApiDetail;
 import garry.train.common.util.PageUtil;
 import garry.train.common.vo.ApiDetailVo;
 import garry.train.common.vo.PageVo;

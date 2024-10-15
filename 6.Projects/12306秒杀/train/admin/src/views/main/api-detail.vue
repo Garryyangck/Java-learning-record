@@ -11,9 +11,6 @@
            :pagination="pagination"
            @change="handleTableChange"
            :loading="loading">
-    <template #bodyCell="{ column, record }">
-
-    </template>
   </a-table>
 </template>
 
@@ -35,52 +32,52 @@ export default defineComponent({
     let loading = ref(false);
     const columns = ref([
     {
-      title: '接口的全路径',
+      title: '接口全路径',
       dataIndex: 'fullApiPath',
       key: 'fullApiPath',
     },
     {
-      title: '接口的类型',
+      title: '类型',
       dataIndex: 'apiMethod',
       key: 'apiMethod',
     },
     {
-      title: '模块名称',
+      title: '模块',
       dataIndex: 'moduleName',
       key: 'moduleName',
     },
     {
-      title: '被调用的次数',
+      title: '调用次数',
       dataIndex: 'callTimes',
       key: 'callTimes',
     },
     {
-      title: '成功调用的次数',
+      title: '成功调用次数',
       dataIndex: 'successTimes',
       key: 'successTimes',
     },
     {
-      title: '成功的比例',
+      title: '成功比例',
       dataIndex: 'successRatio',
       key: 'successRatio',
     },
     {
-      title: '执行的总毫秒',
+      title: '执行总时间(ms)',
       dataIndex: 'executeMills',
       key: 'executeMills',
     },
     {
-      title: '成功调用执行的总毫秒',
+      title: '成功执行总时间(ms)',
       dataIndex: 'successExecuteMills',
       key: 'successExecuteMills',
     },
     {
-      title: '平均执行总毫秒',
+      title: '平均执行时间(ms)',
       dataIndex: 'avgExecuteMills',
       key: 'avgExecuteMills',
     },
     {
-      title: '成功调用执行的平均总毫秒',
+      title: '成功平均执行时间(ms)',
       dataIndex: 'avgSuccessExecuteMills',
       key: 'avgSuccessExecuteMills',
     },

@@ -1,6 +1,6 @@
 package garry.train.business.controller.admin;
 
-import garry.train.business.service.ApiDetailService;
+import garry.train.common.service.ApiDetailService;
 import garry.train.common.form.ApiDetailQueryForm;
 import garry.train.common.vo.ApiDetailVo;
 import garry.train.common.vo.PageVo;
