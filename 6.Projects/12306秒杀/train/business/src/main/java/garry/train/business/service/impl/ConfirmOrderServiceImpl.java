@@ -120,10 +120,6 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     @Override
     @Async
     public void doConfirm(ConfirmOrderDoForm form) {
-        // 业务数据校验
-        if (!checkConfirmOrder(form)) {
-            throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
-        }
 
         // 创建对象，插入 confirm_order 表，状态为初始
         ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
@@ -158,11 +154,8 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         return confirmOrderMapper.selectByExample(confirmOrderExample);
     }
 
-    /**
-     * 业务数据校验，车次是否存在，车票是否存在，车次时间是否合法，
-     * tickets 是否 > 0，是否有余票，同一乘客不能购买同一车次
-     */
-    private boolean checkConfirmOrder(ConfirmOrderDoForm form) {
+    @Override
+    public boolean checkConfirmOrder(ConfirmOrderDoForm form) {
         // 车次是否存在
         List<DailyTrain> trains = dailyTrainService.queryByDateAndCode(form.getDate(), form.getTrainCode());
         if (CollUtil.isEmpty(trains)) {
