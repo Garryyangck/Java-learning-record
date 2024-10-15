@@ -1,4 +1,9 @@
-GET http://localhost:8080/business/admin/api-detail/query-list?pageNum=1&pageSize=10
-Accept: application/json
+POST http://localhost:8080/business/admin/api-detail/query-all-list
+Content-Type: application/json
+
+{
+  "pageNum": 1,
+  "pageSize": 10
+}
 
 ###

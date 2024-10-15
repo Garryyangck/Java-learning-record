@@ -31,56 +31,56 @@ export default defineComponent({
     });
     let loading = ref(false);
     const columns = ref([
-    {
-      title: '接口全路径',
-      dataIndex: 'fullApiPath',
-      key: 'fullApiPath',
-    },
-    {
-      title: '类型',
-      dataIndex: 'apiMethod',
-      key: 'apiMethod',
-    },
-    {
-      title: '模块',
-      dataIndex: 'moduleName',
-      key: 'moduleName',
-    },
-    {
-      title: '调用次数',
-      dataIndex: 'callTimes',
-      key: 'callTimes',
-    },
-    {
-      title: '成功调用次数',
-      dataIndex: 'successTimes',
-      key: 'successTimes',
-    },
-    {
-      title: '成功比例',
-      dataIndex: 'successRatio',
-      key: 'successRatio',
-    },
-    {
-      title: '执行总时间(ms)',
-      dataIndex: 'executeMills',
-      key: 'executeMills',
-    },
-    {
-      title: '成功执行总时间(ms)',
-      dataIndex: 'successExecuteMills',
-      key: 'successExecuteMills',
-    },
-    {
-      title: '平均执行时间(ms)',
-      dataIndex: 'avgExecuteMills',
-      key: 'avgExecuteMills',
-    },
-    {
-      title: '成功平均执行时间(ms)',
-      dataIndex: 'avgSuccessExecuteMills',
-      key: 'avgSuccessExecuteMills',
-    },
+      {
+        title: '接口全路径',
+        dataIndex: 'fullApiPath',
+        key: 'fullApiPath',
+      },
+      {
+        title: '类型',
+        dataIndex: 'apiMethod',
+        key: 'apiMethod',
+      },
+      {
+        title: '模块',
+        dataIndex: 'moduleName',
+        key: 'moduleName',
+      },
+      {
+        title: '调用次数',
+        dataIndex: 'callTimes',
+        key: 'callTimes',
+      },
+      {
+        title: '成功调用次数',
+        dataIndex: 'successTimes',
+        key: 'successTimes',
+      },
+      {
+        title: '成功比例',
+        dataIndex: 'successRatio',
+        key: 'successRatio',
+      },
+      {
+        title: '执行总时间(ms)',
+        dataIndex: 'executeMills',
+        key: 'executeMills',
+      },
+      {
+        title: '成功执行总时间(ms)',
+        dataIndex: 'successExecuteMills',
+        key: 'successExecuteMills',
+      },
+      {
+        title: '平均执行时间(ms)',
+        dataIndex: 'avgExecuteMills',
+        key: 'avgExecuteMills',
+      },
+      {
+        title: '成功平均执行时间(ms)',
+        dataIndex: 'avgSuccessExecuteMills',
+        key: 'avgSuccessExecuteMills',
+      },
     ]);
 
     const handleQuery = (param) => {
@@ -93,11 +93,9 @@ export default defineComponent({
         byRefresh = true;
       }
       loading.value = true;
-      axios.get("/business/admin/api-detail/query-list", {
-        params: {
-          pageNum: param.pageNum,
-          pageSize: param.pageSize,
-        }
+      axios.post("/business/admin/api-detail/query-all-list", {
+        pageNum: param.pageNum,
+        pageSize: param.pageSize,
       }).then((response) => {
         loading.value = false;
         let responseVo = response.data;

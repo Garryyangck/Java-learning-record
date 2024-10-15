@@ -1,6 +1,7 @@
 package garry.train.business.feign;
 
 import garry.train.business.form.TicketSaveForm;
+import garry.train.common.form.ApiDetailQueryForm;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,4 +19,10 @@ public interface MemberFeign {
      */
     @PostMapping("/feign/ticket/save")
     String save(@Valid @RequestBody TicketSaveForm form);
+
+    /**
+     * 获取 member 模块的 ApiDetail
+     */
+    @PostMapping("/admin/api-detail/query-list")
+    String queryList(@Valid @RequestBody ApiDetailQueryForm form);
 }
