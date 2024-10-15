@@ -62,6 +62,16 @@ export default defineComponent({
         key: 'successRatio',
       },
       {
+        title: '最长执行时间(ms)',
+        dataIndex: 'maxExecuteMills',
+        key: 'maxExecuteMills',
+      },
+      {
+        title: '最短执行时间(ms)',
+        dataIndex: 'minExecuteMills',
+        key: 'minExecuteMills',
+      },
+      {
         title: '执行总时间(ms)',
         dataIndex: 'executeMills',
         key: 'executeMills',

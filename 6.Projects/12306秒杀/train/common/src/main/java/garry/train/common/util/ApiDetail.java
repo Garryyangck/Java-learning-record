@@ -37,6 +37,8 @@ public class ApiDetail {
         apiDetail.setCallTimes(BigDecimal.ONE);
         apiDetail.setSuccessTimes(success ? BigDecimal.ONE : BigDecimal.ZERO);
         apiDetail.setSuccessRatio(success ? "100.00%" : "0.00%");
+        apiDetail.setMaxExecuteMills(BigDecimal.valueOf(mills));
+        apiDetail.setMinExecuteMills(BigDecimal.valueOf(mills));
         apiDetail.setExecuteMills(BigDecimal.valueOf(mills));
         apiDetail.setSuccessExecuteMills(success ? BigDecimal.valueOf(mills) : BigDecimal.ZERO);
         apiDetail.setAvgExecuteMills(BigDecimal.valueOf(mills));
@@ -79,21 +81,27 @@ public class ApiDetail {
         // 更新成功调用次数
         BigDecimal newSuccessTimes = oldApiDetail.getSuccessTimes().add(newApiDetail.getSuccessTimes());
 
-        // 更新执行的总毫秒
+        // 更新执行总时间(ms)
         BigDecimal newExecuteMills = oldApiDetail.getExecuteMills().add(newApiDetail.getExecuteMills());
 
-        // 更新成功调用执行的总毫秒
+        // 更新成功执行总时间(ms)
         BigDecimal newSuccessExecuteMills = oldApiDetail.getSuccessExecuteMills().add(newApiDetail.getSuccessExecuteMills());
+
+        // 更新最长执行时间(ms)
+        BigDecimal newMaxExecuteMills = oldApiDetail.getMaxExecuteMills().max(newApiDetail.getMaxExecuteMills());
+
+        // 更新最短执行时间(ms)
+        BigDecimal newMinExecuteMills = oldApiDetail.getMinExecuteMills().min(newApiDetail.getMinExecuteMills());
 
         // 计算新的成功比例
         String newSuccessRatio = newCallTimes.compareTo(BigDecimal.ZERO) == 0 ? "0.00%" :
                 String.format("%.2f%%", newSuccessTimes.divide(newCallTimes, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-        // 计算新的平均执行总毫秒
+        // 计算新的平均执行时间(ms)
         BigDecimal newAvgExecuteMills = newCallTimes.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO :
                 newExecuteMills.divide(newCallTimes, 2, RoundingMode.HALF_UP);
 
-        // 计算新的成功调用执行的平均总毫秒
+        // 计算新的成功平均执行时间(ms)
         BigDecimal newAvgSuccessExecuteMills = newSuccessTimes.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO :
                 newSuccessExecuteMills.divide(newSuccessTimes, 2, RoundingMode.HALF_UP);
 
@@ -107,6 +115,8 @@ public class ApiDetail {
         mergedApiDetail.setCallTimes(newCallTimes);
         mergedApiDetail.setSuccessTimes(newSuccessTimes);
         mergedApiDetail.setSuccessRatio(newSuccessRatio);
+        mergedApiDetail.setMaxExecuteMills(newMaxExecuteMills);
+        mergedApiDetail.setMinExecuteMills(newMinExecuteMills);
         mergedApiDetail.setExecuteMills(newExecuteMills);
         mergedApiDetail.setSuccessExecuteMills(newSuccessExecuteMills);
         mergedApiDetail.setAvgExecuteMills(newAvgExecuteMills);
@@ -116,52 +126,62 @@ public class ApiDetail {
     }
 
     /**
-     * 接口的全路径
+     * 接口全路径
      */
     private String fullApiPath;
 
     /**
-     * 接口的类型 | GET, POST...
+     * 类型 | GET, POST...
      */
     private String apiMethod;
 
     /**
-     * 模块名称
+     * 模块
      */
     private String moduleName;
 
     /**
-     * 被调用的次数
+     * 调用次数
      */
     private BigDecimal callTimes;
 
     /**
-     * 成功调用的次数
+     * 成功调用次数
      */
     private BigDecimal successTimes;
 
     /**
-     * 成功的比例 | 33.33%
+     * 成功比例 | 33.33%
      */
     private String successRatio;
 
     /**
-     * 执行的总毫秒
+     * 最长执行时间(ms)
+     */
+    private BigDecimal maxExecuteMills;
+
+    /**
+     * 最短执行时间(ms)
+     */
+    private BigDecimal minExecuteMills;
+
+    /**
+     * 执行总时间(ms)
      */
     private BigDecimal executeMills;
 
     /**
-     * 成功调用执行的总毫秒
+     * 成功执行总时间(ms)
      */
     private BigDecimal successExecuteMills;
 
     /**
-     * 平均执行总毫秒
+     * 平均执行时间(ms)
      */
     private BigDecimal avgExecuteMills;
 
     /**
-     * 成功调用执行的平均总毫秒
+     * 成功平均执行时间(ms)
      */
     private BigDecimal avgSuccessExecuteMills;
 }

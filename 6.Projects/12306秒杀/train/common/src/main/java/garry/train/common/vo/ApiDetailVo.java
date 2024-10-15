@@ -16,52 +16,62 @@ import java.math.BigDecimal;
 public class ApiDetailVo {
 
     /**
-     * 接口的全路径
+     * 接口全路径
      */
     private String fullApiPath;
 
     /**
-     * 接口的类型 | GET, POST...
+     * 类型 | GET, POST...
      */
     private String apiMethod;
 
     /**
-     * 模块名称
+     * 模块
      */
     private String moduleName;
 
     /**
-     * 被调用的次数
+     * 调用次数
      */
     private BigDecimal callTimes;
 
     /**
-     * 成功调用的次数
+     * 成功调用次数
      */
     private BigDecimal successTimes;
 
     /**
-     * 成功的比例 | 33.33%
+     * 成功比例 | 33.33%
      */
     private String successRatio;
 
     /**
-     * 执行的总毫秒
+     * 最长执行时间(ms)
+     */
+    private BigDecimal maxExecuteMills;
+
+    /**
+     * 最短执行时间(ms)
+     */
+    private BigDecimal minExecuteMills;
+
+    /**
+     * 执行总时间(ms)
      */
     private BigDecimal executeMills;
 
     /**
-     * 成功调用执行的总毫秒
+     * 成功执行总时间(ms)
      */
     private BigDecimal successExecuteMills;
 
     /**
-     * 平均执行总毫秒
+     * 平均执行时间(ms)
      */
     private BigDecimal avgExecuteMills;
 
     /**
-     * 成功调用执行的平均总毫秒
+     * 成功平均执行时间(ms)
      */
     private BigDecimal avgSuccessExecuteMills;
 }
