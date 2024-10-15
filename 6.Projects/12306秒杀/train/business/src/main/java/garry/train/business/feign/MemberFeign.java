@@ -1,11 +1,12 @@
 package garry.train.business.feign;
 
 import garry.train.business.form.TicketSaveForm;
-import garry.train.common.form.ApiDetailQueryForm;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Garry
@@ -22,7 +23,9 @@ public interface MemberFeign {
 
     /**
      * 获取 member 模块的 ApiDetail
+     * 报错：Request method 'POST' is not supported 的解决方法
+     * 把 form 中的参数单独提出来，并带上 @RequestParam 注解
      */
-    @PostMapping("/admin/api-detail/query-list")
-    String queryList(@Valid @RequestBody ApiDetailQueryForm form);
+    @GetMapping("/admin/api-detail/query-list")
+    String queryList(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
 }

@@ -7,7 +7,6 @@ import garry.train.common.vo.PageVo;
 import garry.train.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +22,8 @@ public class ApiDetailAdminController {
     @Resource
     private ApiDetailService apiDetailService;
 
-    @RequestMapping(value = "/query-list", method = RequestMethod.POST)
-    public ResponseVo<PageVo<ApiDetailVo>> queryList(@Valid @RequestBody ApiDetailQueryForm form) {
+    @RequestMapping(value = "/query-list", method = RequestMethod.GET)
+    public ResponseVo<PageVo<ApiDetailVo>> queryList(@Valid ApiDetailQueryForm form) {
         PageVo<ApiDetailVo> vo = apiDetailService.queryList(form);
         return ResponseVo.success(vo);
     }

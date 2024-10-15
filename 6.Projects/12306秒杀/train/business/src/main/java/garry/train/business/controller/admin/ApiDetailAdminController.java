@@ -14,7 +14,6 @@ import garry.train.common.vo.PageVo;
 import garry.train.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +34,8 @@ public class ApiDetailAdminController {
     @Resource
     private MemberFeign memberFeign;
 
-    @RequestMapping(value = "/query-list", method = RequestMethod.POST)
-    public ResponseVo<PageVo<ApiDetailVo>> queryList(@Valid @RequestBody ApiDetailQueryForm form) {
+    @RequestMapping(value = "/query-list", method = RequestMethod.GET)
+    public ResponseVo<PageVo<ApiDetailVo>> queryList(@Valid ApiDetailQueryForm form) {
         PageVo<ApiDetailVo> vo = apiDetailService.queryList(form);
         return ResponseVo.success(vo);
     }
@@ -44,12 +43,12 @@ public class ApiDetailAdminController {
     /**
      * 获取所有的模块的 ApiDetail
      */
-    @RequestMapping(value = "/query-all-list", method = RequestMethod.POST)
-    public ResponseVo<PageVo<ApiDetailVo>> queryAllList(@Valid @RequestBody ApiDetailQueryForm form) {
+    @RequestMapping(value = "/query-all-list", method = RequestMethod.GET)
+    public ResponseVo<PageVo<ApiDetailVo>> queryAllList(@Valid ApiDetailQueryForm form) {
 
         List<ApiDetailVo> businessApiDetails = apiDetailService.queryList(form).getList();
 
-        ResponseVo<String> responseVo = CommonUtil.getResponseVo(memberFeign.queryList(form));
+        ResponseVo<String> responseVo = CommonUtil.getResponseVo(memberFeign.queryList(form.getPageNum(), form.getPageSize()));
         @SuppressWarnings("unchecked")
         List<Object> apiDetailJSONList = JSONUtil.parseObj(responseVo.getData()).get("list", List.class);
         List<ApiDetailVo> memberApiDetails = apiDetailJSONList.stream()

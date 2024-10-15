@@ -93,9 +93,11 @@ export default defineComponent({
         byRefresh = true;
       }
       loading.value = true;
-      axios.post("/business/admin/api-detail/query-all-list", {
-        pageNum: param.pageNum,
-        pageSize: param.pageSize,
+      axios.get("/business/admin/api-detail/query-all-list", {
+        params: {
+          pageNum: param.pageNum,
+          pageSize: param.pageSize,
+        }
       }).then((response) => {
         loading.value = false;
         let responseVo = response.data;

@@ -7,3 +7,8 @@ Content-Type: application/json
 }
 
 ###
+
+GET http://localhost:8081/member/admin/api-detail/query-list?pageNum=1&pageSize=10
+Content-Type: application/json
+
+###
