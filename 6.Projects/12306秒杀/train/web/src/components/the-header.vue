@@ -1,6 +1,6 @@
 <!--suppress JSCheckFunctionSignatures -->
 <template>
-  <a-layout-header class="header">
+  <a-layout-header>
     <div class="logo">
       <router-link to="/welcome" style="color: white;">
         GARRY
