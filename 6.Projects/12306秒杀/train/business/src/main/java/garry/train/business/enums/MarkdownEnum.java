@@ -1,5 +1,8 @@
 package garry.train.business.enums;
 
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
+
 /**
  * @author Garry
  * 2024-10-16 10:39
@@ -33,5 +36,14 @@ public enum MarkdownEnum {
 
     public String getFileName() {
         return fileName;
+    }
+
+    public static String getFileNameByCode(String code) {
+        for (MarkdownEnum markdownEnum : MarkdownEnum.values()) {
+            if (code.equals(markdownEnum.getCode())) {
+                return markdownEnum.getFileName();
+            }
+        }
+        throw new BusinessException(ResponseEnum.BUSINESS_MARKDOWN_FILE_NOT_FOUND);
     }
 }

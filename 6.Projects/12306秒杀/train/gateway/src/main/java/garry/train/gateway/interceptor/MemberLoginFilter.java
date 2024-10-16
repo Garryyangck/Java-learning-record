@@ -31,6 +31,7 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
         // 排除不需要过滤的接口
         if (path.contains("/admin")
                 || path.contains("/hello")
+                || path.contains("/markdown")
                 || path.contains("/member/member/register")
                 || path.contains("/member/member/send-code")
                 || path.contains("/member/member/login")) {

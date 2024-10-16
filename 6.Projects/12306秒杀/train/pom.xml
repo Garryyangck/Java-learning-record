@@ -156,6 +156,12 @@
                 <artifactId>jaxen</artifactId>
                 <version>1.2.0</version>
             </dependency>
+            <!--flexmark将md代码转为html-->
+            <dependency>
+                <groupId>com.vladsch.flexmark</groupId>
+                <artifactId>flexmark-all</artifactId>
+                <version>0.62.2</version>
+            </dependency>
 
 
         </dependencies>

@@ -93,6 +93,10 @@ public enum ResponseEnum {
     BUSINESS_WEBSOCKET_DISCONNECT_FAILED(39, "websocket断开连接失败"),
 
     BUSINESS_MESSAGE_UNTOP_FAILED(40, "取消置顶失败，消息还没有置顶"),
+
+    BUSINESS_MARKDOWN_FILE_NOT_FOUND(41, "获取md页面失败，服务器找不到对应md文件"),
+
+    BUSINESS_MARKDOWN_FILE_READ_FAILED(41, "获取md页面失败，md文件读取失败"),
     ;
 
     private final Integer code;
