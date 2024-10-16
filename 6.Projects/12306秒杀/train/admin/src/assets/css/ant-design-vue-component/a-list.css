@@ -1,0 +1,79 @@
+/* 通用列表样式 */
+.ant-list {
+  background-color: #ffffff; /* 列表整体背景为白色 */
+  border-radius: 8px; /* 圆角 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 柔和阴影 */
+  padding: 20px; /* 内边距 */
+  transition: background-color 0.3s ease; /* 背景颜色过渡 */
+}
+
+/* 列表项样式 */
+.ant-list-item {
+  border-bottom: 1px solid #f0f0f0; /* 分隔线 */
+  padding: 15px 0; /* 内边距 */
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background-image 0.3s ease; /* 过渡效果 */
+  transform-origin: center; /* 设置缩放的中心点 */
+}
+
+/* 鼠标悬停时整体放大，背景为渐变，阴影加深 */
+.ant-list-item:hover {
+  background-image: linear-gradient(90deg, #f0f9ff, #ffffff); /* 渐变背景 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* 深阴影 */
+  transform: scale(1.01); /* 整体放大 2% */
+}
+
+/* 列表项 meta 样式 */
+.ant-list-item-meta {
+  display: flex; /* Flexbox 布局 */
+  align-items: center; /* 垂直居中 */
+}
+
+/* 列表项标题样式 */
+.ant-list-item-meta-title {
+  font-size: 18px; /* 标题字体 */
+  font-weight: bold; /* 加粗 */
+  color: #1890ff; /* 天蓝色 */
+  margin-bottom: 8px; /* 间距 */
+  transition: color 0.3s ease; /* 平滑的颜色变化 */
+}
+
+/* 鼠标悬停时标题颜色变亮 */
+.ant-list-item-meta-title:hover {
+  color: #40a9ff; /* 更亮的蓝色 */
+}
+
+/* 描述文字 */
+.ant-list-item-meta-description {
+  font-size: 14px; /* 描述字体 */
+  color: #595959; /* 深灰色 */
+  line-height: 1.5; /* 行高 */
+}
+
+/* 头像样式 */
+.ant-list-item-meta-avatar {
+  margin-right: 15px; /* 间距 */
+}
+
+/* 附加内容 */
+.ant-list-item-extra {
+  color: #8c8c8c; /* 灰色 */
+  font-size: 12px; /* 字号 */
+  text-align: right; /* 右对齐 */
+}
+
+/* 列表项动画 */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px); /* 从左侧滑入 */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0); /* 回到正常位置 */
+  }
+}
+
+/* 列表项加载时应用动画 */
+.ant-list-item {
+  animation: slideIn 0.5s ease-in-out; /* 滑入效果 */
+}

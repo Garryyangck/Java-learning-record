@@ -1,0 +1,51 @@
+/* 修改 .ant-badge 样式 */
+.ant-badge {
+  /* 确保 badge 可以相对于其父元素进行绝对定位 */
+  position: relative;
+  /* 控制 badge 的显示层级，确保它不会被其他元素遮挡 */
+  z-index: 10;
+}
+
+/* 修改 .ant-badge-count 样式 */
+.ant-badge-count {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background-color: #ff4d4f;
+  color: #ffffff;
+  /* 圆形样式 */
+  border-radius: 50%;
+  /* 内边距调整大小 */
+  padding: 2px 4px;
+  /* 字体大小调整 */
+  font-size: 12px;
+  /* 文本居中 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 添加轻微阴影 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  /* 边框样式（可选） */
+  border: 1px solid transparent;
+}
+
+/* 修改 .ant-badge-dot 样式 */
+.ant-badge-dot {
+  /* 绝对定位 */
+  position: absolute;
+  /* 调整顶部位置 */
+  top: 2px;
+  /* 调整右侧位置 */
+  right: 10px;
+  /* 小圆点的宽度和高度 */
+  width: 6px;
+  height: 6px;
+  /* 圆形样式 */
+  border-radius: 50%;
+  /* 背景颜色 */
+  background-color: #ff4d4f;
+  /* 默认情况下隐藏边框 */
+  border: 1px solid transparent;
+  /* 显示为块级元素 */
+  display: block;
+}

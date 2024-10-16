@@ -13,6 +13,8 @@
 @import "ant-design-vue-component/a-popconfirm.css";
 @import "ant-design-vue-component/a-notification.css";
 @import "ant-design-vue-component/a-switch.css";
+@import "ant-design-vue-component/a-badge.css";
+@import "ant-design-vue-component/a-list.css";
 
 :root {
     font-family: Arial, 'Segoe UI Emoji', sans-serif;
@@ -29,10 +31,3 @@
     font-family: Arial, 'Segoe UI Emoji', sans-serif;
 }
 
-/* ----------------------------------- a-checkbox-group ----------------------------------- */
-/* ----------------------------------- a-select ----------------------------------- */
-/* ----------------------------------- a-button ----------------------------------- */
-/* ----------------------------------- a-table ----------------------------------- */
-/* ----------------------------------- a-modal ----------------------------------- */
-/* ----------------------------------- a-layout-header ----------------------------------- */
-/* ----------------------------------- a-layout-sider ----------------------------------- */

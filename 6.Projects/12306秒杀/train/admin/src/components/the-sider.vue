@@ -1,11 +1,21 @@
 <template>
-  <a-layout-sider width="250px" style="background: #fff;">
+  <a-layout-sider width="250px">
     <a-menu
         v-model:selectedKeys="selectedKeys"
         v-model:openKeys="openKeys"
         mode="inline"
         :style="{ height: '100%', borderRight: 0 }"
     >
+      <a-menu-item key="/welcome">
+        <router-link to="/welcome">
+          <HomeOutlined /> &nbsp; 欢迎
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="/welcome">
+        <router-link to="/welcome">
+          <HomeOutlined /> &nbsp; 欢迎
+        </router-link>
+      </a-menu-item>
       <a-menu-item key="/welcome">
         <router-link to="/welcome">
           <HomeOutlined /> &nbsp; 欢迎

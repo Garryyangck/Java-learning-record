@@ -1,13 +1,14 @@
 /* 定义 sider 的样式 */
 .ant-layout-sider {
-    background: linear-gradient(180deg, #e6f7ff, #ffffff); /* 渐变背景从天蓝色到白色 */
+    background: #ffffff; /* 背景白色 */
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.15); /* 增加阴影效果 */
     transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 平滑的过渡效果 */
+    overflow-y: auto; /* 允许垂直滚动 */
+    overflow-x: hidden; /* 禁止水平滚动垂直滚动 */
 }
 
 /* 当鼠标悬停在 sider 上时，改变背景颜色 */
 .ant-layout-sider:hover {
-    background: linear-gradient(180deg, #b3e5fc, #e6f7ff); /* 渐变变得更亮 */
     box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2); /* 增加悬停时的阴影 */
 }
 

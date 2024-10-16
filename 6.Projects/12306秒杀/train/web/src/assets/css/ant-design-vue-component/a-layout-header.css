@@ -95,6 +95,7 @@
 }
 
 /* 菜单项的动画 */
+/* 这里会影响到侧边栏！ */
 .ant-menu-item {
     position: relative; /* 相对定位 */
 }
