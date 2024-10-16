@@ -18,6 +18,10 @@ const routes = [
                 component: () => import('../views/main/api-detail.vue'),
             },
             {
+                path: 'homework',
+                component: () => import('../views/main/homework/garry-homework.vue'),
+            },
+            {
                 path: 'base/',
                 children: [
                     {

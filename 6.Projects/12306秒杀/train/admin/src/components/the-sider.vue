@@ -21,6 +21,11 @@
           <BranchesOutlined /> &nbsp; 接口详情
         </router-link>
       </a-menu-item>
+      <a-menu-item key="/homework">
+        <router-link to="/homework">
+          <BranchesOutlined /> &nbsp; 作业
+        </router-link>
+      </a-menu-item>
       <a-sub-menu key="base">
         <template #title>
           <span>

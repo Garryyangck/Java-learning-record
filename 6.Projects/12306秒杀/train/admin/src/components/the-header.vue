@@ -26,6 +26,11 @@
           <BranchesOutlined /> &nbsp; 接口详情
         </router-link>
       </a-menu-item>
+      <a-menu-item key="/homework">
+        <router-link to="/homework">
+          <BranchesOutlined /> &nbsp; 作业
+        </router-link>
+      </a-menu-item>
     </a-menu>
     <div style="margin-left: auto; color: white;">
       欢迎使用管理控制台
