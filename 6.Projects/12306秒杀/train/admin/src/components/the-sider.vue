@@ -11,16 +11,6 @@
           <HomeOutlined /> &nbsp; 欢迎
         </router-link>
       </a-menu-item>
-      <a-menu-item key="/welcome">
-        <router-link to="/welcome">
-          <HomeOutlined /> &nbsp; 欢迎
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="/welcome">
-        <router-link to="/welcome">
-          <HomeOutlined /> &nbsp; 欢迎
-        </router-link>
-      </a-menu-item>
       <a-menu-item key="/about">
         <router-link to="/about">
           <coffeeOutlined/> &nbsp; 关于

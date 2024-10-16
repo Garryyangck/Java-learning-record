@@ -12,6 +12,25 @@
     box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2); /* 增加悬停时的阴影 */
 }
 
+/* 定义滚动条样式 */
+.ant-layout-sider::-webkit-scrollbar {
+    width: 6px; /* 滚动条宽度 */
+    height: 6px; /* 滚动条高度 */
+    background-color: #f0f0f0; /* 滚动条背景颜色 */
+}
+
+/* 定义滚动条滑块样式 */
+.ant-layout-sider::-webkit-scrollbar-thumb {
+    background-color: rgb(193, 193, 193); /* 滑块颜色 */
+    border-radius: 3px; /* 滑块圆角 */
+}
+
+/* 定义滚动条轨道样式 */
+.ant-layout-sider::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* 轨道颜色 */
+    border-radius: 3px; /* 轨道圆角 */
+}
+
 /* 定义 sider 内部的菜单样式 */
 .ant-layout-sider .ant-menu-dark {
     color: #0c73c2; /* 天蓝色文字 */
@@ -20,7 +39,7 @@
 
 /* 一级菜单（menu-item）的样式 */
 .ant-layout-sider .ant-menu-item {
-    border-left: 3px solid transparent; /* 菜单项左侧边框，未选中时透明 */
+    border-right: 3px solid transparent; /* 菜单项右侧边框，未选中时透明 */
     margin: 0; /* 移除间距 */
     padding: 12px 20px; /* 增加内边距，使菜单项更大 */
     transition: background-color 0.3s ease, border-left-color 0.3s ease; /* 平滑过渡 */
@@ -28,20 +47,17 @@
 
 /* 鼠标悬停在菜单项上的样式 */
 .ant-layout-sider .ant-menu-item:hover {
-    background-color: #d9e9ff; /* 悬停时的背景颜色 */
-    border-left-color: #40a9ff; /* 左侧高亮边框 */
+    background-color: #ebf0f7; /* 悬停时的背景颜色 */
     color: #0c73c2; /* 天蓝色文字 */
     cursor: pointer;
-    box-shadow: inset 5px 0 0 #40a9ff; /* 内嵌的左侧高亮阴影 */
 }
 
 /* 选中菜单项的样式 */
 .ant-layout-sider .ant-menu-item-selected {
     background-color: #cce5ff; /* 选中项的背景颜色 */
-    border-left-color: #40a9ff; /* 天蓝色边框 */
+    border-right-color: rgb(24, 144, 255); /* 天蓝色边框 */
     font-weight: bold; /* 加粗 */
     color: #0c73c2; /* 天蓝色文字 */
-    box-shadow: inset 5px 0 0 #40a9ff; /* 内嵌高亮阴影 */
     transition: all 0.3s ease; /* 平滑过渡 */
 }
 
@@ -61,7 +77,7 @@
 
 /* 子菜单标题悬停时 */
 .ant-layout-sider .ant-menu-submenu-title:hover {
-    background-color: #d9e9ff; /* 悬停时背景 */
+    background-color: rgb(249, 249, 249); /* 悬停时背景 */
     border-left-color: #40a9ff; /* 高亮左侧边框 */
     color: #0c73c2; /* 悬停时文字 */
 }
