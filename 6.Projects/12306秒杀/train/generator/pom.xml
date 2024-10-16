@@ -19,6 +19,16 @@
     </properties>
 
     <dependencies>
+        <!--引入member的所有依赖-->
+        <dependency>
+            <groupId>garry</groupId>
+            <artifactId>member</artifactId>
+        </dependency>
+        <!--引入business的所有依赖-->
+        <dependency>
+            <groupId>garry</groupId>
+            <artifactId>business</artifactId>
+        </dependency>
         <!--模板引擎 freemarker-->
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -33,21 +43,6 @@
         <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
-        </dependency>
-        <!--lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <!--hutool-->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
-        <!--mysql驱动，5.1开头的版本支持mysql5.7-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
         </dependency>
     </dependencies>
 

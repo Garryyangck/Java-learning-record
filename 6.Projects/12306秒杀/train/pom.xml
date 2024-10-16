@@ -83,6 +83,18 @@
                 <artifactId>common</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
+            <!--引入的member-->
+            <dependency>
+                <groupId>garry</groupId>
+                <artifactId>member</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <!--引入的business-->
+            <dependency>
+                <groupId>garry</groupId>
+                <artifactId>business</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
             <!--mybatis依赖，必须要3.0.0才能支持Springboot3-->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
