@@ -27,7 +27,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>3.0.0</spring-boot.version>
-        <spring-cloud.version>2022.0.0-RC2</spring-cloud.version>
+        <spring-cloud.version>2022.0.0</spring-cloud.version>
+        <spring-cloud-alibaba.version>2022.0.0.0-RC1</spring-cloud-alibaba.version>
     </properties>
 
     <!--父pom不运行，因此dependencies可以不用-->
@@ -51,6 +52,32 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!--alibaba-spring-cloud下所有的dependencies，如nacos-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--引入的common-->
+            <dependency>
+                <groupId>garry</groupId>
+                <artifactId>common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <!--引入的member-->
+            <dependency>
+                <groupId>garry</groupId>
+                <artifactId>member</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <!--引入的business-->
+            <dependency>
+                <groupId>garry</groupId>
+                <artifactId>business</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <!--lombok-->
             <dependency>
@@ -76,24 +103,6 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>5.8.10</version>
-            </dependency>
-            <!--引入的common-->
-            <dependency>
-                <groupId>garry</groupId>
-                <artifactId>common</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <!--引入的member-->
-            <dependency>
-                <groupId>garry</groupId>
-                <artifactId>member</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <!--引入的business-->
-            <dependency>
-                <groupId>garry</groupId>
-                <artifactId>business</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <!--mybatis依赖，必须要3.0.0才能支持Springboot3-->
             <dependency>
