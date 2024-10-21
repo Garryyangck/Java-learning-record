@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: member # 注册中心的名字
+  profiles:
+    active: dev # 启动环境，Nacos 会根据不同的环境，生产不同的 dataId：member-dev.yml
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yml # 配置文件的后缀

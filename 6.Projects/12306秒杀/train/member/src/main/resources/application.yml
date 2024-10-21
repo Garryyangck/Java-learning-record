@@ -4,8 +4,6 @@ server:
     context-path: /member # 项目的前缀
 
 spring:
-  application:
-    name: member
   datasource: # Mybatis 数据库连接配置
     driver-class-name: com.mysql.jdbc.Driver  # driver-class-name：5.7版本为 com.mysql.jdbc.Driver；8.0版本为 com.mysql.cj.jdbc.Driver
     username: garry_train_member
@@ -28,3 +26,6 @@ aliyun:
     accessKeySecret: dTOwgV9xKoXnjJwM4EFRMCrry1rGnd
     signName: Garry售票系统
     templateCode: SMS_472695133
+
+test:
+  nacos: 看见我就说明没有使用 Nacos
