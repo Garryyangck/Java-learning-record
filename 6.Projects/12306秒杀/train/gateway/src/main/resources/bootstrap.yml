@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: gateway # 项目的名字
+  cloud:
+    nacos:
+      discovery: # 注册中心
+        server-addr: 127.0.0.1:8848
+        namespace: garry_train # namespace 的 id

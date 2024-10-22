@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: batch # 项目的名字
+  profiles:
+    active: dev # 启动环境，Nacos 会根据不同的环境，生产不同的 dataId：member-dev.yml
+  cloud:
+    nacos:
+      config: # 配置中心
+        server-addr: 127.0.0.1:8848
+        file-extension: yml # 配置文件的后缀
+        namespace: garry_train # namespace 的 id
+      discovery: # 注册中心
+        server-addr: 127.0.0.1:8848
+        namespace: garry_train # namespace 的 id

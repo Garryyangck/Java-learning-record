@@ -4,8 +4,6 @@ server:
     context-path: /business # 项目的前缀
 
 spring:
-  application:
-    name: business
   main:
     # 允许循环依赖，为了可以在删除 Train 时，删除 Train 下所有的 Station, Carriage, Seat
     # WARNING: 允许循环依赖可能会使应用的行为变得不可预测，因此应该将其作为最后的手段

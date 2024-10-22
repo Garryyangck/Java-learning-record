@@ -1,22 +1,20 @@
 server:
   port: 8080
-
 spring:
-  application:
-    name: gateway
   cloud:
     gateway:
       routes: # 网关配置
         - id: member
-          uri: http://127.0.0.1:8081
+          # uri: http://127.0.0.1:8081 # 写死
+          uri: lb://member # 使用 GatewayNacos 实现负载均衡，以后就算增加服务器，也可以不用改 gateway 的配置
           predicates:
             - Path=/member/** # 将所有以 member为前缀的请求(e.g. http://localhost:8080/member/hello)都转发到 http://127.0.0.1:8081
         - id: business
-          uri: http://127.0.0.1:8082
+          uri: lb://business
           predicates:
             - Path=/business/**
         - id: batch
-          uri: http://127.0.0.1:8083
+          uri: lb://batch
           predicates:
             - Path=/batch/**
       globalcors: # 允许跨域

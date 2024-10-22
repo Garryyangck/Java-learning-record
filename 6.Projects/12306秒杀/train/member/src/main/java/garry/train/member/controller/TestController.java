@@ -14,8 +14,11 @@ public class TestController {
     @Value("${test.nacos}")
     private String testNacos;
 
+    @Value("${server.port}")
+    private String port;
+
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public ResponseVo<String> hello() {
-        return ResponseVo.success(testNacos);
+        return ResponseVo.success(testNacos + " 端口: " + port);
     }
 }
