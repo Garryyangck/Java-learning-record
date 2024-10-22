@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Garry
  * 2024-10-14 16:16
  */
-@FeignClient(name = "member", url = "http://127.0.0.1:8081/member/")
+@FeignClient("member")
+//@FeignClient(name = "member", url = "http://127.0.0.1:8081/member/")
 public interface MemberFeign {
 
     /**
      * 存储 Ticket
      */
-    @PostMapping("/feign/ticket/save")
+    @PostMapping("/member/feign/ticket/save")
     String save(@Valid @RequestBody TicketSaveForm form);
 
     /**
@@ -26,6 +27,6 @@ public interface MemberFeign {
      * 报错：Request method 'POST' is not supported 的解决方法
      * 把 form 中的参数单独提出来，并带上 @RequestParam 注解
      */
-    @GetMapping("/admin/api-detail/query-list")
+    @GetMapping("/member/admin/api-detail/query-list")
     String queryList(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
 }
