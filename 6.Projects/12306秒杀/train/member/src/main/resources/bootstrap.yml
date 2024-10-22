@@ -8,3 +8,5 @@ spring:
       config:
         server-addr: 127.0.0.1:8848
         file-extension: yml # 配置文件的后缀
+        namespace: garry_train # namespace 的 id
+
