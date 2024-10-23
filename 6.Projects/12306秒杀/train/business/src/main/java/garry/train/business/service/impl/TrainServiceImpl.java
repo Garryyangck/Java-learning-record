@@ -80,9 +80,6 @@ public class TrainServiceImpl implements TrainService {
             trainMapper.updateByPrimaryKeySelective(train);
             log.info("修改车次：{}", train);
         }
-
-        // 更新缓存
-        queryAllRefreshCache();
     }
 
     @Override
@@ -131,19 +128,21 @@ public class TrainServiceImpl implements TrainService {
         }
 
         trainMapper.deleteByPrimaryKey(id);
-
-        // 更新缓存
-        queryAllRefreshCache();
     }
 
+    @Override
     @CachePut(value = "TrainServiceImpl.queryAll")
     public List<TrainQueryAllVo> queryAllRefreshCache() {
-        return queryAll();
+        return _queryAll();
     }
 
     @Override
     @Cacheable(value = "TrainServiceImpl.queryAll")
     public List<TrainQueryAllVo> queryAll() {
+        return _queryAll();
+    }
+
+    private List<TrainQueryAllVo> _queryAll() {
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("code");
         List<Train> trains = trainMapper.selectByExample(trainExample).stream()

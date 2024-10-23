@@ -38,6 +38,7 @@ public class TrainAdminController {
     public ResponseVo save(@Valid @RequestBody TrainSaveForm form) {
 //        form.setMemberId(hostHolder.getMemberId());
         trainService.save(form);
+        trainService.queryAllRefreshCache();
         return ResponseVo.success();
     }
 
@@ -51,6 +52,7 @@ public class TrainAdminController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseVo delete(@PathVariable Long id) {
         trainService.delete(id);
+        trainService.queryAllRefreshCache();
         return ResponseVo.success();
     }
 

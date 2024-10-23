@@ -39,6 +39,11 @@ public interface TrainService {
     List<TrainQueryAllVo> queryAll();
 
     /**
+     * 增删改操作后更新 redis 缓存
+     */
+    List<TrainQueryAllVo> queryAllRefreshCache();
+
+    /**
      * 用于 service 之间调用
      */
     List<Train> selectAll();

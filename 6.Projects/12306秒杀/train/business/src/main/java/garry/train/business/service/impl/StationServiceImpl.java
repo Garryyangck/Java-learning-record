@@ -5,26 +5,25 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.business.pojo.Train;
-import garry.train.business.service.TrainService;
-import garry.train.common.enums.ResponseEnum;
-import garry.train.common.exception.BusinessException;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.StationQueryForm;
 import garry.train.business.form.StationSaveForm;
 import garry.train.business.mapper.StationMapper;
 import garry.train.business.pojo.Station;
 import garry.train.business.pojo.StationExample;
 import garry.train.business.service.StationService;
+import garry.train.business.service.TrainService;
 import garry.train.business.vo.StationQueryVo;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,9 +62,6 @@ public class StationServiceImpl implements StationService {
             stationMapper.updateByPrimaryKeySelective(station);
             log.info("修改车站：{}", station);
         }
-
-        // 更新缓存
-        queryAllRefreshCache();
     }
 
     @Override
@@ -99,33 +95,22 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public void delete(Long id) {
-        // 先得到需要被删除的 Station
-        Station station = stationMapper.selectByPrimaryKey(id);
-
-        // 查询作为始发站和终点站的对应 train
-        List<Train> trains = new ArrayList<>();
-        trains.addAll(trainService.queryByStart(station.getName()));
-        trains.addAll(trainService.queryByEnd(station.getName()));
-
-        // 删除这些 train
-        for (Train train : trains) {
-            trainService.delete(train.getId());
-        }
-
         stationMapper.deleteByPrimaryKey(id);
-
-        // 更新缓存
-        queryAllRefreshCache();
     }
 
+    @Override
     @CachePut(value = "StationServiceImpl.queryAll")
     public List<StationQueryVo> queryAllRefreshCache() {
-        return queryAll();
+        return _queryAll();
     }
 
     @Override
     @Cacheable(value = "StationServiceImpl.queryAll")
     public List<StationQueryVo> queryAll() {
+        return _queryAll();
+    }
+
+    private @Nullable List<StationQueryVo> _queryAll() {
         StationExample stationExample = new StationExample();
         stationExample.setOrderByClause("name_pinyin"); // 根据拼音排序
         StationExample.Criteria criteria = stationExample.createCriteria();

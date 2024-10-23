@@ -38,6 +38,11 @@ public interface StationService {
     List<StationQueryVo> queryAll();
 
     /**
+     * 增删改操作后更新 redis 缓存
+     */
+    List<StationQueryVo> queryAllRefreshCache();
+
+    /**
      * 根据 Name 查询 Station
      * 主要用于校验唯一键约束
      */

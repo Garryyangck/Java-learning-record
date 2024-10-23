@@ -29,6 +29,7 @@ public class StationAdminController {
     public ResponseVo save(@Valid @RequestBody StationSaveForm form) {
 //        form.setMemberId(hostHolder.getMemberId());
         stationService.save(form);
+        stationService.queryAllRefreshCache(); // 更新 redis 缓存
         return ResponseVo.success();
     }
 
@@ -42,6 +43,7 @@ public class StationAdminController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseVo delete(@PathVariable Long id) {
         stationService.delete(id);
+        stationService.queryAllRefreshCache(); // 更新 redis 缓存
         return ResponseVo.success();
     }
 
