@@ -48,14 +48,12 @@ public class CacheConfig {
         NO_EXPIRE_CACHE_CONFIG = RedisCacheConfiguration
                 .defaultCacheConfig()
                 .prefixCacheNameWith(prefix)
-                .disableCachingNullValues()
                 .entryTtl(Duration.ZERO) // 设置TTL为0表示永不过期
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         DEFAULT_CACHE_CONFIG = RedisCacheConfiguration
                 .defaultCacheConfig()
                 .prefixCacheNameWith(prefix)
-                .disableCachingNullValues()
                 .entryTtl(defaultExpireDuration)
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
