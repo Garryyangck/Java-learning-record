@@ -1,0 +1,15 @@
+POST http://localhost:8080/business/admin/station/save
+Content-Type: application/json
+
+{
+  "name": "占位",
+  "namePinyin": "zhanwei",
+  "namePy": "zw"
+}
+
+###
+
+GET http://localhost:8080/business/admin/station/query-list?pageNum=2&pageSize=12
+Accept: application/json
+
+###
