@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement // 允许事务处理
 @EnableAsync // 允许异步执行
 @EnableFeignClients("garry.train.business.feign")
-@EnableCaching // 允许使用缓存
 public class BusinessApplication {
     public static void main(String[] args)   {
         // 打印启动日志

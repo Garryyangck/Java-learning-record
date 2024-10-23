@@ -14,10 +14,12 @@ spring:
           max-idle: 10  # 最大空闲连接
           max-active: 100 # 最大连接数
           max-wait: 2000  # 连接分配应该阻塞的最大时间
-  cache:
-    type: redis # 使用 redis 作为缓存，代替 spring boot 内置的本地缓存
-    redis:
-      use-key-prefix: true # 缓存的键是否有前缀
-      key-prefix: "train_cache:" # 前缀
-      cache-null-values: false # 缓存内容是否能为空
-      time-to-live: 600s # 缓存过期时间
+
+# spring cache 的配置写到 CacheConfig 中了，以便实现更复杂的业务逻辑
+#  cache:
+#    type: redis # 使用 redis 作为缓存，代替 spring boot 内置的本地缓存
+#    redis:
+#      use-key-prefix: true # 缓存的键是否有前缀
+#      key-prefix: "train_cache:" # 前缀
+#      cache-null-values: false # 缓存内容是否能为空
+#      time-to-live: 10s # 缓存过期时间

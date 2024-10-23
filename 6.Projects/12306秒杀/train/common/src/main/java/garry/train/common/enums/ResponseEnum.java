@@ -96,7 +96,9 @@ public enum ResponseEnum {
 
     BUSINESS_MARKDOWN_FILE_NOT_FOUND(41, "获取md页面失败，服务器找不到对应md文件"),
 
-    BUSINESS_MARKDOWN_FILE_READ_FAILED(41, "获取md页面失败，md文件读取失败"),
+    BUSINESS_MARKDOWN_FILE_READ_FAILED(42, "获取md页面失败，md文件读取失败"),
+
+    NO_EXPIRE_CACHE_NAME_READ_FAILED(43, "no_expire_cache_name.txt文件读取异常"),
     ;
 
     private final Integer code;
