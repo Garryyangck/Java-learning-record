@@ -3,6 +3,7 @@ package garry.train.business.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * 2024-09-23 15:39
  */
 @Data
-public class TrainQueryAllVo {
+public class TrainQueryAllVo implements Serializable {
 
     /**
      * 车次编号

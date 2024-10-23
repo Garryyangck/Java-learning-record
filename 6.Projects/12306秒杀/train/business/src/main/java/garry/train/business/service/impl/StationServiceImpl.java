@@ -20,6 +20,8 @@ import garry.train.business.service.StationService;
 import garry.train.business.vo.StationQueryVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,6 +63,9 @@ public class StationServiceImpl implements StationService {
             stationMapper.updateByPrimaryKeySelective(station);
             log.info("修改车站：{}", station);
         }
+
+        // 更新缓存
+        queryAllRefreshCache();
     }
 
     @Override
@@ -108,9 +113,18 @@ public class StationServiceImpl implements StationService {
         }
 
         stationMapper.deleteByPrimaryKey(id);
+
+        // 更新缓存
+        queryAllRefreshCache();
+    }
+
+    @CachePut(value = "StationServiceImpl.queryAll")
+    public List<StationQueryVo> queryAllRefreshCache() {
+        return queryAll();
     }
 
     @Override
+    @Cacheable(value = "StationServiceImpl.queryAll")
     public List<StationQueryVo> queryAll() {
         StationExample stationExample = new StationExample();
         stationExample.setOrderByClause("name_pinyin"); // 根据拼音排序

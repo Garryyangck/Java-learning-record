@@ -9,7 +9,12 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/business/admin/station/query-list?pageNum=2&pageSize=12
+GET http://localhost:8080/business/admin/station/query-list?pageNum=1&pageSize=10
+Accept: application/json
+
+###
+
+GET http://localhost:8080/business/admin/station/query-all
 Accept: application/json
 
 ###

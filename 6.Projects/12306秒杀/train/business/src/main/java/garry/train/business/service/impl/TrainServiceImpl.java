@@ -22,6 +22,8 @@ import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -78,6 +80,9 @@ public class TrainServiceImpl implements TrainService {
             trainMapper.updateByPrimaryKeySelective(train);
             log.info("修改车次：{}", train);
         }
+
+        // 更新缓存
+        queryAllRefreshCache();
     }
 
     @Override
@@ -126,9 +131,18 @@ public class TrainServiceImpl implements TrainService {
         }
 
         trainMapper.deleteByPrimaryKey(id);
+
+        // 更新缓存
+        queryAllRefreshCache();
+    }
+
+    @CachePut(value = "TrainServiceImpl.queryAll")
+    public List<TrainQueryAllVo> queryAllRefreshCache() {
+        return queryAll();
     }
 
     @Override
+    @Cacheable(value = "TrainServiceImpl.queryAll")
     public List<TrainQueryAllVo> queryAll() {
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("code");

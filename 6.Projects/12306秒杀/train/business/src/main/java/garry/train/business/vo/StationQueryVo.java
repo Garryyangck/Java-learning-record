@@ -1,17 +1,19 @@
 package garry.train.business.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+
+import java.io.Serializable;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
  * 2024-09-19 20:52
  */
 @Data
-public class StationQueryVo {
+public class StationQueryVo implements Serializable {
 
     /**
      * id
