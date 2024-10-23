@@ -19,6 +19,35 @@
     </properties>
 
     <dependencies>
+        <!--
+            common 模块中，只有没有标记 scope 或 optional 的依赖
+            才能被其它模块正常引用！
+            比如：
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+            </dependency>
+            可以被正常引用，但是：
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <scope>runtime</scope>
+                <optional>true</optional>
+            </dependency>
+            这三个依赖，由于标记了 scope 或者 optional 属性，因此只能在 common 模块生效，
+            而无法在 member, business 模块中被正常依赖。
+            因此如果需要类似的依赖，就不要写在 common 中了，而是在各自模块中自行添加依赖！
+        -->
         <!--spring-boot-starter-web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

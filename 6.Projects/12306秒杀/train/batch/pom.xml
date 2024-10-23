@@ -24,15 +24,16 @@
             <groupId>garry</groupId>
             <artifactId>common</artifactId>
         </dependency>
-        <!--quartz的springboot依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-quartz</artifactId>
-        </dependency>
         <!--spring-boot-starter-test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--junit4-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <!--spring-boot-devtools-->
@@ -42,11 +43,10 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <!--junit4-->
+        <!--quartz的springboot依赖-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
         <!--模块之间调用openfeign-->
         <dependency>
