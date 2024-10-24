@@ -1606,11 +1606,11 @@ Lua没看
 
 	> - ```java
 	> 	./redis-cli --bigkeys
-	> 																				
+	> 																					
 	> 	-------- summary -------
 	> 	Sampled 32 keys in the keyspace!
 	> 	Total key length in bytes is 184 (avg len 5.75)
-	> 																				
+	> 																					
 	> 	//统计每种数据类型中元素个数最多的bigkey
 	> 	Biggest   list found 'product1' has 8 items
 	> 	Biggest   hash found 'dtemp' has 5 fields
@@ -1618,7 +1618,7 @@ Lua没看
 	> 	Biggest stream found 'mqstream' has 4 entries
 	> 	Biggest    set found 'userid' has 5 members
 	> 	Biggest   zset found 'device:temperature' has 6 members
-	> 																				
+	> 																					
 	> 	//统计每种数据类型的总键值个数，占所有键值个数的比例，以及平均大小
 	> 	4 lists with 15 items (12.50% of keys, avg size 3.75)
 	> 	5 hashs with 14 fields (15.62% of keys, avg size 2.80)
