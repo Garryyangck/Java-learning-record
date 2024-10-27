@@ -14,9 +14,28 @@ spring:
         namespace: garry_train # namespace 的 id
 
 seata:
-  tx-service-group: train-group # 该模块所属的事务组
-  service:
-    vgroup-mapping:
-      train-group: default # 将 train-group 事务组放到名为 default 的事务集群
-    grouplist:
-      default: 127.0.0.1:8091 # seata 的 default 集群包含机器 127.0.0.1:7091；可以在后面写多个机器 ip 地址
+  registry: # seata 注册中心，要和 seata-server 的 application.yml 中的配置一致
+    type: nacos
+    nacos:
+      application: seata-server # 该客户端连接的 seata 服务器，在 Nacos 注册中心中的名字
+      server-addr: 127.0.0.1:8848
+      namespace: seata
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+  config: # seata 配置中心，要和 seata-server 的 application.yml 中的配置一致
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      namespace: seata
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      data-id: seataServer.properties
+  tx-service-group: train-group # 该模块所属的 seata 事务组
+#  # 配置 nacos 后，可以把部分配置写到 nacos 中，比如下面的配置，这样所有 train-group 中的模块的事务集群和机器 ip 地址的配置，就可以统一进行配置了
+#  service:
+#    vgroup-mapping:
+#      train-group: default # 将 train-group 事务组放到名为 default 的事务集群
+#    grouplist:
+#      default: 127.0.0.1:8091 # seata 的 default 集群包含机器 127.0.0.1:7091；可以在后面写多个机器 ip 地址
