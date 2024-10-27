@@ -1,10 +1,8 @@
 package garry.train.common.controller;
 
-import cn.hutool.core.util.StrUtil;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.vo.ResponseVo;
-import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.BindException;
@@ -31,11 +29,6 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({Exception.class})
     @ResponseBody // 这里必须要加ResponseBody，否则返回的不是JSON字符串！
     public ResponseVo exceptionHandler(Exception e) throws Exception {
-        String seataTxID = RootContext.getXID();
-        if (StrUtil.isNotBlank(seataTxID)) {
-            log.error("分布式事务出现异常，需要回滚，ID = {}", seataTxID);
-            throw e;
-        }
         log.error("系统异常: ", e);
         return ResponseVo.error(ResponseEnum.ERROR);
     }

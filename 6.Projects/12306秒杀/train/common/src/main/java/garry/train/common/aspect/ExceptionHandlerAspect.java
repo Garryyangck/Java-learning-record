@@ -1,5 +1,7 @@
 package garry.train.common.aspect;
 
+import cn.hutool.core.util.StrUtil;
+import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,6 +28,11 @@ public class ExceptionHandlerAspect {
     @Around("exceptionHandlerPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object result = proceedingJoinPoint.proceed();
+        String seataTxID = RootContext.getXID();
+        if (StrUtil.isNotBlank(seataTxID)) {
+            log.error("分布式事务出现异常，需要回滚，ID = {}", seataTxID);
+            throw new RuntimeException("分布式事务出现异常，需要回滚，ID = " + seataTxID);
+        }
         log.info("返回结果: {}", result);
         log.info("------------- 产生异常结束 -------------");
         return result;

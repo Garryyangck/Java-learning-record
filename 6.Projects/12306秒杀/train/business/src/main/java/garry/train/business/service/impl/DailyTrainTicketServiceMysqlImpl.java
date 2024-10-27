@@ -22,6 +22,7 @@ import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@Primary
 public class DailyTrainTicketServiceMysqlImpl implements DailyTrainTicketService {
     @Resource
     private TrainStationService trainStationService;

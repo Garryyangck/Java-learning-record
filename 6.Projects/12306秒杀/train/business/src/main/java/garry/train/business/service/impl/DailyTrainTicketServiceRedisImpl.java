@@ -24,7 +24,6 @@ import garry.train.common.util.RedisUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +35,12 @@ import java.util.*;
  * @author Garry
  * 2024-09-30 20:31
  */
+
+/**
+ * 使用 redis 存储余票的致命问题：由于余票信息是存在 redis 里面的，因此 Seata 事务回滚的时候，无法对 redis 中减少的票数进行回滚！
+ */
 @Slf4j
 @Service
-@Primary
 public class DailyTrainTicketServiceRedisImpl implements DailyTrainTicketService {
     @Resource
     private TrainStationService trainStationService;

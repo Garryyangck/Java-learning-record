@@ -117,27 +117,27 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
+    /**
+     * 由于此方法异步执行，执行时 Controller 已经给浏览器返回结果了，
+     * 因此此方法抛出的异常，不会被统一异常处理，因为统一异常处理的返回是给浏览器，但是此刻浏览器已经有返回值了
+     *
+     * @param form
+     */
     @Override
     @Async
     public void doConfirm(ConfirmOrderDoForm form) {
-
-        // 创建对象，插入 confirm_order 表，状态为初始
-        ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
-        log.info("插入 INIT 订单：{}", confirmOrder);
-
-        // 选座
-        List<SeatChosen> seatChosenList = chooseSeat(form);
-
-        // 模拟选座用时很久，毕竟还要排队什么的
         try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            // 创建对象，插入 confirm_order 表，状态为初始
+            ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
+            log.info("插入 INIT 订单：{}", confirmOrder);
 
-        // 选座成功后，进行相关座位售卖情况、余票数、购票信息、订单状态的修改，创建并通过 websocket 发送 message，事务处理
-        if (!afterConfirmOrderService.afterDoConfirm(seatChosenList, form)) {
-            throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_HANDLE_SEAT_CHOSEN_FAILED);
+            // 选座
+            List<SeatChosen> seatChosenList = chooseSeat(form);
+
+            // 选座成功后，进行相关座位售卖情况、余票数、购票信息、订单状态的修改，创建并通过 websocket 发送 message，事务处理
+            afterConfirmOrderService.afterDoConfirm(seatChosenList, form);
+        } catch (Exception e) {
+            // TODO 发送消息，没能选到座位
         }
     }
 
