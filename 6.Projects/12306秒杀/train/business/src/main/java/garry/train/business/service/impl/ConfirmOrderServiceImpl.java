@@ -3,6 +3,7 @@ package garry.train.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -58,6 +59,9 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
     @Resource
     private ConfirmOrderMapper confirmOrderMapper;
+
+    @Resource
+    private MessageService messageService;
 
     @Override
     public ConfirmOrder save(ConfirmOrderDoForm form, ConfirmOrderStatusEnum statusEnum) {
@@ -136,8 +140,14 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
             // 选座成功后，进行相关座位售卖情况、余票数、购票信息、订单状态的修改，创建并通过 websocket 发送 message，事务处理
             afterConfirmOrderService.afterDoConfirm(seatChosenList, form);
+
         } catch (Exception e) {
-            // TODO 发送消息，没能选到座位
+            // 发送消息，没能选到座位
+            String content = "很抱歉，您购买的【%s】从【%s】开往【%s】的【%s】车次的车票购买失败。"
+                    .formatted(DateUtil.format(form.getDate(), "yyyy-MM-dd"),
+                            form.getStart(), form.getEnd(), form.getTrainCode());
+            messageService.sendSystemMessage(form.getMemberId(), content);
+            log.info("发送选座失败消息：{}", content);
         }
     }
 
