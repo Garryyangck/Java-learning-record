@@ -12,3 +12,11 @@ spring:
       discovery: # 注册中心
         server-addr: 127.0.0.1:8848
         namespace: garry_train # namespace 的 id
+
+seata:
+  tx-service-group: train-group # 该模块所属的事务组
+  service:
+    vgroup-mapping:
+      train-group: default # 将 train-group 事务组放到名为 default 的事务集群
+    grouplist:
+      default: 127.0.0.1:8091 # seata 的 default 集群包含机器 127.0.0.1:7091；可以在后面写多个机器 ip 地址

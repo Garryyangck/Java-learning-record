@@ -14,6 +14,7 @@ import garry.train.member.pojo.Ticket;
 import garry.train.member.pojo.TicketExample;
 import garry.train.member.service.TicketService;
 import garry.train.member.vo.TicketQueryVo;
+import io.seata.core.context.RootContext;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,8 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void save(TicketSaveForm form) {
+        log.info("Seata 的全局事务 ID = {} (只有分布式事务生效时才会打印)", RootContext.getXID());
+
         Ticket ticket = BeanUtil.copyProperties(form, Ticket.class);
         DateTime now = DateTime.now();
 
