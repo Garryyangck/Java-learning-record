@@ -8734,3 +8734,13 @@ Java进阶完成：
 
 
 
+## 2024.10.27打卡 Day 6
+
+1. csapp-lab2-bomblab
+
+	完成了 secret_phase，其本质就是一个二叉搜索树的节点查找，只要顺利完成了 phase_1 ~ phase_6，我觉得这个 secret_phase 肯定可以拿下的。
+
+2. 集成分布式事务管理组件 Seata，使用其 AT 模式为余票处理操作增加分布式事务，解决不同模块不同数据库在 Mysql 自带事务下不能同时回滚的问题。由于 Seata 本身是一个 Spring 项目，因此使用 Nacos 对 Seata Server 进行注册和配置的管理，并让 Seata Client 可以在 Nacos 上发现并读取 Nacos 上 Seata 的配置，以便统一进行配置管理。最后将 Nacos 的存储方法改为 Mysql，Seata 会记录分布式事务的过程中进行哪些数据库操作，以便回滚时生成并执行反向 SQL(AT 模式)，并在分布式事务 commit 的时候删除插入 seata 那些表中的所有数据。
+
+
+
