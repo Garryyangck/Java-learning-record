@@ -18,16 +18,20 @@ import garry.train.business.pojo.*;
 import garry.train.business.service.*;
 import garry.train.business.util.SellUtil;
 import garry.train.business.vo.ConfirmOrderQueryVo;
+import garry.train.common.consts.RedisConst;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
+import garry.train.common.util.RedisUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Garry
@@ -55,10 +59,15 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     private AfterConfirmOrderService afterConfirmOrderService;
 
     @Resource
+    private MessageService messageService;
+
+    @Resource
     private ConfirmOrderMapper confirmOrderMapper;
 
     @Resource
-    private MessageService messageService;
+    private RedisTemplate redisTemplate;
+
+    private ThreadLocal<Boolean> getLockHolder = new ThreadLocal<>();
 
     @Override
     public ConfirmOrder save(ConfirmOrderDoForm form, ConfirmOrderStatusEnum statusEnum) {
@@ -126,8 +135,18 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
      */
     @Override
     @Async
-    public synchronized void doConfirm(ConfirmOrderDoForm form) {
+    public void doConfirm(ConfirmOrderDoForm form) {
+        String redisKey = RedisUtil.getRedisKey4DailyTicketDistributedLock(form.getDate(), form.getTrainCode());
         try {
+            Boolean success = redisTemplate.opsForValue().setIfAbsent(redisKey, redisKey, RedisConst.DAILY_TICKET_DISTRIBUTED_LOCK_EXPIRE_SECOND, TimeUnit.SECONDS);
+            if (Boolean.TRUE.equals(success)) {
+                log.info("{} 成功抢到锁 {}", form.getMemberId(), redisKey);
+                getLockHolder.set(true);
+            } else {
+                log.info("{} 未能抢到锁 {}", form.getMemberId(), redisKey);
+                getLockHolder.set(false);
+                throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED);
+            }
             // 创建对象，插入 confirm_order 表，状态为初始
             ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
             log.info("插入 INIT 订单：{}", confirmOrder);
@@ -145,6 +164,14 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
                             form.getStart(), form.getEnd(), form.getTrainCode());
             messageService.sendSystemMessage(form.getMemberId(), content);
             log.info("发送选座失败消息：{}", content);
+
+        } finally {
+            // 只有获取到锁的，才能释放锁，没获取到锁的禁止释放锁！
+            if (Boolean.TRUE.equals(getLockHolder.get())) {
+                getLockHolder.set(false);
+                // 执行完毕释放分布式锁，防止一直持有导致性能降低
+                redisTemplate.delete(redisKey);
+            }
         }
     }
 

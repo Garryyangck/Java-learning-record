@@ -33,6 +33,16 @@ public class RedisUtil {
     }
 
     /**
+     * 获取分布式锁解决超卖问题的 redisKey
+     * 如果参数为 null，则将其替换为 *
+     */
+    public static String getRedisKey4DailyTicketDistributedLock(Date date, String trainCode) {
+        String dateStringFormat = checkDate(date, "yyyy-MM-dd");
+        trainCode = checkString(trainCode);
+        return String.format(RedisConst.DAILY_TICKET_DISTRIBUTED_LOCK_FORMAT, dateStringFormat, trainCode);
+    }
+
+    /**
      * 将 date 转换为 formatString
      * date 若为空，则转化为 *
      */

@@ -25,4 +25,15 @@ public class RedisConst {
      * 举例说明: daily_ticket:2024-10-14:G000224:北京~南京
      */
     public static final String DAILY_TRAIN_TICKET_FORMAT = "daily_ticket:%s:%s:%s~%s";
+
+    /**
+     * redis 作分布式锁解决超卖问题的 key
+     * 举例说明: daily_ticket_distributed_lock:2024-10-30:G000224
+     */
+    public static final String DAILY_TICKET_DISTRIBUTED_LOCK_FORMAT = "daily_ticket_distributed_lock:%s:%s";
+
+    /**
+     * 分布式锁自动释放时间
+     */
+    public static final Long DAILY_TICKET_DISTRIBUTED_LOCK_EXPIRE_SECOND = 5L;
 }

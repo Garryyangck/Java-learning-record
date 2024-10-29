@@ -99,6 +99,8 @@ public enum ResponseEnum {
     BUSINESS_MARKDOWN_FILE_READ_FAILED(42, "获取md页面失败，md文件读取失败"),
 
     NO_EXPIRE_CACHE_NAME_READ_FAILED(43, "no_expire_cache_name.txt文件读取异常"),
+
+    BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED(44, "分布式锁获取失败，请稍后重试"),
     ;
 
     private final Integer code;

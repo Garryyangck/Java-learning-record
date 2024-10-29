@@ -29,12 +29,10 @@ public class ConfirmOrderController {
     @RequestMapping(value = "/do", method = RequestMethod.POST)
     public ResponseVo doConfirm(@Valid @RequestBody ConfirmOrderDoForm form) {
         form.setMemberId(hostHolder.getMemberId());
-        synchronized (this) {
-            if (!confirmOrderService.checkConfirmOrder(form)) {
-                throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
-            }
-            confirmOrderService.doConfirm(form);
+        if (!confirmOrderService.checkConfirmOrder(form)) {
+            throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
         }
+        confirmOrderService.doConfirm(form);
         return ResponseVo.success();
     }
 }
