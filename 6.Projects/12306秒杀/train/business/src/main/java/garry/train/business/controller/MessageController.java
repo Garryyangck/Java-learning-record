@@ -53,6 +53,12 @@ public class MessageController {
         return ResponseVo.success(unreadNum);
     }
 
+    @RequestMapping(value = "/read-all", method = RequestMethod.POST)
+    public ResponseVo readAll() {
+        messageService.readAll(hostHolder.getMemberId());
+        return ResponseVo.success();
+    }
+
     @RequestMapping(value = "/unread-number/{memberId}", method = RequestMethod.GET)
     public ResponseVo<Integer> unReadNum(@PathVariable Long memberId) {
         int unreadNum = messageService.getUnreadNum(memberId);

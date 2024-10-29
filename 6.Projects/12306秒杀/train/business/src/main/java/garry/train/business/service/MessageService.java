@@ -44,6 +44,11 @@ public interface MessageService {
     int read(Long id, Long memberId);
 
     /**
+     * 将所有状态为“未读”的，标为已读
+     */
+    void readAll(Long memberId);
+
+    /**
      * 修改状态为置顶
      */
     void top(Long id);

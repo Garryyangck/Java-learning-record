@@ -260,13 +260,18 @@ export default defineComponent({
     };
 
     const readAll = () => {
-      messages.value.forEach((item) => {
-        read(item.id);
-      });
-      handleQuery({
-        pageNum: 1,
-        pageSize: pagination.value.pageSize,
-      });
+      axios.post("/business/message/read-all").then((response) => {
+        let responseVo = response.data;
+        if (responseVo.success) {
+          handleQuery({
+            pageNum: 1,
+            pageSize: pagination.value.pageSize,
+          });
+          store.state.unreadNum = 0;
+        } else {
+          notification.error({description: responseVo.msg});
+        }
+      })
     };
 
     const onTop = (record) => {

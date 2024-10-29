@@ -142,6 +142,17 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public void readAll(Long memberId) {
+        MessageExample messageExample = new MessageExample();
+        messageExample.createCriteria()
+                .andToIdEqualTo(memberId)
+                .andStatusEqualTo(MessageStatusEnum.UNREAD.getCode());
+        Message message = new Message();
+        message.setStatus(MessageStatusEnum.READ.getCode());
+        messageMapper.updateByExampleSelective(message, messageExample);
+    }
+
+    @Override
     public void top(Long id) {
         Message message = messageMapper.selectByPrimaryKey(id);
         message.setStatus(MessageStatusEnum.TOP.getCode());
