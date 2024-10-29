@@ -79,8 +79,8 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
 
             // daily_train_ticket 修改余票数
             List<DailyTrainTicket> tickets = dailyTrainTickets.stream()
-                    .filter(dailyTrainTicket -> dailyTrainTicket.getStartIndex() >= startIndex
-                            && dailyTrainTicket.getEndIndex() <= endIndex).toList(); // startIndex, endIndex 之间的所有车站的票都要减少
+                    .filter(dailyTrainTicket -> dailyTrainTicket.getStartIndex() <= startIndex
+                            && dailyTrainTicket.getEndIndex() >= endIndex).toList(); // startIndex, endIndex 之间的所有车站的票都要减少
             for (DailyTrainTicket dailyTrainTicket : tickets) {
                 switch (seatChosen.getSeatType()) {
                     case "1":
