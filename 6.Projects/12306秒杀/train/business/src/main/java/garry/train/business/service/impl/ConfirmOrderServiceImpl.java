@@ -126,7 +126,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
      */
     @Override
     @Async
-    public void doConfirm(ConfirmOrderDoForm form) {
+    public synchronized void doConfirm(ConfirmOrderDoForm form) {
         try {
             // 创建对象，插入 confirm_order 表，状态为初始
             ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
