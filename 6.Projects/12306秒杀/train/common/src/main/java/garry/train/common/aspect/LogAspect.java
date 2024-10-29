@@ -90,7 +90,9 @@ public class LogAspect {
         String apiMethod = _request.getMethod();
         String moduleName = fullApiPath.split("/")[1];
         fullApiPath = handlePathVariable(joinPoint, fullApiPath);
-        ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, 0L, false);
+        synchronized (this) { // 防止并发线程，修改 ApiDetail 导致调用次数不准确，因此在修改 ApiDetail 的时候加 JDK 锁
+            ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, 0L, false);
+        }
     }
 
     /**
@@ -118,7 +120,9 @@ public class LogAspect {
         String moduleName = fullApiPath.split("/")[1];
         Long mills = executeMills;
         fullApiPath = handlePathVariable(proceedingJoinPoint, fullApiPath);
-        ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, mills, true);
+        synchronized (this) { // 防止并发线程，修改 ApiDetail 导致调用次数不准确，因此在修改 ApiDetail 的时候加 JDK 锁
+            ApiDetail.putApiDetails(fullApiPath, apiMethod, moduleName, mills, true);
+        }
 
         return result;
     }
