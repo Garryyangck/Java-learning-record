@@ -56,7 +56,7 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
     private MemberFeign memberFeign;
 
     @Override
-    // @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ, rollbackFor = RuntimeException.class)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ, rollbackFor = RuntimeException.class)
     @GlobalTransactional
     public boolean afterDoConfirm(List<ConfirmOrderService.SeatChosen> seatChosenList, ConfirmOrderDoForm form) {
         log.info("Seata 的全局事务 ID = {} (只有分布式事务生效时才会打印)", RootContext.getXID());

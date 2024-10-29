@@ -5,9 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
@@ -30,7 +28,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Garry
@@ -181,10 +178,10 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         }
 
         // 车次时间是否合法
-        if (System.currentTimeMillis() > form.getDate().getTime()) {
-            log.info("车次时间不合法");
-            return false;
-        }
+//        if (System.currentTimeMillis() > form.getDate().getTime()) {
+//            log.info("车次时间不合法");
+//            return false;
+//        }
 
         // tickets 是否 > 0
         if (CollUtil.isEmpty(form.getTickets())) {
@@ -204,20 +201,20 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         }
 
         // 同一乘客不能购买同一车次
-        Set<Long> passengerIdSet = form.getTickets().stream()
-                .map(ConfirmOrderTicketForm::getPassengerId).collect(Collectors.toSet());
-        List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
-        for (ConfirmOrder confirmOrder : confirmOrders) {
-            // 使用 fastjson，将 JSON 字符串转化为 List<ConfirmOrderTicketForm> 对象
-            List<ConfirmOrderTicketForm> ticketList = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {
-            });
-            for (ConfirmOrderTicketForm ticketForm : ticketList) {
-                if (passengerIdSet.contains(ticketForm.getPassengerId())) {
-                    log.info("同一乘客不能购买同一车次");
-                    throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DUPLICATE_PASSENGER);
-                }
-            }
-        }
+//        Set<Long> passengerIdSet = form.getTickets().stream()
+//                .map(ConfirmOrderTicketForm::getPassengerId).collect(Collectors.toSet());
+//        List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
+//        for (ConfirmOrder confirmOrder : confirmOrders) {
+//            // 使用 fastjson，将 JSON 字符串转化为 List<ConfirmOrderTicketForm> 对象
+//            List<ConfirmOrderTicketForm> ticketList = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {
+//            });
+//            for (ConfirmOrderTicketForm ticketForm : ticketList) {
+//                if (passengerIdSet.contains(ticketForm.getPassengerId())) {
+//                    log.info("同一乘客不能购买同一车次");
+//                    throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DUPLICATE_PASSENGER);
+//                }
+//            }
+//        }
 
         log.info("订单校验成功");
         return true;

@@ -2,6 +2,8 @@ package garry.train.business.controller;
 
 import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.service.ConfirmOrderService;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
 import garry.train.common.util.HostHolder;
 import garry.train.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
@@ -27,9 +29,9 @@ public class ConfirmOrderController {
     @RequestMapping(value = "/do", method = RequestMethod.POST)
     public ResponseVo doConfirm(@Valid @RequestBody ConfirmOrderDoForm form) {
         form.setMemberId(hostHolder.getMemberId());
-//        if (!confirmOrderService.checkConfirmOrder(form)) {
-//            throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
-//        }
+        if (!confirmOrderService.checkConfirmOrder(form)) {
+            throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
+        }
         confirmOrderService.doConfirm(form);
         return ResponseVo.success();
     }
