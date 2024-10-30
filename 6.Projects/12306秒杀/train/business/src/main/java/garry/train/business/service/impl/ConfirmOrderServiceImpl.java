@@ -27,6 +27,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.MDC;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -132,12 +133,14 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     /**
      * 由于此方法异步执行，执行时 Controller 已经给浏览器返回结果了，
      * 因此此方法抛出的异常，不会被统一异常处理，因为统一异常处理的返回是给浏览器，但是此刻浏览器已经有返回值了
-     *
-     * @param form
      */
     @Override
     @Async
-    public void doConfirm(ConfirmOrderDoForm form) {
+    public void doConfirm(ConfirmOrderDoForm form, String LOG_ID) {
+        // 由于这是一个异步的方法，Controller 是一个线程，该方法是另一个线程，不共享 Controller 的 LOG_ID，这就是该方法的日志没有流水号的原因
+        // 因此可以让 Controller 把自己的 LOG_ID 传过来
+        MDC.put("LOG_ID", LOG_ID);
+
         String redisKey = RedisUtil.getRedisKey4DailyTicketDistributedLock(form.getDate(), form.getTrainCode());
 
         RLock rLock = null;

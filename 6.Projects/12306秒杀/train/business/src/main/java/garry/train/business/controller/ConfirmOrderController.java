@@ -8,6 +8,7 @@ import garry.train.common.util.HostHolder;
 import garry.train.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,7 +33,7 @@ public class ConfirmOrderController {
         if (!confirmOrderService.checkConfirmOrder(form)) {
             throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
         }
-        confirmOrderService.doConfirm(form);
+        confirmOrderService.doConfirm(form, MDC.get("LOG_ID"));
         return ResponseVo.success();
     }
 }

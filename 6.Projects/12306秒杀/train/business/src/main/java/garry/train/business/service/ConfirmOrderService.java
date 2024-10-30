@@ -101,7 +101,7 @@ public interface ConfirmOrderService {
     /**
      * 处理订票操作
      */
-    void doConfirm(ConfirmOrderDoForm form);
+    void doConfirm(ConfirmOrderDoForm form, String LOG_ID);
 
     /**
      * 用于检验用户是否会重复购买同一乘客某一确定始末站的车票
