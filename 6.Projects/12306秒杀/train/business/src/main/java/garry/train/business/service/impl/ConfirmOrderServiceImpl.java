@@ -153,11 +153,11 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
             if (tryLock) {
                 log.info("{} 成功抢到锁 {}", form.getMemberId(), redisKey);
-                for (int i = 0; i < 30; i++) {
-                    Long expire = redisTemplate.opsForValue().getOperations().getExpire(redisKey);
-                    log.info("分布式锁剩余过期时间: {} 秒", expire);
-                    Thread.sleep(1000);
-                }
+//                for (int i = 0; i < 30; i++) {
+//                    Long expire = redisTemplate.opsForValue().getOperations().getExpire(redisKey);
+//                    log.info("分布式锁剩余过期时间: {} 秒", expire);
+//                    Thread.sleep(1000);
+//                }
             } else {
                 log.info("{} 未能抢到锁 {}", form.getMemberId(), redisKey);
                 throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED);
