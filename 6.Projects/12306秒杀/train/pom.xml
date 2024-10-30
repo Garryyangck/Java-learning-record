@@ -171,6 +171,12 @@
                 <artifactId>flexmark-all</artifactId>
                 <version>0.62.2</version>
             </dependency>
+            <!--Redisson，通过“看门狗”实现安全的分布式锁-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>3.21.0</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

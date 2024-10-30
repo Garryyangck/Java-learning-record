@@ -18,7 +18,6 @@ import garry.train.business.pojo.*;
 import garry.train.business.service.*;
 import garry.train.business.util.SellUtil;
 import garry.train.business.vo.ConfirmOrderQueryVo;
-import garry.train.common.consts.RedisConst;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
@@ -26,6 +25,8 @@ import garry.train.common.util.RedisUtil;
 import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,8 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     @Resource
     private RedisTemplate redisTemplate;
 
-    private ThreadLocal<Boolean> getLockHolder = new ThreadLocal<>();
+    @Resource
+    private RedissonClient redissonClient;
 
     @Override
     public ConfirmOrder save(ConfirmOrderDoForm form, ConfirmOrderStatusEnum statusEnum) {
@@ -137,16 +139,30 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     @Async
     public void doConfirm(ConfirmOrderDoForm form) {
         String redisKey = RedisUtil.getRedisKey4DailyTicketDistributedLock(form.getDate(), form.getTrainCode());
+
+        RLock rLock = null;
+
         try {
-            Boolean success = redisTemplate.opsForValue().setIfAbsent(redisKey, redisKey, RedisConst.DAILY_TICKET_DISTRIBUTED_LOCK_EXPIRE_SECOND, TimeUnit.SECONDS);
-            if (Boolean.TRUE.equals(success)) {
+            // 使用 redisson，通过“看门狗”机制，实现安全的 redis 分布式锁
+            rLock = redissonClient.getLock(redisKey);
+
+//            // 不带看门狗，阻塞 30 秒等待，分布式锁 5 秒自动释放，还是有安全风险
+//            boolean tryLock = rLock.tryLock(30/* wait_time，如果没有拿到锁，则阻塞 30 秒 */, 30/* 分布式锁过期时间 */, TimeUnit.SECONDS);
+            // 带看门狗，无限刷新 EXPIRE_TIME，不会引起多个线程进来，造成的并发风险
+            boolean tryLock = rLock.tryLock(0/* wait_time，如果没有拿到锁，则阻塞 0 秒 */, TimeUnit.SECONDS);
+
+            if (tryLock) {
                 log.info("{} 成功抢到锁 {}", form.getMemberId(), redisKey);
-                getLockHolder.set(true);
+                for (int i = 0; i < 30; i++) {
+                    Long expire = redisTemplate.opsForValue().getOperations().getExpire(redisKey);
+                    log.info("分布式锁剩余过期时间: {} 秒", expire);
+                    Thread.sleep(1000);
+                }
             } else {
                 log.info("{} 未能抢到锁 {}", form.getMemberId(), redisKey);
-                getLockHolder.set(false);
                 throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED);
             }
+
             // 创建对象，插入 confirm_order 表，状态为初始
             ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
             log.info("插入 INIT 订单：{}", confirmOrder);
@@ -166,11 +182,9 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             log.info("发送选座失败消息：{}", content);
 
         } finally {
-            // 只有获取到锁的，才能释放锁，没获取到锁的禁止释放锁！
-            if (Boolean.TRUE.equals(getLockHolder.get())) {
-                getLockHolder.set(false);
-                // 执行完毕释放分布式锁，防止一直持有导致性能降低
-                redisTemplate.delete(redisKey);
+            log.info("执行完毕，释放锁 {}", redisKey);
+            if (null != rLock && rLock.isHeldByCurrentThread()) {
+                rLock.unlock();
             }
         }
     }
