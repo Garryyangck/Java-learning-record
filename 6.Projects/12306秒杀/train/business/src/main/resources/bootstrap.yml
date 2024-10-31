@@ -13,6 +13,9 @@ spring:
         server-addr: 127.0.0.1:8848
         namespace: garry_train # namespace 的 id
     sentinel:
+      transport:
+        port: 8719 # 这个不能改
+        dashboard: 127.0.0.1:18080 # 控制台 ip 端口
       log:
         dir: D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\log\sentinel
 
