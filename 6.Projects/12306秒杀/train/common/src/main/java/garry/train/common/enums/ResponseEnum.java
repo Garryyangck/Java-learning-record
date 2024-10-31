@@ -101,6 +101,8 @@ public enum ResponseEnum {
     NO_EXPIRE_CACHE_NAME_READ_FAILED(43, "no_expire_cache_name.txt文件读取异常"),
 
     BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED(44, "分布式锁获取失败，请稍后重试"),
+
+    BUSINESS_CONFIRM_ORDER_SENTINEL_BLOCKED(45, "doConfirm 请求被降级处理，请稍后重试"),
     ;
 
     private final Integer code;

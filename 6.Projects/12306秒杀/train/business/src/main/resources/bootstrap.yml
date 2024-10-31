@@ -12,6 +12,9 @@ spring:
       discovery: # 注册中心
         server-addr: 127.0.0.1:8848
         namespace: garry_train # namespace 的 id
+    sentinel:
+      log:
+        dir: D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\log\sentinel
 
 seata:
   registry: # seata 注册中心，要和 seata-server 的 application.yml 中的配置一致

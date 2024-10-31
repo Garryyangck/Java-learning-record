@@ -5,6 +5,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -136,6 +138,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
      */
     @Override
     @Async
+    @SentinelResource(value = "doConfirm", blockHandler = "doConfirmBlock")
     public void doConfirm(ConfirmOrderDoForm form, String LOG_ID) {
         // 由于这是一个异步的方法，Controller 是一个线程，该方法是另一个线程，不共享 Controller 的 LOG_ID，这就是该方法的日志没有流水号的原因
         // 因此可以让 Controller 把自己的 LOG_ID 传过来
@@ -149,18 +152,11 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
             // 使用 redisson，通过“看门狗”机制，实现安全的 redis 分布式锁
             rLock = redissonClient.getLock(redisKey);
 
-//            // 不带看门狗，阻塞 30 秒等待，分布式锁 5 秒自动释放，还是有安全风险
-//            boolean tryLock = rLock.tryLock(30/* wait_time，如果没有拿到锁，则阻塞 30 秒 */, 30/* 分布式锁过期时间 */, TimeUnit.SECONDS);
-            // 带看门狗，无限刷新 EXPIRE_TIME，不会引起多个线程进来，造成的并发风险
-            boolean tryLock = rLock.tryLock(0/* wait_time，如果没有拿到锁，则阻塞 0 秒 */, TimeUnit.SECONDS);
+//            boolean tryLock = rLock.tryLock(30/* wait_time，如果没有拿到锁，则阻塞 30 秒 */, 30/* 分布式锁过期时间 */, TimeUnit.SECONDS); // 不带看门狗，阻塞 30 秒等待，分布式锁 5 秒自动释放，有并发风险
+            boolean tryLock = rLock.tryLock(0/* wait_time，如果没有拿到锁，则阻塞 0 秒 */, TimeUnit.SECONDS); // 带看门狗，无限刷新 EXPIRE_TIME，不会引起多个线程进来造成的并发风险
 
             if (tryLock) {
                 log.info("{} 成功抢到锁 {}", form.getMemberId(), redisKey);
-//                for (int i = 0; i < 30; i++) {
-//                    Long expire = redisTemplate.opsForValue().getOperations().getExpire(redisKey);
-//                    log.info("分布式锁剩余过期时间: {} 秒", expire);
-//                    Thread.sleep(1000);
-//                }
             } else {
                 log.info("{} 未能抢到锁 {}", form.getMemberId(), redisKey);
                 throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED);
@@ -412,6 +408,14 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
         log.info("系统自动分配的座位 seatChosenList = {}", seatChosenList);
         return seatChosenList;
+    }
+
+    /**
+     * doConfirm 的降级方法
+     */
+    public void doConfirmBlock(ConfirmOrderDoForm form, String LOG_ID, BlockException e) {
+        log.info("{} 的 doConfirm 请求被降级处理", form.getMemberId());
+        throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_SENTINEL_BLOCKED);
     }
 
     /**
