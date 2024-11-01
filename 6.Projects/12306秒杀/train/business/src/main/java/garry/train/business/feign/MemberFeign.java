@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 //@FeignClient(name = "member", url = "http://127.0.0.1:8081/member/")
 public interface MemberFeign {
 
+    @GetMapping("/member/hello")
+    String hello();
+
     /**
      * 存储 Ticket
      */

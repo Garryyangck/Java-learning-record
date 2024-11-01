@@ -12,6 +12,8 @@ spring:
       discovery: # 注册中心
         server-addr: 127.0.0.1:8848
         namespace: garry_train # namespace 的 id
+#    openfeign:
+#      lazy-attributes-resolution: true # feign 懒加载，不然 feign:sentinel:default-rule 配置后会报错
     sentinel:
       transport:
         port: 8719 # 这个不能改
@@ -30,8 +32,8 @@ spring:
 #          server-addr: 127.0.0.1:8848
 #          namespace: garry_train
 #          group-id: SENTINEL_GROUP
-#          data-id: sentinel_business_flow
-#          rule-type: degrade
+#          data-id: sentinel_business_degrade
+#          rule-type: degrade # 熔断
 
 seata:
   registry: # seata 注册中心，要和 seata-server 的 application.yml 中的配置一致
@@ -59,3 +61,7 @@ seata:
 #      train-group: default # 将 train-group 事务组放到名为 default 的事务集群
 #    grouplist:
 #      default: 127.0.0.1:8091 # seata 的 default 集群包含机器 127.0.0.1:7091；可以在后面写多个机器 ip 地址
+
+#feign:
+#  sentinel:
+#    default-rule: true # Sentinel 默认不监控 feign，需配置为 true 才能在簇点链路页面看到 feign 的接口
