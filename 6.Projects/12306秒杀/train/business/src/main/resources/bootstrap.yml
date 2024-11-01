@@ -18,13 +18,20 @@ spring:
         dashboard: 127.0.0.1:18080 # 控制台 ip 端口
       log:
         dir: D:\杨宸楷\学习\工作相关\java-learning\6.Projects\12306秒杀\train\log\sentinel
-      datasource.nacos:
+      datasource.flow:
         nacos:
           server-addr: 127.0.0.1:8848
           namespace: garry_train
           group-id: SENTINEL_GROUP
-          data-id: sentinel
-          rule-type: flow
+          data-id: sentinel_business_flow
+          rule-type: flow # 限流
+#      datasource.degrade:
+#        nacos:
+#          server-addr: 127.0.0.1:8848
+#          namespace: garry_train
+#          group-id: SENTINEL_GROUP
+#          data-id: sentinel_business_flow
+#          rule-type: degrade
 
 seata:
   registry: # seata 注册中心，要和 seata-server 的 application.yml 中的配置一致

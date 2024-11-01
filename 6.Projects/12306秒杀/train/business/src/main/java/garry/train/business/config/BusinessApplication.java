@@ -25,7 +25,7 @@ public class BusinessApplication {
         log.info("启动成功！");
         log.info("地址\thttp://127.0.0.1:{}{}/hello", env.getProperty("server.port"), env.getProperty("server.servlet.context-path"));
 //        initFlowRules();
-        log.info("Sentinel 限流规则定义成功！");
+//        log.info("Sentinel 限流规则定义成功！");
     }
 
 //    private static void initFlowRules() {
