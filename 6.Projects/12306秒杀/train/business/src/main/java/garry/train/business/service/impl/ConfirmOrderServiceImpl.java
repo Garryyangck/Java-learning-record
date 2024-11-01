@@ -174,11 +174,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
 
         } catch (Exception e) {
             // 发送消息，没能选到座位
-            String content = "很抱歉，您购买的【%s】从【%s】开往【%s】的【%s】车次的车票购买失败。"
-                    .formatted(DateUtil.format(form.getDate(), "yyyy-MM-dd"),
-                            form.getStart(), form.getEnd(), form.getTrainCode());
-            messageService.sendSystemMessage(form.getMemberId(), content);
-            log.info("发送选座失败消息：{}", content);
+            sendFailMessage(form);
 
         } finally {
             log.info("执行完毕，释放锁 {}", redisKey);
@@ -415,7 +411,16 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
      */
     public void doConfirmBlock(ConfirmOrderDoForm form, String LOG_ID, BlockException e) {
         log.info("{} 的 doConfirm 请求被降级处理", form.getMemberId());
-        throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_SENTINEL_BLOCKED);
+        sendFailMessage(form);
+    }
+
+    private void sendFailMessage(ConfirmOrderDoForm form) {
+        // 发送消息，没能选到座位
+        String content = "很抱歉，您购买的【%s】从【%s】开往【%s】的【%s】车次的车票购买失败。"
+                .formatted(DateUtil.format(form.getDate(), "yyyy-MM-dd"),
+                        form.getStart(), form.getEnd(), form.getTrainCode());
+        messageService.sendSystemMessage(form.getMemberId(), content);
+        log.info("发送选座失败消息：{}", content);
     }
 
     /**
