@@ -1,9 +1,14 @@
 package garry.train.business.service;
 
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.SkTokenQueryForm;
 import garry.train.business.form.SkTokenSaveForm;
+import garry.train.business.pojo.SkToken;
+import garry.train.business.pojo.Train;
 import garry.train.business.vo.SkTokenQueryVo;
+import garry.train.common.vo.PageVo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Garry
@@ -27,4 +32,14 @@ public interface SkTokenService {
      * 根据 id(主键) 删除秒杀令牌
      */
     void delete(Long id);
+
+    /**
+     * 生成 date 日，train 下的所有 sk-token
+     */
+    void genDaily(Date date, Train train);
+
+    /**
+     * 一次性查出 date, trainCode 下的 sk-token
+     */
+    List<SkToken> queryByDateAndTrainCode(Date date, String trainCode);
 }

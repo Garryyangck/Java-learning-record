@@ -5,6 +5,11 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import garry.train.business.pojo.Train;
+import garry.train.business.service.DailyTrainSeatService;
+import garry.train.business.service.DailyTrainStationService;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
 import garry.train.common.vo.PageVo;
 import garry.train.business.form.SkTokenQueryForm;
@@ -18,6 +23,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +36,12 @@ public class SkTokenServiceImpl implements SkTokenService {
     @Resource
     private SkTokenMapper skTokenMapper;
 
+    @Resource
+    private DailyTrainSeatService dailyTrainSeatService;
+
+    @Resource
+    private DailyTrainStationService dailyTrainStationService;
+
     @Override
     public void save(SkTokenSaveForm form) {
         SkToken skToken = BeanUtil.copyProperties(form, SkToken.class);
@@ -37,7 +49,9 @@ public class SkTokenServiceImpl implements SkTokenService {
 
         if (ObjectUtil.isNull(skToken.getId())) { // 插入
             // 插入时要看数据库有没有唯一键约束，在此校验唯一键约束，防止出现 DuplicationKeyException
-
+            if (!queryByDateAndTrainCode(form.getDate(), form.getTrainCode()).isEmpty()) {
+                throw new BusinessException(ResponseEnum.BUSINESS_DUPLICATE_SK_TOKEN_DATE_TRAIN_CODE);
+            }
             // 对Id、createTime、updateTime 重新赋值
             // 可能还需要重新赋值其它的字段，比如 Passenger.memberId
             skToken.setId(CommonUtil.getSnowflakeNextId());
@@ -84,5 +98,36 @@ public class SkTokenServiceImpl implements SkTokenService {
     @Override
     public void delete(Long id) {
         skTokenMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void genDaily(Date date, Train train) {
+        // 删除之前的 skToken
+        SkTokenExample skTokenExample = new SkTokenExample();
+        skTokenExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(train.getCode());
+        skTokenMapper.deleteByExample(skTokenExample);
+
+        // 生成新 skToken 对象
+        SkTokenSaveForm form = new SkTokenSaveForm();
+        form.setDate(date);
+        form.setTrainCode(train.getCode());
+
+        // 计算改车次的令牌总数，即总座位数 * 3/4
+        int seatCount = dailyTrainSeatService.queryByDateAndTrainCode(date, train.getCode()).size();
+        int stationCount = dailyTrainStationService.queryByDateAndTrainCode(date, train.getCode()).size();
+
+        form.setCount(seatCount * (stationCount - 1) * 3/4);
+        save(form);
+    }
+
+    @Override
+    public List<SkToken> queryByDateAndTrainCode(Date date, String trainCode) {
+        SkTokenExample skTokenExample = new SkTokenExample();
+        skTokenExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
+        return skTokenMapper.selectByExample(skTokenExample);
     }
 }

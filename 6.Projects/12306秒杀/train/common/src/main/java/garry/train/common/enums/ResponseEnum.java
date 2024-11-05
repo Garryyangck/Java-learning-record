@@ -103,6 +103,8 @@ public enum ResponseEnum {
     BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED(44, "分布式锁获取失败，请稍后重试"),
 
     BUSINESS_CONFIRM_ORDER_SENTINEL_BLOCKED(45, "doConfirm 请求被降级处理，请稍后重试"),
+
+    BUSINESS_DUPLICATE_SK_TOKEN_DATE_TRAIN_CODE(46, "该日期的该车次已生成令牌"),
     ;
 
     private final Integer code;

@@ -146,4 +146,13 @@ public class DailyTrainStationServiceImpl implements DailyTrainStationService {
                 .andNameEqualTo(name);
         return dailyTrainStationMapper.selectByExample(dailyTrainStationExample);
     }
+
+    @Override
+    public List<DailyTrainStation> queryByDateAndTrainCode(Date date, String trainCode) {
+        DailyTrainStationExample dailyTrainStationExample = new DailyTrainStationExample();
+        dailyTrainStationExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
+        return dailyTrainStationMapper.selectByExample(dailyTrainStationExample);
+    }
 }

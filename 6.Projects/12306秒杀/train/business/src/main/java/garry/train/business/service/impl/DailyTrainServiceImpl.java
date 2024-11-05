@@ -52,6 +52,9 @@ public class DailyTrainServiceImpl implements DailyTrainService {
     @Resource
     private DailyTrainMapper dailyTrainMapper;
 
+    @Resource
+    private SkTokenService skTokenService;
+
     @Override
     public void save(DailyTrainSaveForm form) {
         DailyTrain dailyTrain = BeanUtil.copyProperties(form, DailyTrain.class);
@@ -155,6 +158,9 @@ public class DailyTrainServiceImpl implements DailyTrainService {
 
         // 生成 dailyTrainTicket
         dailyTrainTicketService.genDaily(date, train);
+
+        // 生成 skToken
+        skTokenService.genDaily(date, train);
 
         log.info("已生成 【{}】 车次 【{}】 的所有每日数据", DateUtil.format(date, "yyyy-MM-dd"), train.getCode());
     }

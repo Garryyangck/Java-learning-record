@@ -40,10 +40,4 @@ public class SkTokenAdminController {
         PageVo<SkTokenQueryVo> vo = skTokenService.queryList(form);
         return ResponseVo.success(vo);
     }
-
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseVo delete(@PathVariable Long id) {
-        skTokenService.delete(id);
-        return ResponseVo.success();
-    }
 }

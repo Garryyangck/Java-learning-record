@@ -47,4 +47,9 @@ public interface DailyTrainStationService {
      * 校验唯一键
      */
     List<DailyTrainStation> queryByDateAndTrainCodeAndName(Date date, String trainCode, String name);
+
+    /**
+     * 查询总站数
+     */
+    List<DailyTrainStation> queryByDateAndTrainCode(Date date, String trainCode);
 }
