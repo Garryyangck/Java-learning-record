@@ -66,6 +66,9 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     private MessageService messageService;
 
     @Resource
+    private SkTokenService skTokenService;
+
+    @Resource
     private ConfirmOrderMapper confirmOrderMapper;
 
     @Resource
@@ -198,7 +201,14 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     }
 
     @Override
-    public boolean checkConfirmOrder(ConfirmOrderDoForm form) {
+    public boolean checkConfirmOrder(ConfirmOrderDoForm form, Long memberId) {
+
+        // 在执行后面哪些更慢的 SQL 之前，先查令牌数，因为令牌查起来更快，如果令牌没有了，就可以认为库存没有了，当然如果还有令牌可以手动添加
+        boolean validSkToken = skTokenService.validSkToken(form.getDate(), form.getTrainCode(), memberId);
+        if (!validSkToken) {
+            throw new BusinessException(ResponseEnum.BUSINESS_SK_TOKEN_GET_FAILED);
+        }
+
         // 车次是否存在
         List<DailyTrain> trains = dailyTrainService.queryByDateAndCode(form.getDate(), form.getTrainCode());
         if (CollUtil.isEmpty(trains)) {

@@ -118,7 +118,7 @@ public class SkTokenServiceImpl implements SkTokenService {
         int seatCount = dailyTrainSeatService.queryByDateAndTrainCode(date, train.getCode()).size();
         int stationCount = dailyTrainStationService.queryByDateAndTrainCode(date, train.getCode()).size();
 
-        form.setCount(seatCount * (stationCount - 1) * 3/4);
+        form.setCount(seatCount * (stationCount - 1) * 2);
         save(form);
     }
 
@@ -129,5 +129,21 @@ public class SkTokenServiceImpl implements SkTokenService {
                 .andDateEqualTo(date)
                 .andTrainCodeEqualTo(trainCode);
         return skTokenMapper.selectByExample(skTokenExample);
+    }
+
+    @Override
+    public boolean validSkToken(Date date, String trainCode, Long memberId) {
+        SkTokenExample skTokenExample = new SkTokenExample();
+        skTokenExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
+        SkToken skToken = skTokenMapper.selectByExample(skTokenExample).get(0);
+        if (skToken.getCount() > 0) {
+            log.info("{} 成功获取 {}  {} 车次的令牌", memberId, date, trainCode);
+            skToken.setCount(skToken.getCount() - 1);
+            skTokenMapper.updateByPrimaryKeySelective(skToken);
+            return true;
+        }
+        return false;
     }
 }

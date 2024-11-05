@@ -112,5 +112,5 @@ public interface ConfirmOrderService {
      * 业务数据校验，车次是否存在，车票是否存在，车次时间是否合法，
      * tickets 是否 > 0，是否有余票，同一乘客不能购买同一车次
      */
-    boolean checkConfirmOrder(ConfirmOrderDoForm form);
+    boolean checkConfirmOrder(ConfirmOrderDoForm form, Long memberId);
 }

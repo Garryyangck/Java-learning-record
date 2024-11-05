@@ -105,6 +105,8 @@ public enum ResponseEnum {
     BUSINESS_CONFIRM_ORDER_SENTINEL_BLOCKED(45, "doConfirm 请求被降级处理，请稍后重试"),
 
     BUSINESS_DUPLICATE_SK_TOKEN_DATE_TRAIN_CODE(46, "该日期的该车次已生成令牌"),
+
+    BUSINESS_SK_TOKEN_GET_FAILED(47, "获取令牌失败"),
     ;
 
     private final Integer code;

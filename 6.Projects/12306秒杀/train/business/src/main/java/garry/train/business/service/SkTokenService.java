@@ -42,4 +42,9 @@ public interface SkTokenService {
      * 一次性查出 date, trainCode 下的 sk-token
      */
     List<SkToken> queryByDateAndTrainCode(Date date, String trainCode);
+
+    /**
+     * 扣减令牌
+     */
+    boolean validSkToken(Date date, String trainCode, Long memberId);
 }

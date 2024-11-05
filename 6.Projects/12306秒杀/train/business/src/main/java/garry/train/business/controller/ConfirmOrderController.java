@@ -35,7 +35,7 @@ public class ConfirmOrderController {
     @RequestMapping(value = "/do", method = RequestMethod.POST)
     public ResponseVo doConfirm(@Valid @RequestBody ConfirmOrderDoForm form) {
         form.setMemberId(hostHolder.getMemberId());
-        if (!confirmOrderService.checkConfirmOrder(form)) {
+        if (!confirmOrderService.checkConfirmOrder(form, hostHolder.getMemberId())) {
             throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
         }
         confirmOrderService.doConfirm(form, MDC.get("LOG_ID"));
