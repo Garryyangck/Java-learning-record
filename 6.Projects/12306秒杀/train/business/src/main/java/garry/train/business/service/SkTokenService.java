@@ -44,7 +44,7 @@ public interface SkTokenService {
     List<SkToken> queryByDateAndTrainCode(Date date, String trainCode);
 
     /**
-     * 扣减令牌
+     * 扣减令牌，并防止机器人刷票
      */
     boolean validSkToken(Date date, String trainCode, Long memberId);
 }

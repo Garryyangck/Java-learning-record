@@ -107,6 +107,8 @@ public enum ResponseEnum {
     BUSINESS_DUPLICATE_SK_TOKEN_DATE_TRAIN_CODE(46, "该日期的该车次已生成令牌"),
 
     BUSINESS_SK_TOKEN_GET_FAILED(47, "获取令牌失败"),
+
+    BUSINESS_SK_TOKEN_REQUEST_TOO_FREQUENT(48, "同一人同一车票请求过于频繁，疑似机器人刷票"),
     ;
 
     private final Integer code;

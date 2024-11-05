@@ -33,7 +33,12 @@ public class RedisConst {
     public static final String DAILY_TICKET_DISTRIBUTED_LOCK_FORMAT = "daily_ticket_distributed_lock:%s:%s";
 
     /**
+     * 举例说明: sk_token_distributed_lock:2024-10-30:G000224:1833041335083470848
+     */
+    public static final String SK_TOKEN_DISTRIBUTED_LOCK_FORMAT = "sk_token_distributed_lock:%s:%s:%s";
+
+    /**
      * 分布式锁自动释放时间
      */
-    public static final Long DAILY_TICKET_DISTRIBUTED_LOCK_EXPIRE_SECOND = 5L;
+    public static final Long SK_TOKEN_DISTRIBUTED_LOCK_EXPIRE_SECOND = 5L;
 }

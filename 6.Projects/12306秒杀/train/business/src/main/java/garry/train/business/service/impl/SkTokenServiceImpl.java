@@ -5,26 +5,31 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import garry.train.business.pojo.Train;
-import garry.train.business.service.DailyTrainSeatService;
-import garry.train.business.service.DailyTrainStationService;
-import garry.train.common.enums.ResponseEnum;
-import garry.train.common.exception.BusinessException;
-import garry.train.common.util.CommonUtil;
-import garry.train.common.vo.PageVo;
 import garry.train.business.form.SkTokenQueryForm;
 import garry.train.business.form.SkTokenSaveForm;
 import garry.train.business.mapper.SkTokenMapper;
 import garry.train.business.pojo.SkToken;
 import garry.train.business.pojo.SkTokenExample;
+import garry.train.business.pojo.Train;
+import garry.train.business.service.DailyTrainSeatService;
+import garry.train.business.service.DailyTrainStationService;
 import garry.train.business.service.SkTokenService;
 import garry.train.business.vo.SkTokenQueryVo;
+import garry.train.common.consts.RedisConst;
+import garry.train.common.enums.ResponseEnum;
+import garry.train.common.exception.BusinessException;
+import garry.train.common.util.CommonUtil;
+import garry.train.common.util.RedisUtil;
+import garry.train.common.vo.PageVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Garry
@@ -41,6 +46,9 @@ public class SkTokenServiceImpl implements SkTokenService {
 
     @Resource
     private DailyTrainStationService dailyTrainStationService;
+
+    @Resource
+    private RedissonClient redissonClient;
 
     @Override
     public void save(SkTokenSaveForm form) {
@@ -133,13 +141,27 @@ public class SkTokenServiceImpl implements SkTokenService {
 
     @Override
     public boolean validSkToken(Date date, String trainCode, Long memberId) {
+        log.info("{} 尝试获取 {}  {} 车次的令牌", memberId, date, trainCode);
+
+        // 为了防止机器人刷票，用 data, trainCode, memberId 做一个分布式锁
+        String redisKey = RedisUtil.getRedisKey4SkTokenDistributedLock(date, trainCode, memberId);
+        RLock rLock;
+        try {
+            rLock = redissonClient.getLock(redisKey);
+            boolean tryLock = rLock.tryLock(0, RedisConst.SK_TOKEN_DISTRIBUTED_LOCK_EXPIRE_SECOND, TimeUnit.SECONDS);
+            if (!tryLock) {
+                throw new BusinessException(ResponseEnum.BUSINESS_SK_TOKEN_REQUEST_TOO_FREQUENT);
+            }
+        } catch (Exception e) {
+            throw new BusinessException(ResponseEnum.BUSINESS_SK_TOKEN_REQUEST_TOO_FREQUENT);
+        }
+
         SkTokenExample skTokenExample = new SkTokenExample();
         skTokenExample.createCriteria()
                 .andDateEqualTo(date)
                 .andTrainCodeEqualTo(trainCode);
         SkToken skToken = skTokenMapper.selectByExample(skTokenExample).get(0);
         if (skToken.getCount() > 0) {
-            log.info("{} 成功获取 {}  {} 车次的令牌", memberId, date, trainCode);
             skToken.setCount(skToken.getCount() - 1);
             skTokenMapper.updateByPrimaryKeySelective(skToken);
             return true;

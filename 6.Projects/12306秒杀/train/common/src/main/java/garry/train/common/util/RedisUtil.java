@@ -43,6 +43,17 @@ public class RedisUtil {
     }
 
     /**
+     * 获取分布式锁解决机器人刷票问题的 redisKey
+     * 如果参数为 null，则将其替换为 *
+     */
+    public static String getRedisKey4SkTokenDistributedLock(Date date, String trainCode, Long memberId) {
+        String dateStringFormat = checkDate(date, "yyyy-MM-dd");
+        trainCode = checkString(trainCode);
+        String strMemberId = checkString(String.valueOf(memberId));
+        return String.format(RedisConst.SK_TOKEN_DISTRIBUTED_LOCK_FORMAT, dateStringFormat, trainCode, strMemberId);
+    }
+
+    /**
      * 将 date 转换为 formatString
      * date 若为空，则转化为 *
      */
