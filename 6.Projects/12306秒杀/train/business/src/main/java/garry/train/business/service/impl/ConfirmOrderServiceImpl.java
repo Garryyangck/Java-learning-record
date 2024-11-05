@@ -203,6 +203,14 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     @Override
     public boolean checkConfirmOrder(ConfirmOrderDoForm form, Long memberId) {
 
+        // 验证图片验证码，防止机器人刷票，以及打散订单提交的时间
+        String redisKey = RedisUtil.getRedisKey4Kaptcha(form.getImageCodeToken());
+        String rightImageCode = (String) redisTemplate.opsForValue().get(redisKey);
+        if (StrUtil.isBlank(rightImageCode) || !rightImageCode.equalsIgnoreCase(form.getImageCode())) {
+            throw new BusinessException(ResponseEnum.BUSINESS_KAPTCHA_WRONG_IMAGE_CODE);
+        }
+        redisTemplate.delete(redisKey);
+
         // 在执行后面哪些更慢的 SQL 之前，先查令牌数，因为令牌查起来更快，如果令牌没有了，就可以认为库存没有了，当然如果还有令牌可以手动添加
         boolean validSkToken = skTokenService.validSkToken(form.getDate(), form.getTrainCode(), memberId);
         if (!validSkToken) {

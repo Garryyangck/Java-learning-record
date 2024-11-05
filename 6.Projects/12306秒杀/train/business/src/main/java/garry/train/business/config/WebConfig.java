@@ -32,7 +32,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/hello",
                         "/admin/**",
-                        "/markdown/**"
+                        "/markdown/**",
+                        "/kaptcha/**"
                 );
     }
 }

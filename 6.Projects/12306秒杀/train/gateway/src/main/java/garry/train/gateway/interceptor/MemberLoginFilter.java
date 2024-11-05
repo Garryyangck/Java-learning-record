@@ -32,6 +32,7 @@ public class MemberLoginFilter implements GlobalFilter, Ordered {
         if (path.contains("/admin")
                 || path.contains("/hello")
                 || path.contains("/markdown")
+                || path.contains("/kaptcha")
                 || path.contains("/member/member/register")
                 || path.contains("/member/member/send-code")
                 || path.contains("/member/member/login")) {

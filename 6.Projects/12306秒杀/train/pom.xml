@@ -177,6 +177,20 @@
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>3.21.0</version>
             </dependency>
+            <!--kaptcha图形验证码-->
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <!--老版本的kaptcha-->
+                <version>2.3.2</version>
+                <!--下面的包只在 JDK8 中有，在 JDK17 中没有 javax 了，因此要排除-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>javax.servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

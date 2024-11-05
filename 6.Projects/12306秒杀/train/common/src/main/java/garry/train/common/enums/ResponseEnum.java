@@ -109,6 +109,8 @@ public enum ResponseEnum {
     BUSINESS_SK_TOKEN_GET_FAILED(47, "获取令牌失败"),
 
     BUSINESS_SK_TOKEN_REQUEST_TOO_FREQUENT(48, "同一人同一车票请求过于频繁，疑似机器人刷票"),
+
+    BUSINESS_KAPTCHA_WRONG_IMAGE_CODE(49, "图片验证码有误或已过期"),
     ;
 
     private final Integer code;

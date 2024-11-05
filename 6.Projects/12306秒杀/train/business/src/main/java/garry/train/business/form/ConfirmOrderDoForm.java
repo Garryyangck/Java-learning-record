@@ -62,4 +62,16 @@ public class ConfirmOrderDoForm {
     @NotNull(message = "【车票】不能为空")
     private List<ConfirmOrderTicketForm> tickets;
 
+    /**
+     * 图片验证码 token
+     */
+    @NotBlank(message = "【图片验证码 token】不能为空")
+    private String imageCodeToken;
+
+    /**
+     * 图片验证码
+     */
+    @NotBlank(message = "【图片验证码】不能为空")
+    private String imageCode;
+
 }

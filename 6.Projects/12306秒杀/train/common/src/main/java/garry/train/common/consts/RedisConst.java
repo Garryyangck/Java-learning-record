@@ -48,4 +48,14 @@ public class RedisConst {
      * 举例说明: sk_token_distributed_lock:2024-10-30:G000224
      */
     public static final String SK_TOKEN_FORMAT = "sk_token_distributed_lock:%s:%s";
+
+    /**
+     * 图片验证码的 redisKey
+     */
+    public static final String KAPTCHA_FORMAT = "kaptcha:%s";
+
+    /**
+     * Kaptcha 验证码过期时间
+     */
+    public static final Integer KAPTCHA_EXPIRE_SECOND = 60 * 5;
 }

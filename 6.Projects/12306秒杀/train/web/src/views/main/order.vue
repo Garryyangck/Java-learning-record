@@ -57,7 +57,7 @@
   <a-modal v-model:visible="visible" title="请核对以下信息"
            style="top: 50px; width: 800px"
            ok-text="确认" cancel-text="取消"
-           @ok="handleOk">
+           @ok="showImageCodeModal">
     <div class="order-tickets">
       <a-row class="order-tickets-header" v-if="tickets.length > 0">
         <a-col :span="6">乘客</a-col>
@@ -96,7 +96,7 @@
           </div>
         </template>
         <template #icon>
-          <FrownOutlined />
+          <FrownOutlined/>
         </template>
         <template #description>
           <div style="color: #e24444">
@@ -118,13 +118,21 @@
       <div style="color: #999999; margin-top: 10px">提示：您可以选择{{ tickets.length }}个座位</div>
     </div>
     <br/>
-    <!--    chooseSeatType = {{ chooseSeatType }}-->
-    <!--    <a-divider/>-->
-    <!--    chooseSeatObj = {{ chooseSeatObj }}-->
-    <!--    <a-divider/>-->
-    <!--    SEAT_COL_ARRAY = {{ SEAT_COL_ARRAY }}-->
-    <!--    <a-divider/>-->
-    <!--    tickets = {{tickets}}-->
+  </a-modal>
+
+  <a-modal v-model:visible="imageCodeModalVisible" :title="null" :footer="null" :closable="false"
+           style="top: 50px; width: 400px">
+    <p style="text-align: center; font-weight: bold; font-size: 18px">
+      请输入验证码
+    </p>
+    <p>
+      <a-input v-model:value="imageCode" placeholder="图片验证码">
+        <template #suffix>
+          <img v-show="!!imageCodeSrc" :src="imageCodeSrc" alt="验证码" v-on:click="loadImageCode()"/>
+        </template>
+      </a-input>
+    </p>
+    <a-button type="danger" block @click="handleOk">确认购票</a-button>
   </a-modal>
 
 </template>
@@ -236,8 +244,12 @@ export default defineComponent({
     };
 
     const handleOk = () => {
-      console.log("选好的座位：", chooseSeatObj.value);
+      if (Tool.isEmpty(imageCode.value)) {
+        notification.error({description: '验证码不能为空'});
+        return;
+      }
 
+      console.log("选好的座位：", chooseSeatObj.value);
       // 设置每张票的座位
       // 先清空购票列表的座位，有可能之前选了并设置座位了，但选座数不对被拦截了，又重新选一遍
       for (let i = 0; i < tickets.value.length; i++) {
@@ -258,9 +270,7 @@ export default defineComponent({
         notification.error({description: '所选座位数小于购票数'});
         return;
       }
-
       console.log("最终购票：", tickets.value);
-      visible.value = false;
 
       axios.post("business/confirm-order/do", {
         date: dailyTrainTicket.date,
@@ -269,9 +279,13 @@ export default defineComponent({
         end: dailyTrainTicket.end,
         dailyTrainTicketId: dailyTrainTicket.id,
         tickets: tickets.value,
+        imageCodeToken: imageCodeToken.value,
+        imageCode: imageCode.value,
       }).then((response) => {
         let responseVo = response.data;
         if (responseVo.success) {
+          imageCodeModalVisible.value = false;
+          visible.value = false;
           notification.success({description: '下单成功，请等待购票成功消息'});
         } else {
           notification.error({description: responseVo.msg});
@@ -356,6 +370,25 @@ export default defineComponent({
       visible.value = true;
     };
 
+    /* ------------------- 后端验证码 --------------------- */
+    const imageCodeModalVisible = ref();
+    const imageCodeToken = ref();
+    const imageCodeSrc = ref();
+    const imageCode = ref();
+
+    /**
+     * 加载图形验证码
+     */
+    const loadImageCode = () => {
+      imageCodeToken.value = Tool.uuid(8);
+      imageCodeSrc.value = process.env.VUE_APP_SERVER + '/business/kaptcha/image-code/' + imageCodeToken.value;
+    };
+
+    const showImageCodeModal = () => {
+      loadImageCode();
+      imageCodeModalVisible.value = true;
+    };
+
     onMounted(() => {
       document.title = '购票页面';
       handleQueryPassenger();
@@ -373,8 +406,13 @@ export default defineComponent({
       chooseSeatType,
       chooseSeatObj,
       SEAT_COL_ARRAY,
+      imageCodeModalVisible,
+      imageCode,
+      imageCodeSrc,
       finishCheckPassenger,
       handleOk,
+      showImageCodeModal,
+      loadImageCode,
     };
   },
 });

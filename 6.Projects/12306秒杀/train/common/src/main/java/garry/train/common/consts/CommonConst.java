@@ -58,4 +58,5 @@ public class CommonConst {
      * SkToken 缓存更新至数据库的频率
      */
     public static final Integer DB_UPDATE_FREQUENCY = 5;
+
 }

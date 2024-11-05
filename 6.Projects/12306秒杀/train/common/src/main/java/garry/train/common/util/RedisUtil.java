@@ -64,6 +64,15 @@ public class RedisUtil {
     }
 
     /**
+     * kaptcha 验证码的 redisKey
+     * 如果参数为 null，则将其替换为 *
+     */
+    public static String getRedisKey4Kaptcha(String imageCodeToken) {
+        imageCodeToken = checkString(imageCodeToken);
+        return String.format(RedisConst.KAPTCHA_FORMAT, imageCodeToken);
+    }
+
+    /**
      * 将 date 转换为 formatString
      * date 若为空，则转化为 *
      */
