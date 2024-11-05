@@ -8784,4 +8784,16 @@ Java进阶完成：
 
 	float 和 double 的构成，浮点数的类型，舍入、运算。
 
-4. 
+4. Sentinel 对资源进行限流降级和熔断降级操作，并通过 Nacos 持久化限流和熔断降级规则，并在 Sentinel 控制台进行监控和临时修改。
+
+
+
+## 2024.11.4打卡 Day 11
+
+1. CMU-csapp：Computer Architecture ISA、logic、sequential
+
+	Y86_64 指令体系结构，数字电路及处理器的设计、以及 Y86_64 的顺序实现。其中 Y86_64 的顺序实现的缺点是每一个指令都必须在一个时钟周期中完成，这就导致时钟周期过长，并且产生很多无效时间。
+
+2. csapp-lab3-attacklab
+
+	完成 CI 的三道题，和 ROP 的第一题，加深了自己对栈区的认识。
