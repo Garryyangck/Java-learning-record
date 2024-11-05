@@ -2,6 +2,7 @@ package garry.train.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -15,6 +16,7 @@ import garry.train.business.service.DailyTrainSeatService;
 import garry.train.business.service.DailyTrainStationService;
 import garry.train.business.service.SkTokenService;
 import garry.train.business.vo.SkTokenQueryVo;
+import garry.train.common.consts.CommonConst;
 import garry.train.common.consts.RedisConst;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
@@ -25,6 +27,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -46,6 +49,9 @@ public class SkTokenServiceImpl implements SkTokenService {
 
     @Resource
     private DailyTrainStationService dailyTrainStationService;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @Resource
     private RedissonClient redissonClient;
@@ -156,16 +162,42 @@ public class SkTokenServiceImpl implements SkTokenService {
             throw new BusinessException(ResponseEnum.BUSINESS_SK_TOKEN_REQUEST_TOO_FREQUENT);
         }
 
+        // 先查缓存，有缓存则先扣减缓存，之后一次性写入数据库；否则查数据库，再写入缓存
+        redisKey = RedisUtil.getRedisKey4SkToken(date, trainCode);
+        Object skTokenCount = redisTemplate.opsForValue().get(redisKey);
+        if (ObjUtil.isNotNull(skTokenCount)) {
+            log.info("{} {} 的车次 skToken 存在缓存", date, trainCode);
+            Long count = redisTemplate.opsForValue().decrement(redisKey, 1);
+            if (count < 0) {
+                log.info("{} {} 的车次的 skToken 在缓存中已耗尽", date, trainCode);
+                return false;
+            } else {
+                log.info("{} {} 的车次的 skToken 在缓存中还剩余 {} 个", date, trainCode, count);
+                // 每 5 个请求，写入一次数据库
+                if (count % CommonConst.DB_UPDATE_FREQUENCY == 0) {
+                    decreaseToken(date, trainCode, CommonConst.DB_UPDATE_FREQUENCY);
+                }
+                return true;
+            }
+        } else {
+            // 先扣减数据库
+            int count = decreaseToken(date, trainCode, 1);
+
+            // 写入缓存
+            redisTemplate.opsForValue().set(redisKey, String.valueOf(count));
+
+            return true;
+        }
+    }
+
+    private int decreaseToken(Date date, String trainCode, Integer decreaseNum) {
         SkTokenExample skTokenExample = new SkTokenExample();
         skTokenExample.createCriteria()
                 .andDateEqualTo(date)
                 .andTrainCodeEqualTo(trainCode);
         SkToken skToken = skTokenMapper.selectByExample(skTokenExample).get(0);
-        if (skToken.getCount() > 0) {
-            skToken.setCount(skToken.getCount() - 1);
-            skTokenMapper.updateByPrimaryKeySelective(skToken);
-            return true;
-        }
-        return false;
+        skToken.setCount(skToken.getCount() > decreaseNum ? skToken.getCount() - decreaseNum : 0);
+        skTokenMapper.updateByPrimaryKeySelective(skToken);
+        return skToken.getCount();
     }
 }

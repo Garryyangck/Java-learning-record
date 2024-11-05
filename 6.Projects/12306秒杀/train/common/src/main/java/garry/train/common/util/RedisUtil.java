@@ -54,6 +54,16 @@ public class RedisUtil {
     }
 
     /**
+     * skToken 缓存的 redisKey
+     * 如果参数为 null，则将其替换为 *
+     */
+    public static String getRedisKey4SkToken(Date date, String trainCode) {
+        String dateStringFormat = checkDate(date, "yyyy-MM-dd");
+        trainCode = checkString(trainCode);
+        return String.format(RedisConst.SK_TOKEN_FORMAT, dateStringFormat, trainCode);
+    }
+
+    /**
      * 将 date 转换为 formatString
      * date 若为空，则转化为 *
      */
@@ -69,6 +79,6 @@ public class RedisUtil {
      * param 若为空，则转化为 *
      */
     private static String checkString(String param) {
-        return ObjectUtil.isNotNull(param) ? param : "*";
+        return ObjectUtil.isNotNull(param) && !"null".equals(param) ? param : "*";
     }
 }

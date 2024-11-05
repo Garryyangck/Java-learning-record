@@ -33,6 +33,7 @@ public class RedisConst {
     public static final String DAILY_TICKET_DISTRIBUTED_LOCK_FORMAT = "daily_ticket_distributed_lock:%s:%s";
 
     /**
+     * skToken 的分布式锁，解决机器人刷票问题
      * 举例说明: sk_token_distributed_lock:2024-10-30:G000224:1833041335083470848
      */
     public static final String SK_TOKEN_DISTRIBUTED_LOCK_FORMAT = "sk_token_distributed_lock:%s:%s:%s";
@@ -41,4 +42,10 @@ public class RedisConst {
      * 分布式锁自动释放时间
      */
     public static final Long SK_TOKEN_DISTRIBUTED_LOCK_EXPIRE_SECOND = 5L;
+
+    /**
+     * skToken 的 redis 缓存，以防大量购票请求查 skToken，搞崩数据库
+     * 举例说明: sk_token_distributed_lock:2024-10-30:G000224
+     */
+    public static final String SK_TOKEN_FORMAT = "sk_token_distributed_lock:%s:%s";
 }

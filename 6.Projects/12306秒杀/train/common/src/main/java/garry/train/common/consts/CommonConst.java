@@ -53,4 +53,9 @@ public class CommonConst {
      * 系统的 id
      */
     public static final Long SystemId = 0L;
+
+    /**
+     * SkToken 缓存更新至数据库的频率
+     */
+    public static final Integer DB_UPDATE_FREQUENCY = 5;
 }
