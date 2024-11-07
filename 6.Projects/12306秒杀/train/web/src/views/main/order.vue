@@ -286,6 +286,7 @@ export default defineComponent({
         if (responseVo.success) {
           imageCodeModalVisible.value = false;
           visible.value = false;
+          imageCode.value = undefined;
           notification.success({description: '下单成功，请等待购票成功消息'});
         } else {
           notification.error({description: responseVo.msg});

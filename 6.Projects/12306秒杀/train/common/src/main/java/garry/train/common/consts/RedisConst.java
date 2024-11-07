@@ -50,12 +50,17 @@ public class RedisConst {
     public static final String SK_TOKEN_FORMAT = "sk_token_distributed_lock:%s:%s";
 
     /**
-     * 图片验证码的 redisKey
+     * skToken redis 缓存的过期时间
+     */
+    public static final Integer SK_TOKEN_EXPIRE_SECOND = 60 * 5;
+
+    /**
+     * Kaptcha 图片验证码的 redisKey
      */
     public static final String KAPTCHA_FORMAT = "kaptcha:%s";
 
     /**
-     * Kaptcha 验证码过期时间
+     * Kaptcha 图片验证码过期时间
      */
     public static final Integer KAPTCHA_EXPIRE_SECOND = 60 * 5;
 }

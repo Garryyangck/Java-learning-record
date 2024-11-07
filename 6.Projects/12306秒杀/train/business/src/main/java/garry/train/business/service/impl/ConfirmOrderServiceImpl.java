@@ -206,7 +206,7 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         // 验证图片验证码，防止机器人刷票，以及打散订单提交的时间
         String redisKey = RedisUtil.getRedisKey4Kaptcha(form.getImageCodeToken());
         String rightImageCode = (String) redisTemplate.opsForValue().get(redisKey);
-        if (StrUtil.isBlank(rightImageCode) || !rightImageCode.equalsIgnoreCase(form.getImageCode())) {
+        if (StrUtil.isBlank(rightImageCode) || !rightImageCode.equalsIgnoreCase(form.getImageCode().trim())) {
             throw new BusinessException(ResponseEnum.BUSINESS_KAPTCHA_WRONG_IMAGE_CODE);
         }
         redisTemplate.delete(redisKey);

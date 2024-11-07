@@ -76,6 +76,8 @@ public class SkTokenServiceImpl implements SkTokenService {
         } else { // 修改
             skToken.setUpdateTime(now);
             skTokenMapper.updateByPrimaryKeySelective(skToken);
+            // 将缓存清除，避免增加了数据库库存，但是缓存依然很少，然后缓存覆盖掉我们增加的库存
+            redisTemplate.delete(RedisUtil.getRedisKey4SkToken(form.getDate(), form.getTrainCode()));
             log.info("修改秒杀令牌：{}", skToken);
         }
     }
@@ -180,12 +182,11 @@ public class SkTokenServiceImpl implements SkTokenService {
                 return true;
             }
         } else {
+            log.info("{} {} 的车次 skToken 还没有缓存", date, trainCode);
             // 先扣减数据库
             int count = decreaseToken(date, trainCode, 1);
-
             // 写入缓存
-            redisTemplate.opsForValue().set(redisKey, String.valueOf(count));
-
+            redisTemplate.opsForValue().set(redisKey, String.valueOf(count), RedisConst.SK_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
             return true;
         }
     }
