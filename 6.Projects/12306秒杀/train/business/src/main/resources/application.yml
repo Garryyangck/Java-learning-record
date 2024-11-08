@@ -28,3 +28,8 @@ websocket:
   message:
     server:
       uri: ws://localhost:9999/ws/message/ # 最后还要加一个 memberId
+
+rocketmq:
+  name-server: http://localhost:9876
+  producer:
+    group: default

@@ -74,4 +74,9 @@ public class ConfirmOrderDoForm {
     @NotBlank(message = "【图片验证码】不能为空")
     private String imageCode;
 
+    /**
+     * MDC LOG_ID，以便 doConfirm 异步执行时，能打印跟踪号
+     */
+    private String LOG_ID;
+
 }

@@ -101,16 +101,10 @@ public interface ConfirmOrderService {
     /**
      * 处理订票操作
      */
-    void doConfirm(ConfirmOrderDoForm form, String LOG_ID);
+    void doConfirm(ConfirmOrderDoForm form);
 
     /**
      * 用于检验用户是否会重复购买同一乘客某一确定始末站的车票
      */
     List<ConfirmOrder> queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(Long memberId, Date date, String trainCode, String start, String end);
-
-    /**
-     * 业务数据校验，车次是否存在，车票是否存在，车次时间是否合法，
-     * tickets 是否 > 0，是否有余票，同一乘客不能购买同一车次
-     */
-    boolean checkConfirmOrder(ConfirmOrderDoForm form, Long memberId);
 }
