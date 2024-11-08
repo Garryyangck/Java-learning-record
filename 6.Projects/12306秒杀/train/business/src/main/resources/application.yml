@@ -22,7 +22,7 @@ logging:
     garry:
       train:
         business:
-          mapper: trace # garry.train.business.mapper下的日志等级设置为 trace，可以打印出 sql
+          mapper: info # garry.train.business.mapper下的日志等级设置为 trace，可以打印出 sql
 
 websocket:
   message:

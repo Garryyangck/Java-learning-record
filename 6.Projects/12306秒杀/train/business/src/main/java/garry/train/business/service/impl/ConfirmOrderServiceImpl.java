@@ -147,16 +147,13 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
         MDC.put("LOG_ID", form.getLOG_ID());
 
         String redisKey = RedisUtil.getRedisKey4DailyTicketDistributedLock(form.getDate(), form.getTrainCode());
-
         RLock rLock = null;
 
         try {
             // 使用 redisson，通过“看门狗”机制，实现安全的 redis 分布式锁
             rLock = redissonClient.getLock(redisKey);
-
 //            boolean tryLock = rLock.tryLock(30/* wait_time，如果没有拿到锁，则阻塞 30 秒 */, 30/* 分布式锁过期时间 */, TimeUnit.SECONDS); // 不带看门狗，阻塞 30 秒等待，分布式锁 5 秒自动释放，有并发风险
             boolean tryLock = rLock.tryLock(0/* wait_time，如果没有拿到锁，则阻塞 0 秒 */, TimeUnit.SECONDS); // 带看门狗，无限刷新 EXPIRE_TIME，不会引起多个线程进来造成的并发风险
-
             if (tryLock) {
                 log.info("{} 成功抢到锁 {}", form.getMemberId(), redisKey);
             } else {
@@ -164,17 +161,24 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
                 throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED);
             }
 
-            // 创建对象，插入 confirm_order 表，状态为初始
-            ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.INIT);
-            log.info("插入 INIT 订单：{}", confirmOrder);
-
             // 选座
             List<SeatChosen> seatChosenList = chooseSeat(form);
 
             // 选座成功后，进行相关座位售卖情况、余票数、购票信息、订单状态的修改，创建并通过 websocket 发送 message，事务处理
             afterConfirmOrderService.afterDoConfirm(seatChosenList, form);
 
-        } catch (Exception e) {
+        } catch (RuntimeException | InterruptedException e) {
+            if (e instanceof BusinessException
+                    && ResponseEnum.BUSINESS_CONFIRM_ORDER_CHOOSE_SEAT_FAILED
+                    .equals(((BusinessException) e).getResponseEnum())) {
+                // 将订单状态改为 无票
+                ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.EMPTY);
+                log.info("将订单状态修改为 EMPTY：{}", confirmOrder);
+            } else {
+                // 将订单状态改为 失败
+                ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.FAILURE);
+                log.info("将订单状态修改为 FAILURE：{}", confirmOrder);
+            }
             // 发送消息，没能选到座位
             sendFailMessage(form);
 

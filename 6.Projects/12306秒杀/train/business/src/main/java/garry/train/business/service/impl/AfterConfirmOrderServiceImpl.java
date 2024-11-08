@@ -2,11 +2,12 @@ package garry.train.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import garry.train.business.enums.ConfirmOrderStatusEnum;
 import garry.train.business.feign.MemberFeign;
-import garry.train.business.form.*;
+import garry.train.business.form.ConfirmOrderDoForm;
+import garry.train.business.form.DailyTrainSeatSaveForm;
+import garry.train.business.form.DailyTrainTicketSaveForm;
+import garry.train.business.form.TicketSaveForm;
 import garry.train.business.pojo.ConfirmOrder;
 import garry.train.business.pojo.DailyTrainSeat;
 import garry.train.business.pojo.DailyTrainTicket;
@@ -115,20 +116,8 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
         }
 
         // confirm_order 修改状态为成功 (不要放到循环里面，confirm_order 的状态只需要修改一次就可以了)
-        List<ConfirmOrder> confirmOrders = confirmOrderService.queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
-        for (ConfirmOrder confirmOrder : confirmOrders) {
-            // 根据 tickets 判断该 confirmOrder 是否是我们要找的 confirmOrder
-            List<ConfirmOrderTicketForm> ticketForms = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {
-            });
-            if (form.getTickets().equals(ticketForms)) {
-                // 修改对应订单的状态为 SUCCESS
-                form.setId(confirmOrder.getId());
-                confirmOrderService.save(form, ConfirmOrderStatusEnum.SUCCESS);
-                log.info("将订单状态修改为 SUCCESS：{}", confirmOrder);
-                break;
-            }
-        }
-        log.info("confirm_order 修改状态为 SUCCESS 完成");
+        ConfirmOrder confirmOrder = confirmOrderService.save(form, ConfirmOrderStatusEnum.SUCCESS);
+        log.info("将订单状态修改为 SUCCESS：{}", confirmOrder);
 
         // 创建 message 入库，并通过 websocket 发送给前端浏览器
         for (ConfirmOrderService.SeatChosen seatChosen : seatChosenList) {

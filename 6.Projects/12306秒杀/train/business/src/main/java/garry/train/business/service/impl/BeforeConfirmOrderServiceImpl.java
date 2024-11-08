@@ -5,8 +5,10 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson.JSON;
+import garry.train.business.enums.ConfirmOrderStatusEnum;
 import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.form.ConfirmOrderTicketForm;
+import garry.train.business.pojo.ConfirmOrder;
 import garry.train.business.pojo.DailyTrain;
 import garry.train.business.pojo.DailyTrainTicket;
 import garry.train.business.service.*;
@@ -17,7 +19,6 @@ import garry.train.common.util.RedisUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
-import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,9 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
     private DailyTrainTicketService dailyTrainTicketService;
 
     @Resource
+    private ConfirmOrderService confirmOrderService;
+
+    @Resource
     private MessageService messageService;
 
     @Resource
@@ -47,13 +51,11 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
     private RedisTemplate redisTemplate;
 
     @Resource
-    private RedissonClient redissonClient;
-
-    @Resource
     private RocketMQTemplate rocketMQTemplate;
 
     @Override
-    @SentinelResource(value = "doConfirm", blockHandler = "doConfirmBlock") // 直接从 doConfirm COPY 过来的，懒得改 Nacos 配置，因此没有改 Resource 的名字
+    @SentinelResource(value = "doConfirm", blockHandler = "doConfirmBlock")
+    // 直接从 doConfirm COPY 过来的，懒得改 Nacos 配置，因此没有改 Resource 的名字
     public boolean beforeDoConfirm(ConfirmOrderDoForm form, Long memberId) {
         // 验证图片验证码，防止机器人刷票，以及打散订单提交的时间
         String redisKey = RedisUtil.getRedisKey4Kaptcha(form.getImageCodeToken());
@@ -124,6 +126,11 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
 
         log.info("订单校验成功");
 
+        // 创建对象，插入 confirm_order 表，状态为初始
+        ConfirmOrder confirmOrder = confirmOrderService.save(form, ConfirmOrderStatusEnum.INIT);
+        log.info("插入 INIT 订单：{}", confirmOrder);
+        form.setId(confirmOrder.getId());
+
         // 向 rocketmq 发送消息
         String formJSON = JSON.toJSONString(form);
         log.info("排队购票，发送 MQ 消息： {}", formJSON);
@@ -138,6 +145,6 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
      */
     public boolean doConfirmBlock(ConfirmOrderDoForm form, Long memberId, BlockException e) {
         log.info("{} 的 beforeDoConfirm 请求被降级处理", memberId);
-        return false;
+        throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_SENTINEL_BLOCKED);
     }
 }
