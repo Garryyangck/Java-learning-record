@@ -76,7 +76,7 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
             DailyTrainSeatSaveForm seatSaveForm = BeanUtil.copyProperties(dailyTrainSeat, DailyTrainSeatSaveForm.class);
             seatSaveForm.setSell(SellUtil.sell(seatSaveForm.getSell(), startIndex, endIndex));
             dailyTrainSeatService.save(seatSaveForm);
-            log.info("乘客 {} 的 daily_train_seat 修改 sell 售卖情况完成", seatChosen.getTicket().getPassengerName());
+            log.info("daily_train_seat 修改 sell 售卖情况完成，乘客：{}", seatChosen.getTicket().getPassengerName());
 
             // daily_train_ticket 修改余票数
             List<DailyTrainTicket> tickets = dailyTrainTickets.stream()
@@ -102,7 +102,7 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
                 DailyTrainTicketSaveForm ticketSaveForm = BeanUtil.copyProperties(dailyTrainTicket, DailyTrainTicketSaveForm.class);
                 dailyTrainTicketService.save(ticketSaveForm);
             }
-            log.info("乘客 {} 的 daily_train_ticket 修改余票数完成", seatChosen.getTicket().getPassengerName());
+            log.info("daily_train_ticket 修改余票数完成，乘客：{}", seatChosen.getTicket().getPassengerName());
 
             // (member)ticket 增加用户购票的记录，还没有创建 ticket 表
             DailyTrainTicket dailyTrainTicket = dailyTrainTickets.stream()
@@ -112,7 +112,7 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
                             && ticket.getEnd().equals(seatChosen.getEnd())).toList().get(0);
             TicketSaveForm ticketSaveForm = getTicketSaveForm(seatChosen, dailyTrainTicket);
             memberFeign.save(ticketSaveForm);
-            log.info("乘客 {} 的 (member)ticket 增加用户购票的记录完成", seatChosen.getTicket().getPassengerName());
+            log.info("乘客 {} 的 (member)ticket 增加用户购票的记录完成，{}", seatChosen.getTicket().getPassengerName(), ticketSaveForm);
         }
 
         // confirm_order 修改状态为成功 (不要放到循环里面，confirm_order 的状态只需要修改一次就可以了)
@@ -129,7 +129,7 @@ public class AfterConfirmOrderServiceImpl implements AfterConfirmOrderService {
             messageService.sendSystemMessage(form.getMemberId(), content);
             log.info("发送消息：{}", content);
         }
-        log.info("成功创建 message 入库，并通过 websocket 发送给前端浏览器");
+        log.info("将 formId = {} 的订单的所有购票消息发送完毕", form.getId());
 
         return true;
     }

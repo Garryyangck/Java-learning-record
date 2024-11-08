@@ -27,7 +27,7 @@ public class JobAspect {
 
     @Around("jobPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        MDC.put("LOG_ID", CommonUtil.generateUUID(CommonConst.LOG_ID_LENGTH));
+        MDC.put(CommonConst.LOG_ID, CommonUtil.generateUUID(CommonConst.LOG_ID_LENGTH));
         String className = proceedingJoinPoint.getSignature().getDeclaringTypeName();
         className = className.substring(className.lastIndexOf(".") + 1);
         String methodName = proceedingJoinPoint.getSignature().getName();

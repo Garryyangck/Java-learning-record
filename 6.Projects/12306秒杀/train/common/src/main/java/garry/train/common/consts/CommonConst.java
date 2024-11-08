@@ -9,6 +9,12 @@ package garry.train.common.consts;
  * 通用常量
  */
 public class CommonConst {
+
+    /**
+     * 日志跟踪号，MDC 的 key 值
+     */
+    public static final String LOG_ID = "LOG_ID";
+
     /**
      * LOG_ID的长度，用于 logback的配置中
      */
@@ -58,5 +64,10 @@ public class CommonConst {
      * SkToken 缓存更新至数据库的频率
      */
     public static final Integer DB_UPDATE_FREQUENCY = 5;
+
+    /**
+     * doConfirm 中一个分布式锁下，一次从数据库中查出并进行处理的 INIT 订单数
+     */
+    public static final Integer CONFIRM_ORDER_PER_HANDLE = 5;
 
 }

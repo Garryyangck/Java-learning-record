@@ -42,9 +42,6 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
     private ConfirmOrderService confirmOrderService;
 
     @Resource
-    private MessageService messageService;
-
-    @Resource
     private SkTokenService skTokenService;
 
     @Resource
@@ -74,26 +71,26 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
         // 车次是否存在
         List<DailyTrain> trains = dailyTrainService.queryByDateAndCode(form.getDate(), form.getTrainCode());
         if (CollUtil.isEmpty(trains)) {
-            log.info("车次不存在");
+            log.info("Date = {} TrainCode = {} 下的车次不存在", form.getDate(), form.getTrainCode());
             return false;
         }
 
         // 车票是否存在
         List<DailyTrainTicket> dailyTrainTickets = dailyTrainTicketService.queryByDateAndTrainCodeAndStartAndEnd(form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
         if (CollUtil.isEmpty(dailyTrainTickets)) {
-            log.info("车票不存在");
+            log.info("Date = {} TrainCode = {} 下的车票不存在", form.getDate(), form.getTrainCode());
             return false;
         }
 
         // 车次时间是否合法
 //        if (System.currentTimeMillis() > form.getDate().getTime()) {
-//            log.info("车次时间不合法");
+//            log.info("Date = {} TrainCode = {} 下的车次时间不合法", form.getDate(), form.getTrainCode());
 //            return false;
 //        }
 
-        // tickets 是否 > 0
+        // 订单是否存在，即 tickets 是否 > 0
         if (CollUtil.isEmpty(form.getTickets())) {
-            log.info("tickets <= 0");
+            log.info("用户 {} 提交的订单为空", form.getMemberId());
             return false;
         }
 
@@ -103,7 +100,7 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
         for (ConfirmOrderTicketForm ticketForm : form.getTickets()) {
             String seatTypeCode = ticketForm.getSeatTypeCode();
             if (seatCodeRemainNumMap.get(seatTypeCode) <= 0) {
-                log.info("无余票，seatTypeCode = {}", seatTypeCode);
+                log.info("Date = {} TrainCode = {} 下无余票，seatTypeCode = {}", form.getDate(), form.getTrainCode(), seatTypeCode);
                 throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_LACK_OF_TICKETS);
             }
         }
@@ -111,14 +108,13 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
         // 同一乘客不能购买同一车次
 //        Set<Long> passengerIdSet = form.getTickets().stream()
 //                .map(ConfirmOrderTicketForm::getPassengerId).collect(Collectors.toSet());
-//        List<ConfirmOrder> confirmOrders = queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
+//        List<ConfirmOrder> confirmOrders = confirmOrderService.queryByMemberIdAndDateAndTrainCodeAndStartAndEnd(form.getMemberId(), form.getDate(), form.getTrainCode(), form.getStart(), form.getEnd());
 //        for (ConfirmOrder confirmOrder : confirmOrders) {
 //            // 使用 fastjson，将 JSON 字符串转化为 List<ConfirmOrderTicketForm> 对象
-//            List<ConfirmOrderTicketForm> ticketList = JSON.parseObject(confirmOrder.getTickets(), new TypeReference<>() {
-//            });
-//            for (ConfirmOrderTicketForm ticketForm : ticketList) {
+//            List<ConfirmOrderTicketForm> ticketForms = JSON.parseArray(confirmOrder.getTickets(), ConfirmOrderTicketForm.class);
+//            for (ConfirmOrderTicketForm ticketForm : ticketForms) {
 //                if (passengerIdSet.contains(ticketForm.getPassengerId())) {
-//                    log.info("同一乘客不能购买同一车次");
+//                    log.info("同一乘客 {} 不能购买同一车次 Date = {} TrainCode = {}", ticketForm.getPassengerName(), form.getDate(), form.getTrainCode());
 //                    throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DUPLICATE_PASSENGER);
 //                }
 //            }
@@ -144,7 +140,7 @@ public class BeforeConfirmOrderServiceImpl implements BeforeConfirmOrderService 
      * doConfirm 的降级方法
      */
     public boolean doConfirmBlock(ConfirmOrderDoForm form, Long memberId, BlockException e) {
-        log.info("{} 的 beforeDoConfirm 请求被降级处理", memberId);
+        log.info("用户 {} 的 beforeDoConfirm 请求被降级处理", memberId);
         throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_SENTINEL_BLOCKED);
     }
 }

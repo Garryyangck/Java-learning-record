@@ -21,7 +21,7 @@ public class LogIdInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // MDC 是 Slf4j 自带的，用于存放我们自定义的键值对，比如在logback-spring.xml中的LOG_ID
         String logId = CommonUtil.generateUUID(CommonConst.LOG_ID_LENGTH);
-        MDC.put("LOG_ID", logId);
+        MDC.put(CommonConst.LOG_ID, logId);
         log.info("------------- LoginInterceptor 开始 -------------");
         log.info("LOG_ID = {}", logId);
         return true;

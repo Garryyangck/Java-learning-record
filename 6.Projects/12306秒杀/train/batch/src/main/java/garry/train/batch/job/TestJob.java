@@ -10,11 +10,13 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.stereotype.Component;
 
 /**
  * 使用 quartz 的测试 Job
  */
 @Slf4j
+@Component
 @DisallowConcurrentExecution // 禁止任务并发执行
 public class TestJob implements Job {
 

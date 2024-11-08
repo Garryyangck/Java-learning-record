@@ -1,6 +1,7 @@
 package garry.train.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -20,6 +21,7 @@ import garry.train.business.pojo.DailyTrainSeat;
 import garry.train.business.service.*;
 import garry.train.business.util.SellUtil;
 import garry.train.business.vo.ConfirmOrderQueryVo;
+import garry.train.common.consts.CommonConst;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.CommonUtil;
@@ -144,43 +146,86 @@ public class ConfirmOrderServiceImpl implements ConfirmOrderService {
     public void doConfirm(ConfirmOrderDoForm form) {
         // 由于这是一个异步的方法，Controller 是一个线程，该方法是另一个线程，不共享 Controller 的 LOG_ID，这就是该方法的日志没有流水号的原因
         // 因此可以让 Controller 把自己的 LOG_ID 传过来
-        MDC.put("LOG_ID", form.getLOG_ID());
+        MDC.put(CommonConst.LOG_ID, form.getLOG_ID());
 
+        // 获取分布式锁，因为同一时刻，只能有一个线程执行 (从队列中取订单 + 出票) 的逻辑
         String redisKey = RedisUtil.getRedisKey4DailyTicketDistributedLock(form.getDate(), form.getTrainCode());
         RLock rLock = null;
-
         try {
-            // 使用 redisson，通过“看门狗”机制，实现安全的 redis 分布式锁
+            // 使用 redisson，通过“看门狗”机制，redisKey 无限过期时间，实现安全的 redis 分布式锁
             rLock = redissonClient.getLock(redisKey);
-//            boolean tryLock = rLock.tryLock(30/* wait_time，如果没有拿到锁，则阻塞 30 秒 */, 30/* 分布式锁过期时间 */, TimeUnit.SECONDS); // 不带看门狗，阻塞 30 秒等待，分布式锁 5 秒自动释放，有并发风险
+            // boolean tryLock = rLock.tryLock(30/* wait_time，如果没有拿到锁，则阻塞 30 秒 */, 30/* 分布式锁过期时间 */, TimeUnit.SECONDS); // 不带看门狗，阻塞 30 秒等待，分布式锁 5 秒自动释放，有并发风险
             boolean tryLock = rLock.tryLock(0/* wait_time，如果没有拿到锁，则阻塞 0 秒 */, TimeUnit.SECONDS); // 带看门狗，无限刷新 EXPIRE_TIME，不会引起多个线程进来造成的并发风险
             if (tryLock) {
-                log.info("{} 成功抢到锁 {}", form.getMemberId(), redisKey);
+                log.info("成功抢到锁 {}", redisKey);
+
+                while (true) {
+                    // 不管 form 是谁的订单，我直接从数据库里查订单，因为数据库中的订单都抢到了 SKToken，因此都需要出票
+                    ConfirmOrderExample confirmOrderExample = new ConfirmOrderExample();
+                    confirmOrderExample.setOrderByClause("id");
+                    confirmOrderExample.createCriteria()
+                            .andDateEqualTo(form.getDate())
+                            .andTrainCodeEqualTo(form.getTrainCode())
+                            .andStatusEqualTo(ConfirmOrderStatusEnum.INIT.getCode());
+                    PageHelper.startPage(1, CommonConst.CONFIRM_ORDER_PER_HANDLE); // 一次只查 5 条进行处理，防止一次性太多订单，内存装不下
+                    List<ConfirmOrder> confirmOrders = confirmOrderMapper.selectByExample(confirmOrderExample);
+
+                    // 数据库中该 Date TrainCode 下的订单全部查完了，break，完成这一次出票
+                    if (CollUtil.isEmpty(confirmOrders)) {
+                        log.info("分布式锁 {} 下的 INIT 订单已全部处理完毕", redisKey);
+                        break;
+                    }
+
+                    // 一个一个订单地出票
+                    for (ConfirmOrder confirmOrder : confirmOrders) {
+                        ConfirmOrderDoForm confirmOrderDoForm = new ConfirmOrderDoForm();
+
+                        try {
+                            log.info("分布式锁 {} 下正在处理的订单：{}", redisKey, confirmOrder);
+                            confirmOrderDoForm.setId(confirmOrder.getId());
+                            confirmOrderDoForm.setMemberId(confirmOrder.getMemberId());
+                            confirmOrderDoForm.setDate(confirmOrder.getDate());
+                            confirmOrderDoForm.setTrainCode(confirmOrder.getTrainCode());
+                            confirmOrderDoForm.setStart(confirmOrder.getStart());
+                            confirmOrderDoForm.setEnd(confirmOrder.getEnd());
+                            confirmOrderDoForm.setDailyTrainTicketId(confirmOrder.getDailyTrainTicketId());
+                            // 不能使用 copyProperties，因为 list 可以转为 String，但是 String 无法转为 list，无法完成 tickets 字段的转换，会报错
+                            confirmOrderDoForm.setTickets(JSONObject.parseArray(confirmOrder.getTickets(), ConfirmOrderTicketForm.class));
+                            confirmOrderDoForm.setLOG_ID(form.getLOG_ID());
+                            // confirm_order 修改状态为 处理中
+                            confirmOrder = save(confirmOrderDoForm, ConfirmOrderStatusEnum.PENDING);
+                            log.info("将订单状态修改为 PENDING：{}", confirmOrder);
+                            // 选座
+                            List<SeatChosen> seatChosenList = chooseSeat(confirmOrderDoForm);
+                            // 选座成功后，进行相关座位售卖情况、余票数、购票信息、订单状态的修改，创建并通过 websocket 发送 message，事务处理
+                            afterConfirmOrderService.afterDoConfirm(seatChosenList, confirmOrderDoForm);
+
+                        } catch (Exception e) {
+                            if (e instanceof BusinessException
+                                    && ResponseEnum.BUSINESS_CONFIRM_ORDER_CHOOSE_SEAT_FAILED
+                                    .equals(((BusinessException) e).getResponseEnum())) {
+                                // 将订单状态改为 无票
+                                confirmOrder = save(confirmOrderDoForm, ConfirmOrderStatusEnum.EMPTY);
+                                log.info("将订单状态修改为 EMPTY：{}", confirmOrder);
+                            } else {
+                                // 将订单状态改为 失败
+                                confirmOrder = save(confirmOrderDoForm, ConfirmOrderStatusEnum.FAILURE);
+                                log.info("将订单状态修改为 FAILURE：{}", confirmOrder);
+                            }
+                            // 发送消息，没能选到座位
+                            sendFailMessage(confirmOrderDoForm);
+                        }
+                    }
+                }
+
             } else {
-                log.info("{} 未能抢到锁 {}", form.getMemberId(), redisKey);
-                throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_DISTRIBUTED_LOCK_GET_FAILED);
+                log.info("未能抢到锁 {}，其它线程正在处理该分布式锁下的订单", redisKey);
+                // 没能抢到锁的线程，直接返回也无所谓，因为证明有其它线程拿到锁，会执行 (从队列中取订单 + 出票) 的逻辑
+                return;
             }
 
-            // 选座
-            List<SeatChosen> seatChosenList = chooseSeat(form);
-
-            // 选座成功后，进行相关座位售卖情况、余票数、购票信息、订单状态的修改，创建并通过 websocket 发送 message，事务处理
-            afterConfirmOrderService.afterDoConfirm(seatChosenList, form);
-
-        } catch (RuntimeException | InterruptedException e) {
-            if (e instanceof BusinessException
-                    && ResponseEnum.BUSINESS_CONFIRM_ORDER_CHOOSE_SEAT_FAILED
-                    .equals(((BusinessException) e).getResponseEnum())) {
-                // 将订单状态改为 无票
-                ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.EMPTY);
-                log.info("将订单状态修改为 EMPTY：{}", confirmOrder);
-            } else {
-                // 将订单状态改为 失败
-                ConfirmOrder confirmOrder = save(form, ConfirmOrderStatusEnum.FAILURE);
-                log.info("将订单状态修改为 FAILURE：{}", confirmOrder);
-            }
-            // 发送消息，没能选到座位
-            sendFailMessage(form);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
 
         } finally {
             log.info("执行完毕，释放锁 {}", redisKey);

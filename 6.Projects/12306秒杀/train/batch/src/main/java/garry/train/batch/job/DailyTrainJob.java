@@ -12,6 +12,7 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -20,6 +21,7 @@ import java.util.Date;
  * 2024-09-28 21:19
  */
 @Slf4j
+@Component
 @DisallowConcurrentExecution // 禁止任务并发执行
 public class DailyTrainJob implements Job {
     @Resource

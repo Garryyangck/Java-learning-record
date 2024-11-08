@@ -4,6 +4,7 @@ import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import garry.train.business.form.ConfirmOrderDoForm;
 import garry.train.business.service.BeforeConfirmOrderService;
+import garry.train.common.consts.CommonConst;
 import garry.train.common.enums.ResponseEnum;
 import garry.train.common.exception.BusinessException;
 import garry.train.common.util.HostHolder;
@@ -35,7 +36,7 @@ public class ConfirmOrderController {
     @RequestMapping(value = "/do", method = RequestMethod.POST)
     public ResponseVo doConfirm(@Valid @RequestBody ConfirmOrderDoForm form) {
         form.setMemberId(hostHolder.getMemberId());
-        form.setLOG_ID(MDC.get("LOG_ID"));
+        form.setLOG_ID(MDC.get(CommonConst.LOG_ID));
         if (!beforeConfirmOrderService.beforeDoConfirm(form, hostHolder.getMemberId())) {
             throw new BusinessException(ResponseEnum.BUSINESS_CONFIRM_ORDER_CHECK_FAILED);
         }

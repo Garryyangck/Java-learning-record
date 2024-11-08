@@ -35,7 +35,7 @@
     </a-menu>
     <div style="margin-left: auto; color: white;">
       <router-link to="/message">
-        <a-badge :count="unreadNum">
+        <a-badge :count="unreadNum" :overflowCount="999999">
           <a-button style="margin-right: 10px">
             <MessageOutlined/> &nbsp; 我的消息
           </a-button>
