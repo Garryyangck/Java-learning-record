@@ -10,9 +10,9 @@ spring:
     allow-circular-references: true
   datasource: # Mybatis 数据库连接配置
     driver-class-name: com.mysql.jdbc.Driver  # driver-class-name：5.7版本为 com.mysql.jdbc.Driver；8.0版本为 com.mysql.cj.jdbc.Driver
-    username: garry_train_business
-    password: garry_train_business
-    url: jdbc:mysql://localhost:3306/train_business?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username:
+    password:
+    url:
 
 mybatis:
   mapper-locations: classpath:/mapper/**/*.xml  # 指定对应的 xml文件的位置为：target/classes/mapper下的所有文件夹的所有.xml文件
